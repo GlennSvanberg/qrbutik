@@ -20,3 +20,4 @@
 - Keep `AGENTS.md` small and concise.
 - All buttons must have a pointer cursor on hover.
 - Follow the "Swedish Minimalist" design spec.
+- Before finishing, always run `npx tsc --noEmit` and `npx eslint .` to ensure types are valid and lint rules pass. Type checking is required, but you do not need to run a full build each time.
