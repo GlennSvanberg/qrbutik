@@ -63,9 +63,9 @@ Vi använder **inte** Swish Business API (för att hålla tröskeln låg).
 ## 🗺 Roadmap
 
 ### Fas 1: Fundament (MVP)
-- [ ] Setup TanStack Start + Convex + Better Auth.
-- [ ] Schema för `shops`, `products`, och `transactions`.
-- [ ] Grundläggande "Skapa butik"-flöde.
+- [X] Setup TanStack Start + Convex + Better Auth.
+- [X] Schema för `shops`, `products`, och `transactions`.
+- [X] Grundläggande "Skapa butik"-flöde.
 
 ### Fas 2: Köpupplevelse
 - [ ] Buyer view med varukorg.

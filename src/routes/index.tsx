@@ -1,120 +1,214 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMutation } from 'convex/react'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { convexQuery } from '@convex-dev/react-query'
+import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { authClient } from '../lib/authClient'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
 function Home() {
-  const {
-    data: { viewer, numbers },
-  } = useSuspenseQuery(convexQuery(api.myFunctions.listNumbers, { count: 10 }))
-
-  const addNumber = useMutation(api.myFunctions.addNumber)
+  const createShop = useMutation(api.shops.createShop)
+  const [formState, setFormState] = useState({
+    name: '',
+    ownerEmail: '',
+    swishNumber: '',
+    slug: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [createdSlug, setCreatedSlug] = useState<string | null>(null)
+  const [authStatus, setAuthStatus] = useState<string | null>(null)
 
   return (
-    <main className="p-8 flex flex-col gap-16">
-      <h1 className="text-4xl font-bold text-center">
-        Convex + Tanstack Start
-      </h1>
-      <div className="flex flex-col gap-8 max-w-lg mx-auto">
-        <p>Welcome {viewer ?? 'Anonymous'}!</p>
-        <p>
-          Click the button below and open this page in another window - this
-          data is persisted in the Convex cloud database!
-        </p>
-        <p>
-          <button
-            className="bg-dark dark:bg-light text-light dark:text-dark text-sm px-4 py-2 rounded-md border-2"
-            onClick={() => {
-              void addNumber({ value: Math.floor(Math.random() * 10) })
-            }}
-          >
-            Add a random number
-          </button>
-        </p>
-        <p>
-          Numbers:{' '}
-          {numbers.length === 0 ? 'Click the button!' : numbers.join(', ')}
-        </p>
-        <p>
-          Edit{' '}
-          <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
-            convex/myFunctions.ts
-          </code>{' '}
-          to change your backend
-        </p>
-        <p>
-          Edit{' '}
-          <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
-            src/routes/index.tsx
-          </code>{' '}
-          to change your frontend
-        </p>
-        <p>
-          Open{' '}
-          <Link
-            to="/anotherPage"
-            className="text-blue-600 underline hover:no-underline"
-          >
-            another page
-          </Link>{' '}
-          to send an action.
-        </p>
-        <div className="flex flex-col">
-          <p className="text-lg font-bold">Useful resources:</p>
-          <div className="flex gap-2">
-            <div className="flex flex-col gap-2 w-1/2">
-              <ResourceCard
-                title="Convex docs"
-                description="Read comprehensive documentation for all Convex features."
-                href="https://docs.convex.dev/home"
-              />
-              <ResourceCard
-                title="Stack articles"
-                description="Learn about best practices, use cases, and more from a growing
-            collection of articles, videos, and walkthroughs."
-                href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html"
-              />
+    <main className="min-h-screen px-6 py-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12">
+        <header className="flex flex-col gap-4 text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
+            QRButik.se
+          </p>
+          <h1 className="text-4xl font-semibold text-slate-900 sm:text-5xl">
+            Kiosken på burk för svenska föreningar.
+          </h1>
+          <p className="mx-auto max-w-2xl text-base text-slate-600 sm:text-lg">
+            Skapa en mobil butik på två minuter. Dela en QR-kod, ta betalt med
+            Swish och följ försäljningen i realtid.
+          </p>
+        </header>
+
+        <section className="grid gap-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:grid-cols-[1.1fr_0.9fr]">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-2xl font-semibold text-slate-900">
+              Skapa din butik
+            </h2>
+            <p className="text-sm text-slate-600">
+              Välj ett namn, ett Swish-nummer och en unik slug för din butik.
+              Butiken hamnar under <span className="font-medium">/s/</span> för
+              att hålla övriga sidor rena.
+            </p>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={async (event) => {
+                event.preventDefault()
+                setError(null)
+                setCreatedSlug(null)
+                setIsSubmitting(true)
+                try {
+                  const result = await createShop({
+                    name: formState.name.trim(),
+                    ownerEmail: formState.ownerEmail.trim(),
+                    swishNumber: formState.swishNumber.trim(),
+                    slug: formState.slug.trim() || undefined,
+                  })
+                  setCreatedSlug(result.slug)
+                } catch (submitError) {
+                  if (submitError instanceof Error) {
+                    setError(submitError.message)
+                  } else {
+                    setError('Något gick fel. Försök igen.')
+                  }
+                } finally {
+                  setIsSubmitting(false)
+                }
+              }}
+            >
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                Butiksnamn
+                <input
+                  required
+                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                  value={formState.name}
+                  onChange={(event) =>
+                    setFormState((prev) => ({
+                      ...prev,
+                      name: event.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                Swish-nummer
+                <input
+                  required
+                  inputMode="numeric"
+                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                  value={formState.swishNumber}
+                  onChange={(event) =>
+                    setFormState((prev) => ({
+                      ...prev,
+                      swishNumber: event.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                E-post för admin
+                <input
+                  required
+                  type="email"
+                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                  value={formState.ownerEmail}
+                  onChange={(event) =>
+                    setFormState((prev) => ({
+                      ...prev,
+                      ownerEmail: event.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                Önskad slug (valfritt)
+                <input
+                  placeholder="t.ex. kiosken-ovanaker"
+                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                  value={formState.slug}
+                  onChange={(event) =>
+                    setFormState((prev) => ({
+                      ...prev,
+                      slug: event.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-2 h-12 rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+              >
+                {isSubmitting ? 'Skapar butik...' : 'Skapa butik'}
+              </button>
+              <button
+                type="button"
+                disabled={!formState.ownerEmail.trim()}
+                onClick={async () => {
+                  const email = formState.ownerEmail.trim()
+                  if (!email) {
+                    setAuthStatus('Fyll i en e-postadress först.')
+                    return
+                  }
+                  setAuthStatus('Skickar magic link...')
+                  await authClient.signIn.magicLink(
+                    { email },
+                    {
+                      onSuccess: () =>
+                        setAuthStatus('Magic link skickad. Kolla inkorgen.'),
+                      onError: (ctx) =>
+                        setAuthStatus(ctx.error.message ?? 'Något gick fel.'),
+                    },
+                  )
+                }}
+                className="h-12 rounded-xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 disabled:cursor-not-allowed disabled:text-slate-400"
+              >
+                Skicka testlänk
+              </button>
+              {error ? (
+                <p className="text-sm text-rose-600">{error}</p>
+              ) : null}
+              {authStatus ? (
+                <p className="text-sm text-slate-600">{authStatus}</p>
+              ) : null}
+              {createdSlug ? (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
+                  <p>Butiken är skapad!</p>
+                  <Link
+                    to="/s/$shopSlug"
+                    params={{ shopSlug: createdSlug }}
+                    className="font-semibold underline underline-offset-4"
+                  >
+                    Öppna butiken
+                  </Link>
+                </div>
+              ) : null}
+            </form>
+          </div>
+          <div className="flex flex-col gap-6 rounded-2xl bg-slate-50 p-6">
+            <div className="flex flex-col gap-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Vad händer nu?
+              </p>
+              <p className="text-base text-slate-700">
+                När butiken är skapad kan du lägga till produkter, skapa en
+                QR-skylt och dela länken med besökare.
+              </p>
             </div>
-            <div className="flex flex-col gap-2 w-1/2">
-              <ResourceCard
-                title="Templates"
-                description="Browse our collection of templates to get started quickly."
-                href="https://www.convex.dev/templates"
-              />
-              <ResourceCard
-                title="Discord"
-                description="Join our developer community to ask questions, trade tips & tricks,
-            and show off your projects."
-                href="https://www.convex.dev/community"
-              />
+            <div className="flex flex-col gap-3 text-sm text-slate-600">
+              <p>
+                <span className="font-semibold text-slate-800">1.</span> Dela
+                länken eller QR-koden.
+              </p>
+              <p>
+                <span className="font-semibold text-slate-800">2.</span> Kunden
+                väljer varor på mobilen.
+              </p>
+              <p>
+                <span className="font-semibold text-slate-800">3.</span> Swish
+                öppnas med rätt belopp.
+              </p>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
-  )
-}
-
-function ResourceCard({
-  title,
-  description,
-  href,
-}: {
-  title: string
-  description: string
-  href: string
-}) {
-  return (
-    <div className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-800 p-4 rounded-md h-28 overflow-auto">
-      <a href={href} className="text-sm underline hover:no-underline">
-        {title}
-      </a>
-      <p className="text-xs">{description}</p>
-    </div>
   )
 }
