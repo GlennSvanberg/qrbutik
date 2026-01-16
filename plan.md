@@ -73,13 +73,14 @@ Vi använder **inte** Swish Business API (för att hålla tröskeln låg).
 
 
 ### Fas 3: Köpupplevelse
-- [] Sipmle Buyer view med varukorg.
-- [] Swish deep-link generator.with items as message and price autocalcualted 
-- [] "Tack för ditt köp"-sida med instruktioner till personalen.
+- [X] Sipmle Buyer view med varukorg.
+- [X] Swish deep-link generator.with items as message and price autocalcualted 
+- [X] "Tack för ditt köp"-sida med instruktioner till personalen.
 
 ### Fas 4: Admin & PDF
 - [ ] Realtids-dashboard för transaktioner.
 - [ ] PDF-generator för A4-skylt med QR-kod.
+- [ ] Sida för att visa qrkod till butiken
 - [ ] Magic Link e-postutskick via Resend.
 
 ### Fas 5: Polering & Growth

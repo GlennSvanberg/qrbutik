@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as RedigeraShopIdRouteImport } from './routes/redigera/$shopId'
 
@@ -22,6 +23,11 @@ const SkapaRoute = SkapaRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TackTransactionIdRoute = TackTransactionIdRouteImport.update({
+  id: '/tack/$transactionId',
+  path: '/tack/$transactionId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SShopSlugRoute = SShopSlugRouteImport.update({
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/skapa': typeof SkapaRoute
   '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
+  '/tack/$transactionId': typeof TackTransactionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
+  '/tack/$transactionId': typeof TackTransactionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,30 @@ export interface FileRoutesById {
   '/skapa': typeof SkapaRoute
   '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
+  '/tack/$transactionId': typeof TackTransactionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
+  fullPaths:
+    | '/'
+    | '/skapa'
+    | '/redigera/$shopId'
+    | '/s/$shopSlug'
+    | '/tack/$transactionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
-  id: '__root__' | '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
+  to:
+    | '/'
+    | '/skapa'
+    | '/redigera/$shopId'
+    | '/s/$shopSlug'
+    | '/tack/$transactionId'
+  id:
+    | '__root__'
+    | '/'
+    | '/skapa'
+    | '/redigera/$shopId'
+    | '/s/$shopSlug'
+    | '/tack/$transactionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +92,7 @@ export interface RootRouteChildren {
   SkapaRoute: typeof SkapaRoute
   RedigeraShopIdRoute: typeof RedigeraShopIdRoute
   SShopSlugRoute: typeof SShopSlugRoute
+  TackTransactionIdRoute: typeof TackTransactionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -83,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tack/$transactionId': {
+      id: '/tack/$transactionId'
+      path: '/tack/$transactionId'
+      fullPath: '/tack/$transactionId'
+      preLoaderRoute: typeof TackTransactionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/s/$shopSlug': {
@@ -107,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   SkapaRoute: SkapaRoute,
   RedigeraShopIdRoute: RedigeraShopIdRoute,
   SShopSlugRoute: SShopSlugRoute,
+  TackTransactionIdRoute: TackTransactionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
