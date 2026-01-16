@@ -9,9 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
+import { Route as RedigeraShopIdRouteImport } from './routes/redigera/$shopId'
 
+const SkapaRoute = SkapaRouteImport.update({
+  id: '/skapa',
+  path: '/skapa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,35 +29,55 @@ const SShopSlugRoute = SShopSlugRouteImport.update({
   path: '/s/$shopSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedigeraShopIdRoute = RedigeraShopIdRouteImport.update({
+  id: '/redigera/$shopId',
+  path: '/redigera/$shopId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/skapa': typeof SkapaRoute
+  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/skapa': typeof SkapaRoute
+  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/skapa': typeof SkapaRoute
+  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/s/$shopSlug'
+  fullPaths: '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/s/$shopSlug'
-  id: '__root__' | '/' | '/s/$shopSlug'
+  to: '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
+  id: '__root__' | '/' | '/skapa' | '/redigera/$shopId' | '/s/$shopSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SkapaRoute: typeof SkapaRoute
+  RedigeraShopIdRoute: typeof RedigeraShopIdRoute
   SShopSlugRoute: typeof SShopSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/skapa': {
+      id: '/skapa'
+      path: '/skapa'
+      fullPath: '/skapa'
+      preLoaderRoute: typeof SkapaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,11 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SShopSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/redigera/$shopId': {
+      id: '/redigera/$shopId'
+      path: '/redigera/$shopId'
+      fullPath: '/redigera/$shopId'
+      preLoaderRoute: typeof RedigeraShopIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SkapaRoute: SkapaRoute,
+  RedigeraShopIdRoute: RedigeraShopIdRoute,
   SShopSlugRoute: SShopSlugRoute,
 }
 export const routeTree = rootRouteImport

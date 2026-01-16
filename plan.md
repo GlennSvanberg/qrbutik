@@ -67,17 +67,22 @@ Vi använder **inte** Swish Business API (för att hålla tröskeln låg).
 - [X] Schema för `shops`, `products`, och `transactions`.
 - [X] Grundläggande "Skapa butik"-flöde.
 
-### Fas 2: Köpupplevelse
-- [ ] Buyer view med varukorg.
-- [ ] Swish deep-link generator.
-- [ ] "Tack för ditt köp"-sida med instruktioner till personalen.
+### Fas 2: Skapa butik
+- [X] Skapa butik flöde genererar url
+- [X] Skapa butik och kunna lägga till artiklar
 
-### Fas 3: Admin & PDF
+
+### Fas 3: Köpupplevelse
+- [] Sipmle Buyer view med varukorg.
+- [] Swish deep-link generator.with items as message and price autocalcualted 
+- [] "Tack för ditt köp"-sida med instruktioner till personalen.
+
+### Fas 4: Admin & PDF
 - [ ] Realtids-dashboard för transaktioner.
 - [ ] PDF-generator för A4-skylt med QR-kod.
 - [ ] Magic Link e-postutskick via Resend.
 
-### Fas 4: Polering & Growth
+### Fas 5: Polering & Growth
 - [ ] Programmatisk SEO (Landningssidor för städer/nicher).
 - [ ] Säljrapporter (Export till CSV/PDF).
 - [ ] "Powered by QRButik.se" branding.

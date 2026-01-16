@@ -1,26 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useMutation } from 'convex/react'
-import { useState } from 'react'
-import { api } from '../../convex/_generated/api'
-import { authClient } from '../lib/authClient'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
 function Home() {
-  const createShop = useMutation(api.shops.createShop)
-  const [formState, setFormState] = useState({
-    name: '',
-    ownerEmail: '',
-    swishNumber: '',
-    slug: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [createdSlug, setCreatedSlug] = useState<string | null>(null)
-  const [authStatus, setAuthStatus] = useState<string | null>(null)
-
   return (
     <main className="min-h-screen px-6 py-12">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-12">
@@ -38,149 +22,25 @@ function Home() {
         </header>
 
         <section className="grid gap-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm md:grid-cols-[1.1fr_0.9fr]">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5">
             <h2 className="text-2xl font-semibold text-slate-900">
               Skapa din butik
             </h2>
             <p className="text-sm text-slate-600">
-              Välj ett namn, ett Swish-nummer och en unik slug för din butik.
-              Butiken hamnar under <span className="font-medium">/s/</span> för
-              att hålla övriga sidor rena.
+              Bygg din butik på två steg: fyll i butiksinfo och lägg till
+              produkter. Du får direkt en länk att dela.
             </p>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={async (event) => {
-                event.preventDefault()
-                setError(null)
-                setCreatedSlug(null)
-                setIsSubmitting(true)
-                try {
-                  const result = await createShop({
-                    name: formState.name.trim(),
-                    ownerEmail: formState.ownerEmail.trim(),
-                    swishNumber: formState.swishNumber.trim(),
-                    slug: formState.slug.trim() || undefined,
-                  })
-                  setCreatedSlug(result.slug)
-                } catch (submitError) {
-                  if (submitError instanceof Error) {
-                    setError(submitError.message)
-                  } else {
-                    setError('Något gick fel. Försök igen.')
-                  }
-                } finally {
-                  setIsSubmitting(false)
-                }
-              }}
-            >
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
-                Butiksnamn
-                <input
-                  required
-                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
-                  value={formState.name}
-                  onChange={(event) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      name: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
-                Swish-nummer
-                <input
-                  required
-                  inputMode="numeric"
-                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
-                  value={formState.swishNumber}
-                  onChange={(event) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      swishNumber: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
-                E-post för admin
-                <input
-                  required
-                  type="email"
-                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
-                  value={formState.ownerEmail}
-                  onChange={(event) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      ownerEmail: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
-                Önskad slug (valfritt)
-                <input
-                  placeholder="t.ex. kiosken-ovanaker"
-                  className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
-                  value={formState.slug}
-                  onChange={(event) =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      slug: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="mt-2 h-12 rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                to="/skapa"
+                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               >
-                {isSubmitting ? 'Skapar butik...' : 'Skapa butik'}
-              </button>
-              <button
-                type="button"
-                disabled={!formState.ownerEmail.trim()}
-                onClick={async () => {
-                  const email = formState.ownerEmail.trim()
-                  if (!email) {
-                    setAuthStatus('Fyll i en e-postadress först.')
-                    return
-                  }
-                  setAuthStatus('Skickar magic link...')
-                  await authClient.signIn.magicLink(
-                    { email },
-                    {
-                      onSuccess: () =>
-                        setAuthStatus('Magic link skickad. Kolla inkorgen.'),
-                      onError: (ctx) =>
-                        setAuthStatus(ctx.error.message ?? 'Något gick fel.'),
-                    },
-                  )
-                }}
-                className="h-12 rounded-xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 disabled:cursor-not-allowed disabled:text-slate-400"
-              >
-                Skicka testlänk
-              </button>
-              {error ? (
-                <p className="text-sm text-rose-600">{error}</p>
-              ) : null}
-              {authStatus ? (
-                <p className="text-sm text-slate-600">{authStatus}</p>
-              ) : null}
-              {createdSlug ? (
-                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
-                  <p>Butiken är skapad!</p>
-                  <Link
-                    to="/s/$shopSlug"
-                    params={{ shopSlug: createdSlug }}
-                    className="font-semibold underline underline-offset-4"
-                  >
-                    Öppna butiken
-                  </Link>
-                </div>
-              ) : null}
-            </form>
+                Skapa din butik
+              </Link>
+              <p className="text-xs text-slate-500">
+                Tar ca 2 minuter.
+              </p>
+            </div>
           </div>
           <div className="flex flex-col gap-6 rounded-2xl bg-slate-50 p-6">
             <div className="flex flex-col gap-2">
