@@ -1,8 +1,8 @@
 "use node";
 
-import { action } from "./_generated/server";
-import { v } from "convex/values";
 import { Resend } from "resend";
+import { v } from "convex/values";
+import { action } from "./_generated/server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const defaultFrom = process.env.RESEND_FROM ?? "QRButik <no-reply@qrbutik.se>";

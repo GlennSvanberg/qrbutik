@@ -13,7 +13,7 @@ export default defineSchema({
     shopId: v.id("shops"),
     name: v.string(),
     price: v.number(),
-    description: v.string(),
+    description: v.optional(v.string()),
     createdAt: v.number(),
   }).index("by_shopId", ["shopId"]),
   transactions: defineTable({
