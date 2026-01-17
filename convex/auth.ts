@@ -9,7 +9,11 @@ import type { GenericCtx } from "@convex-dev/better-auth";
 
 const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
 const convexSiteUrl =
-  process.env.CONVEX_SITE_URL ?? process.env.CONVEX_HTTP_URL ?? siteUrl;
+  process.env.CONVEX_SITE_URL ?? process.env.CONVEX_HTTP_URL;
+
+if (!convexSiteUrl) {
+  throw new Error("CONVEX_SITE_URL or CONVEX_HTTP_URL must be set.");
+}
 
 export const authComponent = createClient<DataModel>(components.betterAuth);
 
@@ -20,6 +24,12 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
   return betterAuth({
     baseURL: convexSiteUrl,
     trustedOrigins: [siteUrl],
+    advanced: {
+      defaultCookieAttributes: {
+        sameSite: "none",
+        secure: true,
+      },
+    },
     database: authComponent.adapter(ctx),
     plugins: [
       crossDomain({ siteUrl }),

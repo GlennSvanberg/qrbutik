@@ -8,7 +8,9 @@ export default defineSchema({
     ownerEmail: v.string(),
     swishNumber: v.string(),
     createdAt: v.number(),
-  }).index("by_slug", ["slug"]),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_ownerEmail", ["ownerEmail"]),
   products: defineTable({
     shopId: v.id("shops"),
     name: v.string(),
