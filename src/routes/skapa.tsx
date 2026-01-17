@@ -40,10 +40,12 @@ function CreateShopWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [authStatus, setAuthStatus] = useState<string | null>(null);
+  const [adminAuthStatus, setAdminAuthStatus] = useState<string | null>(null);
   const [createdShop, setCreatedShop] = useState<{
     shopId: string;
     slug: string;
   } | null>(null);
+  const { data: session } = authClient.useSession();
 
   const slugCheck = useQuery(api.shops.checkSlug, {
     slug: formState.slug || formState.name,
@@ -399,7 +401,54 @@ function CreateShopWizard() {
                 >
                   Redigera butik
                 </Link>
+                <Link
+                  to="/admin/$shopId"
+                  params={{ shopId: createdShop.shopId }}
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                >
+                  Admin för butiken
+                </Link>
+                <Link
+                  to="/admin"
+                  className="cursor-pointer rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                >
+                  Adminpanelen
+                </Link>
               </div>
+              {!session?.user.email ? (
+                <div className="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const email = formState.ownerEmail.trim();
+                      if (!email) {
+                        setAdminAuthStatus("Fyll i en e-postadress först.");
+                        return;
+                      }
+                      setAdminAuthStatus("Skickar inloggningslänk...");
+                      await authClient.signIn.magicLink(
+                        { email, callbackURL: "/admin" },
+                        {
+                          onSuccess: () =>
+                            setAdminAuthStatus(
+                              "Magic link skickad. Kolla inkorgen.",
+                            ),
+                          onError: (ctx) =>
+                            setAdminAuthStatus(
+                              ctx.error.message || "Något gick fel.",
+                            ),
+                        },
+                      );
+                    }}
+                    className="mx-auto h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                  >
+                    Skicka admin-länk till e-post
+                  </button>
+                  {adminAuthStatus ? (
+                    <p className="text-sm text-slate-600">{adminAuthStatus}</p>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           ) : null}
         </section>

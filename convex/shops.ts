@@ -75,6 +75,7 @@ export const createShop = mutation({
       to: args.ownerEmail,
       shopName: args.name,
       shopSlug: finalSlug,
+      shopId,
     });
 
     return { shopId, slug: finalSlug };
@@ -135,6 +136,7 @@ export const createShopWithProducts = mutation({
       to: args.ownerEmail,
       shopName: args.name,
       shopSlug: finalSlug,
+      shopId,
     });
 
     return { shopId, slug: finalSlug };
@@ -231,5 +233,29 @@ export const checkSlug = query({
       isAvailable: !existing,
       slug,
     };
+  },
+});
+
+export const listByOwnerEmail = query({
+  args: {
+    ownerEmail: v.string(),
+  },
+  returns: v.array(
+    v.object({
+      _id: v.id("shops"),
+      _creationTime: v.number(),
+      name: v.string(),
+      slug: v.string(),
+      ownerEmail: v.string(),
+      swishNumber: v.string(),
+      createdAt: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("shops")
+      .withIndex("by_ownerEmail", (q) => q.eq("ownerEmail", args.ownerEmail))
+      .order("desc")
+      .collect();
   },
 });
