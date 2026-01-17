@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { magicLink } from "better-auth/plugins";
 import authConfig from "./auth.config";
 import { components } from "./_generated/api";
+import { isDevMagicLinkEnabled } from "./devMagicLink";
 import type { DataModel } from "./_generated/dataModel";
 import type { GenericCtx } from "@convex-dev/better-auth";
 
@@ -36,6 +37,19 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
       convex({ authConfig }),
       magicLink({
         sendMagicLink: async ({ email, url }) => {
+          if (isDevMagicLinkEnabled()) {
+            const storeUrl = new URL(`${convexSiteUrl}/dev/magic-link`);
+            storeUrl.searchParams.set("email", email);
+            storeUrl.searchParams.set("url", url);
+            const response = await fetch(storeUrl.toString(), {
+              method: "POST",
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to store dev magic link.");
+            }
+            return;
+          }
           if (!resendApiKey) {
             throw new Error("RESEND_API_KEY is not set");
           }

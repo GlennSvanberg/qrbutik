@@ -14,9 +14,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
-import { Route as RedigeraShopIdRouteImport } from './routes/redigera/$shopId'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
+import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
+import { Route as AdminShopIdVerifyRouteImport } from './routes/admin/$shopId/verify'
+import { Route as AdminShopIdSettingsRouteImport } from './routes/admin/$shopId/settings'
 import { Route as AdminShopIdQrRouteImport } from './routes/admin/$shopId/qr'
+import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
 
 const SkapaRoute = SkapaRouteImport.update({
   id: '/skapa',
@@ -43,19 +46,34 @@ const SShopSlugRoute = SShopSlugRouteImport.update({
   path: '/s/$shopSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RedigeraShopIdRoute = RedigeraShopIdRouteImport.update({
-  id: '/redigera/$shopId',
-  path: '/redigera/$shopId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminShopIdRoute = AdminShopIdRouteImport.update({
   id: '/admin/$shopId',
   path: '/admin/$shopId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminShopIdIndexRoute = AdminShopIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminShopIdRoute,
+} as any)
+const AdminShopIdVerifyRoute = AdminShopIdVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => AdminShopIdRoute,
+} as any)
+const AdminShopIdSettingsRoute = AdminShopIdSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminShopIdRoute,
+} as any)
 const AdminShopIdQrRoute = AdminShopIdQrRouteImport.update({
   id: '/qr',
   path: '/qr',
+  getParentRoute: () => AdminShopIdRoute,
+} as any)
+const AdminShopIdProductsRoute = AdminShopIdProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
 
@@ -63,32 +81,40 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
-  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/qr': typeof AdminShopIdQrRoute
+  '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
+  '/admin/$shopId/verify': typeof AdminShopIdVerifyRoute
+  '/admin/$shopId/': typeof AdminShopIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
-  '/admin/$shopId': typeof AdminShopIdRouteWithChildren
-  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/qr': typeof AdminShopIdQrRoute
+  '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
+  '/admin/$shopId/verify': typeof AdminShopIdVerifyRoute
+  '/admin/$shopId': typeof AdminShopIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
-  '/redigera/$shopId': typeof RedigeraShopIdRoute
   '/s/$shopSlug': typeof SShopSlugRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/qr': typeof AdminShopIdQrRoute
+  '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
+  '/admin/$shopId/verify': typeof AdminShopIdVerifyRoute
+  '/admin/$shopId/': typeof AdminShopIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,38 +122,45 @@ export interface FileRouteTypes {
     | '/'
     | '/skapa'
     | '/admin/$shopId'
-    | '/redigera/$shopId'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/admin'
+    | '/admin/$shopId/products'
     | '/admin/$shopId/qr'
+    | '/admin/$shopId/settings'
+    | '/admin/$shopId/verify'
+    | '/admin/$shopId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/skapa'
-    | '/admin/$shopId'
-    | '/redigera/$shopId'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/admin'
+    | '/admin/$shopId/products'
     | '/admin/$shopId/qr'
+    | '/admin/$shopId/settings'
+    | '/admin/$shopId/verify'
+    | '/admin/$shopId'
   id:
     | '__root__'
     | '/'
     | '/skapa'
     | '/admin/$shopId'
-    | '/redigera/$shopId'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/admin/'
+    | '/admin/$shopId/products'
     | '/admin/$shopId/qr'
+    | '/admin/$shopId/settings'
+    | '/admin/$shopId/verify'
+    | '/admin/$shopId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SkapaRoute: typeof SkapaRoute
   AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
-  RedigeraShopIdRoute: typeof RedigeraShopIdRoute
   SShopSlugRoute: typeof SShopSlugRoute
   TackTransactionIdRoute: typeof TackTransactionIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -170,19 +203,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SShopSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/redigera/$shopId': {
-      id: '/redigera/$shopId'
-      path: '/redigera/$shopId'
-      fullPath: '/redigera/$shopId'
-      preLoaderRoute: typeof RedigeraShopIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/$shopId': {
       id: '/admin/$shopId'
       path: '/admin/$shopId'
       fullPath: '/admin/$shopId'
       preLoaderRoute: typeof AdminShopIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/$shopId/': {
+      id: '/admin/$shopId/'
+      path: '/'
+      fullPath: '/admin/$shopId/'
+      preLoaderRoute: typeof AdminShopIdIndexRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
+    '/admin/$shopId/verify': {
+      id: '/admin/$shopId/verify'
+      path: '/verify'
+      fullPath: '/admin/$shopId/verify'
+      preLoaderRoute: typeof AdminShopIdVerifyRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
+    '/admin/$shopId/settings': {
+      id: '/admin/$shopId/settings'
+      path: '/settings'
+      fullPath: '/admin/$shopId/settings'
+      preLoaderRoute: typeof AdminShopIdSettingsRouteImport
+      parentRoute: typeof AdminShopIdRoute
     }
     '/admin/$shopId/qr': {
       id: '/admin/$shopId/qr'
@@ -191,15 +238,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShopIdQrRouteImport
       parentRoute: typeof AdminShopIdRoute
     }
+    '/admin/$shopId/products': {
+      id: '/admin/$shopId/products'
+      path: '/products'
+      fullPath: '/admin/$shopId/products'
+      preLoaderRoute: typeof AdminShopIdProductsRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
   }
 }
 
 interface AdminShopIdRouteChildren {
+  AdminShopIdProductsRoute: typeof AdminShopIdProductsRoute
   AdminShopIdQrRoute: typeof AdminShopIdQrRoute
+  AdminShopIdSettingsRoute: typeof AdminShopIdSettingsRoute
+  AdminShopIdVerifyRoute: typeof AdminShopIdVerifyRoute
+  AdminShopIdIndexRoute: typeof AdminShopIdIndexRoute
 }
 
 const AdminShopIdRouteChildren: AdminShopIdRouteChildren = {
+  AdminShopIdProductsRoute: AdminShopIdProductsRoute,
   AdminShopIdQrRoute: AdminShopIdQrRoute,
+  AdminShopIdSettingsRoute: AdminShopIdSettingsRoute,
+  AdminShopIdVerifyRoute: AdminShopIdVerifyRoute,
+  AdminShopIdIndexRoute: AdminShopIdIndexRoute,
 }
 
 const AdminShopIdRouteWithChildren = AdminShopIdRoute._addFileChildren(
@@ -210,7 +272,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SkapaRoute: SkapaRoute,
   AdminShopIdRoute: AdminShopIdRouteWithChildren,
-  RedigeraShopIdRoute: RedigeraShopIdRoute,
   SShopSlugRoute: SShopSlugRoute,
   TackTransactionIdRoute: TackTransactionIdRoute,
   AdminIndexRoute: AdminIndexRoute,

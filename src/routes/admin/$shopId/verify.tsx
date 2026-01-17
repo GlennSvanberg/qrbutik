@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { useMutation } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
@@ -13,18 +13,18 @@ import {
 } from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
-export const Route = createFileRoute('/admin/$shopId/qr')({
-  component: ShopQrPage,
+export const Route = createFileRoute('/admin/$shopId/verify')({
+  component: VerifyPage,
 })
 
-function ShopQrPage() {
+function VerifyPage() {
   const { data: session, isPending, error } = authClient.useSession()
   const [email, setEmail] = useState('')
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
+      <main className="min-h-screen px-6 py-10">
         <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
@@ -37,7 +37,7 @@ function ShopQrPage() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
+      <main className="min-h-screen px-6 py-10">
         <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -108,26 +108,34 @@ function ShopQrPage() {
     )
   }
 
-  return <ShopQrContent email={session.user.email} />
+  return <VerifyContent email={session.user.email} />
 }
 
-function ShopQrContent({ email }: { email: string }) {
+function VerifyContent({ email }: { email: string }) {
   const { shopId } = Route.useParams()
+  if (!shopId) {
+    return null
+  }
   const shopIdParam = shopId as Id<'shops'>
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
+  const { data: transactions } = useSuspenseQuery(
+    convexQuery(api.transactions.listTodayByShop, { shopId: shopIdParam }),
+  )
+  const verifyTransaction = useMutation(api.transactions.verify)
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const origin = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return ''
-    }
-    return window.location.origin
-  }, [])
+  const pendingTransactions = useMemo(
+    () =>
+      transactions.filter((transaction) => transaction.status === 'pending'),
+    [transactions],
+  )
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
+      <main className="min-h-screen px-6 py-10">
         <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
@@ -148,7 +156,7 @@ function ShopQrContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-12">
+      <main className="min-h-screen px-6 py-10">
         <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
@@ -167,53 +175,94 @@ function ShopQrContent({ email }: { email: string }) {
     )
   }
 
-  const shopUrl = origin ? `${origin}/s/${shop.slug}` : `/s/${shop.slug}`
-
   return (
     <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <AdminHeader
           ownerEmail={email}
           shopId={shop._id}
-          section="qr"
+          section="verify"
           shopName={shop.name}
         />
-        <header className="flex flex-col gap-2 text-center">
-          <h2 className="text-2xl font-semibold text-slate-900">
-            QR-kod för {shop.name}
-          </h2>
-          <p className="text-sm text-slate-600">
-            Skriv ut skylten och låt kunderna skanna QR-koden.
-          </p>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-            >
-              Skriv ut A4
-            </button>
-          </div>
-        </header>
 
-        <section className="flex flex-col items-center gap-6 border-t border-slate-200 pt-6 text-center print:border-none">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm print:border-none print:shadow-none">
-            <QRCodeSVG value={shopUrl} size={220} level="M" />
+        <section className="flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+            <h2 className="text-base font-semibold text-slate-900">
+              Väntar på verifiering
+            </h2>
+            <span className="text-xs text-slate-500">
+              {pendingTransactions.length} betalningar
+            </span>
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold text-slate-900">
-              Skanna för att handla i {shop.name}
-            </p>
-            <p className="text-sm text-slate-500">{shopUrl}</p>
-          </div>
-          <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm text-slate-600">
-            <p>1. Skanna QR-koden med mobilkamera.</p>
-            <p>2. Lägg varor i varukorgen.</p>
-            <p>3. Betala direkt med Swish.</p>
+
+          <div className="divide-y divide-slate-200/70">
+            {pendingTransactions.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+                Inga betalningar att verifiera just nu.
+              </div>
+            ) : (
+              pendingTransactions.map((transaction) => (
+                <div key={transaction._id} className="py-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">
+                        {transaction.reference}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {new Date(transaction.createdAt).toLocaleTimeString(
+                          'sv-SE',
+                          {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          },
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg font-semibold text-slate-900">
+                        {transaction.amount} kr
+                      </span>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setError(null)
+                          setStatusMessage(null)
+                          try {
+                            await verifyTransaction({
+                              transactionId: transaction._id,
+                            })
+                            setStatusMessage('Betalning verifierad.')
+                          } catch (verifyError) {
+                            if (verifyError instanceof Error) {
+                              setError(verifyError.message)
+                            } else {
+                              setError('Något gick fel. Försök igen.')
+                            }
+                          }
+                        }}
+                        className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                      >
+                        Verifiera
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-xs text-slate-500">
+                    {transaction.items
+                      .map((item) => `${item.quantity}x ${item.name}`)
+                      .join(' · ')}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </section>
+
+        {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+        {statusMessage ? (
+          <p className="text-sm text-slate-600">{statusMessage}</p>
+        ) : null}
       </div>
-      <AdminBottomNav shopId={shop._id} active="qr" />
+      <AdminBottomNav shopId={shopIdParam} active="verify" />
     </main>
   )
 }

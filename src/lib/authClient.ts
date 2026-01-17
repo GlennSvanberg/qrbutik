@@ -5,7 +5,7 @@ import {
 } from "@convex-dev/better-auth/client/plugins";
 import { magicLinkClient } from "better-auth/client/plugins";
 
-const convexSiteUrl =
+export const convexSiteUrl =
   (import.meta as any).env.VITE_CONVEX_SITE_URL ??
   (import.meta as any).env.VITE_CONVEX_URL;
 

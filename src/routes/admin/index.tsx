@@ -1,18 +1,22 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { convexQuery } from "@convex-dev/react-query";
-import { useMemo, useState } from "react";
-import { api } from "../../../convex/_generated/api";
-import { authClient } from "../../lib/authClient";
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { convexQuery } from '@convex-dev/react-query'
+import { useMemo, useState } from 'react'
+import { api } from '../../../convex/_generated/api'
+import { authClient } from '../../lib/authClient'
+import {
+  isDevMagicLinkEnabled,
+  maybeOpenDevMagicLink,
+} from '../../lib/devMagicLink'
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute('/admin/')({
   component: AdminDashboard,
-});
+})
 
 function AdminDashboard() {
-  const { data: session, isPending, error } = authClient.useSession();
-  const [email, setEmail] = useState("");
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const { data: session, isPending, error } = authClient.useSession()
+  const [email, setEmail] = useState('')
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
 
   if (isPending) {
     return (
@@ -24,7 +28,7 @@ function AdminDashboard() {
           <p className="text-sm text-slate-600">Kontrollerar din session.</p>
         </div>
       </main>
-    );
+    )
   }
 
   if (!session?.user.email) {
@@ -46,23 +50,29 @@ function AdminDashboard() {
           <form
             className="flex flex-col gap-3"
             onSubmit={async (event) => {
-              event.preventDefault();
-              setStatusMessage(null);
-              const trimmedEmail = email.trim();
+              event.preventDefault()
+              setStatusMessage(null)
+              const trimmedEmail = email.trim()
               if (!trimmedEmail) {
-                setStatusMessage("Fyll i en e-postadress.");
-                return;
+                setStatusMessage('Fyll i en e-postadress.')
+                return
               }
-              setStatusMessage("Skickar inloggningslänk...");
+              setStatusMessage('Skickar inloggningslänk...')
               await authClient.signIn.magicLink(
-                { email: trimmedEmail, callbackURL: "/admin" },
+                { email: trimmedEmail, callbackURL: '/admin' },
                 {
-                  onSuccess: () =>
-                    setStatusMessage("Magic link skickad. Kolla inkorgen."),
+                  onSuccess: async () => {
+                    setStatusMessage(
+                      isDevMagicLinkEnabled()
+                        ? 'Devmode: öppnar magic link direkt.'
+                        : 'Magic link skickad. Kolla inkorgen.',
+                    )
+                    await maybeOpenDevMagicLink(trimmedEmail)
+                  },
                   onError: (ctx) =>
-                    setStatusMessage(ctx.error.message || "Något gick fel."),
+                    setStatusMessage(ctx.error.message || 'Något gick fel.'),
                 },
-              );
+              )
             }}
           >
             <label className="flex flex-col gap-2 text-sm text-slate-700">
@@ -91,33 +101,33 @@ function AdminDashboard() {
           ) : null}
         </div>
       </main>
-    );
+    )
   }
 
-  return <AdminDashboardContent email={session.user.email} />;
+  return <AdminDashboardContent email={session.user.email} />
 }
 
 function AdminDashboardContent({ email }: { email: string }) {
   const { data: shops } = useSuspenseQuery(
     convexQuery(api.shops.listByOwnerEmail, { ownerEmail: email }),
-  );
-  const [copyMessage, setCopyMessage] = useState<string | null>(null);
+  )
+  const [copyMessage, setCopyMessage] = useState<string | null>(null)
 
   const origin = useMemo(() => {
-    if (typeof window === "undefined") {
-      return "";
+    if (typeof window === 'undefined') {
+      return ''
     }
-    return window.location.origin;
-  }, []);
+    return window.location.origin
+  }, [])
 
   return (
-    <main className="min-h-screen px-6 py-12">
+    <main className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8">
-        <header className="flex flex-col gap-2 text-center">
+        <header className="flex flex-col gap-2 text-left">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
+          <h1 className="text-2xl font-semibold text-slate-900">
             Din adminpanel
           </h1>
           <p className="text-sm text-slate-600">
@@ -125,35 +135,32 @@ function AdminDashboardContent({ email }: { email: string }) {
           </p>
         </header>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="flex flex-col gap-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-slate-900">
-                Dina butiker
-              </h2>
-              <Link
-                to="/skapa"
-                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:border-slate-300"
-              >
-                Skapa ny butik
-              </Link>
-            </div>
+        <section className="flex flex-col gap-5 border-t border-slate-200 pt-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-semibold text-slate-900">
+              Dina butiker
+            </h2>
+            <Link
+              to="/skapa"
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:border-slate-300"
+            >
+              Skapa ny butik
+            </Link>
+          </div>
 
-            {shops.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-500">
-                Ingen butik är kopplad till den här e-posten ännu.
-              </div>
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2">
-                {shops.map((shop) => {
-                  const shopUrl = origin
-                    ? `${origin}/s/${shop.slug}`
-                    : `/s/${shop.slug}`;
-                  return (
-                    <article
-                      key={shop._id}
-                      className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6"
-                    >
+          {shops.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-500">
+              Ingen butik är kopplad till den här e-posten ännu.
+            </div>
+          ) : (
+            <div className="divide-y divide-slate-200/70">
+              {shops.map((shop) => {
+                const shopUrl = origin
+                  ? `${origin}/s/${shop.slug}`
+                  : `/s/${shop.slug}`
+                return (
+                  <article key={shop._id} className="py-5">
+                    <div className="flex flex-col gap-3">
                       <div>
                         <h3 className="text-lg font-semibold text-slate-900">
                           {shop.name}
@@ -177,11 +184,11 @@ function AdminDashboardContent({ email }: { email: string }) {
                           QR + PDF
                         </Link>
                         <Link
-                          to="/redigera/$shopId"
+                          to="/admin/$shopId/settings"
                           params={{ shopId: shop._id }}
                           className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300"
                         >
-                          Redigera
+                          Butiksinfo
                         </Link>
                       </div>
 
@@ -191,15 +198,15 @@ function AdminDashboardContent({ email }: { email: string }) {
                           type="button"
                           onClick={async () => {
                             try {
-                              if ("clipboard" in navigator) {
-                                await navigator.clipboard.writeText(shopUrl);
-                                setCopyMessage("Butikslänk kopierad.");
-                                return;
+                              if ('clipboard' in navigator) {
+                                await navigator.clipboard.writeText(shopUrl)
+                                setCopyMessage('Butikslänk kopierad.')
+                                return
                               }
-                              window.prompt("Kopiera butikslänken:", shopUrl);
-                              setCopyMessage("Butikslänk redo att kopieras.");
+                              window.prompt('Kopiera butikslänken:', shopUrl)
+                              setCopyMessage('Butikslänk redo att kopieras.')
                             } catch {
-                              setCopyMessage("Kunde inte kopiera länken.");
+                              setCopyMessage('Kunde inte kopiera länken.')
                             }
                           }}
                           className="w-fit cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 hover:border-slate-300"
@@ -207,12 +214,12 @@ function AdminDashboardContent({ email }: { email: string }) {
                           Kopiera butikslänk
                         </button>
                       </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
         </section>
 
         {copyMessage ? (
@@ -220,5 +227,5 @@ function AdminDashboardContent({ email }: { email: string }) {
         ) : null}
       </div>
     </main>
-  );
+  )
 }

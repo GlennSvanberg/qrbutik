@@ -6,6 +6,9 @@ import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+  },
   plugins: [
     tailwindcss(),
     tsConfigPaths({

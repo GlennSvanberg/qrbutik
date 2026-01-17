@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as devMagicLink from "../devMagicLink.js";
 import type * as email from "../email.js";
 import type * as http from "../http.js";
 import type * as products from "../products.js";
@@ -23,6 +24,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  devMagicLink: typeof devMagicLink;
   email: typeof email;
   http: typeof http;
   products: typeof products;
