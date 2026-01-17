@@ -7,10 +7,10 @@ import type { Id } from '../../convex/_generated/dataModel'
 
 const sectionRoutes = {
   sales: '/admin/$shopId',
-  verify: '/admin/$shopId/verify',
+  history: '/admin/$shopId/historik',
   products: '/admin/$shopId/products',
   settings: '/admin/$shopId/settings',
-  qr: '/admin/$shopId/qr',
+  skylt: '/admin/$shopId/skylt',
 } as const
 
 type AdminSection = keyof typeof sectionRoutes

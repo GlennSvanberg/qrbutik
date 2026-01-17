@@ -13,11 +13,11 @@ import {
 } from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
-export const Route = createFileRoute('/admin/$shopId/verify')({
-  component: VerifyPage,
+export const Route = createFileRoute('/admin/$shopId/historik')({
+  component: PurchaseHistoryPage,
 })
 
-function VerifyPage() {
+function PurchaseHistoryPage() {
   const { data: session, isPending, error } = authClient.useSession()
   const [email, setEmail] = useState('')
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
@@ -108,28 +108,54 @@ function VerifyPage() {
     )
   }
 
-  return <VerifyContent email={session.user.email} />
+  return <PurchaseHistoryContent email={session.user.email} />
 }
 
-function VerifyContent({ email }: { email: string }) {
-  const { shopId } = Route.useParams()
-  if (!shopId) {
+function PurchaseHistoryContent({ email }: { email: string }) {
+  const params = Route.useParams()
+  if (!('shopId' in params)) {
     return null
   }
-  const shopIdParam = shopId as Id<'shops'>
+  const shopIdParam = params.shopId as Id<'shops'>
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
   const { data: transactions } = useSuspenseQuery(
-    convexQuery(api.transactions.listTodayByShop, { shopId: shopIdParam }),
+    convexQuery(api.transactions.listByShop, { shopId: shopIdParam }),
   )
   const verifyTransaction = useMutation(api.transactions.verify)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [expandedTransactionId, setExpandedTransactionId] = useState<
+    string | null
+  >(null)
 
   const pendingTransactions = useMemo(
     () =>
       transactions.filter((transaction) => transaction.status === 'pending'),
+    [transactions],
+  )
+
+  const formattedTransactions = useMemo(
+    () =>
+      transactions.map((transaction) => ({
+        ...transaction,
+        formattedDate: new Date(transaction.createdAt).toLocaleDateString(
+          'sv-SE',
+          {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          },
+        ),
+        formattedTime: new Date(transaction.createdAt).toLocaleTimeString(
+          'sv-SE',
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+          },
+        ),
+      })),
     [transactions],
   )
 
@@ -181,78 +207,132 @@ function VerifyContent({ email }: { email: string }) {
         <AdminHeader
           ownerEmail={email}
           shopId={shop._id}
-          section="verify"
+          section="history"
           shopName={shop.name}
+          subtitle="Köphistorik"
         />
 
         <section className="flex flex-col gap-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-base font-semibold text-slate-900">
-              Väntar på verifiering
-            </h2>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+            <div>
+              <h2 className="text-base font-semibold text-slate-900">
+                Alla köp
+              </h2>
+              <p className="text-xs text-slate-500">
+                Full historik med möjlighet att verifiera betalningar.
+              </p>
+            </div>
             <span className="text-xs text-slate-500">
-              {pendingTransactions.length} betalningar
+              {pendingTransactions.length} väntar på verifiering
             </span>
           </div>
 
-          <div className="divide-y divide-slate-200/70">
-            {pendingTransactions.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
-                Inga betalningar att verifiera just nu.
+          <div className="divide-y divide-slate-200/70 rounded-2xl border border-slate-200 bg-white">
+            <div className="grid grid-cols-[auto_1fr_auto] gap-4 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+              <span>Verifiera</span>
+              <span>Datum &amp; referens</span>
+              <span className="text-right">Summa</span>
+            </div>
+            {formattedTransactions.length === 0 ? (
+              <div className="p-6 text-center text-sm text-slate-500">
+                Inga köp registrerade ännu.
               </div>
             ) : (
-              pendingTransactions.map((transaction) => (
-                <div key={transaction._id} className="py-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">
-                        {transaction.reference}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {new Date(transaction.createdAt).toLocaleTimeString(
-                          'sv-SE',
-                          {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          },
-                        )}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg font-semibold text-slate-900">
+              formattedTransactions.map((transaction) => {
+                const isExpanded = expandedTransactionId === transaction._id
+                return (
+                  <div key={transaction._id} className="px-4 py-4 transition">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        setExpandedTransactionId((prev) =>
+                          prev === transaction._id ? null : transaction._id,
+                        )
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          setExpandedTransactionId((prev) =>
+                            prev === transaction._id ? null : transaction._id,
+                          )
+                        }
+                      }}
+                      className="grid w-full cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 text-left"
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-slate-300">
+                        <input
+                          type="checkbox"
+                          checked={transaction.status === 'verified'}
+                          disabled={transaction.status === 'verified'}
+                          onClick={(event) => event.stopPropagation()}
+                          onChange={async () => {
+                            setError(null)
+                            setStatusMessage(null)
+                            try {
+                              await verifyTransaction({
+                                transactionId: transaction._id,
+                              })
+                              setStatusMessage('Betalning verifierad.')
+                            } catch (verifyError) {
+                              if (verifyError instanceof Error) {
+                                setError(verifyError.message)
+                              } else {
+                                setError('Något gick fel. Försök igen.')
+                              }
+                            }
+                          }}
+                          className="h-4 w-4 cursor-pointer accent-indigo-700"
+                        />
+                      </span>
+                      <span>
+                        <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                          {transaction.formattedDate} ·{' '}
+                          {transaction.formattedTime}
+                          {transaction.status === 'pending' ? (
+                            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                              Väntar
+                            </span>
+                          ) : (
+                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                              Verifierad
+                            </span>
+                          )}
+                        </span>
+                      </span>
+
+                      <span className="text-right text-lg font-semibold text-slate-900">
                         {transaction.amount} kr
                       </span>
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          setError(null)
-                          setStatusMessage(null)
-                          try {
-                            await verifyTransaction({
-                              transactionId: transaction._id,
-                            })
-                            setStatusMessage('Betalning verifierad.')
-                          } catch (verifyError) {
-                            if (verifyError instanceof Error) {
-                              setError(verifyError.message)
-                            } else {
-                              setError('Något gick fel. Försök igen.')
-                            }
-                          }
-                        }}
-                        className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-                      >
-                        Verifiera
-                      </button>
                     </div>
+                    {isExpanded ? (
+                      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                          Varor
+                        </p>
+                        <div className="mt-2 flex flex-col gap-1">
+                          {transaction.items.map((item) => (
+                            <div
+                              key={`${transaction._id}-${item.name}`}
+                              className="flex items-center justify-between"
+                            >
+                              <span>
+                                {item.quantity}x {item.name}
+                              </span>
+                              <span>
+                                {Math.round(
+                                  item.price * item.quantity,
+                                ).toLocaleString('sv-SE')}{' '}
+                                kr
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
-                  <div className="mt-2 text-xs text-slate-500">
-                    {transaction.items
-                      .map((item) => `${item.quantity}x ${item.name}`)
-                      .join(' · ')}
-                  </div>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         </section>
@@ -262,7 +342,7 @@ function VerifyContent({ email }: { email: string }) {
           <p className="text-sm text-slate-600">{statusMessage}</p>
         ) : null}
       </div>
-      <AdminBottomNav shopId={shopIdParam} active="verify" />
+      <AdminBottomNav shopId={shopIdParam} active="history" />
     </main>
   )
 }

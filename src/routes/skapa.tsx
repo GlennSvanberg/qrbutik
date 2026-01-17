@@ -298,7 +298,7 @@ function CreateShopWizard() {
                   window.location.href = link
                   await new Promise((resolve) => setTimeout(resolve, 2000))
                   await navigate({
-                    to: '/admin/$shopId/qr',
+                    to: '/admin/$shopId/skylt',
                     params: { shopId: createdShop.shopId },
                   })
                 }}

@@ -22,6 +22,7 @@ type DraftProduct = {
   id: string
   name: string
   price: string
+  isNew?: boolean
 }
 
 function ProductsPage() {
@@ -132,10 +133,8 @@ function ProductsContent({ email }: { email: string }) {
   )
   const addProduct = useMutation(api.products.addProduct)
   const updateProduct = useMutation(api.products.updateProduct)
-  const deleteProduct = useMutation(api.products.deleteProduct)
 
   const [productDrafts, setProductDrafts] = useState<Array<DraftProduct>>([])
-  const [newProduct, setNewProduct] = useState({ name: '', price: '' })
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -151,17 +150,42 @@ function ProductsContent({ email }: { email: string }) {
         id: product._id,
         name: product.name,
         price: product.price.toString(),
+        isNew: false,
       })),
     )
   }, [products])
 
-  const parsedNewProduct = useMemo(() => {
-    const normalizedPrice = newProduct.price.replace(',', '.')
-    return {
-      name: newProduct.name.trim(),
-      price: Number.parseFloat(normalizedPrice),
-    }
-  }, [newProduct])
+  const parsedProducts = useMemo(
+    () =>
+      productDrafts.map((product) => {
+        const normalizedPrice = product.price.replace(',', '.')
+        return {
+          id: product.id,
+          name: product.name.trim(),
+          price: Number.parseFloat(normalizedPrice),
+        }
+      }),
+    [productDrafts],
+  )
+
+  const canSubmit = useMemo(
+    () =>
+      parsedProducts.length > 0 &&
+      parsedProducts.every(
+        (product) =>
+          product.name.length > 0 &&
+          Number.isFinite(product.price) &&
+          product.price > 0,
+      ),
+    [parsedProducts],
+  )
+
+  const addRow = () => {
+    setProductDrafts((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), name: '', price: '', isNew: true },
+    ])
+  }
 
   if (!shop) {
     return (
@@ -214,169 +238,67 @@ function ProductsContent({ email }: { email: string }) {
           section="products"
           shopName={shop.name}
         />
-        <header className="flex flex-col gap-2 text-left">
-          <p className="text-sm text-slate-600">
-            {shop.name} · <span className="font-medium">/s/{shop.slug}</span>
-          </p>
-          <Link
-            to="/s/$shopSlug"
-            params={{ shopSlug: shop.slug }}
-            className="w-fit cursor-pointer text-sm font-semibold text-indigo-700 hover:text-indigo-600"
-          >
-            Öppna butiken
-          </Link>
-        </header>
-
         <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
           <ProdukterForm
             products={productDrafts}
             onChange={updateProductDrafts}
             helperText="Snabbt och enkelt: namn + pris."
-            onAddRow={() =>
-              setProductDrafts((prev) => [
-                ...prev,
-                { id: crypto.randomUUID(), name: '', price: '' },
-              ])
-            }
+            onAddRow={addRow}
           />
 
-          <div className="divide-y divide-slate-200/70">
-            {productDrafts.map((product) => (
-              <div key={product.id} className="grid gap-3 py-4 sm:grid-cols-2">
-                <div className="flex items-end">
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setError(null)
-                      setStatusMessage(null)
-                      const normalizedPrice = product.price.replace(',', '.')
-                      const price = Number.parseFloat(normalizedPrice)
-                      if (!product.name.trim() || !Number.isFinite(price)) {
-                        setError('Ange ett namn och ett giltigt pris.')
-                        return
-                      }
-                      try {
+          <div className="flex items-center justify-end">
+            <button
+              type="button"
+              onClick={async () => {
+                setError(null)
+                setStatusMessage(null)
+                if (!canSubmit) {
+                  setError('Lägg till minst en produkt med giltigt pris.')
+                  return
+                }
+                try {
+                  const pendingProducts = parsedProducts.filter(
+                    (product) => product.name.length > 0,
+                  )
+                  const createdProducts = await Promise.all(
+                    pendingProducts.map(async (product) => {
+                      if (products.some((item) => item._id === product.id)) {
                         await updateProduct({
                           productId: product.id as Id<'products'>,
-                          name: product.name.trim(),
-                          price,
+                          name: product.name,
+                          price: product.price,
                         })
-                        setStatusMessage('Produkt uppdaterad.')
-                      } catch (updateError) {
-                        if (updateError instanceof Error) {
-                          setError(updateError.message)
-                        } else {
-                          setError('Något gick fel. Försök igen.')
-                        }
+                        return { ...product, isNew: false }
                       }
-                    }}
-                    className="h-11 w-full cursor-pointer rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-                  >
-                    Spara
-                  </button>
-                </div>
-                <div className="flex items-end">
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setError(null)
-                      setStatusMessage(null)
-                      try {
-                        await deleteProduct({
-                          productId: product.id as Id<'products'>,
-                        })
-                        setProductDrafts((prev) =>
-                          prev.filter((item) => item.id !== product.id),
-                        )
-                        setStatusMessage('Produkt borttagen.')
-                      } catch (deleteError) {
-                        if (deleteError instanceof Error) {
-                          setError(deleteError.message)
-                        } else {
-                          setError('Något gick fel. Försök igen.')
-                        }
-                      }
-                    }}
-                    className="h-11 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 hover:border-slate-300"
-                  >
-                    Ta bort
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:grid-cols-[1.4fr_0.6fr_auto]">
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              Ny produkt
-              <input
-                className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-indigo-500"
-                value={newProduct.name}
-                onChange={(event) =>
-                  setNewProduct((prev) => ({
-                    ...prev,
-                    name: event.target.value,
-                  }))
-                }
-              />
-            </label>
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              Pris (SEK)
-              <input
-                inputMode="decimal"
-                className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-indigo-500"
-                value={newProduct.price}
-                onChange={(event) =>
-                  setNewProduct((prev) => ({
-                    ...prev,
-                    price: event.target.value,
-                  }))
-                }
-              />
-            </label>
-            <div className="flex items-end">
-              <button
-                type="button"
-                onClick={async () => {
-                  setError(null)
-                  setStatusMessage(null)
-                  if (
-                    !parsedNewProduct.name ||
-                    !Number.isFinite(parsedNewProduct.price) ||
-                    parsedNewProduct.price <= 0
-                  ) {
-                    setError('Ange ett namn och ett giltigt pris.')
-                    return
+                      const productId = await addProduct({
+                        shopId: shop._id,
+                        name: product.name,
+                        price: product.price,
+                      })
+                      return { ...product, id: productId, isNew: false }
+                    }),
+                  )
+                  setProductDrafts(
+                    createdProducts.map((product) => ({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price.toString(),
+                      isNew: false,
+                    })),
+                  )
+                  setStatusMessage('Produkter sparade.')
+                } catch (saveError) {
+                  if (saveError instanceof Error) {
+                    setError(saveError.message)
+                  } else {
+                    setError('Något gick fel. Försök igen.')
                   }
-                  try {
-                    const productId = await addProduct({
-                      shopId: shop._id,
-                      name: parsedNewProduct.name,
-                      price: parsedNewProduct.price,
-                    })
-                    setProductDrafts((prev) => [
-                      ...prev,
-                      {
-                        id: productId,
-                        name: parsedNewProduct.name,
-                        price: parsedNewProduct.price.toString(),
-                      },
-                    ])
-                    setNewProduct({ name: '', price: '' })
-                    setStatusMessage('Produkt tillagd.')
-                  } catch (addError) {
-                    if (addError instanceof Error) {
-                      setError(addError.message)
-                    } else {
-                      setError('Något gick fel. Försök igen.')
-                    }
-                  }
-                }}
-                className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-              >
-                Lägg till
-              </button>
-            </div>
+                }
+              }}
+              className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+            >
+              Spara ändringar
+            </button>
           </div>
         </section>
 

@@ -13,7 +13,7 @@ import {
 } from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
-export const Route = createFileRoute('/admin/$shopId/qr')({
+export const Route = createFileRoute('/admin/$shopId/skylt')({
   component: ShopQrPage,
 })
 
@@ -167,20 +167,28 @@ function ShopQrContent({ email }: { email: string }) {
     )
   }
 
-  const shopUrl = origin ? `${origin}/s/${shop.slug}` : `/s/${shop.slug}`
+  const qrValue = origin
+    ? `${origin}/s/${shop.slug}`
+    : `https://qrbutik.se/s/${shop.slug}`
+  const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6 print:bg-white print:px-0 print:pb-0 print:pt-0">
+      <style>{`@page { size: A4 portrait; margin: 0; }
+        @media print {
+          html, body { margin: 0; padding: 0; }
+        }
+      `}</style>
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 print:hidden">
         <AdminHeader
           ownerEmail={email}
           shopId={shop._id}
-          section="qr"
+          section="skylt"
           shopName={shop.name}
         />
         <header className="flex flex-col gap-2 text-center">
           <h2 className="text-2xl font-semibold text-slate-900">
-            QR-kod för {shop.name}
+            Skylt för {shop.name}
           </h2>
           <p className="text-sm text-slate-600">
             Skriv ut skylten och låt kunderna skanna QR-koden.
@@ -196,15 +204,15 @@ function ShopQrContent({ email }: { email: string }) {
           </div>
         </header>
 
-        <section className="flex flex-col items-center gap-6 border-t border-slate-200 pt-6 text-center print:border-none">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm print:border-none print:shadow-none">
-            <QRCodeSVG value={shopUrl} size={220} level="M" />
+        <section className="flex flex-col items-center gap-6 border-t border-slate-200 pt-6 text-center">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <QRCodeSVG value={qrValue} size={220} level="M" />
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold text-slate-900">
               Skanna för att handla i {shop.name}
             </p>
-            <p className="text-sm text-slate-500">{shopUrl}</p>
+            <p className="text-sm text-slate-500">{displayUrl}</p>
           </div>
           <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm text-slate-600">
             <p>1. Skanna QR-koden med mobilkamera.</p>
@@ -213,7 +221,27 @@ function ShopQrContent({ email }: { email: string }) {
           </div>
         </section>
       </div>
-      <AdminBottomNav shopId={shop._id} active="qr" />
+
+      <section className="hidden min-h-[297mm] w-[210mm] flex-col items-center justify-between gap-12 px-[22mm] py-[24mm] text-center print:flex">
+        <div className="flex flex-col items-center gap-4">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.5em] text-slate-400">
+            qrbutik.se
+          </span>
+          <h1 className="text-5xl font-semibold text-slate-900">{shop.name}</h1>
+          <p className="text-lg font-semibold text-slate-600">{displayUrl}</p>
+        </div>
+
+        <div className="flex flex-col items-center gap-8">
+          <div className="rounded-[44px] border border-slate-200 bg-white p-10">
+            <QRCodeSVG value={qrValue} size={420} level="M" />
+          </div>
+          <div className="h-px w-40 bg-slate-200" />
+        </div>
+      </section>
+
+      <div className="print:hidden">
+        <AdminBottomNav shopId={shop._id} active="skylt" />
+      </div>
     </main>
   )
 }

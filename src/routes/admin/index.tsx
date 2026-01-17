@@ -177,11 +177,11 @@ function AdminDashboardContent({ email }: { email: string }) {
                           Öppna admin
                         </Link>
                         <Link
-                          to="/admin/$shopId/qr"
+                          to="/admin/$shopId/skylt"
                           params={{ shopId: shop._id }}
                           className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300"
                         >
-                          QR + PDF
+                          Skylt
                         </Link>
                         <Link
                           to="/admin/$shopId/settings"
