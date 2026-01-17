@@ -16,6 +16,10 @@
 - **Roadmap & Plan:** See `plan.md`
 - **Design System:** See `DESIGN_SPEC.md`
 
+## Dev Env
+- `DEV_MAGIC_LINK=true` skips email and stores links for local dev.
+- `VITE_DEV_MAGIC_LINK=true` auto-opens dev magic links in the browser.
+
 ## Workflow
 - Keep `AGENTS.md` small and concise.
 - All buttons must have a pointer cursor on hover.

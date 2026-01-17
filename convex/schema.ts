@@ -32,4 +32,9 @@ export default defineSchema({
     ),
     createdAt: v.number(),
   }).index("by_shopId", ["shopId"]),
+  devMagicLinks: defineTable({
+    email: v.string(),
+    url: v.string(),
+    updatedAt: v.number(),
+  }).index("by_email", ["email"]),
 });

@@ -1,11 +1,12 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useMemo, useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { useMutation } from 'convex/react'
+import { useEffect, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
+import { ButiksinfoForm } from '../../../components/ButiksinfoForm'
 import { authClient } from '../../../lib/authClient'
 import {
   isDevMagicLinkEnabled,
@@ -13,11 +14,11 @@ import {
 } from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
-export const Route = createFileRoute('/admin/$shopId/qr')({
-  component: ShopQrPage,
+export const Route = createFileRoute('/admin/$shopId/settings')({
+  component: SettingsPage,
 })
 
-function ShopQrPage() {
+function SettingsPage() {
   const { data: session, isPending, error } = authClient.useSession()
   const [email, setEmail] = useState('')
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
@@ -108,27 +109,48 @@ function ShopQrPage() {
     )
   }
 
-  return <ShopQrContent email={session.user.email} />
+  return <SettingsContent email={session.user.email} />
 }
 
-function ShopQrContent({ email }: { email: string }) {
+function SettingsContent({ email }: { email: string }) {
   const { shopId } = Route.useParams()
+  if (!shopId) {
+    return null
+  }
   const shopIdParam = shopId as Id<'shops'>
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
+  const updateShop = useMutation(api.shops.updateShop)
 
-  const origin = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return ''
+  const [shopState, setShopState] = useState({
+    name: '',
+    ownerEmail: '',
+    swishNumber: '',
+  })
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!shop) {
+      return
     }
-    return window.location.origin
-  }, [])
+    setShopState({
+      name: shop.name,
+      ownerEmail: shop.ownerEmail,
+      swishNumber: shop.swishNumber,
+    })
+  }, [shop])
+
+  const canSaveShop =
+    shopState.name.trim() &&
+    shopState.ownerEmail.trim() &&
+    shopState.swishNumber.trim()
 
   if (!shop) {
     return (
       <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -149,7 +171,7 @@ function ShopQrContent({ email }: { email: string }) {
   if (shop.ownerEmail !== email) {
     return (
       <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -167,53 +189,72 @@ function ShopQrContent({ email }: { email: string }) {
     )
   }
 
-  const shopUrl = origin ? `${origin}/s/${shop.slug}` : `/s/${shop.slug}`
-
   return (
     <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AdminHeader
           ownerEmail={email}
           shopId={shop._id}
-          section="qr"
+          section="settings"
           shopName={shop.name}
         />
-        <header className="flex flex-col gap-2 text-center">
-          <h2 className="text-2xl font-semibold text-slate-900">
-            QR-kod för {shop.name}
-          </h2>
+        <header className="flex flex-col gap-2 text-left">
           <p className="text-sm text-slate-600">
-            Skriv ut skylten och låt kunderna skanna QR-koden.
+            {shop.name} · <span className="font-medium">/s/{shop.slug}</span>
           </p>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-            >
-              Skriv ut A4
-            </button>
-          </div>
+          <Link
+            to="/s/$shopSlug"
+            params={{ shopSlug: shop.slug }}
+            className="w-fit cursor-pointer text-sm font-semibold text-indigo-700 hover:text-indigo-600"
+          >
+            Öppna butiken
+          </Link>
         </header>
 
-        <section className="flex flex-col items-center gap-6 border-t border-slate-200 pt-6 text-center print:border-none">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm print:border-none print:shadow-none">
-            <QRCodeSVG value={shopUrl} size={220} level="M" />
+        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-semibold text-slate-900">
+              Butiksinfo
+            </h2>
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold text-slate-900">
-              Skanna för att handla i {shop.name}
-            </p>
-            <p className="text-sm text-slate-500">{shopUrl}</p>
-          </div>
-          <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm text-slate-600">
-            <p>1. Skanna QR-koden med mobilkamera.</p>
-            <p>2. Lägg varor i varukorgen.</p>
-            <p>3. Betala direkt med Swish.</p>
-          </div>
+          <ButiksinfoForm
+            values={shopState}
+            onChange={(values) => setShopState(values)}
+          />
+          <button
+            type="button"
+            disabled={!canSaveShop}
+            onClick={async () => {
+              setError(null)
+              setStatusMessage(null)
+              try {
+                await updateShop({
+                  shopId: shop._id,
+                  name: shopState.name.trim(),
+                  swishNumber: shopState.swishNumber.trim(),
+                  ownerEmail: shopState.ownerEmail.trim(),
+                })
+                setStatusMessage('Butiksinfo uppdaterad.')
+              } catch (updateError) {
+                if (updateError instanceof Error) {
+                  setError(updateError.message)
+                } else {
+                  setError('Något gick fel. Försök igen.')
+                }
+              }
+            }}
+            className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+          >
+            Spara butiksinfo
+          </button>
         </section>
+
+        {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+        {statusMessage ? (
+          <p className="text-sm text-slate-600">{statusMessage}</p>
+        ) : null}
       </div>
-      <AdminBottomNav shopId={shop._id} active="qr" />
+      <AdminBottomNav shopId={shop._id} active="settings" />
     </main>
   )
 }
