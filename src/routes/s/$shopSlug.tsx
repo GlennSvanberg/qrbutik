@@ -99,7 +99,6 @@ function ShopView() {
           quantity: item.quantity,
         })),
       })
-
       const origin = window.location.origin
       const callbackUrl = `${origin}/tack/${transactionId}`
 
