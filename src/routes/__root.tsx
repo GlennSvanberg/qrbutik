@@ -144,6 +144,12 @@ export const Route = createRootRouteWithContext<{
         {
           rel: 'icon',
           type: 'image/png',
+          sizes: '48x48',
+          href: '/favicon.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
           sizes: '16x16',
           href: '/favicon-16x16.png',
         },

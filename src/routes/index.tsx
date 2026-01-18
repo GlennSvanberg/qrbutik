@@ -44,9 +44,16 @@ function Home() {
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-slate-50" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 pb-16 pt-14 sm:pt-20">
           <div className="flex flex-col gap-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-              QRButik.se
-            </p>
+            <div className="flex flex-col items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="QRButik logo"
+                className="h-14 w-auto sm:h-16"
+              />
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+                QRButik.se
+              </p>
+            </div>
             <h1 className="text-pretty text-4xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               Sälj med Swish — utan krångel
             </h1>
