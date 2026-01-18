@@ -366,20 +366,14 @@ function SettingsContent({ email }: { email: string }) {
                   shopId: shop._id,
                   plan: 'event',
                 })
-<<<<<<< HEAD
                 const origin = window.location.origin
                 const callbackUrl = `${origin}/admin/${shop._id}/skylt`
 
-=======
->>>>>>> dfeae3035c76043d1960c7299e4b87c34f18c23a
                 const link = generateSwishLink(
                   '0735029113',
                   result.amount,
                   result.message,
-<<<<<<< HEAD
                   callbackUrl,
-=======
->>>>>>> dfeae3035c76043d1960c7299e4b87c34f18c23a
                 )
                 setActivationMessage('Event aktiverad. Öppnar Swish...')
                 window.location.href = link
