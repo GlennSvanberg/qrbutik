@@ -8,6 +8,7 @@
     "dev:web": "vite dev",
     "dev:ts": "tsc -b -w",
     "dev:convex": "npx convex dev",
+    "prebuild": "node scripts/generate-pseo-files.mjs",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs",
     "format": "prettier --write .",

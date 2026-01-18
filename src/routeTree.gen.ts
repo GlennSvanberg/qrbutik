@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UtforskaIndexRouteImport } from './routes/utforska/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as UtforskaSportRouteImport } from './routes/utforska/$sport'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
@@ -23,6 +25,7 @@ import { Route as AdminShopIdSkyltRouteImport } from './routes/admin/$shopId/sky
 import { Route as AdminShopIdSettingsRouteImport } from './routes/admin/$shopId/settings'
 import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
 import { Route as AdminShopIdHistorikRouteImport } from './routes/admin/$shopId/historik'
+import { Route as UtforskaSportCityIndexRouteImport } from './routes/utforska/$sport/$city/index'
 
 const SkapaRoute = SkapaRouteImport.update({
   id: '/skapa',
@@ -34,9 +37,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UtforskaIndexRoute = UtforskaIndexRouteImport.update({
+  id: '/utforska/',
+  path: '/utforska/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UtforskaSportRoute = UtforskaSportRouteImport.update({
+  id: '/utforska/$sport',
+  path: '/utforska/$sport',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TackTransactionIdRoute = TackTransactionIdRouteImport.update({
@@ -94,6 +107,11 @@ const AdminShopIdHistorikRoute = AdminShopIdHistorikRouteImport.update({
   path: '/historik',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
+const UtforskaSportCityIndexRoute = UtforskaSportCityIndexRouteImport.update({
+  id: '/$city/',
+  path: '/$city/',
+  getParentRoute: () => UtforskaSportRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,7 +119,9 @@ export interface FileRoutesByFullPath {
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRouteWithChildren
   '/admin': typeof AdminIndexRoute
+  '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -110,12 +130,15 @@ export interface FileRoutesByFullPath {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
   '/s/$shopSlug/': typeof SShopSlugIndexRoute
+  '/utforska/$sport/$city': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRouteWithChildren
   '/admin': typeof AdminIndexRoute
+  '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -124,6 +147,7 @@ export interface FileRoutesByTo {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId': typeof AdminShopIdIndexRoute
   '/s/$shopSlug': typeof SShopSlugIndexRoute
+  '/utforska/$sport/$city': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,7 +156,9 @@ export interface FileRoutesById {
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRouteWithChildren
   '/admin/': typeof AdminIndexRoute
+  '/utforska/': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -141,6 +167,7 @@ export interface FileRoutesById {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
   '/s/$shopSlug/': typeof SShopSlugIndexRoute
+  '/utforska/$sport/$city/': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,7 +177,9 @@ export interface FileRouteTypes {
     | '/admin/$shopId'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin'
+    | '/utforska'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -159,12 +188,15 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
     | '/s/$shopSlug/'
+    | '/utforska/$sport/$city'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/skapa'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin'
+    | '/utforska'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -173,6 +205,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId'
     | '/s/$shopSlug'
+    | '/utforska/$sport/$city'
   id:
     | '__root__'
     | '/'
@@ -180,7 +213,9 @@ export interface FileRouteTypes {
     | '/admin/$shopId'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin/'
+    | '/utforska/'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -189,6 +224,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
     | '/s/$shopSlug/'
+    | '/utforska/$sport/$city/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,7 +233,9 @@ export interface RootRouteChildren {
   AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
+  UtforskaSportRoute: typeof UtforskaSportRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
+  UtforskaIndexRoute: typeof UtforskaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -216,11 +254,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/utforska/': {
+      id: '/utforska/'
+      path: '/utforska'
+      fullPath: '/utforska'
+      preLoaderRoute: typeof UtforskaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/utforska/$sport': {
+      id: '/utforska/$sport'
+      path: '/utforska/$sport'
+      fullPath: '/utforska/$sport'
+      preLoaderRoute: typeof UtforskaSportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tack/$transactionId': {
@@ -300,6 +352,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShopIdHistorikRouteImport
       parentRoute: typeof AdminShopIdRoute
     }
+    '/utforska/$sport/$city/': {
+      id: '/utforska/$sport/$city/'
+      path: '/$city'
+      fullPath: '/utforska/$sport/$city'
+      preLoaderRoute: typeof UtforskaSportCityIndexRouteImport
+      parentRoute: typeof UtforskaSportRoute
+    }
   }
 }
 
@@ -339,13 +398,27 @@ const SShopSlugRouteWithChildren = SShopSlugRoute._addFileChildren(
   SShopSlugRouteChildren,
 )
 
+interface UtforskaSportRouteChildren {
+  UtforskaSportCityIndexRoute: typeof UtforskaSportCityIndexRoute
+}
+
+const UtforskaSportRouteChildren: UtforskaSportRouteChildren = {
+  UtforskaSportCityIndexRoute: UtforskaSportCityIndexRoute,
+}
+
+const UtforskaSportRouteWithChildren = UtforskaSportRoute._addFileChildren(
+  UtforskaSportRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SkapaRoute: SkapaRoute,
   AdminShopIdRoute: AdminShopIdRouteWithChildren,
   SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
+  UtforskaSportRoute: UtforskaSportRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
+  UtforskaIndexRoute: UtforskaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

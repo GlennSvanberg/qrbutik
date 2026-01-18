@@ -2,8 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://qrbutik.se/</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://qrbutik.se/skapa</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://qrbutik.se/utforska</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://qrbutik.se/utforska/fotboll/stockholm</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://qrbutik.se/utforska/fotboll/goteborg</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://qrbutik.se/utforska/handboll/stockholm</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://qrbutik.se/utforska/handboll/goteborg</loc>
+    <lastmod>2026-01-18T20:30:39.508Z</lastmod>
+    <changefreq>weekly</changefreq>
   </url>
 </urlset>

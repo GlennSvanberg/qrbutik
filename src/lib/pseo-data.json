@@ -1,0 +1,154 @@
+{
+  "sports": [
+    {
+      "slug": "fotboll",
+      "name": "Fotboll",
+      "environment": "outdoor",
+      "season": "summer",
+      "matchContext": "matchdagar och cuper",
+      "crowdContext": "fulla läktare och snabba pauser",
+      "commonItems": ["kaffe", "korv", "läsk", "hembakat"],
+      "operationalNotesVariants": [
+        [
+          "Halvtid är den mest intensiva perioden — kiosken måste tåla hög volym på kort tid.",
+          "Utomhusmatcherna gör skyltning och tydliga priser extra viktiga.",
+          "Cuper innebär många besökare och snabba återkommande köp."
+        ],
+        [
+          "Snabba köp i pausen kräver tydliga menyer och smidig betalning.",
+          "Öppet väder ställer krav på enkel och synlig QR-kod.",
+          "Matchdagar lockar många spontanbeställningar."
+        ],
+        [
+          "Publiken vill handla snabbt mellan spel och uppvärmning.",
+          "Utomhusmiljö gör enkel navigation och prissättning viktig.",
+          "Större matcher ger korta men intensiva säljtoppar."
+        ]
+      ]
+    },
+    {
+      "slug": "handboll",
+      "name": "Handboll",
+      "environment": "indoor",
+      "season": "winter",
+      "matchContext": "hemmamatcher i hallen",
+      "crowdContext": "tajta matchscheman och korta pauser",
+      "commonItems": ["kaffe", "toast", "frukt", "läsk"],
+      "operationalNotesVariants": [
+        [
+          "Hallen ger snabb rotation — kiosken behöver vara tydlig och snabb.",
+          "Pauserna är korta, så självbetjäning gör stor skillnad.",
+          "Publiken sitter nära — QR-koden måste vara enkel att hitta."
+        ],
+        [
+          "Tajta spelscheman gör att varje minut i pausen räknas.",
+          "Självbetjäning minskar köer när många vill handla samtidigt.",
+          "En tydlig QR-kod syns snabbt från läktaren."
+        ],
+        [
+          "Inomhusmiljön gör att flödet måste vara stabilt och förutsägbart.",
+          "Kort paus betyder behov av snabb och tydlig betalning.",
+          "Närheten till kiosken gör enkel skyltning extra effektiv."
+        ]
+      ]
+    }
+  ],
+  "cities": [
+    {
+      "slug": "stockholm",
+      "name": "Stockholm",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Stockholm är byggt på vatten, broar och stadsliv. När föreningslivet samlar publik i staden behövs ett kiosköpp som flyter lika smidigt som matchen.",
+        "Stockholm präglas av aktivitet, arenor och föreningar som samlar publik. QRButik gör kiosken enkel att driva även när tempot är högt.",
+        "I Stockholm möts föreningsliv och stadspuls. En smidig kiosk ger er mer tid till laget och mindre tid i kassan."
+      ],
+      "localNotesVariants": [
+        [
+          "Många föreningar och cuper gör att kiosken ofta behöver skala snabbt.",
+          "Publiken är van vid smidiga digitala flöden och tydliga betalsätt."
+        ],
+        [
+          "Stadens täta matchkalender kräver snabb uppstart.",
+          "Besökare förväntar sig enkel Swish-betalning."
+        ],
+        [
+          "Föreningar driver ofta flera event samtidigt.",
+          "Digitala flöden gör skillnad när köerna växer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Turneringar på sommarhalvåret med många besökare.",
+          "Kiosker i hallar med snabba pauser och tydliga flöden."
+        ],
+        [
+          "Matcher på stora anläggningar med högt tryck.",
+          "Föreningsevent där flera lag delar kiosk."
+        ],
+        [
+          "Cuper där många lag turas om att sälja.",
+          "Arrangemang med korta pauser och snabba köp."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Stockholms stad",
+          "url": "https://start.stockholm/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "goteborg",
+      "name": "Göteborg",
+      "region": "Västra Götaland",
+      "heritageTextVariants": [
+        "Göteborg präglas av hamnen, föreningslivet och matchkulturen. QRButik hjälper er att hålla kiosken snabb och tydlig när staden samlas kring laget.",
+        "I Göteborg möts tradition och föreningsliv. En digital kiosk gör det lättare att sälja när trycket är högt.",
+        "Göteborgs föreningar driver matcher året runt. QRButik gör kiosken smidig oavsett tempo."
+      ],
+      "localNotesVariants": [
+        [
+          "Starkt föreningsliv med både inomhus- och utomhusmatcher.",
+          "Många familjer på läktaren gör snabb betalning extra viktig."
+        ],
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Föreningarna växlar mellan hallar och utomhusplaner."
+        ],
+        [
+          "Många arrangemang samlar stora publikflöden.",
+          "Snabba köp gör kiosken lugnare för volontärerna."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Matchdagar med hög belastning och korta pauser.",
+          "Föreningsarrangemang där enkel Swish-betalning sparar tid."
+        ],
+        [
+          "Cuphelger med flera matcher samma dag.",
+          "Kiosker i hallar där köerna blir långa."
+        ],
+        [
+          "Utomhusmatcher med många spontanbesök.",
+          "Event där flera lag turas om vid kiosken."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Göteborgs Stad",
+          "url": "https://goteborg.se/"
+        },
+        {
+          "label": "Göteborg & Co",
+          "url": "https://www.goteborg.com/"
+        }
+      ]
+    }
+  ]
+}

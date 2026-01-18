@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export const Route = createFileRoute("/tack/$transactionId")({
   component: ThankYouView,
@@ -10,7 +11,9 @@ export const Route = createFileRoute("/tack/$transactionId")({
 function ThankYouView() {
   const { transactionId } = Route.useParams();
   const { data: transaction } = useSuspenseQuery(
-    convexQuery(api.transactions.get, { transactionId: transactionId as any }),
+    convexQuery(api.transactions.get, {
+      transactionId: transactionId as unknown as Id<"transactions">,
+    }),
   );
 
   if (!transaction) {
