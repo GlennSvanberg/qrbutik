@@ -277,6 +277,50 @@ export const updateShop = mutation({
   },
 })
 
+export const deleteShop = mutation({
+  args: {
+    shopId: v.id('shops'),
+    ownerEmail: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const shop = await ctx.db.get('shops', args.shopId)
+    if (!shop) {
+      throw new Error('Butiken hittades inte.')
+    }
+    if (shop.ownerEmail !== args.ownerEmail) {
+      throw new Error('Du har inte behörighet att ta bort butiken.')
+    }
+
+    const products = await ctx.db
+      .query('products')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .collect()
+    for (const product of products) {
+      await ctx.db.delete('products', product._id)
+    }
+
+    const activations = await ctx.db
+      .query('shopActivations')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .collect()
+    for (const activation of activations) {
+      await ctx.db.delete('shopActivations', activation._id)
+    }
+
+    const transactions = await ctx.db
+      .query('transactions')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .collect()
+    for (const transaction of transactions) {
+      await ctx.db.delete('transactions', transaction._id)
+    }
+
+    await ctx.db.delete('shops', args.shopId)
+    return null
+  },
+})
+
 export const getActivationStatus = query({
   args: { shopId: v.id('shops') },
   returns: v.union(
