@@ -2,6 +2,36 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/')({
+  head: () => ({
+    meta: [
+      {
+        title: 'QRbutik – Sälj med Swish utan krångel',
+      },
+      {
+        name: 'description',
+        content:
+          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+      },
+      {
+        property: 'og:title',
+        content: 'QRbutik – Sälj med Swish utan krångel',
+      },
+      {
+        property: 'og:description',
+        content:
+          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+      },
+      {
+        name: 'twitter:title',
+        content: 'QRbutik – Sälj med Swish utan krångel',
+      },
+      {
+        name: 'twitter:description',
+        content:
+          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+      },
+    ],
+  }),
   component: Home,
 })
 

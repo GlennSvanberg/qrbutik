@@ -15,6 +15,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
+import { Route as SShopSlugIndexRouteImport } from './routes/s/$shopSlug/index'
 import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
 import { Route as SShopSlugQrRouteImport } from './routes/s/$shopSlug/qr'
 import { Route as SShopSlugKlartRouteImport } from './routes/s/$shopSlug/klart'
@@ -52,6 +53,11 @@ const AdminShopIdRoute = AdminShopIdRouteImport.update({
   id: '/admin/$shopId',
   path: '/admin/$shopId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SShopSlugIndexRoute = SShopSlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SShopSlugRoute,
 } as any)
 const AdminShopIdIndexRoute = AdminShopIdIndexRouteImport.update({
   id: '/',
@@ -103,11 +109,11 @@ export interface FileRoutesByFullPath {
   '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
+  '/s/$shopSlug/': typeof SShopSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
-  '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
@@ -117,6 +123,7 @@ export interface FileRoutesByTo {
   '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId': typeof AdminShopIdIndexRoute
+  '/s/$shopSlug': typeof SShopSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +140,7 @@ export interface FileRoutesById {
   '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
+  '/s/$shopSlug/': typeof SShopSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,11 +158,11 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/klart'
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
+    | '/s/$shopSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/skapa'
-    | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/admin'
     | '/admin/$shopId/historik'
@@ -164,6 +172,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/klart'
     | '/s/$shopSlug/qr'
     | '/admin/$shopId'
+    | '/s/$shopSlug'
   id:
     | '__root__'
     | '/'
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/klart'
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
+    | '/s/$shopSlug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -233,6 +243,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/$shopId'
       preLoaderRoute: typeof AdminShopIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/s/$shopSlug/': {
+      id: '/s/$shopSlug/'
+      path: '/'
+      fullPath: '/s/$shopSlug/'
+      preLoaderRoute: typeof SShopSlugIndexRouteImport
+      parentRoute: typeof SShopSlugRoute
     }
     '/admin/$shopId/': {
       id: '/admin/$shopId/'
@@ -309,11 +326,13 @@ const AdminShopIdRouteWithChildren = AdminShopIdRoute._addFileChildren(
 interface SShopSlugRouteChildren {
   SShopSlugKlartRoute: typeof SShopSlugKlartRoute
   SShopSlugQrRoute: typeof SShopSlugQrRoute
+  SShopSlugIndexRoute: typeof SShopSlugIndexRoute
 }
 
 const SShopSlugRouteChildren: SShopSlugRouteChildren = {
   SShopSlugKlartRoute: SShopSlugKlartRoute,
   SShopSlugQrRoute: SShopSlugQrRoute,
+  SShopSlugIndexRoute: SShopSlugIndexRoute,
 }
 
 const SShopSlugRouteWithChildren = SShopSlugRoute._addFileChildren(

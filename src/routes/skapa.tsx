@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useMutation, useQuery } from 'convex/react'
 import { useMemo, useState } from 'react'
 import { api } from '../../convex/_generated/api'
@@ -25,13 +25,42 @@ const slugify = (value: string) => {
 }
 
 export const Route = createFileRoute('/skapa')({
+  head: () => ({
+    meta: [
+      {
+        title: 'Skapa din butik – QRbutik',
+      },
+      {
+        name: 'description',
+        content:
+          'Starta en digital kiosk på några minuter. Lägg in varor, få en QR-skylt och ta betalt med Swish direkt.',
+      },
+      {
+        property: 'og:title',
+        content: 'Skapa din butik – QRbutik',
+      },
+      {
+        property: 'og:description',
+        content:
+          'Starta en digital kiosk på några minuter. Lägg in varor, få en QR-skylt och ta betalt med Swish direkt.',
+      },
+      {
+        name: 'twitter:title',
+        content: 'Skapa din butik – QRbutik',
+      },
+      {
+        name: 'twitter:description',
+        content:
+          'Starta en digital kiosk på några minuter. Lägg in varor, få en QR-skylt och ta betalt med Swish direkt.',
+      },
+    ],
+  }),
   component: CreateShopWizard,
 })
 
 type DraftProduct = ProdukterDraft
 
 function CreateShopWizard() {
-  const navigate = useNavigate()
   const createShopWithProducts = useMutation(api.shops.createShopWithProducts)
   const createShopActivation = useMutation(api.shops.activateShop)
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -108,7 +137,9 @@ function CreateShopWizard() {
             {step !== 3 ? (
               <button
                 type="button"
-                onClick={() => navigate({ to: '/' })}
+                onClick={() => {
+                  window.location.href = '/'
+                }}
                 className="cursor-pointer text-slate-500 hover:text-slate-700"
               >
                 Till startsidan
@@ -311,10 +342,7 @@ function CreateShopWizard() {
                     )
                     window.location.href = link
                     setTimeout(() => {
-                      void navigate({
-                        to: '/s/$shopSlug/klart',
-                        params: { shopSlug: createdShop.slug },
-                      })
+                      window.location.href = `/s/${createdShop.slug}/klart`
                     }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
@@ -339,10 +367,7 @@ function CreateShopWizard() {
                     )
                     window.location.href = link
                     setTimeout(() => {
-                      void navigate({
-                        to: '/s/$shopSlug/klart',
-                        params: { shopSlug: createdShop.slug },
-                      })
+                      window.location.href = `/s/${createdShop.slug}/klart`
                     }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
