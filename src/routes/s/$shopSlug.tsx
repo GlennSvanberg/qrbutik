@@ -1,57 +1,57 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { convexQuery } from "@convex-dev/react-query";
-import { useMutation } from "convex/react";
-import { useMemo, useState } from "react";
-import { api } from "../../../convex/_generated/api";
-import { generateSwishLink } from "../../lib/swish";
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { convexQuery } from '@convex-dev/react-query'
+import { useMutation } from 'convex/react'
+import { useMemo, useState } from 'react'
+import { api } from '../../../convex/_generated/api'
+import { generateSwishLink } from '../../lib/swish'
 
-export const Route = createFileRoute("/s/$shopSlug")({
+export const Route = createFileRoute('/s/$shopSlug')({
   component: ShopView,
-});
+})
 
 type CartItem = {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
+  productId: string
+  name: string
+  price: number
+  quantity: number
+}
 
 function ShopView() {
-  const { shopSlug } = Route.useParams();
-  const navigate = useNavigate();
+  const { shopSlug } = Route.useParams()
+  const navigate = useNavigate()
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopBySlug, { slug: shopSlug }),
-  );
+  )
 
   const { data: products } = useSuspenseQuery(
     convexQuery(api.products.listByShop, {
-      shopId: (shop?._id ?? "") as any,
+      shopId: (shop?._id ?? '') as any,
     }),
-  );
+  )
 
-  const createTransaction = useMutation(api.transactions.create);
+  const createTransaction = useMutation(api.transactions.create)
 
-  const [cart, setCart] = useState<Record<string, CartItem | undefined>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cart, setCart] = useState<Record<string, CartItem | undefined>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const cartItems = useMemo(
     () => Object.values(cart).filter((item): item is CartItem => !!item),
     [cart],
-  );
+  )
   const totalPrice = useMemo(
     () => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [cartItems],
-  );
+  )
 
   const addToCart = (product: any) => {
     setCart((prev) => {
-      const existing = prev[product._id];
+      const existing = prev[product._id]
       if (existing) {
         return {
           ...prev,
           [product._id]: { ...existing, quantity: existing.quantity + 1 },
-        };
+        }
       }
       return {
         ...prev,
@@ -61,33 +61,33 @@ function ShopView() {
           price: product.price,
           quantity: 1,
         },
-      };
-    });
-  };
+      }
+    })
+  }
 
   const removeFromCart = (productId: string) => {
     setCart((prev) => {
-      const existing = prev[productId];
-      if (!existing) return prev;
+      const existing = prev[productId]
+      if (!existing) return prev
       if (existing.quantity === 1) {
-        const { [productId]: _, ...rest } = prev;
-        return rest;
+        const { [productId]: _, ...rest } = prev
+        return rest
       }
       return {
         ...prev,
         [productId]: { ...existing, quantity: existing.quantity - 1 },
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handlePay = async () => {
-    if (totalPrice === 0 || !shop) return;
+    if (totalPrice === 0 || !shop) return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       // Create a short unique reference based on timestamp
-      const timestamp = Date.now().toString(36).toUpperCase().slice(-6);
-      const reference = `QRB-${shop.name.substring(0, 10).toUpperCase()}-${timestamp}`;
+      const timestamp = Date.now().toString(36).toUpperCase().slice(-6)
+      const reference = `QRB-${shop.name.substring(0, 10).toUpperCase()}-${timestamp}`
 
       const transactionId = await createTransaction({
         shopId: shop._id,
@@ -98,31 +98,31 @@ function ShopView() {
           price: item.price,
           quantity: item.quantity,
         })),
-      });
+      })
 
       const swishLink = generateSwishLink(
         shop.swishNumber,
         totalPrice,
         reference,
-      );
+      )
 
       // Open Swish
-      window.location.href = swishLink;
+      window.location.href = swishLink
 
       // Redirect to thank you page after a short delay
       setTimeout(() => {
         navigate({
-          to: "/tack/$transactionId",
+          to: '/tack/$transactionId',
           params: { transactionId },
-        });
-      }, 1000);
+        })
+      }, 1000)
     } catch (error) {
-      console.error("Payment failed:", error);
-      alert("Något gick fel vid skapandet av betalningen. Försök igen.");
+      console.error('Payment failed:', error)
+      alert('Något gick fel vid skapandet av betalningen. Försök igen.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   if (!shop) {
     return (
@@ -142,7 +142,28 @@ function ShopView() {
           </Link>
         </div>
       </main>
-    );
+    )
+  }
+
+  if (shop.activationStatus !== 'active' || shop.activeUntil <= Date.now()) {
+    return (
+      <main className="min-h-screen px-6 py-12">
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+            QRButik.se
+          </p>
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Butiken är inaktiv
+          </h1>
+          <p className="text-sm text-slate-600">
+            Butiken behöver aktiveras igen för att kunna ta emot köp.
+          </p>
+          <p className="text-sm text-slate-500">
+            Öppna adminpanelen och välj en ny aktivering.
+          </p>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -159,10 +180,12 @@ function ShopView() {
         </header>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-lg font-semibold text-slate-800 px-2">Produkter</h2>
+          <h2 className="text-lg font-semibold text-slate-800 px-2">
+            Produkter
+          </h2>
           <div className="flex flex-col gap-3">
             {products.map((product) => {
-              const quantity = cart[product._id]?.quantity || 0;
+              const quantity = cart[product._id]?.quantity || 0
               return (
                 <div
                   key={product._id}
@@ -221,7 +244,7 @@ function ShopView() {
                     </button>
                   </div>
                 </div>
-              );
+              )
             })}
 
             {products.length === 0 && (
@@ -237,7 +260,9 @@ function ShopView() {
         <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/80 p-4 backdrop-blur-md">
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             <div className="flex items-center justify-between px-2">
-              <span className="text-slate-500 font-medium">Totalt att betala:</span>
+              <span className="text-slate-500 font-medium">
+                Totalt att betala:
+              </span>
               <span className="text-2xl font-bold text-slate-900">
                 {totalPrice} kr
               </span>
@@ -270,5 +295,5 @@ function ShopView() {
         </div>
       )}
     </main>
-  );
+  )
 }

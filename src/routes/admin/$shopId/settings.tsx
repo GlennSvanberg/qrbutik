@@ -1,8 +1,12 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useMutation } from 'convex/react'
-import { useEffect, useState } from 'react'
+import { useMutation, useQuery } from 'convex/react'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  buildActivationSwishMessage,
+  generateSwishLink,
+} from '../../../lib/swish'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
@@ -122,6 +126,10 @@ function SettingsContent({ email }: { email: string }) {
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
   const updateShop = useMutation(api.shops.updateShop)
+  const activateShop = useMutation(api.shops.activateShop)
+  const activationData = useQuery(api.shops.getActivationStatus, {
+    shopId: shopIdParam,
+  })
 
   const [shopState, setShopState] = useState({
     name: '',
@@ -130,6 +138,40 @@ function SettingsContent({ email }: { email: string }) {
   })
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [activationMessage, setActivationMessage] = useState<string | null>(
+    null,
+  )
+
+  const activationCopy = useMemo(() => {
+    if (!activationData || !shop) {
+      return null
+    }
+    return buildActivationSwishMessage({
+      _id: shop._id,
+      slug: shop.slug,
+      name: shop.name,
+    })
+  }, [activationData, shop])
+
+  const timeLeftLabel = useMemo(() => {
+    if (!activationData?.activeUntil) {
+      return '—'
+    }
+    const remainingMs = activationData.activeUntil - Date.now()
+    if (remainingMs <= 0) {
+      return '0 dagar'
+    }
+    const hours = Math.floor(remainingMs / (60 * 60 * 1000))
+    const days = Math.floor(hours / 24)
+    const remainingHours = hours % 24
+    if (days === 0) {
+      return `${remainingHours} timmar`
+    }
+    if (remainingHours === 0) {
+      return `${days} dagar`
+    }
+    return `${days} dagar ${remainingHours} timmar`
+  }, [activationData])
 
   useEffect(() => {
     if (!shop) {
@@ -247,6 +289,98 @@ function SettingsContent({ email }: { email: string }) {
           >
             Spara butiksinfo
           </button>
+        </section>
+
+        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-base font-semibold text-slate-900">
+              Aktivering
+            </h2>
+            <p className="text-sm text-slate-600">
+              Aktivera butiken via Swish. Betalningen markerar butiken som aktiv
+              direkt.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
+            <div className="flex items-center justify-between">
+              <span>Status</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activationStatus === 'active'
+                  ? 'Aktiv'
+                  : 'Inaktiv'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Plan</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activationPlan === 'season'
+                  ? 'Säsong (180 dagar)'
+                  : activationData?.activationPlan === 'event'
+                    ? 'Event (48 timmar)'
+                    : 'Ingen plan'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Aktiv till</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activeUntil
+                  ? new Date(activationData.activeUntil).toLocaleString('sv-SE')
+                  : '—'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Tid kvar</span>
+              <span className="font-semibold text-slate-900">
+                {timeLeftLabel}
+              </span>
+            </div>
+          </div>
+
+          {activationMessage ? (
+            <p className="text-sm text-emerald-700">{activationMessage}</p>
+          ) : null}
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={async () => {
+                const result = await activateShop({
+                  shopId: shop._id,
+                  plan: 'event',
+                })
+                const link = generateSwishLink(
+                  '0735029113',
+                  result.amount,
+                  result.message,
+                )
+                setActivationMessage('Event aktiverad. Öppnar Swish...')
+                window.location.href = link
+              }}
+              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+            >
+              Aktivera event 10 kr
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                const result = await activateShop({
+                  shopId: shop._id,
+                  plan: 'season',
+                })
+                const link = generateSwishLink(
+                  '0735029113',
+                  result.amount,
+                  result.message,
+                )
+                setActivationMessage('Säsong aktiverad. Öppnar Swish...')
+                window.location.href = link
+              }}
+              className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+            >
+              Aktivera säsong 99 kr
+            </button>
+          </div>
         </section>
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
