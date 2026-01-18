@@ -100,22 +100,26 @@ function ShopView() {
         })),
       })
 
+      const origin = window.location.origin
+      const callbackUrl = `${origin}/tack/${transactionId}`
+
       const swishLink = generateSwishLink(
         shop.swishNumber,
         totalPrice,
         reference,
+        callbackUrl,
       )
 
       // Open Swish
       window.location.href = swishLink
 
-      // Redirect to thank you page after a short delay
+      // Fallback redirect after a short delay in case the browser doesn't switch apps or callback fails
       setTimeout(() => {
         navigate({
           to: '/tack/$transactionId',
           params: { transactionId },
         })
-      }, 1000)
+      }, 3000)
     } catch (error) {
       console.error('Payment failed:', error)
       alert('Något gick fel vid skapandet av betalningen. Försök igen.')

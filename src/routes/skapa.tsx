@@ -300,10 +300,14 @@ function CreateShopWizard() {
                       shopId: createdShop.shopId as Id<'shops'>,
                       plan: 'event',
                     })
+                    const origin = window.location.origin
+                    const callbackUrl = `${origin}/admin/${createdShop.shopId}/skylt`
+
                     const link = generateSwishLink(
                       '0735029113',
                       result.amount,
                       result.message,
+                      callbackUrl,
                     )
                     window.location.href = link
                     await navigate({
@@ -322,10 +326,14 @@ function CreateShopWizard() {
                       shopId: createdShop.shopId as Id<'shops'>,
                       plan: 'season',
                     })
+                    const origin = window.location.origin
+                    const callbackUrl = `${origin}/admin/${createdShop.shopId}/skylt`
+
                     const link = generateSwishLink(
                       '0735029113',
                       result.amount,
                       result.message,
+                      callbackUrl,
                     )
                     window.location.href = link
                     await navigate({

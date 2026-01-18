@@ -555,6 +555,7 @@ export const getShopBySlug = query({
       activeFrom: v.number(),
       activeUntil: v.number(),
       lastActivatedAt: v.number(),
+      createdEmailSentAt: v.optional(v.number()),
       createdAt: v.number(),
     }),
     v.null(),
