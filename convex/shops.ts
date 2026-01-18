@@ -259,6 +259,65 @@ export const getShopById = query({
   },
 })
 
+export const updateShop = mutation({
+  args: {
+    shopId: v.id('shops'),
+    name: v.string(),
+    swishNumber: v.string(),
+    ownerEmail: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await ctx.db.patch('shops', args.shopId, {
+      name: args.name,
+      swishNumber: args.swishNumber,
+      ownerEmail: args.ownerEmail,
+    })
+    return null
+  },
+})
+
+export const getActivationStatus = query({
+  args: { shopId: v.id('shops') },
+  returns: v.union(
+    v.object({
+      _id: v.id('shops'),
+      activationStatus: v.union(v.literal('inactive'), v.literal('active')),
+      verificationStatus: v.union(
+        v.literal('unverified'),
+        v.literal('verified'),
+      ),
+      activationPlan: v.optional(
+        v.union(v.literal('event'), v.literal('season')),
+      ),
+      activeFrom: v.number(),
+      activeUntil: v.number(),
+      lastActivatedAt: v.number(),
+      name: v.string(),
+      slug: v.string(),
+    }),
+    v.null(),
+  ),
+  handler: async (ctx, args) => {
+    const shop = await ctx.db.get('shops', args.shopId)
+    if (!shop) {
+      return null
+    }
+    const normalized = normalizeActivationFields(shop)
+    return {
+      _id: shop._id,
+      activationStatus: normalized.activationStatus,
+      verificationStatus: normalized.verificationStatus,
+      activationPlan: normalized.activationPlan,
+      activeFrom: normalized.activeFrom,
+      activeUntil: normalized.activeUntil,
+      lastActivatedAt: normalized.lastActivatedAt,
+      name: shop.name,
+      slug: shop.slug,
+    }
+  },
+})
+
 export const verifyShopActivation = mutation({
   args: {
     shopId: v.id('shops'),

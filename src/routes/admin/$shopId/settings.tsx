@@ -3,10 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMutation, useQuery } from 'convex/react'
 import { useEffect, useMemo, useState } from 'react'
-import {
-  buildActivationSwishMessage,
-  generateSwishLink,
-} from '../../../lib/swish'
+import { generateSwishLink } from '../../../lib/swish'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
@@ -141,17 +138,6 @@ function SettingsContent({ email }: { email: string }) {
   const [activationMessage, setActivationMessage] = useState<string | null>(
     null,
   )
-
-  const activationCopy = useMemo(() => {
-    if (!activationData || !shop) {
-      return null
-    }
-    return buildActivationSwishMessage({
-      _id: shop._id,
-      slug: shop.slug,
-      name: shop.name,
-    })
-  }, [activationData, shop])
 
   const timeLeftLabel = useMemo(() => {
     if (!activationData?.activeUntil) {
