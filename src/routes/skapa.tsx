@@ -301,7 +301,7 @@ function CreateShopWizard() {
                       plan: 'event',
                     })
                     const origin = window.location.origin
-                    const callbackUrl = `${origin}/admin/${createdShop.shopId}/skylt`
+                    const callbackUrl = `${origin}/s/${createdShop.slug}/klart`
 
                     const link = generateSwishLink(
                       '0735029113',
@@ -310,10 +310,12 @@ function CreateShopWizard() {
                       callbackUrl,
                     )
                     window.location.href = link
-                    await navigate({
-                      to: '/admin/$shopId/skylt',
-                      params: { shopId: createdShop.shopId },
-                    })
+                    setTimeout(() => {
+                      void navigate({
+                        to: '/s/$shopSlug/klart',
+                        params: { shopSlug: createdShop.slug },
+                      })
+                    }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
                 >
@@ -327,7 +329,7 @@ function CreateShopWizard() {
                       plan: 'season',
                     })
                     const origin = window.location.origin
-                    const callbackUrl = `${origin}/admin/${createdShop.shopId}/skylt`
+                    const callbackUrl = `${origin}/s/${createdShop.slug}/klart`
 
                     const link = generateSwishLink(
                       '0735029113',
@@ -336,10 +338,12 @@ function CreateShopWizard() {
                       callbackUrl,
                     )
                     window.location.href = link
-                    await navigate({
-                      to: '/admin/$shopId/skylt',
-                      params: { shopId: createdShop.shopId },
-                    })
+                    setTimeout(() => {
+                      void navigate({
+                        to: '/s/$shopSlug/klart',
+                        params: { shopSlug: createdShop.slug },
+                      })
+                    }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
                 >

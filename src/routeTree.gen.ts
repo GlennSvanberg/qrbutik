@@ -16,6 +16,8 @@ import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactio
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
 import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
+import { Route as SShopSlugQrRouteImport } from './routes/s/$shopSlug/qr'
+import { Route as SShopSlugKlartRouteImport } from './routes/s/$shopSlug/klart'
 import { Route as AdminShopIdSkyltRouteImport } from './routes/admin/$shopId/skylt'
 import { Route as AdminShopIdSettingsRouteImport } from './routes/admin/$shopId/settings'
 import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
@@ -56,6 +58,16 @@ const AdminShopIdIndexRoute = AdminShopIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
+const SShopSlugQrRoute = SShopSlugQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => SShopSlugRoute,
+} as any)
+const SShopSlugKlartRoute = SShopSlugKlartRouteImport.update({
+  id: '/klart',
+  path: '/klart',
+  getParentRoute: () => SShopSlugRoute,
+} as any)
 const AdminShopIdSkyltRoute = AdminShopIdSkyltRouteImport.update({
   id: '/skylt',
   path: '/skylt',
@@ -81,25 +93,29 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
-  '/s/$shopSlug': typeof SShopSlugRoute
+  '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
   '/admin/$shopId/skylt': typeof AdminShopIdSkyltRoute
+  '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
+  '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
-  '/s/$shopSlug': typeof SShopSlugRoute
+  '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
   '/admin/$shopId/skylt': typeof AdminShopIdSkyltRoute
+  '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
+  '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId': typeof AdminShopIdIndexRoute
 }
 export interface FileRoutesById {
@@ -107,13 +123,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
-  '/s/$shopSlug': typeof SShopSlugRoute
+  '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
   '/admin/$shopId/skylt': typeof AdminShopIdSkyltRoute
+  '/s/$shopSlug/klart': typeof SShopSlugKlartRoute
+  '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,6 +147,8 @@ export interface FileRouteTypes {
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
     | '/admin/$shopId/skylt'
+    | '/s/$shopSlug/klart'
+    | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -141,6 +161,8 @@ export interface FileRouteTypes {
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
     | '/admin/$shopId/skylt'
+    | '/s/$shopSlug/klart'
+    | '/s/$shopSlug/qr'
     | '/admin/$shopId'
   id:
     | '__root__'
@@ -154,6 +176,8 @@ export interface FileRouteTypes {
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
     | '/admin/$shopId/skylt'
+    | '/s/$shopSlug/klart'
+    | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
   fileRoutesById: FileRoutesById
 }
@@ -161,7 +185,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SkapaRoute: typeof SkapaRoute
   AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
-  SShopSlugRoute: typeof SShopSlugRoute
+  SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -217,6 +241,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShopIdIndexRouteImport
       parentRoute: typeof AdminShopIdRoute
     }
+    '/s/$shopSlug/qr': {
+      id: '/s/$shopSlug/qr'
+      path: '/qr'
+      fullPath: '/s/$shopSlug/qr'
+      preLoaderRoute: typeof SShopSlugQrRouteImport
+      parentRoute: typeof SShopSlugRoute
+    }
+    '/s/$shopSlug/klart': {
+      id: '/s/$shopSlug/klart'
+      path: '/klart'
+      fullPath: '/s/$shopSlug/klart'
+      preLoaderRoute: typeof SShopSlugKlartRouteImport
+      parentRoute: typeof SShopSlugRoute
+    }
     '/admin/$shopId/skylt': {
       id: '/admin/$shopId/skylt'
       path: '/skylt'
@@ -268,11 +306,25 @@ const AdminShopIdRouteWithChildren = AdminShopIdRoute._addFileChildren(
   AdminShopIdRouteChildren,
 )
 
+interface SShopSlugRouteChildren {
+  SShopSlugKlartRoute: typeof SShopSlugKlartRoute
+  SShopSlugQrRoute: typeof SShopSlugQrRoute
+}
+
+const SShopSlugRouteChildren: SShopSlugRouteChildren = {
+  SShopSlugKlartRoute: SShopSlugKlartRoute,
+  SShopSlugQrRoute: SShopSlugQrRoute,
+}
+
+const SShopSlugRouteWithChildren = SShopSlugRoute._addFileChildren(
+  SShopSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SkapaRoute: SkapaRoute,
   AdminShopIdRoute: AdminShopIdRouteWithChildren,
-  SShopSlugRoute: SShopSlugRoute,
+  SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

@@ -201,6 +201,13 @@ function ShopQrContent({ email }: { email: string }) {
             >
               Skriv ut A4
             </button>
+            <Link
+              to="/s/$shopSlug/qr"
+              params={{ shopSlug: shop.slug }}
+              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+            >
+              Publik QR-sida
+            </Link>
           </div>
         </header>
 
