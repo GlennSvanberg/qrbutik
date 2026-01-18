@@ -1,0 +1,24 @@
+# QRButik
+
+> QRButik is a Swedish web service for creating a QR-based kiosk menu that lets customers pay with Swish, aimed at sports clubs, associations, and small events.
+
+QRButik focuses on fast setup (no app required) and a simple flow: create a kiosk, add products, print or display a QR sign, and let visitors pay with Swish. Customer-facing pages are public, while admin pages require a magic-link login. Most content is in Swedish and prices are in SEK.
+
+## Core pages
+
+- [Homepage](https://qrbutik.se/): Product overview, benefits, and pricing.
+- [Create a kiosk](https://qrbutik.se/skapa): Wizard to enter shop info, products, and activate a pass.
+- [Discover](https://qrbutik.se/utforska): Landing hub for sport and city pages.
+
+## Dynamic routes
+
+- [Shop menu (customer)](https://qrbutik.se/s/{shopSlug}): Public menu and Swish payment flow.
+- [Shop QR sign](https://qrbutik.se/s/{shopSlug}/qr): Printable/onscreen QR sign.
+- [Shop payment confirmation](https://qrbutik.se/s/{shopSlug}/klart): Post-payment confirmation.
+- [Transaction status](https://qrbutik.se/tack/{transactionId}): Payment status/receipt view.
+- [Admin entry](https://qrbutik.se/admin): Magic-link login and admin dashboard (auth required).
+- [Admin shop area](https://qrbutik.se/admin/{shopId}): Products, sales history, settings, and verification (auth required).
+
+## Optional
+
+- [P-SEO pages](https://qrbutik.se/utforska/{sportSlug}/{citySlug}): Sport + city landing pages describing kiosk usage in local contexts.
