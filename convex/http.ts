@@ -4,14 +4,21 @@ import { authComponent, createAuth } from "./auth";
 import { isDevMagicLinkEnabled } from "./devMagicLink";
 import { api, internal } from "./_generated/api";
 
-const http = httpRouter();
-
+const siteUrl = process.env.SITE_URL;
 const allowedOrigins = new Set([
-  process.env.SITE_URL ?? "http://localhost:3000",
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:5173",
+  "https://qrbutik.vercel.app",
+  "https://qrbutik.se",
+  "https://www.qrbutik.se",
 ]);
+
+if (siteUrl) {
+  allowedOrigins.add(siteUrl);
+}
+
+const http = httpRouter();
 
 const withCors = (req: Request, response: Response): Response => {
   const origin = req.headers.get("origin");
