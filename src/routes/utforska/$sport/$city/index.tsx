@@ -55,6 +55,7 @@ function PseoPage() {
         <div className="mt-6 flex justify-center">
           <Link
             to="/utforska"
+            trackaton-on-click="pseo-back-explore"
             className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
           >
             Till utforska
@@ -86,12 +87,14 @@ function PseoPage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
               <Link
                 to="/skapa"
+                trackaton-on-click="pseo-create-kiosk-hero"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               >
                 Skapa kiosk för {copy.sport.name}
               </Link>
               <Link
                 to="/utforska"
+                trackaton-on-click="pseo-explore-more-hero"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
               >
                 Utforska fler städer
@@ -425,12 +428,14 @@ function PseoPage() {
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               to="/skapa"
+              trackaton-on-click="pseo-create-kiosk"
               className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
             >
               Skapa kiosk
             </Link>
             <Link
               to="/utforska"
+              trackaton-on-click="pseo-explore-more"
               className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
             >
               Utforska fler städer

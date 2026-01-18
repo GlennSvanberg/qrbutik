@@ -94,6 +94,7 @@ function SettingsPage() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -194,6 +195,7 @@ function SettingsContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -215,6 +217,7 @@ function SettingsContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -240,6 +243,7 @@ function SettingsContent({ email }: { email: string }) {
             to="/s/$shopSlug"
             params={{ shopSlug: shop.slug }}
             className="w-fit cursor-pointer text-sm font-semibold text-indigo-700 hover:text-indigo-600"
+            trackaton-on-click="admin-open-shop"
           >
             Öppna butiken
           </Link>
@@ -278,6 +282,7 @@ function SettingsContent({ email }: { email: string }) {
               }
             }}
             className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            trackaton-on-click="admin-save-shop-info"
           >
             Spara butiksinfo
           </button>
@@ -355,6 +360,7 @@ function SettingsContent({ email }: { email: string }) {
                   window.location.href = link
                 }}
                 className="h-12 cursor-pointer rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300"
+                trackaton-on-click="admin-extend-activation"
               >
                 Förläng nu
               </button>
@@ -379,6 +385,7 @@ function SettingsContent({ email }: { email: string }) {
                 window.location.href = link
               }}
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-activate-event"
             >
               Aktivera event 10 kr
             </button>
@@ -402,6 +409,7 @@ function SettingsContent({ email }: { email: string }) {
                 window.location.href = link
               }}
               className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              trackaton-on-click="admin-activate-season"
             >
               Aktivera säsong 99 kr
             </button>
@@ -427,6 +435,7 @@ function SettingsContent({ email }: { email: string }) {
                 setDeleteError(null)
               }}
               className="h-10 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-4 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
+              trackaton-on-click="admin-delete-toggle"
             >
               {isDeleteOpen ? 'Stäng' : 'Radera butik'}
             </button>
@@ -472,6 +481,7 @@ function SettingsContent({ email }: { email: string }) {
                     }
                   }}
                   className="h-11 cursor-pointer rounded-xl bg-rose-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
+                  trackaton-on-click="admin-delete-confirm"
                 >
                   Ta bort butik permanent
                 </button>

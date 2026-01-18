@@ -88,6 +88,7 @@ function AdminDashboard() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -158,6 +159,7 @@ function AdminDashboardContent({ email }: { email: string }) {
               <Link
                 to="/skapa"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                trackaton-on-click="admin-create-shop"
               >
                 Skapa ny butik
               </Link>
@@ -251,6 +253,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                         to="/admin/$shopId"
                         params={{ shopId: shop._id }}
                         className="inline-flex h-11 cursor-pointer items-center justify-center rounded-xl bg-indigo-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                        trackaton-on-click="admin-edit-shop"
                       >
                         Redigera butik
                       </Link>
@@ -259,6 +262,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                           to="/s/$shopSlug"
                           params={{ shopSlug: shop.slug }}
                           className="inline-flex h-11 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+                          trackaton-on-click="admin-visit-shop"
                         >
                           Besök butik
                         </Link>
@@ -267,6 +271,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                           to="/admin/$shopId/settings"
                           params={{ shopId: shop._id }}
                           className="inline-flex h-11 cursor-pointer items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300"
+                          trackaton-on-click="admin-activate-shop"
                         >
                           Aktivera butik
                         </Link>

@@ -47,6 +47,7 @@ export function AdminBottomNav({ shopId, active }: AdminBottomNavProps) {
               key={tab.id}
               to={tab.to}
               params={{ shopId }}
+              trackaton-on-click={`admin-tab-${tab.id}`}
               className={`flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-lg px-2 py-3 text-[11px] font-semibold transition-colors ${
                 isActive
                   ? 'bg-indigo-600 text-white'

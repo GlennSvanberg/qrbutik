@@ -92,6 +92,7 @@ function PurchaseHistoryPage() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -172,6 +173,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -193,6 +195,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -259,6 +262,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
                         }
                       }}
                       className="grid w-full cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 text-left"
+                      trackaton-on-click="admin-toggle-transaction"
                     >
                       <span className="flex h-5 w-5 items-center justify-center rounded-md border border-slate-300">
                         <input
@@ -283,6 +287,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
                             }
                           }}
                           className="h-4 w-4 cursor-pointer accent-indigo-700"
+                          trackaton-on-click="admin-verify-transaction"
                         />
                       </span>
                       <span>

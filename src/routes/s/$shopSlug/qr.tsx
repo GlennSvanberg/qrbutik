@@ -35,6 +35,7 @@ function ShopQrPublicPage() {
           <Link
             to="/"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="public-qr-back-home"
           >
             Till startsidan
           </Link>
@@ -63,6 +64,7 @@ function ShopQrPublicPage() {
           <Link
             to="/admin"
             className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600"
+            trackaton-on-click="public-qr-admin"
           >
             Admin
           </Link>
@@ -83,6 +85,7 @@ function ShopQrPublicPage() {
               to="/s/$shopSlug"
               params={{ shopSlug: shop.slug }}
               className="cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="public-qr-view-shop"
             >
               Visa butik
             </Link>
@@ -90,6 +93,7 @@ function ShopQrPublicPage() {
               type="button"
               onClick={() => window.print()}
               className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              trackaton-on-click="public-qr-print"
             >
               Skriv ut QR-kod
             </button>

@@ -141,6 +141,7 @@ function CreateShopWizard() {
                   window.location.href = '/'
                 }}
                 className="cursor-pointer text-slate-500 hover:text-slate-700"
+                trackaton-on-click="create-back-home"
               >
                 Till startsidan
               </button>
@@ -187,6 +188,7 @@ function CreateShopWizard() {
               <button
                 type="submit"
                 className="mt-2 h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                trackaton-on-click="create-step1-continue"
               >
                 Fortsätt till produkter
               </button>
@@ -218,6 +220,7 @@ function CreateShopWizard() {
                   )
                 }}
                 className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 disabled:cursor-not-allowed disabled:text-slate-400"
+                trackaton-on-click="create-send-magic-link"
               >
                 Skicka inloggningslänk
               </button>
@@ -279,6 +282,7 @@ function CreateShopWizard() {
                   type="button"
                   onClick={() => setStep(1)}
                   className="h-11 cursor-pointer rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-600 hover:border-slate-300"
+                  trackaton-on-click="create-step2-back"
                 >
                   Tillbaka
                 </button>
@@ -286,6 +290,7 @@ function CreateShopWizard() {
                   type="submit"
                   disabled={isSubmitting}
                   className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                  trackaton-on-click="create-submit-shop"
                 >
                   {isSubmitting ? 'Skapar butik...' : 'Skapa butik'}
                 </button>
@@ -346,6 +351,7 @@ function CreateShopWizard() {
                     }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                  trackaton-on-click="create-activate-event"
                 >
                   Aktivera event 10 kr
                 </button>
@@ -371,6 +377,7 @@ function CreateShopWizard() {
                     }, 2000)
                   }}
                   className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                  trackaton-on-click="create-activate-season"
                 >
                   Aktivera säsong 99 kr
                 </button>
@@ -406,6 +413,7 @@ function CreateShopWizard() {
                       )
                     }}
                     className="mx-auto h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                    trackaton-on-click="create-send-admin-link"
                   >
                     Skicka admin-länk till e-post
                   </button>

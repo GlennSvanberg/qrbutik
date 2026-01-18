@@ -70,6 +70,7 @@ export function ProdukterForm({
                 type="button"
                 onClick={() => removeProduct(product.id)}
                 className="h-11 cursor-pointer rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700"
+                trackaton-on-click="product-remove-row"
               >
                 Ta bort
               </button>
@@ -82,6 +83,7 @@ export function ProdukterForm({
         type="button"
         onClick={onAddRow}
         className="h-12 cursor-pointer rounded-xl border border-dashed border-indigo-200 bg-indigo-50 px-6 text-sm font-semibold text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-100"
+        trackaton-on-click="product-add-row"
       >
         Lägg till en ny rad
       </button>

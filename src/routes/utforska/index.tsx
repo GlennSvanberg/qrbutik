@@ -104,6 +104,7 @@ function DiscoverPage() {
             <Link
               key={page.slug}
               to={page.slug}
+              trackaton-on-click="discover-page"
               className="group flex h-full cursor-pointer flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
             >
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.25em] text-slate-400">
@@ -130,6 +131,7 @@ function DiscoverPage() {
           <Link
             to="/skapa"
             className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+            trackaton-on-click="discover-create-kiosk"
           >
             Skapa kiosk på 2 minuter
           </Link>

@@ -105,6 +105,7 @@ function AdminShopDashboard() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -166,6 +167,7 @@ function AdminShopContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -187,6 +189,7 @@ function AdminShopContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -223,6 +226,7 @@ function AdminShopContent({ email }: { email: string }) {
                   <button
                     key={option.value}
                     type="button"
+                    trackaton-on-click={`admin-period-${option.value}`}
                     onClick={() => setPeriod(option.value)}
                     className={`min-h-[2.5rem] w-full whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
                       isActive

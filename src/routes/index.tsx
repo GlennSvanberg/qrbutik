@@ -66,12 +66,14 @@ function Home() {
               <Link
                 to="/skapa"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                trackaton-on-click="primary-cta"
               >
                 Skapa din Swish-kiosk — 10 kr
               </Link>
               <Link
                 to="/admin"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                trackaton-on-click="login-admin"
               >
                 Logga in till admin
               </Link>
@@ -412,6 +414,7 @@ function Home() {
               <Link
                 to="/skapa"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                trackaton-on-click="start-event-pass"
               >
                 Starta event-pass
               </Link>
@@ -429,6 +432,7 @@ function Home() {
               <Link
                 to="/skapa"
                 className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                trackaton-on-click="start-season-pass"
               >
                 Starta säsong
               </Link>
@@ -457,13 +461,13 @@ function Home() {
             QRButik.se — Gjort för föreningslivet i Sverige.
           </p>
           <div className="flex flex-wrap justify-center gap-6">
-            <a href="/kontakt" className="cursor-pointer hover:text-slate-900">
+            <a href="/kontakt" className="cursor-pointer hover:text-slate-900" trackaton-on-click="footer-kontakt">
               Kontakt
             </a>
-            <a href="/support" className="cursor-pointer hover:text-slate-900">
+            <a href="/support" className="cursor-pointer hover:text-slate-900" trackaton-on-click="footer-support">
               Support
             </a>
-            <a href="/villkor" className="cursor-pointer hover:text-slate-900">
+            <a href="/villkor" className="cursor-pointer hover:text-slate-900" trackaton-on-click="footer-villkor">
               Villkor
             </a>
           </div>
@@ -509,6 +513,7 @@ function TimeSavingsCalculator() {
                 value={customers}
                 onChange={(e) => setCustomers(parseInt(e.target.value))}
                 className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-indigo-700 accent-white outline-none ring-offset-2 focus:ring-2 focus:ring-indigo-400"
+                trackaton-on-click="adjust-customers"
               />
             </div>
 

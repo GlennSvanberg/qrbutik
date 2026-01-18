@@ -175,6 +175,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="sv">
       <head>
+        <meta
+          name="google-site-verification"
+          content="Z0v_6_RDpp2cNCyO4DiiuCCL5eXUih5LDGXvz1nkyjU"
+        />
+        <script
+          src="https://www.trackaton.com/track.js"
+          data-website-id="jd79w2wpqpayas6bw1j9nhb20h7yqj82"
+          data-endpoint="https://resolute-orca-949.convex.site/api/e"
+          async
+        ></script>
         <HeadContent />
       </head>
       <body>

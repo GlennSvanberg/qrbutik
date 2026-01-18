@@ -42,6 +42,7 @@ export function AdminHeader({
         <Link
           to="/admin"
           className="inline-flex h-11 items-center justify-center rounded-xl border border-transparent px-2 text-xs font-semibold text-indigo-700 transition hover:border-indigo-200 hover:bg-indigo-50"
+          trackaton-on-click="admin-back"
         >
           Tillbaka
         </Link>
@@ -65,6 +66,7 @@ export function AdminHeader({
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700"
           aria-expanded={isOpen}
+          trackaton-on-click="admin-menu-toggle"
           aria-label="Öppna meny"
         >
           <span className="flex h-4 w-5 flex-col justify-between">
@@ -85,6 +87,7 @@ export function AdminHeader({
               <button
                 key={shop._id}
                 type="button"
+                trackaton-on-click="admin-switch-shop"
                 onClick={() => {
                   setIsOpen(false)
                   void navigate({

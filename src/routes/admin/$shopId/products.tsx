@@ -100,6 +100,7 @@ function ProductsPage() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -200,6 +201,7 @@ function ProductsContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -221,6 +223,7 @@ function ProductsContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -296,6 +299,7 @@ function ProductsContent({ email }: { email: string }) {
                 }
               }}
               className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-products-save"
             >
               Spara ändringar
             </button>

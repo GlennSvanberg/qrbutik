@@ -142,6 +142,7 @@ function ShopView() {
           <Link
             to="/"
             className="mx-auto w-fit rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="shop-back-home"
           >
             Till startsidan
           </Link>
@@ -210,6 +211,7 @@ function ShopView() {
                         <button
                           onClick={() => removeFromCart(product._id)}
                           className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 active:scale-95"
+                          trackaton-on-click="shop-remove-from-cart"
                         >
                           <svg
                             width="20"
@@ -232,6 +234,7 @@ function ShopView() {
                     <button
                       onClick={() => addToCart(product)}
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-indigo-700 transition-colors hover:bg-indigo-100 active:scale-95"
+                      trackaton-on-click="shop-add-to-cart"
                     >
                       <svg
                         width="20"
@@ -276,6 +279,7 @@ function ShopView() {
               onClick={handlePay}
               disabled={isSubmitting}
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-indigo-700 py-4 text-lg font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-800 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+              trackaton-on-click="shop-pay-swish"
             >
               {isSubmitting ? (
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />

@@ -29,6 +29,7 @@ function ThankYouView() {
           <Link
             to="/"
             className="mx-auto w-fit rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="thankyou-back-home"
           >
             Till startsidan
           </Link>
@@ -114,6 +115,7 @@ function ThankYouView() {
           <Link
             to="/"
             className="text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+            trackaton-on-click="thankyou-back-home"
           >
             ← Till startsidan
           </Link>

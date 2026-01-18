@@ -26,6 +26,7 @@ function ShopActivationSuccessPage() {
           <Link
             to="/"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="activation-back-home"
           >
             Till startsidan
           </Link>
@@ -53,6 +54,7 @@ function ShopActivationSuccessPage() {
               to="/s/$shopSlug/qr"
               params={{ shopSlug: shop.slug }}
               className="cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="activation-view-qr"
             >
               Visa QR-kod
             </Link>
@@ -60,12 +62,14 @@ function ShopActivationSuccessPage() {
               to="/s/$shopSlug"
               params={{ shopSlug: shop.slug }}
               className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              trackaton-on-click="activation-view-shop"
             >
               Visa butik
             </Link>
             <Link
               to="/admin"
               className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              trackaton-on-click="activation-admin"
             >
               Adminpanel
             </Link>

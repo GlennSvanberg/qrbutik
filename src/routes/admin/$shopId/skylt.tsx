@@ -92,6 +92,7 @@ function ShopQrPage() {
             <button
               type="submit"
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-login-magic-link"
             >
               Skicka magic link
             </button>
@@ -138,6 +139,7 @@ function ShopQrContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -159,6 +161,7 @@ function ShopQrContent({ email }: { email: string }) {
           <Link
             to="/admin"
             className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -198,6 +201,7 @@ function ShopQrContent({ email }: { email: string }) {
               type="button"
               onClick={() => window.print()}
               className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="admin-print-qr"
             >
               Skriv ut A4
             </button>
@@ -205,6 +209,7 @@ function ShopQrContent({ email }: { email: string }) {
               to="/s/$shopSlug/qr"
               params={{ shopSlug: shop.slug }}
               className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              trackaton-on-click="admin-public-qr-page"
             >
               Publik QR-sida
             </Link>
