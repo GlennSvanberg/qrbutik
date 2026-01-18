@@ -1,6 +1,7 @@
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
+import type { Id } from './_generated/dataModel'
 
 export const create = mutation({
   args: {
@@ -59,9 +60,21 @@ const transactionPayload = v.object({
   createdAt: v.number(),
 })
 
-const getTodayRange = () => {
+type Period = 'today' | 'yesterday' | 'last7' | 'last30' | 'all'
+
+const periodValidator = v.union(
+  v.literal('today'),
+  v.literal('yesterday'),
+  v.literal('last7'),
+  v.literal('last30'),
+  v.literal('all'),
+)
+
+const dayMs = 24 * 60 * 60 * 1000
+
+const getStartOfToday = () => {
   const now = new Date()
-  const start = new Date(
+  return new Date(
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
@@ -70,7 +83,99 @@ const getTodayRange = () => {
     0,
     0,
   ).getTime()
-  return { start, end: now.getTime() }
+}
+
+const getPeriodRange = (period: Period) => {
+  const now = new Date()
+  const end = now.getTime()
+  const startOfToday = getStartOfToday()
+
+  if (period === 'today') {
+    return { start: startOfToday, end }
+  }
+
+  if (period === 'yesterday') {
+    const start = startOfToday - dayMs
+    return { start, end: startOfToday - 1 }
+  }
+
+  if (period === 'last7') {
+    return { start: startOfToday - 6 * dayMs, end }
+  }
+
+  if (period === 'last30') {
+    return { start: startOfToday - 29 * dayMs, end }
+  }
+
+  return { start: 0, end }
+}
+
+const getTodayRange = () => getPeriodRange('today')
+
+const buildSummary = (
+  transactions: Array<{
+    _id: Id<'transactions'>
+    amount: number
+    createdAt: number
+    items: Array<{ name: string; price: number; quantity: number }>
+  }>,
+) => {
+  if (transactions.length === 0) {
+    return {
+      totalRevenue: 0,
+      transactionCount: 0,
+      averageOrderValue: 0,
+      lastSaleTime: null,
+      topItems: [],
+      recentSales: [],
+    }
+  }
+
+  const totalRevenue = transactions.reduce(
+    (sum, transaction) => sum + transaction.amount,
+    0,
+  )
+  const transactionCount = transactions.length
+  const averageOrderValue = totalRevenue / transactionCount
+  const lastSaleTime = transactions[0]?.createdAt ?? null
+
+  const itemMap = new Map<string, { quantity: number; revenue: number }>()
+  transactions.forEach((transaction) => {
+    transaction.items.forEach((item) => {
+      const existing = itemMap.get(item.name) ?? {
+        quantity: 0,
+        revenue: 0,
+      }
+      existing.quantity += item.quantity
+      existing.revenue += item.price * item.quantity
+      itemMap.set(item.name, existing)
+    })
+  })
+
+  const topItems = Array.from(itemMap.entries())
+    .map(([name, data]) => ({
+      name,
+      quantity: data.quantity,
+      revenue: data.revenue,
+    }))
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 5)
+
+  const recentSales = transactions.slice(0, 5).map((transaction) => ({
+    _id: transaction._id,
+    amount: transaction.amount,
+    createdAt: transaction.createdAt,
+    itemsCount: transaction.items.reduce((sum, item) => sum + item.quantity, 0),
+  }))
+
+  return {
+    totalRevenue,
+    transactionCount,
+    averageOrderValue,
+    lastSaleTime,
+    topItems,
+    recentSales,
+  }
 }
 
 export const listByShop = query({
@@ -104,6 +209,21 @@ export const listTodayByShop = query({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     const { start, end } = getTodayRange()
+    return await ctx.db
+      .query('transactions')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .filter((q) => q.gte(q.field('createdAt'), start))
+      .filter((q) => q.lte(q.field('createdAt'), end))
+      .order('desc')
+      .collect()
+  },
+})
+
+export const listByShopPeriod = query({
+  args: { shopId: v.id('shops'), period: periodValidator },
+  returns: v.array(transactionPayload),
+  handler: async (ctx, args) => {
+    const { start, end } = getPeriodRange(args.period)
     return await ctx.db
       .query('transactions')
       .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
@@ -180,64 +300,43 @@ export const getTodaySummary = query({
       .order('desc')
       .collect()
 
-    if (transactions.length === 0) {
-      return {
-        totalRevenue: 0,
-        transactionCount: 0,
-        averageOrderValue: 0,
-        lastSaleTime: null,
-        topItems: [],
-        recentSales: [],
-      }
-    }
+    return buildSummary(transactions)
+  },
+})
 
-    const totalRevenue = transactions.reduce(
-      (sum, transaction) => sum + transaction.amount,
-      0,
-    )
-    const transactionCount = transactions.length
-    const averageOrderValue = totalRevenue / transactionCount
-    const lastSaleTime = transactions[0]?.createdAt ?? null
+export const getPeriodSummary = query({
+  args: { shopId: v.id('shops'), period: periodValidator },
+  returns: v.object({
+    totalRevenue: v.number(),
+    transactionCount: v.number(),
+    averageOrderValue: v.number(),
+    lastSaleTime: v.union(v.number(), v.null()),
+    topItems: v.array(
+      v.object({
+        name: v.string(),
+        quantity: v.number(),
+        revenue: v.number(),
+      }),
+    ),
+    recentSales: v.array(
+      v.object({
+        _id: v.id('transactions'),
+        amount: v.number(),
+        createdAt: v.number(),
+        itemsCount: v.number(),
+      }),
+    ),
+  }),
+  handler: async (ctx, args) => {
+    const { start, end } = getPeriodRange(args.period)
+    const transactions = await ctx.db
+      .query('transactions')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .filter((q) => q.gte(q.field('createdAt'), start))
+      .filter((q) => q.lte(q.field('createdAt'), end))
+      .order('desc')
+      .collect()
 
-    const itemMap = new Map<string, { quantity: number; revenue: number }>()
-    transactions.forEach((transaction) => {
-      transaction.items.forEach((item) => {
-        const existing = itemMap.get(item.name) ?? {
-          quantity: 0,
-          revenue: 0,
-        }
-        existing.quantity += item.quantity
-        existing.revenue += item.price * item.quantity
-        itemMap.set(item.name, existing)
-      })
-    })
-
-    const topItems = Array.from(itemMap.entries())
-      .map(([name, data]) => ({
-        name,
-        quantity: data.quantity,
-        revenue: data.revenue,
-      }))
-      .sort((a, b) => b.quantity - a.quantity)
-      .slice(0, 5)
-
-    const recentSales = transactions.slice(0, 5).map((transaction) => ({
-      _id: transaction._id,
-      amount: transaction.amount,
-      createdAt: transaction.createdAt,
-      itemsCount: transaction.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0,
-      ),
-    }))
-
-    return {
-      totalRevenue,
-      transactionCount,
-      averageOrderValue,
-      lastSaleTime,
-      topItems,
-      recentSales,
-    }
+    return buildSummary(transactions)
   },
 })

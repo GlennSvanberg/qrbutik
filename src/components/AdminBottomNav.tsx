@@ -8,9 +8,9 @@ const tabs = [
     to: '/admin/$shopId' as const,
   },
   {
-    id: 'verify',
-    label: 'Verifiera',
-    to: '/admin/$shopId/verify' as const,
+    id: 'history',
+    label: 'Köphistorik',
+    to: '/admin/$shopId/historik' as const,
   },
   {
     id: 'products',
@@ -18,9 +18,9 @@ const tabs = [
     to: '/admin/$shopId/products' as const,
   },
   {
-    id: 'qr',
-    label: 'QR + Skylt',
-    to: '/admin/$shopId/qr' as const,
+    id: 'skylt',
+    label: 'Skylt',
+    to: '/admin/$shopId/skylt' as const,
   },
   {
     id: 'settings',
@@ -47,9 +47,9 @@ export function AdminBottomNav({ shopId, active }: AdminBottomNavProps) {
               key={tab.id}
               to={tab.to}
               params={{ shopId }}
-              className={`flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] font-semibold transition ${
+              className={`flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-lg px-2 py-3 text-[11px] font-semibold transition-colors ${
                 isActive
-                  ? 'bg-white text-indigo-700 shadow-sm'
+                  ? 'bg-indigo-600 text-white'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >

@@ -1,5 +1,9 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
@@ -15,6 +19,16 @@ import type { Id } from '../../../../convex/_generated/dataModel'
 export const Route = createFileRoute('/admin/$shopId/')({
   component: AdminShopDashboard,
 })
+
+type Period = 'today' | 'yesterday' | 'last7' | 'last30' | 'all'
+
+const periodOptions: Array<{ value: Period; label: string }> = [
+  { value: 'today', label: 'Idag' },
+  { value: 'yesterday', label: 'Igår' },
+  { value: 'last7', label: '7 dagar' },
+  { value: 'last30', label: '30 dagar' },
+  { value: 'all', label: 'All tid' },
+]
 
 function AdminShopDashboard() {
   const { data: session, isPending, error } = authClient.useSession()
@@ -119,16 +133,25 @@ function AdminShopContent({ email }: { email: string }) {
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
-  const { data: todaySummary } = useSuspenseQuery(
-    convexQuery(api.transactions.getTodaySummary, { shopId: shopIdParam }),
-  )
+  const [period, setPeriod] = useState<Period>('today')
+  const { data: summary } = useQuery({
+    ...convexQuery(api.transactions.getPeriodSummary, {
+      shopId: shopIdParam,
+      period,
+    }),
+    placeholderData: keepPreviousData,
+  })
 
-  const totalRevenue = todaySummary.totalRevenue
-  const transactionCount = todaySummary.transactionCount
-  const averageOrderValue = todaySummary.averageOrderValue
-  const lastSaleTime = todaySummary.lastSaleTime
-  const topItems = todaySummary.topItems
-  const recentSales = todaySummary.recentSales
+  if (!summary) {
+    return null
+  }
+
+  const totalRevenue = summary.totalRevenue
+  const transactionCount = summary.transactionCount
+  const averageOrderValue = summary.averageOrderValue
+  const lastSaleTime = summary.lastSaleTime
+  const topItems = summary.topItems
+  const recentSales = summary.recentSales
 
   if (!shop) {
     return (
@@ -192,31 +215,41 @@ function AdminShopContent({ email }: { email: string }) {
         />
 
         <section className="flex flex-col gap-5 border-b border-slate-200 pb-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900">
-              Dagens översikt
-            </h2>
-            <span className="text-xs text-slate-500">Uppdateras live</span>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-              Totalt idag
-            </p>
-            <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
-              <p className="text-4xl font-semibold text-slate-900">
-                {formattedTotal} kr
-              </p>
-              <span className="text-xs text-slate-500">
-                inkl. ej verifierade
-              </span>
+          <div className="flex items-center justify-center">
+            <div className="grid w-full max-w-2xl grid-cols-5 gap-2 rounded-full border border-slate-200 bg-white p-1">
+              {periodOptions.map((option) => {
+                const isActive = period === option.value
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => setPeriod(option.value)}
+                    className={`min-h-[2.5rem] w-full whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
+                      isActive
+                        ? 'bg-indigo-700 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                )
+              })}
             </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Totalt
+              </p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">
+                {formattedTotal} kr
+              </p>
+            </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Betalningar
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-slate-900">
                 {transactionCount}
               </p>
             </div>
@@ -224,15 +257,15 @@ function AdminShopContent({ email }: { email: string }) {
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Snittköp
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-slate-900">
                 {formattedAverage} kr
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                Senast köp
+                Senaste köp
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-slate-900">
                 {formattedLastSale}
               </p>
             </div>
@@ -242,7 +275,7 @@ function AdminShopContent({ email }: { email: string }) {
         <section className="flex flex-col gap-4 border-b border-slate-200 pb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-slate-900">
-              Topplista idag
+              Topplista
             </h2>
             <span className="text-xs text-slate-500">Topp 5</span>
           </div>
@@ -279,7 +312,7 @@ function AdminShopContent({ email }: { email: string }) {
             <h2 className="text-base font-semibold text-slate-900">
               Senaste köp
             </h2>
-            <span className="text-xs text-slate-500">Realtid idag</span>
+            <span className="text-xs text-slate-500">Realtid</span>
           </div>
           <div className="divide-y divide-slate-200/70 rounded-2xl border border-slate-200 bg-white px-4">
             {recentSales.length === 0 ? (
