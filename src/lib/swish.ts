@@ -18,9 +18,11 @@ export function generateSwishLink(
   // Remove any non-digit characters from the swish number
   const cleanNumber = swishNumber.replace(/\D/g, '')
 
-  // For pre-filling private Swish numbers (07x), 'swish://payment' is the way to go.
-  // The parameter for the recipient is 'address', not 'payee'.
-  let url = `swish://payment?address=${cleanNumber}&amount=${amount}&message=${encodeURIComponent(message)}`
+  // Use the exact manual string construction from the reference repo
+  // It seems they encode the message inside the JSON string
+  let swishData = `{"version":1,"payee":{"value":"${cleanNumber}"},"amount":{"value":${amount}},"message":{"value":"${encodeURIComponent(message)}","editable":true}}`
+  
+  let url = `swish://payment?data=${swishData}`
 
   // Swish app strictly requires HTTPS for callback URLs and will show "invalid url" 
   // if http://localhost is used. During local development, we omit it to avoid the error.

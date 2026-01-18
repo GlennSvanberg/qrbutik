@@ -9,6 +9,16 @@ import type { DataModel } from "./_generated/dataModel";
 import type { GenericCtx } from "@convex-dev/better-auth";
 
 const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
+const trustedOrigins = [
+  siteUrl,
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:5173",
+  "https://qrbutik.vercel.app",
+  "https://qrbutik.se",
+  "https://www.qrbutik.se",
+];
+
 const convexSiteUrl =
   process.env.CONVEX_SITE_URL ?? process.env.CONVEX_HTTP_URL;
 
@@ -24,7 +34,7 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     process.env.RESEND_FROM ?? "QRButik <no-reply@qrbutik.se>";
   return betterAuth({
     baseURL: convexSiteUrl,
-    trustedOrigins: [siteUrl],
+    trustedOrigins,
     advanced: {
       defaultCookieAttributes: {
         sameSite: "none",
