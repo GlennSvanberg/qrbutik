@@ -51,6 +51,84 @@
           "Närheten till kiosken gör enkel skyltning extra effektiv."
         ]
       ]
+    },
+    {
+      "slug": "ishockey",
+      "name": "Ishockey",
+      "environment": "indoor",
+      "season": "winter",
+      "matchContext": "matcher och turneringar i ishallen",
+      "crowdContext": "intensiva periodpauser och hög puls",
+      "commonItems": ["kaffe", "korv", "läsk", "choklad", "nötter"],
+      "operationalNotesVariants": [
+        [
+          "Periodpauserna är korta och koncentrerade — kiosken måste klara hög volym snabbt.",
+          "Kyla och ytterkläder gör att tydliga skyltar och enkel navigation är extra viktigt.",
+          "Många köp kommer i samma fönster, så smidiga flöden minskar köer."
+        ],
+        [
+          "Publiken vill hinna handla mellan perioderna utan att missa spelstart.",
+          "Ishallen har ofta flera ingångar — QR-koden behöver synas tydligt.",
+          "Turneringar ger många återkommande köp under dagen."
+        ],
+        [
+          "Snabba pauser kräver enkla menyer och få steg till betalning.",
+          "Kiosken måste fungera även när publiken rör sig samtidigt.",
+          "Barnfamiljer uppskattar lätta, snabba köp."
+        ]
+      ]
+    },
+    {
+      "slug": "konstakning",
+      "name": "Konståkning",
+      "environment": "indoor",
+      "season": "winter",
+      "matchContext": "tävlingar och uppvisningar",
+      "crowdContext": "lugna pauser men tydliga fönster för köp",
+      "commonItems": ["kaffe", "te", "smörgås", "frukt", "bulle"],
+      "operationalNotesVariants": [
+        [
+          "Pausfönstren är korta och tydliga — gör menyer enkla att skanna.",
+          "Publiken rör sig samlat, så smidig betalning minskar trängsel.",
+          "Uppvisningar ger jämna flöden med toppar mellan program."
+        ],
+        [
+          "Stillasittande publik gör att tydliga skyltar behövs för att driva köp.",
+          "Många besökare är barn och familjer — snabb kiosk minskar stress.",
+          "Evenemang kan pågå länge, så återkommande köp är vanliga."
+        ],
+        [
+          "Kiosken behöver vara tystlåtande och diskret för att passa miljön.",
+          "Mellan åk blir det korta kötoppar — QR-kod sparar tid.",
+          "Små lokaler gör att köer måste hållas korta."
+        ]
+      ]
+    },
+    {
+      "slug": "innebandy",
+      "name": "Innebandy",
+      "environment": "indoor",
+      "season": "winter",
+      "matchContext": "seriematcher och cuper i hallen",
+      "crowdContext": "snabba pauser och många korta köptillfällen",
+      "commonItems": ["kaffe", "korv", "läsk", "frukt", "godis"],
+      "operationalNotesVariants": [
+        [
+          "Pauserna är korta och intensiva — kiosken måste vara snabb och tydlig.",
+          "Publiken rör sig snabbt mellan perioder, så enkel betalning ger kortare köer.",
+          "Cuper ger många matcher på samma dag och hög beläggning."
+        ],
+        [
+          "Hallarna har ofta flera lag på plats samtidigt — flödet måste vara smidigt.",
+          "Snabba menyer med få val gör köerna kortare.",
+          "Matchscheman är tajta, så kiosken behöver vara redo direkt."
+        ],
+        [
+          "Många barn- och ungdomslag gör att köp kommer i vågor.",
+          "Självbetjäning minskar trycket på volontärerna.",
+          "En tydlig QR-kod gör att fler handlar utan att fråga."
+        ]
+      ]
     }
   ],
   "cities": [
@@ -147,6 +225,486 @@
         {
           "label": "Göteborg & Co",
           "url": "https://www.goteborg.com/"
+        }
+      ]
+    },
+    {
+      "slug": "molndal",
+      "name": "Mölndal",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Mölndal ligger nära Göteborg och har ett aktivt föreningsliv. QRButik gör kiosken smidig när många vill handla samtidigt.",
+        "I Mölndal samsas hallar och utomhusplaner. Med QRButik blir kiosken enkel även när schemat är tajt.",
+        "Mölndals föreningar samlar publik året runt. En digital kiosk sparar tid för volontärerna."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken rör sig snabbt mellan perioder och vill handla utan kö.",
+          "Närheten till Göteborg ger många gästande lag och fulla läktare."
+        ],
+        [
+          "Hallar med korta pauser gör tydliga menyer viktiga.",
+          "Många familjer på plats uppskattar smidig betalning."
+        ],
+        [
+          "Event på kvällar och helger kräver enkel uppstart.",
+          "Föreningar delar ofta kiosk vid turneringar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Cuper där flera lag turas om att sälja."
+        ],
+        [
+          "Utomhusmatcher med många spontanbesökare.",
+          "Evenemang där kiosken bara är öppen under matchtid."
+        ],
+        [
+          "Skolidrott och helgturneringar med jämna flöden.",
+          "Föreningsarrangemang med tydliga köptoppar."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Mölndals stad",
+          "url": "https://www.molndal.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/"
+        }
+      ]
+    },
+    {
+      "slug": "partille",
+      "name": "Partille",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Partille är en växande kommun med starkt föreningsliv. QRButik gör kiosken enkel när publiken blir många.",
+        "I Partille fylls hallarna ofta av familjer och lag. En digital kiosk minskar köer och ger mer tid till matchen.",
+        "Partille är känt för idrott och cuphelger. QRButik gör försäljningen smidigare."
+      ],
+      "localNotesVariants": [
+        [
+          "Cuper och helgmatcher skapar höga toppar i kön.",
+          "Många barn- och ungdomslag ger jämna köp under dagen."
+        ],
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Tydliga priser och snabb betalning gör köerna kortare."
+        ],
+        [
+          "Föreningar samarbetar ofta kring kiosken.",
+          "Evenemang sker både inomhus och utomhus."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhuscuper med flera matcher på samma dag.",
+          "Matcher med korta pauser och högt tryck."
+        ],
+        [
+          "Föreningsevent där flera lag delar kiosk.",
+          "Utomhusarrangemang med snabb servering."
+        ],
+        [
+          "Träningsmatcher med mindre men jämna köer.",
+          "Skolturneringar med många korta köptillfällen."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Partille kommun",
+          "url": "https://www.partille.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/"
+        }
+      ]
+    },
+    {
+      "slug": "harryda",
+      "name": "Härryda",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Härryda har närhet till både Göteborg och natur. QRButik gör kiosken smidig när föreningarna samlar publik.",
+        "I Härryda finns aktiva klubbar och många arrangemang. En digital kiosk hjälper när trycket är högt.",
+        "Härryda växer och idrotten är central. QRButik förenklar köerna vid matcher och cuper."
+      ],
+      "localNotesVariants": [
+        [
+          "Många matcher spelas på helger med korta pauser.",
+          "Publiken är rörlig och vill handla snabbt."
+        ],
+        [
+          "Föreningar delar ofta halltider och kioskansvar.",
+          "Tydliga menyer gör köerna mer lättarbetade."
+        ],
+        [
+          "Event kan ligga utspridda över flera anläggningar.",
+          "Smidig Swish-betalning sparar tid för volontärer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent under sommarhalvåret."
+        ],
+        [
+          "Cuper där kiosken måste klara många återkommande köp.",
+          "Föreningsarrangemang med blandad publik."
+        ],
+        [
+          "Matcher med publik som växlar mellan planer.",
+          "Träningsdagar där kiosken är öppen korta pass."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Härryda kommun",
+          "url": "https://www.harryda.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/"
+        }
+      ]
+    },
+    {
+      "slug": "kungsbacka",
+      "name": "Kungsbacka",
+      "region": "Hallands län",
+      "heritageTextVariants": [
+        "Kungsbacka har ett starkt föreningsliv och ligger nära Göteborg. QRButik gör kiosken snabb när publiken blir stor.",
+        "I Kungsbacka fylls hallar och planer av matcher året runt. En digital kiosk gör försäljningen smidigare.",
+        "Kungsbacka lockar både lokala lag och gästande klubbar. QRButik hjälper er hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar skapar korta kötoppar som behöver snabb service.",
+          "Många familjer på läktaren uppskattar enkla köp."
+        ],
+        [
+          "Cuper drar publik från flera orter.",
+          "Tydliga priser och snabb Swish gör flödet smidigt."
+        ],
+        [
+          "Utomhusmatcher ställer krav på enkel skyltning.",
+          "Föreningar delar ofta kioskansvaret."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent med många spontanbesökare."
+        ],
+        [
+          "Cuphelger med högt tryck.",
+          "Föreningsdagar där flera lag turas om."
+        ],
+        [
+          "Skolidrott som ger jämna köp över dagen.",
+          "Matcher där kiosken är öppen korta pass."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Kungsbacka kommun",
+          "url": "https://www.kungsbacka.se/"
+        },
+        {
+          "label": "Visit Kungsbacka",
+          "url": "https://www.visitkungsbacka.se/"
+        }
+      ]
+    },
+    {
+      "slug": "lerum",
+      "name": "Lerum",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Lerum har ett aktivt idrottsliv med närhet till Göteborg. QRButik gör kiosken smidig när många vill handla samtidigt.",
+        "I Lerum samsas hallar, planer och föreningar. En digital kiosk gör försäljningen enkel när tempot ökar.",
+        "Lerums klubbar samlar publik året runt. QRButik förenklar köerna vid matcher och turneringar."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken rör sig snabbt mellan perioderna och vill handla utan kö.",
+          "Tydliga menyer gör köptillfällen effektivare."
+        ],
+        [
+          "Cuper ger många köp på kort tid.",
+          "Volontärer uppskattar smidiga flöden."
+        ],
+        [
+          "Event sker både inomhus och utomhus.",
+          "Snabb betalning minskar stress i pauserna."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta scheman.",
+          "Utomhusmatcher med många spontanbesök."
+        ],
+        [
+          "Föreningsevent där flera lag delar kiosk.",
+          "Cuper som pågår hela helgen."
+        ],
+        [
+          "Träningsmatcher med mindre men jämna köer.",
+          "Skolturneringar med korta pauser."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Lerums kommun",
+          "url": "https://www.lerum.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/"
+        }
+      ]
+    },
+    {
+      "slug": "kungalv",
+      "name": "Kungälv",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Kungälv har ett rikt föreningsliv och närhet till Göteborg. QRButik gör kiosken effektiv när publiken växer.",
+        "I Kungälv möts tradition och idrott. En digital kiosk håller köerna korta vid matcher och cuper.",
+        "Kungälvs klubbar arrangerar matcher året runt. QRButik gör försäljningen smidigare."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger korta men intensiva kötoppar.",
+          "Publiken vill hinna handla utan att missa spelstart."
+        ],
+        [
+          "Föreningarna har både inomhus- och utomhusevent.",
+          "Tydlig QR-kod gör kiosken lätt att hitta."
+        ],
+        [
+          "Cuper lockar gästande lag och mycket publik.",
+          "Snabb Swish-betalning gör flödet lugnare."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusarrangemang med hög belastning."
+        ],
+        [
+          "Cuper där flera lag turas om att sälja.",
+          "Matcher med publik som kommer i vågor."
+        ],
+        [
+          "Föreningsdagar med flera aktiviteter.",
+          "Skolmatcher med tydliga köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Kungälvs kommun",
+          "url": "https://www.kungalv.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/kungalv/"
+        }
+      ]
+    },
+    {
+      "slug": "alingsas",
+      "name": "Alingsås",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Alingsås har ett levande föreningsliv och många arrangemang. QRButik gör kiosken enkel när publiken samlas.",
+        "I Alingsås kombineras idrott och evenemang året runt. En digital kiosk gör försäljningen smidig.",
+        "Alingsås klubbar samlar publik i hallar och på planer. QRButik håller köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Många matcher spelas på helger med korta pauser.",
+          "Publiken vill handla snabbt och enkelt."
+        ],
+        [
+          "Cuper ger höga toppar i försäljningen.",
+          "Tydliga priser gör köerna mer hanterbara."
+        ],
+        [
+          "Föreningar delar ofta kiosk under event.",
+          "Snabb betalning minskar trängsel i hallen."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta spelscheman.",
+          "Utomhusarrangemang med många spontanbesök."
+        ],
+        [
+          "Cuper som pågår flera dagar.",
+          "Föreningsdagar med många deltagare."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolidrott med korta pauser."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Alingsås kommun",
+          "url": "https://www.alingsas.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/alingsas/"
+        }
+      ]
+    },
+    {
+      "slug": "stenungsund",
+      "name": "Stenungsund",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Stenungsund har ett aktivt föreningsliv nära kusten. QRButik gör kiosken smidig när publiken är många.",
+        "I Stenungsund arrangeras matcher och cuper året runt. En digital kiosk gör försäljningen enkel.",
+        "Stenungsunds klubbar samlar publik i hallar och på planer. QRButik hjälper när trycket är högt."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Utomhusmatcher kräver tydlig skyltning."
+        ],
+        [
+          "Cuper ger många köp på kort tid.",
+          "Snabb Swish-betalning gör köerna kortare."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Event sker både i hall och utomhus."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent med många besökare."
+        ],
+        [
+          "Cuphelger med flera matcher samma dag.",
+          "Föreningsarrangemang med tydliga köptoppar."
+        ],
+        [
+          "Träningsmatcher med jämna flöden.",
+          "Skolturneringar med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Stenungsunds kommun",
+          "url": "https://www.stenungsund.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/stenungsund/"
+        }
+      ]
+    },
+    {
+      "slug": "ockero",
+      "name": "Öckerö",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Öckerö kommun består av öar med starkt föreningsliv. QRButik gör kiosken smidig när publik samlas.",
+        "I Öckerö arrangeras matcher och cuper med närhet till havet. En digital kiosk gör försäljningen enkel.",
+        "Öckerös klubbar samlar publik i hallar och på planer. QRButik hjälper när trycket är högt."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Evenemang kan ha tydliga kötoppar."
+        ],
+        [
+          "Många familjer på plats uppskattar smidiga köp.",
+          "Utomhusmatcher gör enkel skyltning extra viktig."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret vid cuper.",
+          "Snabb betalning minskar trängsel i mindre hallar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent under sommarhalvåret."
+        ],
+        [
+          "Cuper där flera lag turas om att sälja.",
+          "Föreningsarrangemang med blandad publik."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Öckerö kommun",
+          "url": "https://www.ockero.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/ockero/"
+        }
+      ]
+    },
+    {
+      "slug": "ale",
+      "name": "Ale",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Ale har ett aktivt föreningsliv nära Göteborg. QRButik gör kiosken enkel när publiken blir många.",
+        "I Ale samlas publik i hallar och på planer. En digital kiosk håller köerna korta vid matcher.",
+        "Ale är en växande kommun med många idrottsarrangemang. QRButik gör försäljningen smidig."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger korta kötoppar som behöver snabb service.",
+          "Publiken vill hinna handla mellan perioderna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Tydliga priser gör köerna mer lättarbetade."
+        ],
+        [
+          "Utomhusmatcher kräver enkel och synlig QR-kod.",
+          "Snabb Swish-betalning sparar tid för volontärer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent med många besökare."
+        ],
+        [
+          "Cuphelger med flera matcher på samma dag.",
+          "Föreningsarrangemang med tydliga köpfönster."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolmatcher där kiosken är öppen korta pass."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Ale kommun",
+          "url": "https://www.ale.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/"
         }
       ]
     }
