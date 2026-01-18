@@ -89,6 +89,11 @@ function ShopView() {
       const timestamp = Date.now().toString(36).toUpperCase().slice(-6)
       const reference = `QRB-${shop.name.substring(0, 10).toUpperCase()}-${timestamp}`
 
+      const swishMessage = [
+        shop.name,
+        ...cartItems.map((item) => `${item.name} x${item.quantity}`),
+      ].join('\n')
+
       const transactionId = await createTransaction({
         shopId: shop._id,
         amount: totalPrice,
@@ -105,7 +110,7 @@ function ShopView() {
       const swishLink = generateSwishLink(
         shop.swishNumber,
         totalPrice,
-        reference,
+        swishMessage,
         callbackUrl,
       )
 

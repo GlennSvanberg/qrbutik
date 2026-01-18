@@ -20,7 +20,7 @@ export function generateSwishLink(
 
   // Use the exact manual string construction from the reference repo
   // It seems they encode the message inside the JSON string
-  let swishData = `{"version":1,"payee":{"value":"${cleanNumber}"},"amount":{"value":${amount}},"message":{"value":"${encodeURIComponent(message)}","editable":true}}`
+  const swishData = `{"version":1,"payee":{"value":"${cleanNumber}"},"amount":{"value":${amount}},"message":{"value":"${encodeURIComponent(message)}","editable":true}}`
   
   let url = `swish://payment?data=${swishData}`
 
