@@ -12,6 +12,7 @@ import {
 import { generateSwishLink } from '../lib/swish'
 import type { ButiksinfoValues } from '../components/ButiksinfoForm'
 import type { ProdukterDraft } from '../components/ProdukterForm'
+import type { Id } from '../../convex/_generated/dataModel'
 
 const slugify = (value: string) => {
   return value
@@ -32,6 +33,7 @@ type DraftProduct = ProdukterDraft
 function CreateShopWizard() {
   const navigate = useNavigate()
   const createShopWithProducts = useMutation(api.shops.createShopWithProducts)
+  const createShopActivation = useMutation(api.shops.activateShop)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [formState, setFormState] = useState<ButiksinfoValues>({
     name: '',
@@ -268,7 +270,11 @@ function CreateShopWizard() {
                 Din butik är redo
               </h2>
               <p className="text-sm text-slate-600">
-                Aktivera butiken för 10 kr och gå direkt till din QR-skylt.
+                Välj en aktivering för att öppna butiken direkt.
+              </p>
+              <p className="text-xs text-slate-500">
+                Betalningen markerar butiken som aktiv direkt, och vi bekräftar
+                den manuellt.
               </p>
 
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
@@ -279,10 +285,6 @@ function CreateShopWizard() {
                   </span>
                 </div>
                 <div className="mt-2 flex items-center justify-between">
-                  <span>Belopp</span>
-                  <span className="font-semibold text-slate-900">10 kr</span>
-                </div>
-                <div className="mt-2 flex items-center justify-between">
                   <span>Swish-mottagare</span>
                   <span className="font-semibold text-slate-900">
                     0735029113
@@ -290,22 +292,52 @@ function CreateShopWizard() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={async () => {
-                  const message = `QRB-AKTIVERING ${formState.name}`
-                  const link = generateSwishLink('0735029113', 10, message)
-                  window.location.href = link
-                  await new Promise((resolve) => setTimeout(resolve, 2000))
-                  await navigate({
-                    to: '/admin/$shopId/skylt',
-                    params: { shopId: createdShop.shopId },
-                  })
-                }}
-                className="mx-auto h-12 cursor-pointer rounded-xl bg-indigo-700 px-8 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-              >
-                Aktivera nu 10 kr
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const result = await createShopActivation({
+                      shopId: createdShop.shopId as Id<'shops'>,
+                      plan: 'event',
+                    })
+                    const link = generateSwishLink(
+                      '0735029113',
+                      result.amount,
+                      result.message,
+                    )
+                    window.location.href = link
+                    await navigate({
+                      to: '/admin/$shopId/skylt',
+                      params: { shopId: createdShop.shopId },
+                    })
+                  }}
+                  className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                >
+                  Aktivera event 10 kr
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const result = await createShopActivation({
+                      shopId: createdShop.shopId as Id<'shops'>,
+                      plan: 'season',
+                    })
+                    const link = generateSwishLink(
+                      '0735029113',
+                      result.amount,
+                      result.message,
+                    )
+                    window.location.href = link
+                    await navigate({
+                      to: '/admin/$shopId/skylt',
+                      params: { shopId: createdShop.shopId },
+                    })
+                  }}
+                  className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                >
+                  Aktivera säsong 99 kr
+                </button>
+              </div>
 
               {!session?.user.email ? (
                 <div className="flex flex-col gap-2">

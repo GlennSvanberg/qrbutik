@@ -178,6 +178,63 @@ const buildSummary = (
   }
 }
 
+export const getSalesSummaryByShopIds = query({
+  args: { shopIds: v.array(v.id('shops')) },
+  returns: v.array(
+    v.object({
+      shopId: v.id('shops'),
+      totalRevenue: v.number(),
+      latestSaleAt: v.union(v.number(), v.null()),
+      latestSaleAmount: v.union(v.number(), v.null()),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    if (args.shopIds.length === 0) {
+      return []
+    }
+
+    const summaries = [] as Array<{
+      shopId: Id<'shops'>
+      totalRevenue: number
+      latestSaleAt: number | null
+      latestSaleAmount: number | null
+    }>
+
+    for (const shopId of args.shopIds) {
+      const transactions = await ctx.db
+        .query('transactions')
+        .withIndex('by_shopId', (q) => q.eq('shopId', shopId))
+        .order('desc')
+        .collect()
+
+      if (transactions.length === 0) {
+        summaries.push({
+          shopId,
+          totalRevenue: 0,
+          latestSaleAt: null,
+          latestSaleAmount: null,
+        })
+        continue
+      }
+
+      const totalRevenue = transactions.reduce(
+        (sum, transaction) => sum + transaction.amount,
+        0,
+      )
+      const latestSale = transactions[0]
+
+      summaries.push({
+        shopId,
+        totalRevenue,
+        latestSaleAt: latestSale.createdAt,
+        latestSaleAmount: latestSale.amount,
+      })
+    }
+
+    return summaries
+  },
+})
+
 export const listByShop = query({
   args: { shopId: v.id('shops') },
   returns: v.array(transactionPayload),

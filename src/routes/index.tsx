@@ -32,6 +32,12 @@ function Home() {
               >
                 Skapa din Swish-kiosk — 10 kr
               </Link>
+              <Link
+                to="/admin"
+                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              >
+                Logga in till admin
+              </Link>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-xs uppercase tracking-[0.25em] text-slate-500">
               <span>2 minuter</span>

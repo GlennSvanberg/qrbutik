@@ -1,8 +1,9 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useMutation } from 'convex/react'
-import { useEffect, useState } from 'react'
+import { useMutation, useQuery } from 'convex/react'
+import { useEffect, useMemo, useState } from 'react'
+import { generateSwishLink } from '../../../lib/swish'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
@@ -113,6 +114,7 @@ function SettingsPage() {
 }
 
 function SettingsContent({ email }: { email: string }) {
+  const navigate = useNavigate()
   const { shopId } = Route.useParams()
   if (!shopId) {
     return null
@@ -122,6 +124,11 @@ function SettingsContent({ email }: { email: string }) {
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
   const updateShop = useMutation(api.shops.updateShop)
+  const activateShop = useMutation(api.shops.activateShop)
+  const deleteShop = useMutation(api.shops.deleteShop)
+  const activationData = useQuery(api.shops.getActivationStatus, {
+    shopId: shopIdParam,
+  })
 
   const [shopState, setShopState] = useState({
     name: '',
@@ -130,6 +137,33 @@ function SettingsContent({ email }: { email: string }) {
   })
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [activationMessage, setActivationMessage] = useState<string | null>(
+    null,
+  )
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [deleteShopName, setDeleteShopName] = useState('')
+  const [deleteStatus, setDeleteStatus] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+
+  const timeLeft = useMemo(() => {
+    if (!activationData?.activeUntil) {
+      return { label: '—', hoursLeft: null }
+    }
+    const remainingMs = activationData.activeUntil - Date.now()
+    if (remainingMs <= 0) {
+      return { label: '0 dagar', hoursLeft: 0 }
+    }
+    const hours = Math.floor(remainingMs / (60 * 60 * 1000))
+    const days = Math.floor(hours / 24)
+    const remainingHours = hours % 24
+    if (days === 0) {
+      return { label: `${remainingHours} timmar`, hoursLeft: hours }
+    }
+    if (remainingHours === 0) {
+      return { label: `${days} dagar`, hoursLeft: hours }
+    }
+    return { label: `${days} dagar ${remainingHours} timmar`, hoursLeft: hours }
+  }, [activationData])
 
   useEffect(() => {
     if (!shop) {
@@ -247,6 +281,197 @@ function SettingsContent({ email }: { email: string }) {
           >
             Spara butiksinfo
           </button>
+        </section>
+
+        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-base font-semibold text-slate-900">
+              Aktivering
+            </h2>
+            <p className="text-sm text-slate-600">
+              Aktivera butiken via Swish. Betalningen markerar butiken som aktiv
+              direkt.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
+            <div className="flex items-center justify-between">
+              <span>Status</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activationStatus === 'active'
+                  ? 'Aktiv'
+                  : 'Inaktiv'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Plan</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activationPlan === 'season'
+                  ? 'Säsong (180 dagar)'
+                  : activationData?.activationPlan === 'event'
+                    ? 'Event (48 timmar)'
+                    : 'Ingen plan'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Aktiv till</span>
+              <span className="font-semibold text-slate-900">
+                {activationData?.activeUntil
+                  ? new Date(activationData.activeUntil).toLocaleString('sv-SE')
+                  : '—'}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span>Tid kvar</span>
+              <span className="font-semibold text-slate-900">
+                {timeLeft.label}
+              </span>
+            </div>
+          </div>
+
+          {activationMessage ? (
+            <p className="text-sm text-emerald-700">{activationMessage}</p>
+          ) : null}
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            {timeLeft.hoursLeft !== null && timeLeft.hoursLeft <= 24 ? (
+              <button
+                type="button"
+                onClick={async () => {
+                  const result = await activateShop({
+                    shopId: shop._id,
+                    plan: 'event',
+                  })
+                  const link = generateSwishLink(
+                    '0735029113',
+                    result.amount,
+                    result.message,
+                  )
+                  setActivationMessage('Förlängning startad. Öppnar Swish...')
+                  window.location.href = link
+                }}
+                className="h-12 cursor-pointer rounded-xl border border-emerald-200 bg-emerald-50 px-5 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-300"
+              >
+                Förläng nu
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={async () => {
+                const result = await activateShop({
+                  shopId: shop._id,
+                  plan: 'event',
+                })
+                const link = generateSwishLink(
+                  '0735029113',
+                  result.amount,
+                  result.message,
+                )
+                setActivationMessage('Event aktiverad. Öppnar Swish...')
+                window.location.href = link
+              }}
+              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+            >
+              Aktivera event 10 kr
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                const result = await activateShop({
+                  shopId: shop._id,
+                  plan: 'season',
+                })
+                const link = generateSwishLink(
+                  '0735029113',
+                  result.amount,
+                  result.message,
+                )
+                setActivationMessage('Säsong aktiverad. Öppnar Swish...')
+                window.location.href = link
+              }}
+              className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+            >
+              Aktivera säsong 99 kr
+            </button>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-base font-semibold text-slate-900">
+                Ta bort butik
+              </h2>
+              <p className="text-sm text-slate-600">
+                Detta tar bort butiken och all tillhörande data permanent.
+                Åtgärden går inte att ångra.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsDeleteOpen((prev) => !prev)
+                setDeleteStatus(null)
+                setDeleteError(null)
+              }}
+              className="h-10 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-4 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
+            >
+              {isDeleteOpen ? 'Stäng' : 'Radera butik'}
+            </button>
+          </div>
+
+          {isDeleteOpen ? (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50/60 px-5 py-4">
+              <div className="flex flex-col gap-3">
+                <p className="text-sm text-rose-700">
+                  Skriv butikens namn exakt för att bekräfta borttagning.
+                </p>
+                <label className="flex flex-col gap-2 text-sm text-slate-700">
+                  Bekräfta butiksnamn
+                  <input
+                    type="text"
+                    value={deleteShopName}
+                    onChange={(event) => setDeleteShopName(event.target.value)}
+                    className="h-11 rounded-xl border border-rose-200 bg-white px-3 text-base text-slate-900 outline-none focus:border-rose-400"
+                    placeholder={shop.name}
+                  />
+                </label>
+                <button
+                  type="button"
+                  disabled={deleteShopName.trim() !== shop.name}
+                  onClick={async () => {
+                    setDeleteStatus(null)
+                    setDeleteError(null)
+                    try {
+                      await deleteShop({
+                        shopId: shop._id,
+                        ownerEmail: email,
+                      })
+                      setDeleteStatus('Butiken är borttagen. Går tillbaka...')
+                      setTimeout(() => {
+                        void navigate({ to: '/admin' })
+                      }, 1200)
+                    } catch (deleteFailure) {
+                      if (deleteFailure instanceof Error) {
+                        setDeleteError(deleteFailure.message)
+                      } else {
+                        setDeleteError('Något gick fel. Försök igen.')
+                      }
+                    }
+                  }}
+                  className="h-11 cursor-pointer rounded-xl bg-rose-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
+                >
+                  Ta bort butik permanent
+                </button>
+                {deleteStatus ? (
+                  <p className="text-sm text-emerald-700">{deleteStatus}</p>
+                ) : null}
+                {deleteError ? (
+                  <p className="text-sm text-rose-700">{deleteError}</p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
