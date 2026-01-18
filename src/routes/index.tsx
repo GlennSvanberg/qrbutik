@@ -46,9 +46,9 @@ function Home() {
           <div className="flex flex-col gap-6 text-center">
             <div className="flex flex-col items-center gap-3">
               <img
-                src="/logo.png"
+                src="/qrbutik_logo.png"
                 alt="QRButik logo"
-                className="h-14 w-auto sm:h-16"
+                className="h-16 w-auto sm:h-20"
               />
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
                 QRButik.se
