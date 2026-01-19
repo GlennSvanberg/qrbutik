@@ -37,9 +37,13 @@ ${urls
 }
 
 const buildRobots = () => `User-agent: *
+Disallow: /admin/
+Disallow: /s/
+Disallow: /tack/
 Allow: /
 
-Sitemap: ${siteUrl}/sitemap.xml`
+Sitemap: ${siteUrl}/sitemap.xml
+LLMS: ${siteUrl}/llms.txt`
 
 const run = async () => {
   const data = await loadPseoData()

@@ -5,6 +5,17 @@ import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
 export const Route = createFileRoute("/tack/$transactionId")({
+  head: () => ({
+    meta: [
+      {
+        name: "robots",
+        content: "noindex, nofollow",
+      },
+    ],
+  }),
+  headers: () => ({
+    "X-Robots-Tag": "noindex, nofollow",
+  }),
   component: ThankYouView,
 });
 

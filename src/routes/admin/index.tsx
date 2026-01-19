@@ -10,6 +10,17 @@ import {
 } from '../../lib/devMagicLink'
 
 export const Route = createFileRoute('/admin/')({
+  head: () => ({
+    meta: [
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+  }),
+  headers: () => ({
+    'X-Robots-Tag': 'noindex, nofollow',
+  }),
   component: AdminDashboard,
 })
 

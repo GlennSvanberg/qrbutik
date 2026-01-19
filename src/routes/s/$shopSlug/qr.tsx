@@ -6,6 +6,17 @@ import { useMemo } from 'react'
 import { api } from '../../../../convex/_generated/api'
 
 export const Route = createFileRoute('/s/$shopSlug/qr')({
+  head: () => ({
+    meta: [
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+  }),
+  headers: () => ({
+    'X-Robots-Tag': 'noindex, nofollow',
+  }),
   component: ShopQrPublicPage,
 })
 

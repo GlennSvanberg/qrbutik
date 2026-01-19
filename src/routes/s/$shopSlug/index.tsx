@@ -7,6 +7,17 @@ import { api } from '../../../../convex/_generated/api'
 import { generateSwishLink } from '../../../lib/swish'
 
 export const Route = createFileRoute('/s/$shopSlug/')({
+  head: () => ({
+    meta: [
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+  }),
+  headers: () => ({
+    'X-Robots-Tag': 'noindex, nofollow',
+  }),
   component: ShopView,
 })
 

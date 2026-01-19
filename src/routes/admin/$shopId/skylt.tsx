@@ -14,6 +14,17 @@ import {
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/skylt')({
+  head: () => ({
+    meta: [
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+  }),
+  headers: () => ({
+    'X-Robots-Tag': 'noindex, nofollow',
+  }),
   component: ShopQrPage,
 })
 

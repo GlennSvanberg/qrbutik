@@ -4,6 +4,17 @@ import { convexQuery } from '@convex-dev/react-query'
 import { api } from '../../../../convex/_generated/api'
 
 export const Route = createFileRoute('/s/$shopSlug/klart')({
+  head: () => ({
+    meta: [
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+  }),
+  headers: () => ({
+    'X-Robots-Tag': 'noindex, nofollow',
+  }),
   component: ShopActivationSuccessPage,
 })
 
