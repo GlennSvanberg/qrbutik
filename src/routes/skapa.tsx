@@ -202,15 +202,15 @@ function CreateShopWizard() {
                     setAuthStatus('Fyll i en e-postadress först.')
                     return
                   }
-                  setAuthStatus('Skickar inloggningslänk...')
+                  setAuthStatus('Skickar inloggningsmejl...')
                   await authClient.signIn.magicLink(
                     { email },
                     {
                       onSuccess: async () => {
                         setAuthStatus(
                           isDevMagicLinkEnabled()
-                            ? 'Devmode: öppnar magic link direkt.'
-                            : 'Magic link skickad. Kolla inkorgen.',
+                            ? 'Devmode: öppnar inloggningen direkt.'
+                            : 'Inloggningsmejl skickat. Kolla inkorgen.',
                         )
                         await maybeOpenDevMagicLink(email)
                       },
@@ -222,7 +222,7 @@ function CreateShopWizard() {
                 className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 disabled:cursor-not-allowed disabled:text-slate-400"
                 trackaton-on-click="create-send-magic-link"
               >
-                Skicka inloggningslänk
+                Skicka inloggningsmejl
               </button>
               {error ? <p className="text-sm text-rose-600">{error}</p> : null}
               {authStatus ? (
@@ -393,15 +393,15 @@ function CreateShopWizard() {
                         setAdminAuthStatus('Fyll i en e-postadress först.')
                         return
                       }
-                      setAdminAuthStatus('Skickar inloggningslänk...')
+                      setAdminAuthStatus('Skickar inloggningsmejl...')
                       await authClient.signIn.magicLink(
                         { email, callbackURL: '/admin' },
                         {
                           onSuccess: async () => {
                             setAdminAuthStatus(
                               isDevMagicLinkEnabled()
-                                ? 'Devmode: öppnar magic link direkt.'
-                                : 'Magic link skickad. Kolla inkorgen.',
+                                ? 'Devmode: öppnar inloggningen direkt.'
+                                : 'Inloggningsmejl skickat. Kolla inkorgen.',
                             )
                             await maybeOpenDevMagicLink(email)
                           },
@@ -415,7 +415,7 @@ function CreateShopWizard() {
                     className="mx-auto h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
                     trackaton-on-click="create-send-admin-link"
                   >
-                    Skicka admin-länk till e-post
+                    Skicka admininloggning via mejl
                   </button>
                   {adminAuthStatus ? (
                     <p className="text-sm text-slate-600">{adminAuthStatus}</p>

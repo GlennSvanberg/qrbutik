@@ -707,6 +707,486 @@
           "url": "https://www.vastsverige.com/"
         }
       ]
+    },
+    {
+      "slug": "tjorn",
+      "name": "Tjörn",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Tjörn präglas av skärgård, föreningsliv och säsonger med många besökare. QRButik gör kiosken enkel när trycket ökar.",
+        "På Tjörn möts lokala klubbar och sommarpublik. En digital kiosk håller flödet smidigt när tempot växlar.",
+        "Tjörns matcher och evenemang samlar publik över året. QRButik gör försäljningen snabb och tydlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Säsongsvariationer ger toppar i försäljningen.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Utomhusmatcher kräver tydlig skyltning.",
+          "Många familjer på plats uppskattar enkel Swish."
+        ],
+        [
+          "Föreningar delar ofta kioskansvar.",
+          "Snabb självbetjäning minskar köer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommararrangemang med många besökare.",
+          "Inomhusmatcher med korta pauser."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Matchdagar med tydliga köptoppar."
+        ],
+        [
+          "Utomhusmatcher där kiosken är öppen korta pass.",
+          "Föreningsevent med blandad publik."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tjörns kommun",
+          "url": "https://www.tjorn.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/tjorn/"
+        }
+      ]
+    },
+    {
+      "slug": "orust",
+      "name": "Orust",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Orust har kustnära föreningsliv och många säsongsbesök. QRButik gör kiosken smidig när trycket ökar.",
+        "På Orust samlas publik i hallar och på planer under hela året. En digital kiosk gör försäljningen enkel.",
+        "Orusts klubbar driver matcher och event med varierande tempo. QRButik håller köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Sommarsäsongen ger större publik.",
+          "Tydliga priser gör köerna kortare."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvar.",
+          "Snabb Swish-betalning sparar tid."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Utomhusevent under sommarhalvåret.",
+          "Inomhusmatcher med korta pauser."
+        ],
+        [
+          "Cuphelger med flera matcher samma dag.",
+          "Föreningsarrangemang med många familjer."
+        ],
+        [
+          "Matcher med jämna flöden.",
+          "Skolturneringar med tydliga köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Orust kommun",
+          "url": "https://www.orust.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/orust/"
+        }
+      ]
+    },
+    {
+      "slug": "uddevalla",
+      "name": "Uddevalla",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Uddevalla har ett starkt idrottsliv och matcher året runt. QRButik gör kiosken snabb när publiken blir stor.",
+        "I Uddevalla samlas föreningar i hallar och på planer. En digital kiosk håller flödet smidigt.",
+        "Uddevallas klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel även vid högt tryck."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger korta, intensiva kötoppar.",
+          "Publiken vill hinna handla mellan perioderna."
+        ],
+        [
+          "Cuper drar publik från flera orter.",
+          "Tydlig meny minskar stress i pauserna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Snabb Swish gör flödet lugnare."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta scheman.",
+          "Utomhusevent med hög belastning."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Föreningsarrangemang med tydliga pauser."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Uddevalla kommun",
+          "url": "https://www.uddevalla.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/uddevalla/"
+        }
+      ]
+    },
+    {
+      "slug": "ljungskile",
+      "name": "Ljungskile",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Ljungskile ligger längs kusten med aktiva föreningar och närhet till Uddevalla. QRButik gör kiosken smidig när publiken samlas.",
+        "I Ljungskile samsas hallar och utomhusplaner. En digital kiosk håller köerna korta.",
+        "Ljungskiles matcher och event samlar både lokala och gästande lag. QRButik förenklar försäljningen."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Utomhusmatcher kräver tydlig skyltning."
+        ],
+        [
+          "Föreningar delar ofta kioskansvar.",
+          "Tydliga priser gör flödet enklare."
+        ],
+        [
+          "Matchdagar ger korta kötoppar.",
+          "Snabb Swish minskar köer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusarrangemang med många familjer."
+        ],
+        [
+          "Föreningsevent med flera lag på plats.",
+          "Matcher med tydliga köpfönster."
+        ],
+        [
+          "Träningsmatcher med jämnt flöde.",
+          "Cuphelger med hög belastning."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Uddevalla kommun",
+          "url": "https://www.uddevalla.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/ljungskile/"
+        }
+      ]
+    },
+    {
+      "slug": "lilla-edet",
+      "name": "Lilla Edet",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Lilla Edet har ett aktivt föreningsliv med matcher året runt. QRButik gör kiosken smidig när tempot ökar.",
+        "I Lilla Edet samlas publik i hallar och på planer. En digital kiosk håller köerna korta.",
+        "Lilla Edets klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger korta kötoppar.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvar.",
+          "Tydliga menyer gör flödet enklare."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod.",
+          "Snabb Swish sparar tid för volontärer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta scheman.",
+          "Utomhusevent under sommarhalvåret."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Föreningsarrangemang med tydliga pauser."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Lilla Edets kommun",
+          "url": "https://www.lillaedet.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/lillaedet/"
+        }
+      ]
+    },
+    {
+      "slug": "munkedal",
+      "name": "Munkedal",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Munkedal har ett nära föreningsliv och många lokala arrangemang. QRButik gör kiosken snabb när publiken samlas.",
+        "I Munkedal möts hallar och utomhusplaner under hela året. En digital kiosk håller flödet smidigt.",
+        "Munkedals matcher och cuper samlar publik i korta toppar. QRButik gör försäljningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger intensiva kötoppar.",
+          "Publiken vill hinna handla snabbt."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Tydliga priser minskar stress i pauserna."
+        ],
+        [
+          "Utomhusmatcher kräver enkel skyltning.",
+          "Snabb Swish gör flödet lugnare."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent med många besökare."
+        ],
+        [
+          "Cuphelger med flera lag på plats.",
+          "Föreningsarrangemang med tydliga köpfönster."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta pauser."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Munkedals kommun",
+          "url": "https://www.munkedal.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/munkedal/"
+        }
+      ]
+    },
+    {
+      "slug": "tanumshede",
+      "name": "Tanumshede",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Tanumshede är centralort i Tanum med aktiva föreningar och matcher året runt. QRButik gör kiosken smidig när publiken blir stor.",
+        "I Tanumshede samlas lag i hallar och på planer. En digital kiosk håller köerna korta.",
+        "Tanumshedes matcher och cuper ger tydliga köptoppar. QRButik gör försäljningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger intensiva pauser.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Tydliga priser gör flödet smidigare."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod.",
+          "Snabb Swish sparar tid för volontärer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent under sommarhalvåret."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Föreningsarrangemang med tydliga pauser."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tanums kommun",
+          "url": "https://www.tanum.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/tanum/"
+        }
+      ]
+    },
+    {
+      "slug": "grebbestad",
+      "name": "Grebbestad",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Grebbestad har kustnära föreningsliv och många besökare under säsong. QRButik gör kiosken snabb när tempot ökar.",
+        "I Grebbestad samlas publik vid matcher och event nära havet. En digital kiosk håller flödet smidigt.",
+        "Grebbestads arrangemang ger korta men intensiva köptoppar. QRButik förenklar försäljningen."
+      ],
+      "localNotesVariants": [
+        [
+          "Säsongsvariationer ger större publik.",
+          "Utomhusmatcher kräver tydlig skyltning."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Snabb Swish minskar köer."
+        ],
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Tydliga priser gör flödet enklare."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommararrangemang med många besökare.",
+          "Inomhusmatcher med korta pauser."
+        ],
+        [
+          "Föreningsevent med blandad publik.",
+          "Matcher med tydliga köpfönster."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Utomhusevent med hög belastning."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tanums kommun",
+          "url": "https://www.tanum.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/grebbestad/"
+        }
+      ]
+    },
+    {
+      "slug": "fjallbacka",
+      "name": "Fjällbacka",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Fjällbacka kombinerar kustliv med lokala matcher och event. QRButik gör kiosken smidig när publik samlas.",
+        "I Fjällbacka växlar tempot med säsongen. En digital kiosk håller köerna korta även när trycket ökar.",
+        "Fjällbackas arrangemang skapar tydliga köptoppar. QRButik förenklar försäljningen."
+      ],
+      "localNotesVariants": [
+        [
+          "Sommarsäsongen ger fler besökare.",
+          "Utomhusmatcher kräver synlig QR-kod."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Tydliga priser gör flödet enklare.",
+          "Snabb Swish minskar köer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommararrangemang med hög belastning.",
+          "Inomhusmatcher med korta pauser."
+        ],
+        [
+          "Föreningsarrangemang med blandad publik.",
+          "Utomhusevent med tydliga köptoppar."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Matcher med korta köpfönster."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tanums kommun",
+          "url": "https://www.tanum.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/fjallbacka/"
+        }
+      ]
+    },
+    {
+      "slug": "lysekil",
+      "name": "Lysekil",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Lysekil har ett levande föreningsliv med matcher året runt. QRButik gör kiosken snabb när publiken blir stor.",
+        "I Lysekil samlas publik i hallar och vid kusten. En digital kiosk håller flödet smidigt.",
+        "Lysekils klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel när trycket ökar."
+      ],
+      "localNotesVariants": [
+        [
+          "Matchdagar ger intensiva pauser.",
+          "Publiken vill handla snabbt mellan perioderna."
+        ],
+        [
+          "Föreningar delar ofta kioskansvaret.",
+          "Tydliga menyer gör köerna kortare."
+        ],
+        [
+          "Utomhusmatcher kräver enkel skyltning.",
+          "Snabb Swish sparar tid för volontärer."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusevent under sommarhalvåret."
+        ],
+        [
+          "Cuphelger med flera lag.",
+          "Föreningsarrangemang med tydliga köpfönster."
+        ],
+        [
+          "Träningsmatcher med jämna köp.",
+          "Skolturneringar med korta pauser."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Lysekils kommun",
+          "url": "https://www.lysekil.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/lysekil/"
+        }
+      ]
     }
   ]
 }

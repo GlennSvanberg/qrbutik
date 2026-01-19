@@ -58,7 +58,7 @@ function ShopQrPage() {
               Logga in till adminpanelen
             </h1>
             <p className="text-sm text-slate-600">
-              Vi skickar en magic link till din e-postadress.
+              Vi skickar ett inloggningsmejl till din e-postadress. Öppna mejlet så är du inne.
             </p>
           </header>
 
@@ -72,15 +72,15 @@ function ShopQrPage() {
                 setStatusMessage('Fyll i en e-postadress.')
                 return
               }
-              setStatusMessage('Skickar inloggningslänk...')
+              setStatusMessage('Skickar inloggningsmejl...')
               await authClient.signIn.magicLink(
                 { email: trimmedEmail, callbackURL: '/admin' },
                 {
                   onSuccess: async () => {
                     setStatusMessage(
                       isDevMagicLinkEnabled()
-                        ? 'Devmode: öppnar magic link direkt.'
-                        : 'Magic link skickad. Kolla inkorgen.',
+                        ? 'Devmode: öppnar inloggningen direkt.'
+                        : 'Inloggningsmejl skickat. Kolla inkorgen.',
                     )
                     await maybeOpenDevMagicLink(trimmedEmail)
                   },
@@ -105,7 +105,7 @@ function ShopQrPage() {
               className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               trackaton-on-click="admin-login-magic-link"
             >
-              Skicka magic link
+              Skicka inloggningsmejl
             </button>
           </form>
 

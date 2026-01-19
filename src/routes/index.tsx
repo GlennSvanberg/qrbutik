@@ -62,21 +62,29 @@ function Home() {
               varor och betalar direkt. Perfekt för matchen, loppisen och
               föreningskiosken.
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
-              <Link
-                to="/skapa"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-                trackaton-on-click="primary-cta"
-              >
-                Skapa din Swish-kiosk — 10 kr
-              </Link>
-              <Link
-                to="/admin"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
-                trackaton-on-click="login-admin"
-              >
-                Logga in till admin
-              </Link>
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+                <Link
+                  to="/skapa"
+                  className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                  trackaton-on-click="primary-cta"
+                >
+                  Skapa din Swish-kiosk &mdash; 10 kr
+                </Link>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-slate-600">
+                <span>Har du redan en kiosk?</span>
+                <Link
+                  to="/admin/"
+                  className="cursor-pointer font-semibold text-slate-700 underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900"
+                  trackaton-on-click="login-admin"
+                >
+                  Hantera den h&auml;r
+                </Link>
+              </div>
+              <p className="text-xs text-slate-500">
+                Vi mejlar en inloggning. Klicka i mejlet s&aring; &auml;r du inne.
+              </p>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-xs uppercase tracking-[0.25em] text-slate-500">
               <span>2 minuter</span>
