@@ -5,7 +5,8 @@ const rootDir = process.cwd()
 const dataPath = path.join(rootDir, 'src', 'lib', 'pseo-data.json')
 const publicDir = path.join(rootDir, 'public')
 
-const siteUrl = process.env.VITE_SITE_URL ?? 'https://qrbutik.se'
+const siteUrl =
+  process.env.SITE_URL ?? process.env.VITE_SITE_URL ?? 'https://qrbutik.se'
 
 const buildAbsoluteUrl = (pathname) => {
   try {

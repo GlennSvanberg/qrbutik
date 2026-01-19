@@ -36,6 +36,19 @@ Guidelines:
 - Make local notes about realistic event flow and audience behavior.
 - Official links should be stable (municipality + official visitor/tourism site).
 
+## Requested expansion: Gothenburg–Strömstad corridor
+Add these 10 cities between Göteborg and Strömstad:
+- Tjörn
+- Orust
+- Uddevalla
+- Ljungskile
+- Lilla Edet
+- Munkedal
+- Tanumshede
+- Grebbestad
+- Fjällbacka
+- Lysekil
+
 ## When you add new entries
 1. Update `src/lib/pseo-data.json`.
 2. Run `npm run build` to regenerate `public/sitemap.xml` and `public/robots.txt`.
