@@ -49,6 +49,20 @@ Add these 10 cities between Göteborg and Strömstad:
 - Fjällbacka
 - Lysekil
 
+## Requested expansion: Gothenburg–Varberg/Borås area
+Add these 10 cities between Göteborg and Varberg/Borås:
+- Borås
+- Varberg
+- Bollebygd
+- Kinna
+- Svenljunga
+- Tranemo
+- Ulricehamn
+- Falkenberg
+- Gislaved
+- Hylte
+
+
 ## When you add new entries
 1. Update `src/lib/pseo-data.json`.
 2. Run `npm run build` to regenerate `public/sitemap.xml` and `public/robots.txt`.

@@ -7,7 +7,12 @@
       "season": "summer",
       "matchContext": "matchdagar och cuper",
       "crowdContext": "fulla läktare och snabba pauser",
-      "commonItems": ["kaffe", "korv", "läsk", "hembakat"],
+      "commonItems": [
+        "kaffe",
+        "korv",
+        "läsk",
+        "hembakat"
+      ],
       "operationalNotesVariants": [
         [
           "Halvtid är den mest intensiva perioden — kiosken måste tåla hög volym på kort tid.",
@@ -33,7 +38,12 @@
       "season": "winter",
       "matchContext": "hemmamatcher i hallen",
       "crowdContext": "tajta matchscheman och korta pauser",
-      "commonItems": ["kaffe", "toast", "frukt", "läsk"],
+      "commonItems": [
+        "kaffe",
+        "toast",
+        "frukt",
+        "läsk"
+      ],
       "operationalNotesVariants": [
         [
           "Hallen ger snabb rotation — kiosken behöver vara tydlig och snabb.",
@@ -59,7 +69,13 @@
       "season": "winter",
       "matchContext": "matcher och turneringar i ishallen",
       "crowdContext": "intensiva periodpauser och hög puls",
-      "commonItems": ["kaffe", "korv", "läsk", "choklad", "nötter"],
+      "commonItems": [
+        "kaffe",
+        "korv",
+        "läsk",
+        "choklad",
+        "nötter"
+      ],
       "operationalNotesVariants": [
         [
           "Periodpauserna är korta och koncentrerade — kiosken måste klara hög volym snabbt.",
@@ -85,7 +101,13 @@
       "season": "winter",
       "matchContext": "tävlingar och uppvisningar",
       "crowdContext": "lugna pauser men tydliga fönster för köp",
-      "commonItems": ["kaffe", "te", "smörgås", "frukt", "bulle"],
+      "commonItems": [
+        "kaffe",
+        "te",
+        "smörgås",
+        "frukt",
+        "bulle"
+      ],
       "operationalNotesVariants": [
         [
           "Pausfönstren är korta och tydliga — gör menyer enkla att skanna.",
@@ -111,7 +133,13 @@
       "season": "winter",
       "matchContext": "seriematcher och cuper i hallen",
       "crowdContext": "snabba pauser och många korta köptillfällen",
-      "commonItems": ["kaffe", "korv", "läsk", "frukt", "godis"],
+      "commonItems": [
+        "kaffe",
+        "korv",
+        "läsk",
+        "frukt",
+        "godis"
+      ],
       "operationalNotesVariants": [
         [
           "Pauserna är korta och intensiva — kiosken måste vara snabb och tydlig.",
@@ -1185,6 +1213,486 @@
         {
           "label": "Västsverige",
           "url": "https://www.vastsverige.com/lysekil/"
+        }
+      ]
+    },
+    {
+      "slug": "boras",
+      "name": "Borås",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Borås är känt för textil, handel och ett starkt idrottsliv. QRButik gör kiosken smidig i en stad där det alltid händer något.",
+        "I Borås möts kultur och sport, oavsett väder. En digital kiosk håller köerna korta i Knalleland och på arenorna.",
+        "Borås föreningar är aktiva året runt. QRButik hjälper er att sälja smartare när publiken strömmar till."
+      ],
+      "localNotesVariants": [
+        [
+          "Staden har många stora arenor och hallar.",
+          "Publiken är van vid högt tempo och snabb service."
+        ],
+        [
+          "Cuper i Borås drar lag från hela landet.",
+          "Tydlig skyltning är viktigt i stora anläggningar."
+        ],
+        [
+          "Regniga dagar fylls hallarna snabbt.",
+          "Snabb Swish-betalning uppskattas av besökarna."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Stora cuper med tusentals besökare.",
+          "Elitmatcher med intensiva pauser."
+        ],
+        [
+          "Inomhusturneringar under vintern.",
+          "Föreningsdagar med många aktiviteter."
+        ],
+        [
+          "Matcher på konstgräs året runt.",
+          "Evenemang med både kiosk och entré."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Borås Stad",
+          "url": "https://www.boras.se/"
+        },
+        {
+          "label": "Borås.com",
+          "url": "https://www.boras.com/"
+        }
+      ]
+    },
+    {
+      "slug": "varberg",
+      "name": "Varberg",
+      "region": "Hallands län",
+      "heritageTextVariants": [
+        "Varberg lockar med fästning, kust och ett levande föreningsliv. QRButik gör kiosken enkel när sommargästerna och lokalborna samlas.",
+        "I Varberg är idrotten stark både inne och ute. En digital kiosk håller flödet smidigt vid matcher nära havet.",
+        "Varbergs klubbar har en trogen publik. QRButik gör försäljningen snabb och enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Sommarmatcher drar stor publik.",
+          "Vinden vid kusten kräver stadiga skyltar."
+        ],
+        [
+          "Många turister besöker evenemang.",
+          "Enkel betalning är ett måste för tillfälliga gäster."
+        ],
+        [
+          "Cuper kombineras ofta med bad och turism.",
+          "Snabba köp ger mer tid för upplevelsen."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommarcuper utomhus.",
+          "Innebandymatcher i stora hallar."
+        ],
+        [
+          "Strandnära evenemang.",
+          "Föreningsdagar med grill och kiosk."
+        ],
+        [
+          "Seriematcher med trogen hempublik.",
+          "Turneringar med gästande lag."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Varbergs kommun",
+          "url": "https://www.varberg.se/"
+        },
+        {
+          "label": "Visit Varberg",
+          "url": "https://www.visitvarberg.se/"
+        }
+      ]
+    },
+    {
+      "slug": "bollebygd",
+      "name": "Bollebygd",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Bollebygd växer mellan Göteborg och Borås. QRButik gör kiosken smidig för det lokala föreningslivet.",
+        "I Bollebygd är idrotten en samlingspunkt. En digital kiosk förenklar för volontärerna vid matcher.",
+        "Bollebygds föreningar är aktiva och engagerade. QRButik hjälper till att hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Många pendlare och familjer på matcherna.",
+          "Smidig betalning uppskattas av stressade föräldrar."
+        ],
+        [
+          "Hallarna är ofta fullbokade på helger.",
+          "Tydliga menyer gör köpet snabbare."
+        ],
+        [
+          "Utomhusplaner ligger ofta naturskönt.",
+          "Enkel teknik fungerar bäst för ideella krafter."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Helgmatcher i hallen.",
+          "Utomhusturneringar för ungdomar."
+        ],
+        [
+          "Föreningskvällar med café.",
+          "Seriematcher med lokalpublik."
+        ],
+        [
+          "Sammandrag för de yngsta lagen.",
+          "Kiosker som drivs av föräldrar."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Bollebygds kommun",
+          "url": "https://www.bollebygd.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/bollebygd/"
+        }
+      ]
+    },
+    {
+      "slug": "kinna",
+      "name": "Kinna",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Kinna är hjärtat i Mark med starka traditioner inom sport och textil. QRButik gör kiosken effektiv när publiken sluter upp.",
+        "I Kinna är basket och fotboll stort. En digital kiosk håller tempot uppe i pauserna.",
+        "Kinnas föreningsliv engagerar hela bygden. QRButik gör det enkelt att stötta laget."
+      ],
+      "localNotesVariants": [
+        [
+          "Basketkulturen ger intensiv stämning i hallen.",
+          "Korta pauser kräver snabba köp."
+        ],
+        [
+          "Lokalderbyn drar mycket folk.",
+          "Swish är standard för betalning."
+        ],
+        [
+          "Många ideella timmar läggs i kioskerna.",
+          "Enkelhet är nyckeln för att orka."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Basketmatcher med högt tryck.",
+          "Fotbollscuper på konstgräs."
+        ],
+        [
+          "Föreningsarrangemang i Mark.",
+          "Helgturneringar med många lag."
+        ],
+        [
+          "Ungdomsmatcher med caféverksamhet.",
+          "Evenemang i Kinnahallen."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Marks kommun",
+          "url": "https://www.mark.se/"
+        },
+        {
+          "label": "Upplev Mark",
+          "url": "https://www.vastsverige.com/mark/"
+        }
+      ]
+    },
+    {
+      "slug": "svenljunga",
+      "name": "Svenljunga",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Svenljunga erbjuder natur och gemenskap. QRButik gör kiosken smidig för föreningarna i södra Älvsborg.",
+        "I Svenljunga samlas man kring idrotten. En digital kiosk underlättar vid matcher och träffar.",
+        "Svenljungas klubbar håller landsbygden levande. QRButik gör försäljningen enkel och modern."
+      ],
+      "localNotesVariants": [
+        [
+          "Matcher är ofta en social händelse.",
+          "Tid för prat, men köpet ska gå snabbt."
+        ],
+        [
+          "Mindre hallar kan bli trånga vid cup.",
+          "QR-koder minskar kön vid disken."
+        ],
+        [
+          "Utomhusevent drar folk från grannbyarna.",
+          "Tydlig skyltning hjälper gästerna."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Lokala fotbollsmatcher.",
+          "Innebandy i sporthallen."
+        ],
+        [
+          "Bygdeevenemang med servering.",
+          "Ungdomscuper med övernattning."
+        ],
+        [
+          "Ridhusaktiviteter med cafeteria.",
+          "Matcher med trogen publik."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Svenljunga kommun",
+          "url": "https://www.svenljunga.se/"
+        },
+        {
+          "label": "Visit Svenljunga",
+          "url": "https://www.vastsverige.com/svenljunga/"
+        }
+      ]
+    },
+    {
+      "slug": "tranemo",
+      "name": "Tranemo",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Tranemo är känt för starka idrottstraditioner, inte minst inom hockey. QRButik gör kiosken snabb i ishallen och på planen.",
+        "I Tranemo är föreningslivet centralt. En digital kiosk hanterar pausrusningen galant.",
+        "Tranemos klubbar engagerar många. QRButik hjälper till att öka försäljningen till laget."
+      ],
+      "localNotesVariants": [
+        [
+          "Ishallen har korta, intensiva pauser.",
+          "Kyla gör att man vill handla snabbt."
+        ],
+        [
+          "Fotbollsmatcher samlar byn.",
+          "Enkel hantering för kioskpersonalen."
+        ],
+        [
+          "Cuper drar folk från Småland och Halland.",
+          "Swish fungerar överallt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Hockeymatcher med periodpauser.",
+          "Skidtävlingar och uteliv."
+        ],
+        [
+          "Fotbollscuper på sommaren.",
+          "Inomhusturneringar."
+        ],
+        [
+          "Föreningsdagar vid sjön.",
+          "Matcher med gästande supportrar."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tranemo kommun",
+          "url": "https://www.tranemo.se/"
+        },
+        {
+          "label": "Västsverige",
+          "url": "https://www.vastsverige.com/tranemo/"
+        }
+      ]
+    },
+    {
+      "slug": "ulricehamn",
+      "name": "Ulricehamn",
+      "region": "Västra Götalands län",
+      "heritageTextVariants": [
+        "Ulricehamn är en sportstad året runt, från skidspår till fotbollsplaner. QRButik gör kiosken smidig vid sjön Åsunden.",
+        "I Ulricehamn lockar idrotten besökare långväga ifrån. En digital kiosk klarar trycket vid stora evenemang.",
+        "Ulricehamns föreningar är vana arrangörer. QRButik förenklar servicen till publiken."
+      ],
+      "localNotesVariants": [
+        [
+          "Vintersport ger kalla fingrar och snabba köp.",
+          "Värmestugor och kiosker behöver bra flöde."
+        ],
+        [
+          "Sommarcuper vid sjön är populära.",
+          "Tydliga menyer för turister och lag."
+        ],
+        [
+          "Stora event kräver driftsäkerhet.",
+          "Självbetjäning avlastar personalen."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Skidtävlingar och vinterveckor.",
+          "Fotbollscuper (Lassabollen)."
+        ],
+        [
+          "Innebandy i moderna hallar.",
+          "Utomhusevent vid Åsunden."
+        ],
+        [
+          "Cykellopp och motionsarrangemang.",
+          "Matcher med hög publiksiffra."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Ulricehamns kommun",
+          "url": "https://www.ulricehamn.se/"
+        },
+        {
+          "label": "Ulricehamns Turistbyrå",
+          "url": "https://www.ulricehamnturist.se/"
+        }
+      ]
+    },
+    {
+      "slug": "falkenberg",
+      "name": "Falkenberg",
+      "region": "Hallands län",
+      "heritageTextVariants": [
+        "Falkenberg är en sommarstad med elitidrott i blodet. QRButik gör kiosken effektiv på arenan och vid stranden.",
+        "I Falkenberg är volleyboll och fotboll stort. En digital kiosk ser till att publiken hinner handla i pausen.",
+        "Falkenbergs evenemang lockar massor av folk. QRButik gör det enkelt att ta betalt."
+      ],
+      "localNotesVariants": [
+        [
+          "Elitmatcher ger korta, intensiva säljtoppar.",
+          "Publiken förväntar sig proffsig service."
+        ],
+        [
+          "Sommarturneringar på stranden.",
+          "Sand och sol kräver enkla lösningar."
+        ],
+        [
+          "Många turister under semestern.",
+          "Tydlighet på flera språk kan behövas."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Volleybollmatcher på elitnivå.",
+          "Fotboll på Falcon Alkoholfri Arena."
+        ],
+        [
+          "Beachvolley-turneringar.",
+          "Stora ungdomscuper."
+        ],
+        [
+          "Evenemang i Falkhallen.",
+          "Sommarteater och uteliv."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Falkenbergs kommun",
+          "url": "https://kommun.falkenberg.se/"
+        },
+        {
+          "label": "Visit Falkenberg",
+          "url": "https://www.visitfalkenberg.se/"
+        }
+      ]
+    },
+    {
+      "slug": "gislaved",
+      "name": "Gislaved",
+      "region": "Jönköpings län",
+      "heritageTextVariants": [
+        "Gislaved har en stolt industritradition och starkt föreningsliv. QRButik gör kiosken smidig i sporthallar och på motorbanor.",
+        "I Gislaved samlas man kring motorsport och lagidrott. En digital kiosk håller tempot när det går undan.",
+        "Gislaveds klubbar är motorn i bygden. QRButik hjälper till att växla upp försäljningen."
+      ],
+      "localNotesVariants": [
+        [
+          "Motorsport drar stor publik.",
+          "Ljudnivån gör visuella menyer viktiga."
+        ],
+        [
+          "Inomhussporter är populära på vintern.",
+          "Snabba pauser kräver effektivitet."
+        ],
+        [
+          "Industriarvet ger en praktisk inställning.",
+          "Det ska funka, helt enkelt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Speedway och motorsport.",
+          "Volleyboll och innebandy."
+        ],
+        [
+          "Cuper med gästande lag.",
+          "Föreningsdagar med aktiviteter."
+        ],
+        [
+          "Ishockeymatcher.",
+          "Evenemang i Gisleparken."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Gislaveds kommun",
+          "url": "https://www.gislaved.se/"
+        },
+        {
+          "label": "Visit Gislaved",
+          "url": "https://www.visitgislaved.se/"
+        }
+      ]
+    },
+    {
+      "slug": "hylte",
+      "name": "Hylte",
+      "region": "Hallands län",
+      "heritageTextVariants": [
+        "Hylte ligger i Hallands inland med skog och idrott. QRButik gör kiosken enkel för volleybollpubliken och andra.",
+        "I Hylte är volleyboll en religion. En digital kiosk ser till att servicen matchar spelet på planen.",
+        "Hyltes föreningar är navet i samhället. QRButik gör det lätt att driva kiosk ideellt."
+      ],
+      "localNotesVariants": [
+        [
+          "Volleyboll på hög nivå drar publik.",
+          "Intensiva setpauser kräver snabbhet."
+        ],
+        [
+          "Många lokala eldsjälar.",
+          "Systemet måste vara lätt att lära sig."
+        ],
+        [
+          "Matcher är veckans höjdpunkt.",
+          "Socialt häng kombineras med fika."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Elitvolleyboll i Örnahallen.",
+          "Fotboll på gräsplaner."
+        ],
+        [
+          "Ungdomsturneringar.",
+          "Bygdefester och marknader."
+        ],
+        [
+          "Innebandymatcher.",
+          "Föreningsmöten med servering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Hylte kommun",
+          "url": "https://www.hylte.se/"
+        },
+        {
+          "label": "Visit Hylte",
+          "url": "https://www.visithylte.se/"
         }
       ]
     }
