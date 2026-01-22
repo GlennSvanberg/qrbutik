@@ -190,37 +190,21 @@ function PseoPage() {
               Vanliga problem
             </p>
             <h2 className="text-pretty text-3xl font-semibold text-slate-900">
-              Låt kön rulla, inte huvudräkningen.
+              {copy.problems.title}
             </h2>
             <p className="text-sm text-slate-600">
               {copy.matchContext} i {copy.city.name} betyder ofta {copy.crowdContext}. När
               trycket stiger blir handskrivet och huvudräkning en flaskhals.
             </p>
             <ul className="space-y-4 text-base text-slate-600">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
-                  ✗
-                </span>
-                <span>Räkna ihop totalsumman i huvudet mitt i kön</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
-                  ✗
-                </span>
-                <span>Stava Swish-numret högt om och om igen</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
-                  ✗
-                </span>
-                <span>Svårt att veta vad som faktiskt sålts efteråt</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
-                  ✗
-                </span>
-                <span>Långa köer pga långsam hantering</span>
-              </li>
+              {copy.problems.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-start gap-3">
+                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
+                    ✗
+                  </span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex flex-col gap-4">
@@ -228,33 +212,17 @@ function PseoPage() {
               Med QRButik
             </p>
             <h3 className="text-pretty text-2xl font-semibold text-slate-900">
-              Klar struktur, trygg försäljning.
+              {copy.solution.title}
             </h3>
             <ul className="space-y-4 text-base text-slate-600">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-bold text-emerald-600">
-                  ✓
-                </span>
-                <span>Inbyggd varukorg räknar automatiskt ut summan</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-bold text-emerald-600">
-                  ✓
-                </span>
-                <span>Swish öppnas med rätt belopp och nummer direkt</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-bold text-emerald-600">
-                  ✓
-                </span>
-                <span>Färdig säljrapport till kassören med ett klick</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-bold text-emerald-600">
-                  ✓
-                </span>
-                <span>Halvera kötiden med snabbare betalflöde</span>
-              </li>
+              {copy.solution.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-start gap-3">
+                  <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-sm font-bold text-emerald-600">
+                    ✓
+                  </span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </section>
@@ -404,6 +372,21 @@ function PseoPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+                  {copy.environment.title}
+                </p>
+                <p className="mt-3 text-sm text-slate-600">{copy.environment.text}</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+                  {copy.season.title}
+                </p>
+                <p className="mt-3 text-sm text-slate-600">{copy.season.text}</p>
+              </div>
             </div>
 
             <div className="flex flex-col gap-3">
@@ -563,10 +546,10 @@ function PseoPage() {
         <section className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
           <blockquote className="flex flex-col gap-4">
             <p className="text-pretty text-xl font-semibold text-slate-900">
-              “Vår kassör älskar säljrapporten! Sparar oss timmar av pusslande efter varje match.”
+              {copy.testimonial.quote}
             </p>
             <footer className="text-sm text-slate-500">
-              — Lagledare, {copy.sport.name} i {copy.city.name}
+              {copy.testimonial.byline}
             </footer>
           </blockquote>
         </section>
