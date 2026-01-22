@@ -27,6 +27,28 @@ export type PseoPage = {
   slug: string
 }
 
+type ReplaceCtx = {
+  sport: string
+  sportLower: string
+  city: string
+  region: string
+  matchContext: string
+  crowdContext: string
+  environmentTitle: string
+  seasonTitle: string
+}
+
+const replaceTokens = (input: string, ctx: ReplaceCtx) =>
+  input
+    .replaceAll('{sport}', ctx.sport)
+    .replaceAll('{sportLower}', ctx.sportLower)
+    .replaceAll('{city}', ctx.city)
+    .replaceAll('{region}', ctx.region)
+    .replaceAll('{matchContext}', ctx.matchContext)
+    .replaceAll('{crowdContext}', ctx.crowdContext)
+    .replaceAll('{environmentTitle}', ctx.environmentTitle)
+    .replaceAll('{seasonTitle}', ctx.seasonTitle)
+
 const introVariants: Array<string> = [
   '{sport} i {city} kräver snabb kiosköppning, tydliga priser och korta köer. QRButik gör det enkelt att sälja mer utan extra jobb.',
   'Föreningar som driver {sport} i {city} behöver en kiosk som rullar på även när trycket är högt. Med QRButik blir flödet smidigt.',
@@ -83,6 +105,72 @@ const howItWorksSteps: Array<{ title: string; description: string }> = [
     title: 'Ta betalt',
     description: 'Kunderna väljer varor och betalar med Swish direkt.'
   }
+]
+
+const problemsTitleVariants: Array<string> = [
+  'När tempot ökar ska kiosken inte bromsa.',
+  'Köer och huvudräkning hör inte hemma vid {matchContext}.',
+  'Kiosken ska vara snabb — även när {crowdContext}.',
+]
+
+const problemsBulletsVariants: Array<Array<string>> = [
+  [
+    'Räkna totalsumma i huvudet när {matchContext} drar igång.',
+    'Stava Swish-numret gång på gång till nya besökare.',
+    'Tappa överblicken när flera beställer samtidigt.',
+    'Svårt att sammanställa vad som såldes efteråt.',
+  ],
+  [
+    'Handskrivna listor som blir otydliga i stressen.',
+    'Långa köer när {crowdContext}.',
+    'Priser och varor ändras men listan hänger inte med.',
+    'Extra administration för kassören efter matchen.',
+  ],
+  [
+    'Manuell hantering tar tid precis när ni behöver tempo.',
+    'Fler fel när betalningar och beställningar blandas ihop.',
+    'Svårt att hålla samma flöde för alla lag och arrangemang.',
+    'Kön växer när alla vill handla snabbt.',
+  ],
+]
+
+const solutionTitleVariants: Array<string> = [
+  'Ett flöde som publiken klarar själv.',
+  'Tydligt, snabbt och redo för {sportLower}.',
+  'Mer ordning — mindre stress i {city}.',
+]
+
+const solutionBulletsVariants: Array<Array<string>> = [
+  [
+    'Inbyggd varukorg räknar automatiskt ut summan.',
+    'Swish öppnas med rätt belopp och referens direkt.',
+    'Säljrapport redo när {matchContext} är slut.',
+    'Samma kiosk återanvänds för fler arrangemang.',
+  ],
+  [
+    'Digital meny som är lätt att uppdatera när som helst.',
+    'Kunderna beställer själva – kön rör sig snabbare.',
+    'Ni ser betalningar i realtid i admin-vyn.',
+    'Färre missförstånd när det är mycket folk.',
+  ],
+  [
+    'Allt i webbläsaren – ingen app eller installation.',
+    'Funkar lika bra i {city} som på bortamatch.',
+    'Tydliga varor och priser för alla besökare.',
+    'Smidigare avstämning för kassören efteråt.',
+  ],
+]
+
+const testimonialQuoteVariants: Array<string> = [
+  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter {matchContext} är rapporten klar.”',
+  '“Kön rör sig mycket snabbare nu. Folk beställer själva och Swish blir rätt direkt — perfekt för {sportLower}.”',
+  '“Det bästa är avstämningen. Efter varje arrangemang i {city} har vi koll utan extra jobb.”',
+]
+
+const testimonialBylineVariants: Array<string> = [
+  '— Kassör, {sportLower} i {city}',
+  '— Lagledare, {sport} i {city}',
+  '— Styrelsemedlem, förening i {city}',
 ]
 
 const comparePoints: Array<{ title: string; points: Array<string> }> = [
@@ -176,6 +264,19 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
   const localNotes = pickVariant(city.localNotesVariants, seed)
   const useCases = pickVariant(city.useCasesVariants, seed)
   const operationalNotes = pickVariant(sport.operationalNotesVariants, seed)
+  const environment = environmentCopy[sport.environment]
+  const season = seasonCopy[sport.season]
+
+  const replaceCtx: ReplaceCtx = {
+    sport: sport.name,
+    sportLower: sport.name.toLowerCase(),
+    city: city.name,
+    region: city.region,
+    matchContext: sport.matchContext,
+    crowdContext: sport.crowdContext,
+    environmentTitle: environment.title,
+    seasonTitle: season.title,
+  }
 
   return {
     sport,
@@ -189,6 +290,18 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
     benefits: benefitVariants.map((benefit) =>
       benefit.replaceAll('{sport}', sport.name)
     ),
+    problems: {
+      title: replaceTokens(pickVariant(problemsTitleVariants, seed), replaceCtx),
+      bullets: pickVariant(problemsBulletsVariants, seed).map((item) =>
+        replaceTokens(item, replaceCtx)
+      ),
+    },
+    solution: {
+      title: replaceTokens(pickVariant(solutionTitleVariants, seed), replaceCtx),
+      bullets: pickVariant(solutionBulletsVariants, seed).map((item) =>
+        replaceTokens(item, replaceCtx)
+      ),
+    },
     compare: comparePoints,
     steps: howItWorksSteps,
     faq: faqVariants.map((item) => ({
@@ -200,13 +313,17 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
     matchContext: sport.matchContext,
     crowdContext: sport.crowdContext,
     commonItems: sport.commonItems,
-    environment: environmentCopy[sport.environment],
-    season: seasonCopy[sport.season],
+    environment,
+    season,
     heritageText,
     localNotes,
     useCases,
     operationalNotes,
-    officialLinks: city.officialLinks
+    officialLinks: city.officialLinks,
+    testimonial: {
+      quote: replaceTokens(pickVariant(testimonialQuoteVariants, seed), replaceCtx),
+      byline: replaceTokens(pickVariant(testimonialBylineVariants, seed), replaceCtx),
+    },
   }
 }
 
