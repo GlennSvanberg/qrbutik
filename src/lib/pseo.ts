@@ -68,7 +68,7 @@ const faqVariants: Array<{ question: string; answer: string }> = [
       'Nej. Ni skapar kiosken på några minuter och får en QR-kod att visa upp. Allt fungerar direkt i mobilen.'
   },
   {
-    question: 'Hur tar vi betalt vid {matchContext} i {city}?',
+    question: 'Hur tar vi betalt när vi säljer för {sportLower} i {city}?',
     answer:
       'Besökarna skannar QR-koden, väljer varor och betalar med Swish. Ni ser betalningen i realtid.'
   },
@@ -85,7 +85,7 @@ const faqVariants: Array<{ question: string; answer: string }> = [
 ]
 
 const benefitVariants: Array<string> = [
-  'Kortare köer när publiken vill handla snabbt.',
+  'Kortare köer när publiken på {sportLower} vill handla snabbt.',
   'Swish-betalning med rätt belopp och referens automatiskt.',
   'Tydlig försäljningsöversikt efter varje match.',
   'Ingen app, ingen installation – allt fungerar i webbläsaren.',
@@ -144,7 +144,7 @@ const solutionBulletsVariants: Array<Array<string>> = [
   [
     'Inbyggd varukorg räknar automatiskt ut summan.',
     'Swish öppnas med rätt belopp och referens direkt.',
-    'Säljrapport redo direkt efter arrangemanget.',
+    'Säljrapport redo direkt efteråt — även när det är {matchContext}.',
     'Samma kiosk återanvänds för fler arrangemang.',
   ],
   [
@@ -162,14 +162,14 @@ const solutionBulletsVariants: Array<Array<string>> = [
 ]
 
 const testimonialQuoteVariants: Array<string> = [
-  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter matchen är rapporten klar.”',
+  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter {matchContext} i {city} är rapporten klar.”',
   '“Kön rör sig mycket snabbare nu. Folk beställer själva och Swish blir rätt direkt — perfekt för {sportLower}.”',
   '“Det bästa är avstämningen. Efter varje arrangemang i {city} har vi koll utan extra jobb.”',
 ]
 
 const testimonialBylineVariants: Array<string> = [
-  '— Kassör, förening i {city}',
-  '— Lagledare, förening i {city}',
+  '— Kassör, {sportLower} i {city}',
+  '— Lagledare, {sport} i {city}',
   '— Styrelsemedlem, förening i {city}',
 ]
 
@@ -287,9 +287,7 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
     closing: pickVariant(closingVariants, seed)
       .replaceAll('{sport}', sport.name)
       .replaceAll('{city}', city.name),
-    benefits: benefitVariants.map((benefit) =>
-      benefit.replaceAll('{sport}', sport.name)
-    ),
+    benefits: benefitVariants.map((benefit) => replaceTokens(benefit, replaceCtx)),
     problems: {
       title: replaceTokens(pickVariant(problemsTitleVariants, seed), replaceCtx),
       bullets: pickVariant(problemsBulletsVariants, seed).map((item) =>
