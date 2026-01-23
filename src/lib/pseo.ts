@@ -50,7 +50,7 @@ const replaceTokens = (input: string, ctx: ReplaceCtx) =>
     .replaceAll('{seasonTitle}', ctx.seasonTitle)
 
 const introVariants: Array<string> = [
-  '{sport} i {city} kräver snabb kiosköppning, tydliga priser och korta köer. QRButik gör det enkelt att sälja mer utan extra jobb.',
+  '{sport} i {city} kräver ett snabbt kioskflöde, tydliga priser och korta köer. QRButik gör det enkelt att sälja mer utan extra jobb.',
   'Föreningar som driver {sport} i {city} behöver en kiosk som rullar på även när trycket är högt. Med QRButik blir flödet smidigt.',
   'När {sport} spelas i {city} vill ingen stå och räkna i huvudet. QRButik ger er en digital kiosk som sparar tid.'
 ]
@@ -68,7 +68,7 @@ const faqVariants: Array<{ question: string; answer: string }> = [
       'Nej. Ni skapar kiosken på några minuter och får en QR-kod att visa upp. Allt fungerar direkt i mobilen.'
   },
   {
-    question: 'Hur tar vi betalt under {sport}-matcher i {city}?',
+    question: 'Hur tar vi betalt vid {matchContext} i {city}?',
     answer:
       'Besökarna skannar QR-koden, väljer varor och betalar med Swish. Ni ser betalningen i realtid.'
   },
@@ -85,7 +85,7 @@ const faqVariants: Array<{ question: string; answer: string }> = [
 ]
 
 const benefitVariants: Array<string> = [
-  'Kortare köer när {sport}-publiken vill handla snabbt.',
+  'Kortare köer när publiken vill handla snabbt.',
   'Swish-betalning med rätt belopp och referens automatiskt.',
   'Tydlig försäljningsöversikt efter varje match.',
   'Ingen app, ingen installation – allt fungerar i webbläsaren.',
@@ -110,19 +110,19 @@ const howItWorksSteps: Array<{ title: string; description: string }> = [
 const problemsTitleVariants: Array<string> = [
   'När tempot ökar ska kiosken inte bromsa.',
   'Köer och huvudräkning hör inte hemma vid {matchContext}.',
-  'Kiosken ska vara snabb — även när {crowdContext}.',
+  'Kiosken ska vara snabb — även när det är {crowdContext}.',
 ]
 
 const problemsBulletsVariants: Array<Array<string>> = [
   [
-    'Räkna totalsumma i huvudet när {matchContext} drar igång.',
+    'Räkna totalsumman i huvudet när det är {matchContext}.',
     'Stava Swish-numret gång på gång till nya besökare.',
     'Tappa överblicken när flera beställer samtidigt.',
     'Svårt att sammanställa vad som såldes efteråt.',
   ],
   [
     'Handskrivna listor som blir otydliga i stressen.',
-    'Långa köer när {crowdContext}.',
+    'Långa köer när det är {crowdContext}.',
     'Priser och varor ändras men listan hänger inte med.',
     'Extra administration för kassören efter matchen.',
   ],
@@ -144,7 +144,7 @@ const solutionBulletsVariants: Array<Array<string>> = [
   [
     'Inbyggd varukorg räknar automatiskt ut summan.',
     'Swish öppnas med rätt belopp och referens direkt.',
-    'Säljrapport redo när {matchContext} är slut.',
+    'Säljrapport redo direkt efter arrangemanget.',
     'Samma kiosk återanvänds för fler arrangemang.',
   ],
   [
@@ -155,21 +155,21 @@ const solutionBulletsVariants: Array<Array<string>> = [
   ],
   [
     'Allt i webbläsaren – ingen app eller installation.',
-    'Funkar lika bra i {city} som på bortamatch.',
+    'Funkar lika bra i {city} som på bortamatcher.',
     'Tydliga varor och priser för alla besökare.',
     'Smidigare avstämning för kassören efteråt.',
   ],
 ]
 
 const testimonialQuoteVariants: Array<string> = [
-  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter {matchContext} är rapporten klar.”',
+  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter matchen är rapporten klar.”',
   '“Kön rör sig mycket snabbare nu. Folk beställer själva och Swish blir rätt direkt — perfekt för {sportLower}.”',
   '“Det bästa är avstämningen. Efter varje arrangemang i {city} har vi koll utan extra jobb.”',
 ]
 
 const testimonialBylineVariants: Array<string> = [
-  '— Kassör, {sportLower} i {city}',
-  '— Lagledare, {sport} i {city}',
+  '— Kassör, förening i {city}',
+  '— Lagledare, förening i {city}',
   '— Styrelsemedlem, förening i {city}',
 ]
 
@@ -199,7 +199,7 @@ const environmentCopy = {
   },
   outdoor: {
     title: 'Utomhusflöde',
-    text: 'Utomhusmatcher betyder fler spontana köp och snabba beslut. QRButik gör kiosken tydlig även i matchstress.'
+    text: 'Utomhusmatcher betyder fler spontana köp och snabba beslut. QRButik gör kiosken tydlig även när matchpulsen är hög.'
   }
 }
 
@@ -305,9 +305,7 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
     compare: comparePoints,
     steps: howItWorksSteps,
     faq: faqVariants.map((item) => ({
-      question: item.question
-        .replaceAll('{sport}', sport.name.toLowerCase())
-        .replaceAll('{city}', city.name),
+      question: replaceTokens(item.question, replaceCtx),
       answer: item.answer,
     })),
     matchContext: sport.matchContext,
