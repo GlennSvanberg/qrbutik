@@ -68,7 +68,7 @@ const faqVariants: Array<{ question: string; answer: string }> = [
       'Nej. Ni skapar kiosken på några minuter och får en QR-kod att visa upp. Allt fungerar direkt i mobilen.'
   },
   {
-    question: 'Hur tar vi betalt när vi säljer för {sportLower} i {city}?',
+    question: 'Hur tar {sportLower}-klubben i {city} betalt i kiosken?',
     answer:
       'Besökarna skannar QR-koden, väljer varor och betalar med Swish. Ni ser betalningen i realtid.'
   },
