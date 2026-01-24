@@ -1695,6 +1695,966 @@
           "url": "https://www.visithylte.se/"
         }
       ]
+    },
+    {
+      "slug": "solna",
+      "name": "Solna",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Solna är en del av Stockholms tätort med mycket rörelse kring hallar och arenor. När föreningslivet samlar publik hjälper QRButik er att hålla kiosken snabb och tydlig.",
+        "I Solna blandas matchdagar, cuper och familjeaktiviteter. Med QRButik blir kiosken enkel att sköta även när pausen är kort.",
+        "Solna har många besökare och ett högt tempo vid evenemang. En QR-kiosk gör att fler hinner handla utan att köerna växer."
+      ],
+      "localNotesVariants": [
+        [
+          "Många arrangemang gör att kiosken behöver fungera direkt när publikflödet kommer.",
+          "Besökare är vana vid smidiga digitala betalsätt."
+        ],
+        [
+          "Korta pauser gör tydliga menyer extra viktiga.",
+          "När trycket är högt hjälper självbetjäning till att hålla kön rörlig."
+        ],
+        [
+          "Flera lag och grupper kan dela samma anläggning.",
+          "En synlig QR-kod gör att fler hittar kiosken utan att fråga."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med tydliga pauser.",
+          "Cuphelger där många vill handla samtidigt."
+        ],
+        [
+          "Matcher vid större anläggningar med hög belastning.",
+          "Föreningsevent där flera lag turas om att bemanna kiosken."
+        ],
+        [
+          "Arrangemang med många barnfamiljer och snabba köp.",
+          "Kioskdrift när ni vill slippa manuell huvudräkning."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Solna stad",
+          "url": "https://www.solna.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "sundbyberg",
+      "name": "Sundbyberg",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Sundbyberg är Sveriges minsta kommun till ytan men med ett stort föreningsliv och mycket aktivitet. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Sundbyberg är det nära mellan hall, läktare och kiosk. Med QRButik blir flödet enkelt även när pauserna är korta.",
+        "Sundbyberg präglas av stadstempo och många besökare. En digital kiosk hjälper er att hålla köerna korta vid match och cup."
+      ],
+      "localNotesVariants": [
+        [
+          "Små ytor gör att köer snabbt blir trängsel.",
+          "Snabb självbetjäning avlastar när många kommer samtidigt."
+        ],
+        [
+          "Publiken är van vid Swish och digitala betalningar.",
+          "Tydliga priser minskar frågor i stressen."
+        ],
+        [
+          "Föreningar har ofta tajta tider i hallarna.",
+          "En enkel uppstart gör skillnad när ni roterar kioskansvar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser och hög puls.",
+          "Ungdomscuper där det blir många småköp under dagen."
+        ],
+        [
+          "Event där kiosken behöver vara tydlig utan extra personal.",
+          "Matcher där publiken vill hinna handla utan att missa spelstart."
+        ],
+        [
+          "Kiosker i mindre hallar där köer måste hållas korta.",
+          "Föreningsarrangemang med flera lag på plats samtidigt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Sundbybergs stad",
+          "url": "https://www.sundbyberg.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "lidingo",
+      "name": "Lidingö",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Lidingö kombinerar närhet till staden med föreningsliv och natur. QRButik gör kiosken smidig när matcher och cuper samlar publik.",
+        "På Lidingö är idrotten ofta en naturlig mötesplats för familjer och lag. Med QRButik blir kiosken enkel att driva utan stress.",
+        "Lidingö har många arrangemang där publiken vill handla snabbt i pausen. En digital kiosk hjälper er hålla flödet rakt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill handla snabbt och gärna med Swish.",
+          "Tydliga menyer gör det lätt att köpa utan att fråga."
+        ],
+        [
+          "Många barn- och ungdomslag ger köp i vågor.",
+          "Självbetjäning minskar trycket på ideella krafter."
+        ],
+        [
+          "Utomhusarrangemang kräver enkel och synlig QR-kod.",
+          "Snabb uppstart hjälper när flera lag delar kioskansvaret."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Matchdagar med många familjer på läktaren.",
+          "Cuper där kiosken behöver klara hög volym snabbt."
+        ],
+        [
+          "Utomhusmatcher med spontana köp före och efter match.",
+          "Inomhusmatcher där pauserna är korta."
+        ],
+        [
+          "Arrangemang där ni vill slippa kontanthantering och felräkning.",
+          "Kiosker som bemannas av olika personer under dagen."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Lidingö stad",
+          "url": "https://www.lidingo.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "nacka",
+      "name": "Nacka",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Nacka växer snabbt och har ett aktivt föreningsliv med både hallar och utomhusplaner. QRButik gör kiosken smidig när trycket är högt.",
+        "I Nacka är många på språng mellan träning, match och vardag. Med QRButik går kioskbesöket snabbt och utan köstress.",
+        "Nackas matcher och cuper samlar publik i tydliga toppar. En digital kiosk hjälper er att sälja mer med mindre administration."
+      ],
+      "localNotesVariants": [
+        [
+          "Tajta scheman gör att pausen måste utnyttjas effektivt.",
+          "Besökare förväntar sig smidig Swish-betalning."
+        ],
+        [
+          "Cuper kan ge många återkommande köp under samma dag.",
+          "Tydliga menyer minskar kö och frågor."
+        ],
+        [
+          "Utomhusmiljö kräver enkel skyltning och synlig QR-kod.",
+          "Självbetjäning gör att volontärerna hinner med."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser och hög belastning.",
+          "Utomhusmatcher där många vill handla samtidigt."
+        ],
+        [
+          "Cuphelger med flera lag och publikflöden i vågor.",
+          "Föreningsevent där kiosken delas mellan grupper."
+        ],
+        [
+          "Arrangemang där ni vill ha tydlig rapport efteråt.",
+          "Kioskdrift utan extra kassautrustning."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Nacka kommun",
+          "url": "https://www.nacka.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "huddinge",
+      "name": "Huddinge",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Huddinge är en stor kommun med många idrottsanläggningar och aktiva föreningar. QRButik gör kiosken lätt att sköta när publiken är många.",
+        "I Huddinge samlas publik till matcher och cuper i både hallar och utomhusmiljöer. Med QRButik blir köerna kortare och flödet tydligare.",
+        "Huddinges föreningsliv skapar många matchdagar under året. En digital kiosk sparar tid för volontärerna och gör det enkelt för besökarna."
+      ],
+      "localNotesVariants": [
+        [
+          "Många lag och anläggningar ger behov av en kiosk som är enkel att återanvända.",
+          "Publiken vill betala snabbt och slippa felbelopp."
+        ],
+        [
+          "Cuper ger tydliga kötoppar i pauser och mellan matcher.",
+          "Tydliga priser och enkel meny minskar stress."
+        ],
+        [
+          "Familjepublik ger många småköp under dagen.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Cupdagar med många matcher i samma hall.",
+          "Seriematcher med korta pauser och hög efterfrågan."
+        ],
+        [
+          "Utomhusmatcher med spontana köp före och efter match.",
+          "Föreningsarrangemang där flera lag delar kiosk."
+        ],
+        [
+          "Evenemang där ni vill ha tydlig avstämning efteråt.",
+          "Kiosker som drivs av ideella krafter med lite tid."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Huddinge kommun",
+          "url": "https://www.huddinge.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "botkyrka",
+      "name": "Botkyrka",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Botkyrka har ett brett föreningsliv med många matcher och aktiviteter för barn och unga. QRButik gör kiosken smidig när trycket ökar.",
+        "I Botkyrka samlas publik i hallar och på planer under helger och kvällar. Med QRButik blir kiosken enkel att driva även när bemanningen varierar.",
+        "Botkyrkas matchdagar ger tydliga toppar i försäljningen. En digital kiosk hjälper er att hålla flödet snabbt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Många familjer på plats gör snabb service extra viktig.",
+          "En tydlig QR-kod gör att fler kan beställa utan att fråga."
+        ],
+        [
+          "Cuper och sammandrag ger många småköp under dagen.",
+          "Självbetjäning avlastar när många vill handla samtidigt."
+        ],
+        [
+          "Utomhusmatcher kräver enkel skyltning och tydliga priser.",
+          "Snabb Swish-betalning minskar risken för felbelopp."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Ungdomsmatcher med många korta köpfönster.",
+          "Cuper där kiosken behöver rulla på hela dagen."
+        ],
+        [
+          "Inomhusmatcher med intensiva pauser.",
+          "Utomhusevent där publiken rör sig mycket."
+        ],
+        [
+          "Föreningsevent där flera personer turas om vid kiosken.",
+          "Arrangemang där ni vill ha enkel rapport efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Botkyrka kommun",
+          "url": "https://www.botkyrka.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "haninge",
+      "name": "Haninge",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Haninge kombinerar stad, skärgårdsnärhet och ett aktivt föreningsliv. QRButik gör kiosken smidig när matcher och cuper samlar publik.",
+        "I Haninge är helger ofta fyllda av träningar, matcher och sammandrag. Med QRButik blir kioskflödet enkelt för både publik och volontärer.",
+        "Haninges arrangemang ger korta men intensiva köptoppar. En digital kiosk håller kön rörlig när trycket är högt."
+      ],
+      "localNotesVariants": [
+        [
+          "Cuper kan skapa många köp på kort tid.",
+          "Tydliga menyer minskar stress när pausen är kort."
+        ],
+        [
+          "Många barnfamiljer på plats uppskattar snabba köp.",
+          "Självbetjäning hjälper när bemanningen är begränsad."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och tydliga priser.",
+          "Swish-betalning gör flödet enkelt även för gästande lag."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sammandrag och cuphelger med många lag.",
+          "Seriematcher i hall med korta pauser."
+        ],
+        [
+          "Utomhusmatcher med spontana köp före och efter match.",
+          "Föreningsdagar med flera aktiviteter samtidigt."
+        ],
+        [
+          "Kioskdrift där ni vill slippa manuell hantering.",
+          "Arrangemang där ni vill ha tydlig avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Haninge kommun",
+          "url": "https://www.haninge.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "tyreso",
+      "name": "Tyresö",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Tyresö har ett aktivt föreningsliv och många matcher nära både natur och stad. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Tyresö samlas lag och familjer i hallar och på planer under hela säsongen. Med QRButik blir kiosken enkel att driva utan köstress.",
+        "Tyresös matchdagar ger tydliga köptoppar i pauserna. En digital kiosk hjälper er hålla flödet snabbt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Korta pauser kräver snabba köp och tydliga priser.",
+          "Publiken är van vid Swish och digitala flöden."
+        ],
+        [
+          "Barn- och ungdomsidrott ger många småköp under dagen.",
+          "Självbetjäning avlastar när ideella bemannar kiosken."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "En stabil meny minskar frågor när det är mycket folk."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher där publiken rör sig i vågor."
+        ],
+        [
+          "Cuphelger med flera lag och tydliga säljtimmar.",
+          "Föreningsarrangemang där kiosken delas mellan grupper."
+        ],
+        [
+          "Kioskdrift där ni vill undvika felräkning och felbelopp.",
+          "Arrangemang där ni vill ha snabb avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Tyresö kommun",
+          "url": "https://www.tyreso.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "sodertalje",
+      "name": "Södertälje",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Södertälje har ett starkt idrottsliv och matcher året runt. QRButik gör kiosken snabb när publiken kommer samtidigt i pausen.",
+        "I Södertälje blandas stora arrangemang med lokala seriematcher. Med QRButik blir kiosken enkel att driva oavsett nivå.",
+        "Södertäljes föreningar samlar engagerad publik. En digital kiosk hjälper er att hålla köerna korta och betalningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Periodpauser och korta raster skapar tydliga kötoppar.",
+          "Tydliga menyer och snabb Swish gör flödet lugnare."
+        ],
+        [
+          "Många arrangemang samlar publik från flera håll.",
+          "Självbetjäning gör att fler hinner handla."
+        ],
+        [
+          "Föreningar roterar ofta kioskansvar mellan lag.",
+          "En enkel uppstart minskar friktion vid varje matchdag."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Matcher med hög belastning och korta pauser.",
+          "Cuphelger där många köp sker i samma tidsfönster."
+        ],
+        [
+          "Föreningsevent där flera lag delar kiosk.",
+          "Arrangemang där ni vill undvika manuell hantering."
+        ],
+        [
+          "Kiosker där ni vill ha tydlig rapport efteråt.",
+          "Evenemang med publik som vill handla snabbt och enkelt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Södertälje kommun",
+          "url": "https://www.sodertalje.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "jarfalla",
+      "name": "Järfälla",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Järfälla har ett aktivt föreningsliv med många matcher och cuper. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Järfälla samlas många barnfamiljer kring idrotten. Med QRButik blir kioskflödet enkelt och tydligt i pauserna.",
+        "Järfällas arrangemang ger tydliga försäljningstoppar. En digital kiosk hjälper er att hålla kön rörlig även när trycket är högt."
+      ],
+      "localNotesVariants": [
+        [
+          "Cuper och sammandrag ger många småköp under dagen.",
+          "Självbetjäning avlastar när bemanningen varierar."
+        ],
+        [
+          "Korta pauser gör att varje minut i kiosken räknas.",
+          "Tydliga priser minskar frågor och tvekan."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp gör flödet tryggt och snabbt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med intensiva pauser.",
+          "Utomhusmatcher där publiken vill handla snabbt."
+        ],
+        [
+          "Cuphelger med flera lag i samma anläggning.",
+          "Föreningsevent där kiosken delas mellan grupper."
+        ],
+        [
+          "Kiosker som drivs av ideella krafter med lite tid.",
+          "Arrangemang där ni vill ha enkel avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Järfälla kommun",
+          "url": "https://www.jarfalla.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "sollentuna",
+      "name": "Sollentuna",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Sollentuna har ett stort föreningsliv med matcher och cuper i både hallar och utomhusmiljö. QRButik gör kiosken smidig när publiktrycket är högt.",
+        "I Sollentuna är idrotten en naturlig samlingspunkt för många familjer. Med QRButik blir kiosken enkel att använda och lätt att bemanna.",
+        "Sollentunas matchdagar ger tydliga köptoppar. En digital kiosk hjälper er att hålla flödet snabbt även när pausen är kort."
+      ],
+      "localNotesVariants": [
+        [
+          "Många ungdomslag ger köp i vågor under dagen.",
+          "Självbetjäning minskar kö och stress."
+        ],
+        [
+          "Publiken vill betala snabbt och slippa felbelopp.",
+          "Tydliga menyer gör att fler handlar utan att fråga."
+        ],
+        [
+          "Cuper innebär många besökare och återkommande köp.",
+          "En synlig QR-kod gör kiosken lätt att hitta i större anläggningar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Cuphelger med flera matcher samma dag."
+        ],
+        [
+          "Utomhusmatcher där publiken rör sig mellan planer.",
+          "Föreningsdagar med flera aktiviteter samtidigt."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Sollentuna kommun",
+          "url": "https://www.sollentuna.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "taby",
+      "name": "Täby",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Täby har ett aktivt föreningsliv och många matcher under veckan. QRButik gör kiosken smidig när publiken vill handla snabbt i pausen.",
+        "I Täby samlas lag och familjer i hallar och på planer. Med QRButik blir kiosken enkel att driva även när det är högt tryck.",
+        "Täbys idrottsarrangemang skapar tydliga köptoppar. En digital kiosk hjälper er hålla köerna korta och flödet tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Korta pauser kräver snabba köp och tydlig meny.",
+          "Publiken förväntar sig smidig Swish-betalning."
+        ],
+        [
+          "Cuper ger många återkommande köp under dagen.",
+          "Självbetjäning minskar belastningen på volontärer."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Tydliga priser minskar frågor när det är mycket folk."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med intensiva pauser.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där kiosken behöver klara hög volym snabbt.",
+          "Föreningsarrangemang med flera lag på plats."
+        ],
+        [
+          "Kioskdrift där ni vill slippa felräkning och kontanter.",
+          "Arrangemang där ni vill ha snabb avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Täby kommun",
+          "url": "https://www.taby.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "danderyd",
+      "name": "Danderyd",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Danderyd har ett aktivt föreningsliv med många matcher i närområdet. QRButik gör kiosken enkel att använda när publiken vill handla snabbt.",
+        "I Danderyd är matchdagar ofta välbesökta och pauserna korta. Med QRButik blir kiosken tydlig och smidig utan extra administration.",
+        "Danderyds föreningar drivs av ideella krafter. En digital kiosk gör det lättare att sälja utan stress när trycket ökar."
+      ],
+      "localNotesVariants": [
+        [
+          "Korta pauser kräver snabba köp och tydliga priser.",
+          "Publiken är van vid Swish och digitala flöden."
+        ],
+        [
+          "Flera lag kan dela samma anläggning under helger.",
+          "En enkel meny gör att kön rör sig snabbare."
+        ],
+        [
+          "Barnfamiljer ger många småköp under dagen.",
+          "Självbetjäning avlastar när bemanningen är begränsad."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Ungdomsmatcher där många vill handla samtidigt."
+        ],
+        [
+          "Föreningsevent där kiosken bemannas av olika personer.",
+          "Arrangemang där ni vill undvika felbelopp och huvudräkning."
+        ],
+        [
+          "Cuphelger med tydliga köptoppar.",
+          "Kioskdrift där ni vill ha enkel avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Danderyds kommun",
+          "url": "https://www.danderyd.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "vallentuna",
+      "name": "Vallentuna",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Vallentuna har ett levande föreningsliv och många matcher i både hall och utomhusmiljö. QRButik gör kiosken smidig när publiken samlas.",
+        "I Vallentuna är idrotten en viktig mötesplats för bygd och familjer. Med QRButik blir kiosken enkel att använda och lätt att bemanna.",
+        "Vallentunas matchdagar ger tydliga köptoppar i pauserna. En digital kiosk hjälper er hålla flödet snabbt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Barn- och ungdomsidrott ger många småköp under dagen.",
+          "Självbetjäning avlastar när ideella bemannar kiosken."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och tydliga priser.",
+          "En enkel meny gör att kön rör sig snabbare."
+        ],
+        [
+          "Cuper och sammandrag ger många köp på kort tid.",
+          "Snabb Swish minskar risken för felbelopp."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där kiosken behöver rulla på hela dagen.",
+          "Föreningsdagar med flera aktiviteter samtidigt."
+        ],
+        [
+          "Kiosker som bemannas av olika personer under dagen.",
+          "Arrangemang där ni vill ha tydlig avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Vallentuna kommun",
+          "url": "https://www.vallentuna.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "osteraker",
+      "name": "Österåker",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Österåker ligger nära skärgården och har ett aktivt föreningsliv. QRButik gör kiosken smidig när matcher och cuper samlar publik.",
+        "I Österåker växlar tempot mellan vardagsmatcher och helgarrangemang. Med QRButik blir kioskflödet enkelt när trycket ökar.",
+        "Österåkers idrott skapar tydliga köptoppar i pauser och mellan matcher. En digital kiosk hjälper er hålla kön rörlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Helgarrangemang kan ge många köp på kort tid.",
+          "Tydliga menyer gör att fler handlar utan att fråga."
+        ],
+        [
+          "Barnfamiljer och ungdomslag ger jämna flöden under dagen.",
+          "Självbetjäning avlastar när bemanningen varierar."
+        ],
+        [
+          "Utomhusmiljö kräver synlig QR-kod och enkel skyltning.",
+          "Snabb Swish-betalning minskar fel och kö."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher där publiken rör sig mellan planer."
+        ],
+        [
+          "Cuphelger med flera lag och tydliga köptoppar.",
+          "Föreningsarrangemang där kiosken delas mellan grupper."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Österåkers kommun",
+          "url": "https://www.osteraker.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "vaxholm",
+      "name": "Vaxholm",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Vaxholm ligger i skärgården och har ett lokalt föreningsliv med säsongsvariationer. QRButik gör kiosken smidig när publiken blir fler.",
+        "I Vaxholm kan tempot växla mellan lugna vardagar och fulla helger. Med QRButik blir kiosken enkel att driva när trycket ökar.",
+        "Vaxholms arrangemang skapar tydliga toppar i försäljningen. En digital kiosk hjälper er att hålla flödet snabbt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Säsong och helger kan ge fler besökare än vanligt.",
+          "Tydliga priser och enkel meny minskar frågor."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och stabil skyltning.",
+          "Snabb Swish gör köerna kortare."
+        ],
+        [
+          "Mindre anläggningar blir snabbt trånga vid kö.",
+          "Självbetjäning hjälper när bemanningen är liten."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommararrangemang med många besökare.",
+          "Matcher och event med tydliga pauser."
+        ],
+        [
+          "Föreningsdagar där flera grupper turas om att sälja.",
+          "Utomhusevent där publiken vill handla snabbt."
+        ],
+        [
+          "Kiosker där ni vill slippa manuell totalsumma och felbelopp.",
+          "Arrangemang där ni vill ha enkel avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Vaxholms stad",
+          "url": "https://www.vaxholm.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "ekero",
+      "name": "Ekerö",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Ekerö har ett aktivt föreningsliv i en kommun med både tätorter och landsbygd. QRButik gör kiosken smidig när publiken samlas vid matcher.",
+        "I Ekerö är matchdagar ofta en gemenskapshändelse. Med QRButik blir kioskflödet enkelt och tydligt även när många vill handla samtidigt.",
+        "Ekerös föreningar driver många arrangemang över året. En digital kiosk sparar tid för volontärerna och minskar köerna."
+      ],
+      "localNotesVariants": [
+        [
+          "Utomhusmatcher kräver synlig QR-kod och tydlig skyltning.",
+          "Publiken vill betala snabbt och slippa felbelopp."
+        ],
+        [
+          "Barn- och ungdomsidrott ger många småköp under dagen.",
+          "Självbetjäning minskar trycket på ideella krafter."
+        ],
+        [
+          "Cuper och sammandrag ger tydliga köptoppar.",
+          "En enkel meny gör att fler hinner handla i pausen."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Föreningsarrangemang där kiosken bemannas av olika personer.",
+          "Cuphelger med många återkommande köp."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Ekerö kommun",
+          "url": "https://www.ekero.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "upplands-vasby",
+      "name": "Upplands Väsby",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Upplands Väsby har ett aktivt föreningsliv med matcher och cuper under hela året. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Upplands Väsby möts många lag och familjer i hallar och på planer. Med QRButik blir kiosken enkel att driva även när bemanningen roterar.",
+        "Upplands Väsbys arrangemang ger tydliga köptoppar i pauser och mellan matcher. En digital kiosk håller flödet rakt och tydligt."
+      ],
+      "localNotesVariants": [
+        [
+          "Cuper kan ge många köp på kort tid.",
+          "Tydliga menyer gör att fler hinner handla i pausen."
+        ],
+        [
+          "Barnfamiljer ger många småköp under dagen.",
+          "Självbetjäning avlastar när volontärer bemannar kiosken."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel och stress."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher där publiken rör sig mellan planer."
+        ],
+        [
+          "Cuphelger med flera lag och återkommande köp.",
+          "Föreningsarrangemang där kiosken delas mellan grupper."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma och felbelopp."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Upplands Väsby kommun",
+          "url": "https://www.upplandsvasby.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "sigtuna",
+      "name": "Sigtuna",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Sigtuna är en kommun med både historia och ett aktivt föreningsliv. QRButik gör kiosken smidig när matchdagar samlar publik.",
+        "I Sigtuna möts lokala matcher, cuper och besökare på genomresa. Med QRButik blir kiosken enkel att använda även när tempot växlar.",
+        "Sigtunas föreningar driver många arrangemang under året. En digital kiosk hjälper er hålla köerna korta och betalningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Publikflöden kan variera mellan vardag och helg.",
+          "Tydliga priser och snabb Swish gör flödet smidigt."
+        ],
+        [
+          "Cuper ger många återkommande köp under dagen.",
+          "Självbetjäning hjälper när pausen är kort."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och enkel skyltning.",
+          "En enkel meny gör att fler vågar beställa direkt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Seriematcher i hall med korta pauser.",
+          "Utomhusmatcher med tydliga köptoppar."
+        ],
+        [
+          "Cuphelger där flera lag turas om att bemanna kiosken.",
+          "Föreningsarrangemang med blandad publik."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Sigtuna kommun",
+          "url": "https://www.sigtuna.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
+    },
+    {
+      "slug": "nynashamn",
+      "name": "Nynäshamn",
+      "region": "Stockholms län",
+      "heritageTextVariants": [
+        "Nynäshamn är en kustkommun med lokalt föreningsliv och arrangemang under året. QRButik gör kiosken smidig när publiken samlas.",
+        "I Nynäshamn växlar tempot mellan vardagsmatcher och helger med mer publik. Med QRButik blir kiosken enkel att driva när trycket ökar.",
+        "Nynäshamns matchdagar ger tydliga köptoppar. En digital kiosk hjälper er att hålla kön rörlig och betalningen enkel."
+      ],
+      "localNotesVariants": [
+        [
+          "Helger och säsong kan ge fler besökare än vanligt.",
+          "Tydliga priser och snabb Swish minskar köer."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och enkel skyltning.",
+          "Självbetjäning hjälper när bemanningen är liten."
+        ],
+        [
+          "Cuper ger många köp i tydliga fönster under dagen.",
+          "En enkel meny gör att fler hinner handla mellan matcher."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Sommararrangemang med många besökare.",
+          "Seriematcher i hall med korta pauser."
+        ],
+        [
+          "Cuphelger där flera lag turas om att sälja.",
+          "Utomhusmatcher med spontana köp före och efter match."
+        ],
+        [
+          "Kioskdrift där ni vill slippa manuell hantering.",
+          "Arrangemang där ni vill ha tydlig avstämning efteråt."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Nynäshamns kommun",
+          "url": "https://www.nynashamn.se/"
+        },
+        {
+          "label": "Visit Stockholm",
+          "url": "https://www.visitstockholm.com/"
+        }
+      ]
     }
   ]
 }
