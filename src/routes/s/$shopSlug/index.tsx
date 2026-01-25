@@ -2,7 +2,7 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMutation } from 'convex/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { generateSwishLink } from '../../../lib/swish'
 
@@ -45,6 +45,14 @@ function ShopView() {
 
   const [cart, setCart] = useState<Record<string, CartItem | undefined>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const prefillAppliedRef = useRef(false)
+  const [prefillProductId] = useState<string | null>(() => {
+    if (typeof window === 'undefined') {
+      return null
+    }
+    const params = new URLSearchParams(window.location.search)
+    return params.get('addProductId')
+  })
 
   const cartItems = useMemo(
     () => Object.values(cart).filter((item): item is CartItem => !!item),
@@ -54,6 +62,40 @@ function ShopView() {
     () => cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [cartItems],
   )
+
+  useEffect(() => {
+    if (prefillAppliedRef.current) {
+      return
+    }
+    if (shopSlug !== 'glenn') {
+      prefillAppliedRef.current = true
+      return
+    }
+    if (!prefillProductId) {
+      prefillAppliedRef.current = true
+      return
+    }
+    const product = products.find((item) => item._id === prefillProductId)
+    if (!product) {
+      prefillAppliedRef.current = true
+      return
+    }
+    setCart((prev) => {
+      if (prev[prefillProductId]) {
+        return prev
+      }
+      return {
+        ...prev,
+        [prefillProductId]: {
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+        },
+      }
+    })
+    prefillAppliedRef.current = true
+  }, [prefillProductId, products, shopSlug])
 
   const addToCart = (product: any) => {
     setCart((prev) => {
@@ -195,6 +237,27 @@ function ShopView() {
             Valj varor nedan och betala smidigt med Swish.
           </p>
         </header>
+
+        {shopSlug === 'glenn' ? (
+          <section className="rounded-3xl border border-indigo-100 bg-indigo-50/60 px-6 py-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500">
+              Demo av QRButik
+            </p>
+            <h2 className="mt-2 text-lg font-semibold text-slate-900">
+              Skapa din egen Swish-kiosk pa 2 minuter
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Det har ar en riktig QRButik-checkout. Bygg din egen butik direkt.
+            </p>
+            <Link
+              to="/glenn"
+              className="mt-4 inline-flex h-11 items-center justify-center rounded-xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="glenn-demo-cta"
+            >
+              Skapa din kiosk
+            </Link>
+          </section>
+        ) : null}
 
         <section className="flex flex-col gap-4">
           <h2 className="text-lg font-semibold text-slate-800 px-2">

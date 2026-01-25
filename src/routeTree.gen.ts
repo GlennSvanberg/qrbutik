@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SkapaRouteImport } from './routes/skapa'
+import { Route as GlennRouteImport } from './routes/glenn'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UtforskaIndexRouteImport } from './routes/utforska/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
@@ -30,6 +31,11 @@ import { Route as UtforskaSportCityIndexRouteImport } from './routes/utforska/$s
 const SkapaRoute = SkapaRouteImport.update({
   id: '/skapa',
   path: '/skapa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlennRoute = GlennRouteImport.update({
+  id: '/glenn',
+  path: '/glenn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -115,6 +121,7 @@ const UtforskaSportCityIndexRoute = UtforskaSportCityIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/glenn': typeof GlennRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
@@ -134,6 +141,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/glenn': typeof GlennRoute
   '/skapa': typeof SkapaRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRouteWithChildren
@@ -152,6 +160,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/glenn': typeof GlennRoute
   '/skapa': typeof SkapaRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/glenn'
     | '/skapa'
     | '/admin/$shopId'
     | '/s/$shopSlug'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/glenn'
     | '/skapa'
     | '/tack/$transactionId'
     | '/utforska/$sport'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/glenn'
     | '/skapa'
     | '/admin/$shopId'
     | '/s/$shopSlug'
@@ -229,6 +241,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GlennRoute: typeof GlennRoute
   SkapaRoute: typeof SkapaRoute
   AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
@@ -245,6 +258,13 @@ declare module '@tanstack/react-router' {
       path: '/skapa'
       fullPath: '/skapa'
       preLoaderRoute: typeof SkapaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glenn': {
+      id: '/glenn'
+      path: '/glenn'
+      fullPath: '/glenn'
+      preLoaderRoute: typeof GlennRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -412,6 +432,7 @@ const UtforskaSportRouteWithChildren = UtforskaSportRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GlennRoute: GlennRoute,
   SkapaRoute: SkapaRoute,
   AdminShopIdRoute: AdminShopIdRouteWithChildren,
   SShopSlugRoute: SShopSlugRouteWithChildren,

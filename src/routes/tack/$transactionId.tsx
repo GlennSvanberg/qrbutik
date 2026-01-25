@@ -119,6 +119,28 @@ function ThankYouView() {
           </div>
         </section>
 
+        {transaction.shopName.toLowerCase().includes('glenn') ? (
+          <section className="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-6 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500">
+              QRButik-demo
+            </p>
+            <h2 className="mt-2 text-lg font-semibold text-slate-900">
+              Skapa din egen Swish-kiosk
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Det har flodet ar byggt med QRButik. Skapa din egen butik pa 2
+              minuter.
+            </p>
+            <Link
+              to="/glenn"
+              className="mt-4 inline-flex h-11 items-center justify-center rounded-xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              trackaton-on-click="glenn-thankyou-cta"
+            >
+              Skapa din kiosk
+            </Link>
+          </section>
+        ) : null}
+
         <div className="flex flex-col gap-4 text-center">
           <p className="text-sm text-slate-500">
             När personalen har verifierat betalningen får du dina varor.
