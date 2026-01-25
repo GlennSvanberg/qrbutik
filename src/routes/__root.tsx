@@ -175,7 +175,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta
           name="google-site-verification"
-          content="Z0v_6_RDpp2cNCyO4DiiuCCL5eXUih5LDGXvz1nkyjU"
+          content="R-KP7EKVZRONLvh8T9mSu_yuAMh9zTpqBVJf8AZR1Ho"
         />
         <HeadContent />
         <script
