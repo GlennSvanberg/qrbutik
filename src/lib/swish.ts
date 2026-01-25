@@ -18,9 +18,12 @@ export function generateSwishLink(
   // Remove any non-digit characters from the swish number
   const cleanNumber = swishNumber.replace(/\D/g, '')
 
+  // Replace newlines with spaces as they are not allowed in Swish messages
+  const cleanMessage = message.replace(/\n/g, ' ')
+
   // Use the exact manual string construction from the reference repo
   // It seems they encode the message inside the JSON string
-  const swishData = `{"version":1,"payee":{"value":"${cleanNumber}"},"amount":{"value":${amount}},"message":{"value":"${encodeURIComponent(message)}","editable":true}}`
+  const swishData = `{"version":1,"payee":{"value":"${cleanNumber}"},"amount":{"value":${amount}},"message":{"value":"${encodeURIComponent(cleanMessage)}","editable":true}}`
   
   let url = `swish://payment?data=${swishData}`
 
