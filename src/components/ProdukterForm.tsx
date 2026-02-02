@@ -46,7 +46,7 @@ export function ProdukterForm({
               Produktnamn
               <input
                 required
-                className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-indigo-500"
+                className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500"
                 value={product.name}
                 onChange={(event) =>
                   updateProduct(product.id, { name: event.target.value })
@@ -58,7 +58,7 @@ export function ProdukterForm({
               <input
                 required
                 inputMode="decimal"
-                className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-indigo-500"
+                className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500"
                 value={product.price}
                 onChange={(event) =>
                   updateProduct(product.id, { price: event.target.value })
@@ -69,7 +69,7 @@ export function ProdukterForm({
               <button
                 type="button"
                 onClick={() => removeProduct(product.id)}
-                className="h-11 cursor-pointer rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700"
+                className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700"
                 trackaton-on-click="product-remove-row"
               >
                 Ta bort

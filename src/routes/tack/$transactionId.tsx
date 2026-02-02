@@ -133,7 +133,7 @@ function ThankYouView() {
             </p>
             <Link
               to="/glenn"
-              className="mt-4 inline-flex h-11 items-center justify-center rounded-xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="mt-4 inline-flex h-12 items-center justify-center rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               trackaton-on-click="glenn-thankyou-cta"
             >
               Skapa din kiosk

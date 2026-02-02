@@ -251,7 +251,7 @@ function ShopView() {
             </p>
             <Link
               to="/glenn"
-              className="mt-4 inline-flex h-11 items-center justify-center rounded-xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="mt-4 inline-flex h-12 items-center justify-center rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               trackaton-on-click="glenn-demo-cta"
             >
               Skapa din kiosk
@@ -284,7 +284,7 @@ function ShopView() {
                       <>
                         <button
                           onClick={() => removeFromCart(product._id)}
-                          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 active:scale-95"
+                          className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 active:scale-95"
                           trackaton-on-click="shop-remove-from-cart"
                         >
                           <svg
@@ -307,7 +307,7 @@ function ShopView() {
                     )}
                     <button
                       onClick={() => addToCart(product)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-indigo-700 transition-colors hover:bg-indigo-100 active:scale-95"
+                      className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-700 transition-colors hover:bg-indigo-100 active:scale-95"
                       trackaton-on-click="shop-add-to-cart"
                     >
                       <svg

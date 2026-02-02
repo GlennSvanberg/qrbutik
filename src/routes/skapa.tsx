@@ -281,7 +281,7 @@ function CreateShopWizard() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="h-11 cursor-pointer rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-600 hover:border-slate-300"
+                  className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-600 hover:border-slate-300"
                   trackaton-on-click="create-step2-back"
                 >
                   Tillbaka
@@ -289,7 +289,7 @@ function CreateShopWizard() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                  className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
                   trackaton-on-click="create-submit-shop"
                 >
                   {isSubmitting ? 'Skapar butik...' : 'Skapa butik'}

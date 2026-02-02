@@ -309,7 +309,7 @@ function ProductsContent({ email }: { email: string }) {
                   }
                 }
               }}
-              className="h-11 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
               trackaton-on-click="admin-products-save"
             >
               Spara ändringar
