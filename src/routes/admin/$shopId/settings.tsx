@@ -445,7 +445,7 @@ function SettingsContent({ email }: { email: string }) {
                 setDeleteStatus(null)
                 setDeleteError(null)
               }}
-              className="h-10 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-4 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
+              className="h-12 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-5 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
               trackaton-on-click="admin-delete-toggle"
             >
               {isDeleteOpen ? 'Stäng' : 'Radera butik'}
@@ -464,7 +464,7 @@ function SettingsContent({ email }: { email: string }) {
                     type="text"
                     value={deleteShopName}
                     onChange={(event) => setDeleteShopName(event.target.value)}
-                    className="h-11 rounded-xl border border-rose-200 bg-white px-3 text-base text-slate-900 outline-none focus:border-rose-400"
+                    className="h-12 rounded-xl border border-rose-200 bg-white px-4 text-base text-slate-900 outline-none focus:border-rose-400"
                     placeholder={shop.name}
                   />
                 </label>
@@ -491,7 +491,7 @@ function SettingsContent({ email }: { email: string }) {
                       }
                     }
                   }}
-                  className="h-11 cursor-pointer rounded-xl bg-rose-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
+                  className="h-12 cursor-pointer rounded-xl bg-rose-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
                   trackaton-on-click="admin-delete-confirm"
                 >
                   Ta bort butik permanent

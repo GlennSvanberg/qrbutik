@@ -14,7 +14,20 @@
     cursor: pointer;
   }
 
-  .using-mouse * {
+  /* Hide outlines only for mouse focus, never for keyboard focus. */
+  .using-mouse *:focus:not(:focus-visible) {
     outline: none !important;
+  }
+
+  /* Consistent keyboard focus ring across the app. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #4338ca;
+    outline-offset: 3px;
   }
 }

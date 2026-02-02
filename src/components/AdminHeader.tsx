@@ -1,7 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
 
@@ -32,16 +32,54 @@ export function AdminHeader({
 }: AdminHeaderProps) {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef<HTMLElement | null>(null)
   const { data: shops } = useSuspenseQuery(
     convexQuery(api.shops.listByOwnerEmail, { ownerEmail }),
   )
 
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      const container = containerRef.current
+      if (!container) {
+        return
+      }
+      const target = event.target
+      if (!(target instanceof Node)) {
+        return
+      }
+      if (!container.contains(target)) {
+        setIsOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('pointerdown', onPointerDown)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [isOpen])
+
   return (
-    <header className="relative border-b border-slate-200 pb-4">
+    <header
+      ref={containerRef}
+      className="relative border-b border-slate-200 pb-4"
+    >
       <div className="flex items-center justify-between gap-3">
         <Link
           to="/admin"
-          className="inline-flex h-11 items-center justify-center rounded-xl border border-transparent px-2 text-xs font-semibold text-indigo-700 transition hover:border-indigo-200 hover:bg-indigo-50"
+          className="inline-flex h-12 items-center justify-center rounded-xl border border-transparent px-3 text-xs font-semibold text-indigo-700 transition hover:border-indigo-200 hover:bg-indigo-50"
           trackaton-on-click="admin-back"
         >
           Tillbaka
@@ -64,8 +102,9 @@ export function AdminHeader({
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700"
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
           aria-expanded={isOpen}
+          aria-controls="admin-header-menu"
           trackaton-on-click="admin-menu-toggle"
           aria-label="Öppna meny"
         >
@@ -78,7 +117,12 @@ export function AdminHeader({
       </div>
 
       {isOpen ? (
-        <div className="absolute left-0 right-0 top-full z-20 mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
+        <div
+          id="admin-header-menu"
+          role="menu"
+          aria-label="Välj butik"
+          className="absolute left-0 right-0 top-full z-20 mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg"
+        >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Mina butiker
           </p>
@@ -87,6 +131,7 @@ export function AdminHeader({
               <button
                 key={shop._id}
                 type="button"
+                role="menuitem"
                 trackaton-on-click="admin-switch-shop"
                 onClick={() => {
                   setIsOpen(false)
