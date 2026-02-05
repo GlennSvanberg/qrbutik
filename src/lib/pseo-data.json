@@ -3615,6 +3615,486 @@
           "url": "https://visitumea.se/"
         }
       ]
+    },
+    {
+      "slug": "sundsvall",
+      "name": "Sundsvall",
+      "region": "Västernorrlands län",
+      "heritageTextVariants": [
+        "Sundsvall är en kuststad med starkt föreningsliv och många matcher året runt. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Sundsvall möts idrott, cuper och helgarrangemang. En digital kiosk håller flödet enkelt även när tempot är högt.",
+        "Sundsvalls matchdagar ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla kön rörlig och betalningen tydlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Korta pauser kräver snabba köp och tydliga priser.",
+          "Publiken vill ofta handla direkt mellan perioder."
+        ],
+        [
+          "Inomhus- och utomhusarrangemang kräver enkel uppstart.",
+          "Självbetjäning avlastar när ideella bemannar."
+        ],
+        [
+          "Cuphelger kan ge många beställningar i vågor under dagen.",
+          "En enkel meny gör att fler vågar beställa snabbt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där flera lag turas om i kiosken.",
+          "Föreningsdagar med hög belastning."
+        ],
+        [
+          "Arrangemang där ni vill ha tydlig avstämning efteråt.",
+          "Kioskdrift där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Sundsvalls kommun",
+          "url": "https://sundsvall.se/"
+        },
+        {
+          "label": "Destination Sundsvall",
+          "url": "https://visitsundsvall.se/"
+        }
+      ]
+    },
+    {
+      "slug": "lulea",
+      "name": "Luleå",
+      "region": "Norrbottens län",
+      "heritageTextVariants": [
+        "Luleå är en kuststad i norr med starkt idrottsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Luleå är säsongerna tydliga och arrangemang sker både inne och ute. En digital kiosk håller flödet enkelt även när det är kallt ute.",
+        "Luleås matcher och cuper ger intensiva pauser. QRButik hjälper er att hålla köerna korta och betalningen tydlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Kalla dagar gör att besökare vill handla snabbt och smidigt.",
+          "Tydlig meny minskar kö och väntan."
+        ],
+        [
+          "Hallar med korta pauser kräver snabb betalning.",
+          "Självbetjäning minskar trycket på volontärer."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med högt tempo.",
+          "Utomhusmatcher där publiken vill handla före och efter."
+        ],
+        [
+          "Cuphelger med många återkommande köp.",
+          "Föreningsarrangemang där flera grupper delar kiosk."
+        ],
+        [
+          "Kioskdrift där ni vill ha snabb rapport efteråt.",
+          "Arrangemang där bemanningen roterar mellan pass."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Luleå kommun",
+          "url": "https://www.lulea.se/"
+        },
+        {
+          "label": "Visit Luleå",
+          "url": "https://www.visitlulea.se/"
+        }
+      ]
+    },
+    {
+      "slug": "ostersund",
+      "name": "Östersund",
+      "region": "Jämtlands län",
+      "heritageTextVariants": [
+        "Östersund har ett starkt föreningsliv och många matcher under året. QRButik gör kiosken smidig när publiken vill handla i pausen.",
+        "I Östersund möts idrott och evenemang året runt. En digital kiosk hjälper er att hålla flödet enkelt även när trycket är högt.",
+        "Östersunds matchdagar ger korta men intensiva köptoppar. QRButik gör betalningen tydlig och snabb."
+      ],
+      "localNotesVariants": [
+        [
+          "Inomhusarrangemang ger många köp samtidigt.",
+          "Tydliga priser minskar frågor i pausen."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Kalla perioder gör att publiken vill handla snabbt."
+        ],
+        [
+          "Cuper kan pågå länge och ge många småköp.",
+          "Självbetjäning avlastar när ideella turas om."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där flera lag delar kioskansvar.",
+          "Föreningsdagar med flera aktiviteter samtidigt."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Östersunds kommun",
+          "url": "https://www.ostersund.se/"
+        },
+        {
+          "label": "Visit Östersund",
+          "url": "https://www.visitostersund.se/"
+        }
+      ]
+    },
+    {
+      "slug": "skelleftea",
+      "name": "Skellefteå",
+      "region": "Västerbottens län",
+      "heritageTextVariants": [
+        "Skellefteå är en växande stad i Västerbotten med aktivt föreningsliv. QRButik gör kiosken smidig när publikflödet ökar.",
+        "I Skellefteå arrangeras matcher och cuper året runt. En digital kiosk håller försäljningen enkel även när tempot är högt.",
+        "Skellefteås matchdagar ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla kön rörlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill ofta handla snabbt mellan perioderna.",
+          "Tydliga menyer gör att fler beställer direkt."
+        ],
+        [
+          "Cuper ger återkommande köp under dagen.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ],
+        [
+          "Inomhus- och utomhusplaner kräver enkel uppstart.",
+          "Swish med rätt belopp minskar fel."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusmatcher med spontanpublik."
+        ],
+        [
+          "Cuphelger där flera lag turas om att sälja.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig rapport efteråt.",
+          "Arrangemang där ni vill undvika manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Skellefteå kommun",
+          "url": "https://www.skelleftea.se/"
+        },
+        {
+          "label": "Visit Skellefteå",
+          "url": "https://www.visitskelleftea.se/"
+        }
+      ]
+    },
+    {
+      "slug": "ornskoldsvik",
+      "name": "Örnsköldsvik",
+      "region": "Västernorrlands län",
+      "heritageTextVariants": [
+        "Örnsköldsvik är en kuststad med aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Örnsköldsvik sker matcher och arrangemang året runt. En digital kiosk håller flödet enkelt när trycket är högt.",
+        "Örnsköldsviks matchdagar ger korta men intensiva köptoppar. QRButik gör betalningen tydlig och snabb."
+      ],
+      "localNotesVariants": [
+        [
+          "Hallar med korta pauser kräver snabba köp.",
+          "Tydliga priser minskar frågor."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Självbetjäning avlastar när ideella bemannar."
+        ],
+        [
+          "Cuphelger kan ge många beställningar i vågor.",
+          "En enkel meny gör att kön rör sig snabbare."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuper där flera lag delar kioskansvar.",
+          "Föreningsdagar med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Örnsköldsviks kommun",
+          "url": "https://www.ornskoldsvik.se/"
+        },
+        {
+          "label": "Höga Kusten",
+          "url": "https://www.hogakusten.com/"
+        }
+      ]
+    },
+    {
+      "slug": "pitea",
+      "name": "Piteå",
+      "region": "Norrbottens län",
+      "heritageTextVariants": [
+        "Piteå är en kuststad i Norrbotten med aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Piteå samlas många kring idrott och lokala arrangemang. En digital kiosk håller flödet enkelt även när tempot är högt.",
+        "Piteås matchdagar ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Kalla dagar gör att publiken vill handla snabbt och smidigt.",
+          "Tydliga menyer minskar väntan."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel."
+        ],
+        [
+          "Cuper ger återkommande köp under dagen.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusmatcher där publiken handlar före och efter."
+        ],
+        [
+          "Cuphelger där flera lag turas om i kiosken.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Piteå kommun",
+          "url": "https://www.pitea.se/"
+        },
+        {
+          "label": "Destination Piteå",
+          "url": "https://www.destinationpitea.se/"
+        }
+      ]
+    },
+    {
+      "slug": "boden",
+      "name": "Boden",
+      "region": "Norrbottens län",
+      "heritageTextVariants": [
+        "Boden har ett aktivt föreningsliv och många matcher året runt. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Boden sker arrangemang både i hallar och utomhus. En digital kiosk håller flödet enkelt även när bemanningen varierar.",
+        "Bodens matchdagar ger korta men intensiva pauser. QRButik gör betalningen tydlig och snabb."
+      ],
+      "localNotesVariants": [
+        [
+          "Hallar med korta raster kräver snabba köp.",
+          "Tydliga priser minskar frågor."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Kalla perioder gör att publiken vill handla snabbt."
+        ],
+        [
+          "Föreningar delar ofta kiosk vid turneringar.",
+          "Självbetjäning avlastar när ideella turas om."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med högt tempo.",
+          "Utomhusmatcher med publik i vågor."
+        ],
+        [
+          "Cuphelger där flera lag delar ansvar.",
+          "Föreningsdagar med jämna köptoppar."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Bodens kommun",
+          "url": "https://www.boden.se/"
+        },
+        {
+          "label": "Destination Boden",
+          "url": "https://www.destinationboden.se/"
+        }
+      ]
+    },
+    {
+      "slug": "harnosand",
+      "name": "Härnösand",
+      "region": "Västernorrlands län",
+      "heritageTextVariants": [
+        "Härnösand är en kuststad med aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Härnösand samlas många kring lokala matcher och cuper. En digital kiosk håller flödet enkelt när trycket är högt.",
+        "Härnösands matchdagar ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla kön rörlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Publiken vill handla snabbt mellan perioderna.",
+          "Tydliga menyer minskar väntan."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och enkel skyltning.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ],
+        [
+          "Cuper kan ge många beställningar under dagen.",
+          "En enkel meny gör att fler beställer direkt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där flera lag turas om i kiosken.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Härnösands kommun",
+          "url": "https://www.harnosand.se/"
+        },
+        {
+          "label": "Höga Kusten",
+          "url": "https://www.hogakusten.com/"
+        }
+      ]
+    },
+    {
+      "slug": "hudiksvall",
+      "name": "Hudiksvall",
+      "region": "Gävleborgs län",
+      "heritageTextVariants": [
+        "Hudiksvall är en kuststad i Hälsingland med aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Hudiksvall arrangeras matcher och cuper året runt. En digital kiosk håller flödet enkelt även när tempot är högt.",
+        "Hudiksvalls matchdagar ger korta men intensiva köptoppar. QRButik hjälper er att hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Hallar med korta pauser kräver snabba köp.",
+          "Tydliga priser minskar frågor."
+        ],
+        [
+          "Utomhusmatcher behöver synlig QR-kod och enkel skyltning.",
+          "Självbetjäning avlastar när ideella bemannar."
+        ],
+        [
+          "Cuphelger kan ge många beställningar i vågor.",
+          "En enkel meny gör att fler beställer direkt."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik i vågor."
+        ],
+        [
+          "Cuper där flera lag delar kioskansvar.",
+          "Föreningsdagar med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Hudiksvalls kommun",
+          "url": "https://www.hudiksvall.se/"
+        },
+        {
+          "label": "Visit Hudiksvall",
+          "url": "https://visithudiksvall.se/"
+        }
+      ]
+    },
+    {
+      "slug": "kiruna",
+      "name": "Kiruna",
+      "region": "Norrbottens län",
+      "heritageTextVariants": [
+        "Kiruna är en fjällnära stad med aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Kiruna är säsongerna tydliga och arrangemang sker både inne och ute. En digital kiosk håller flödet enkelt även när det är kallt.",
+        "Kirunas matchdagar ger korta men intensiva pauser. QRButik gör betalningen tydlig och snabb."
+      ],
+      "localNotesVariants": [
+        [
+          "Kalla dagar gör att besökare vill handla snabbt och smidigt.",
+          "Tydliga menyer minskar väntan."
+        ],
+        [
+          "Hallar med korta pauser kräver snabb betalning.",
+          "Självbetjäning avlastar när ideella bemannar."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med högt tempo.",
+          "Utomhusmatcher där publiken handlar före och efter."
+        ],
+        [
+          "Cuphelger med återkommande köp under dagen.",
+          "Föreningsarrangemang där flera grupper turas om."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Kiruna kommun",
+          "url": "https://kiruna.se/"
+        },
+        {
+          "label": "Visit Kiruna",
+          "url": "https://www.visitkiruna.se/"
+        }
+      ]
     }
   ]
 }
