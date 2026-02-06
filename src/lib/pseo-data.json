@@ -741,22 +741,22 @@
       "name": "Tjörn",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Tjörn präglas av skärgård, föreningsliv och säsonger med många besökare. QRButik gör kiosken enkel när trycket ökar.",
+        "Tjörn präglas av skärgård och starkt föreningsliv med tydliga säsongstoppar. QRButik gör kiosken enkel när besökartrycket ökar.",
         "På Tjörn möts lokala klubbar och sommarpublik. En digital kiosk håller flödet smidigt när tempot växlar.",
-        "Tjörns matcher och evenemang samlar publik över året. QRButik gör försäljningen snabb och tydlig."
+        "Tjörns matcher och evenemang samlar publik året om, särskilt under sommarhalvåret. QRButik gör försäljningen snabb och tydlig."
       ],
       "localNotesVariants": [
         [
-          "Säsongsvariationer ger toppar i försäljningen.",
+          "Säsongsvariationer ger korta, intensiva kötoppar.",
           "Publiken vill handla snabbt mellan perioderna."
         ],
         [
-          "Utomhusmatcher kräver tydlig skyltning.",
+          "Utomhusplaner kräver tydlig skyltning och QR-kod.",
           "Många familjer på plats uppskattar enkel Swish."
         ],
         [
-          "Föreningar delar ofta kioskansvar.",
-          "Snabb självbetjäning minskar köer."
+          "Flera föreningar delar ofta kioskansvaret.",
+          "Självbetjäning minskar belastningen i pauserna."
         ]
       ],
       "useCasesVariants": [
@@ -765,8 +765,8 @@
           "Inomhusmatcher med korta pauser."
         ],
         [
-          "Cuphelger med flera lag.",
-          "Matchdagar med tydliga köptoppar."
+          "Cuphelger med flera lag på plats.",
+          "Matchdagar med tydliga köpfönster."
         ],
         [
           "Utomhusmatcher där kiosken är öppen korta pass.",
@@ -789,13 +789,13 @@
       "name": "Orust",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Orust har kustnära föreningsliv och många säsongsbesök. QRButik gör kiosken smidig när trycket ökar.",
-        "På Orust samlas publik i hallar och på planer under hela året. En digital kiosk gör försäljningen enkel.",
-        "Orusts klubbar driver matcher och event med varierande tempo. QRButik håller köerna korta."
+        "Orust kombinerar kustnära samhällen med aktivt föreningsliv och säsongsbesök. QRButik gör kiosken smidig när trycket ökar.",
+        "På Orust samlas publik i hallar och på planer under hela året. En digital kiosk håller köerna korta.",
+        "Orusts klubbar driver matcher och event med skiftande tempo. QRButik gör försäljningen enkel även vid toppar."
       ],
       "localNotesVariants": [
         [
-          "Sommarsäsongen ger större publik.",
+          "Sommarsäsongen ger större publik kring matcher och event.",
           "Tydliga priser gör köerna kortare."
         ],
         [
@@ -837,13 +837,13 @@
       "name": "Uddevalla",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Uddevalla har ett starkt idrottsliv och matcher året runt. QRButik gör kiosken snabb när publiken blir stor.",
-        "I Uddevalla samlas föreningar i hallar och på planer. En digital kiosk håller flödet smidigt.",
-        "Uddevallas klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel även vid högt tryck."
+        "Uddevalla har ett brett idrottsliv med matcher och cuper året runt. QRButik gör kiosken snabb när publiken blir stor.",
+        "I Uddevalla möts föreningar i hallar och på planer. En digital kiosk håller flödet smidigt.",
+        "Uddevallas arrangemang ger tydliga pauser och köptoppar. QRButik gör försäljningen enkel även vid högt tryck."
       ],
       "localNotesVariants": [
         [
-          "Matchdagar ger korta, intensiva kötoppar.",
+          "Matchdagar skapar korta, intensiva kötoppar.",
           "Publiken vill hinna handla mellan perioderna."
         ],
         [
@@ -861,7 +861,7 @@
           "Utomhusevent med hög belastning."
         ],
         [
-          "Cuphelger med flera lag.",
+          "Cuphelger med många lag.",
           "Föreningsarrangemang med tydliga pauser."
         ],
         [
@@ -885,8 +885,8 @@
       "name": "Ljungskile",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Ljungskile ligger längs kusten med aktiva föreningar och närhet till Uddevalla. QRButik gör kiosken smidig när publiken samlas.",
-        "I Ljungskile samsas hallar och utomhusplaner. En digital kiosk håller köerna korta.",
+        "Ljungskile är en kustnära ort med aktiva föreningar och närhet till Uddevalla. QRButik gör kiosken smidig när publiken samlas.",
+        "I Ljungskile varvas hallar och utomhusplaner. En digital kiosk håller köerna korta.",
         "Ljungskiles matcher och event samlar både lokala och gästande lag. QRButik förenklar försäljningen."
       ],
       "localNotesVariants": [
@@ -933,9 +933,9 @@
       "name": "Lilla Edet",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Lilla Edet har ett aktivt föreningsliv med matcher året runt. QRButik gör kiosken smidig när tempot ökar.",
+        "Lilla Edet ligger vid älven och har ett aktivt föreningsliv med matcher året runt. QRButik gör kiosken smidig när tempot ökar.",
         "I Lilla Edet samlas publik i hallar och på planer. En digital kiosk håller köerna korta.",
-        "Lilla Edets klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel."
+        "Lilla Edets klubbar arrangerar cuper och seriematcher. QRButik gör försäljningen enkel."
       ],
       "localNotesVariants": [
         [
@@ -982,8 +982,8 @@
       "region": "Västra Götalands län",
       "heritageTextVariants": [
         "Munkedal har ett nära föreningsliv och många lokala arrangemang. QRButik gör kiosken snabb när publiken samlas.",
-        "I Munkedal möts hallar och utomhusplaner under hela året. En digital kiosk håller flödet smidigt.",
-        "Munkedals matcher och cuper samlar publik i korta toppar. QRButik gör försäljningen enkel."
+        "I Munkedal varvas hallar och utomhusplaner under hela året. En digital kiosk håller flödet smidigt.",
+        "Munkedals matcher och cuper ger tydliga köptoppar. QRButik gör försäljningen enkel."
       ],
       "localNotesVariants": [
         [
@@ -1010,7 +1010,7 @@
         ],
         [
           "Träningsmatcher med jämna köp.",
-          "Skolturneringar med korta pauser."
+          "Skolturneringar med korta köpfönster."
         ]
       ],
       "officialLinks": [
@@ -1029,13 +1029,13 @@
       "name": "Tanumshede",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Tanumshede är centralort i Tanum med aktiva föreningar och matcher året runt. QRButik gör kiosken smidig när publiken blir stor.",
+        "Tanumshede är centralort i Tanums kommun med aktiva föreningar och matcher året runt. QRButik gör kiosken smidig när publiken blir stor.",
         "I Tanumshede samlas lag i hallar och på planer. En digital kiosk håller köerna korta.",
-        "Tanumshedes matcher och cuper ger tydliga köptoppar. QRButik gör försäljningen enkel."
+        "Tanumshedes arrangemang skapar tydliga köptoppar. QRButik gör försäljningen enkel."
       ],
       "localNotesVariants": [
         [
-          "Matchdagar ger intensiva pauser.",
+          "Matchdagar ger korta, intensiva pauser.",
           "Publiken vill handla snabbt mellan perioderna."
         ],
         [
@@ -1077,7 +1077,7 @@
       "name": "Grebbestad",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Grebbestad har kustnära föreningsliv och många besökare under säsong. QRButik gör kiosken snabb när tempot ökar.",
+        "Grebbestad är en kustort med många besökare under säsong. QRButik gör kiosken snabb när tempot ökar.",
         "I Grebbestad samlas publik vid matcher och event nära havet. En digital kiosk håller flödet smidigt.",
         "Grebbestads arrangemang ger korta men intensiva köptoppar. QRButik förenklar försäljningen."
       ],
@@ -1125,8 +1125,8 @@
       "name": "Fjällbacka",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Fjällbacka kombinerar kustliv med lokala matcher och event. QRButik gör kiosken smidig när publik samlas.",
-        "I Fjällbacka växlar tempot med säsongen. En digital kiosk håller köerna korta även när trycket ökar.",
+        "Fjällbacka är en kustort där säsongen påverkar publikflödet. QRButik gör kiosken smidig när trycket ökar.",
+        "I Fjällbacka varvas lokala matcher med besöksintensiva perioder. En digital kiosk håller köerna korta.",
         "Fjällbackas arrangemang skapar tydliga köptoppar. QRButik förenklar försäljningen."
       ],
       "localNotesVariants": [
@@ -1173,13 +1173,13 @@
       "name": "Lysekil",
       "region": "Västra Götalands län",
       "heritageTextVariants": [
-        "Lysekil har ett levande föreningsliv med matcher året runt. QRButik gör kiosken snabb när publiken blir stor.",
+        "Lysekil är en kuststad med aktivt föreningsliv och matcher året runt. QRButik gör kiosken snabb när publiken blir stor.",
         "I Lysekil samlas publik i hallar och vid kusten. En digital kiosk håller flödet smidigt.",
         "Lysekils klubbar driver cuper och seriematcher. QRButik gör försäljningen enkel när trycket ökar."
       ],
       "localNotesVariants": [
         [
-          "Matchdagar ger intensiva pauser.",
+          "Matchdagar ger korta, intensiva pauser.",
           "Publiken vill handla snabbt mellan perioderna."
         ],
         [
@@ -1202,7 +1202,7 @@
         ],
         [
           "Träningsmatcher med jämna köp.",
-          "Skolturneringar med korta pauser."
+          "Skolturneringar med korta köpfönster."
         ]
       ],
       "officialLinks": [
