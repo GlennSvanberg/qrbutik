@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { MarketingFooter } from '~/components/MarketingFooter'
 import { TimeSavingsCalculator } from '~/components/TimeSavingsCalculator'
 import {
@@ -8,15 +8,46 @@ import {
   getPseoSlug,
 } from '~/lib/pseo'
 
+const SITE_URL =
+  (import.meta as any).env.VITE_SITE_URL ?? 'https://qrbutik.se'
+
+const buildAbsoluteUrl = (pathname: string) => {
+  try {
+    return new URL(pathname, SITE_URL).toString()
+  } catch {
+    return SITE_URL
+  }
+}
+
 export const Route = createFileRoute('/utforska/$sport/$city/')({
-  head: ({ params }) => {
+  loader: ({ params }) => {
     const copy = getPseoCopy(params.sport, params.city)
-    const title = copy
-      ? `QR-kiosk för ${copy.sport.name} i ${copy.city.name} | QRButik`
-      : 'QRButik | Digital kiosk för föreningar'
-    const description = copy
-      ? `${copy.sport.name} i ${copy.city.name}: snabb kiosk med Swish. Kortare köer, tydliga priser och smart rapport för föreningar.`
-      : 'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.'
+    if (!copy) {
+      throw notFound()
+    }
+    return copy
+  },
+  head: ({ loaderData, params }) => {
+    const copy = loaderData ?? getPseoCopy(params.sport, params.city)
+    if (!copy) {
+      return {
+        meta: [
+          {
+            title: 'Sidan hittades inte | QRButik',
+          },
+          {
+            name: 'robots',
+            content: 'noindex, nofollow',
+          },
+        ],
+      }
+    }
+
+    const title = `QR-kiosk för ${copy.sport.name} i ${copy.city.name} | QRButik`
+    const description = `${copy.sport.name} i ${copy.city.name}: snabb kiosk med Swish. Kortare köer, tydliga priser och smart rapport för föreningar.`
+    const pageUrl = buildAbsoluteUrl(
+      `/utforska/${copy.sport.slug}/${copy.city.slug}`,
+    )
 
     return {
       meta: [
@@ -35,6 +66,50 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
           property: 'og:description',
           content: description,
         },
+        {
+          property: 'og:url',
+          content: pageUrl,
+        },
+        {
+          name: 'twitter:title',
+          content: title,
+        },
+        {
+          name: 'twitter:description',
+          content: description,
+        },
+        {
+          name: 'robots',
+          content:
+            'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+        },
+        {
+          'script:ld+json': {
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'WebPage',
+                '@id': `${pageUrl}#webpage`,
+                url: pageUrl,
+                name: title,
+                description,
+                inLanguage: 'sv-SE',
+              },
+              {
+                '@type': 'FAQPage',
+                '@id': `${pageUrl}#faq`,
+                mainEntity: copy.faq.map((item) => ({
+                  '@type': 'Question',
+                  name: item.question,
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: item.answer,
+                  },
+                })),
+              },
+            ],
+          },
+        },
       ],
     }
   },
@@ -42,33 +117,14 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
 })
 
 function PseoPage() {
-  const { sport, city } = Route.useParams()
-  const copy = getPseoCopy(sport, city)
+  const copy = Route.useLoaderData()
 
-  if (!copy) {
-    return (
-      <main className="min-h-screen bg-slate-50 px-6 py-20 text-center">
-        <h1 className="text-3xl font-semibold text-slate-900">
-          Sidan hittades inte
-        </h1>
-        <p className="mt-3 text-slate-600">
-          Vi kunde tyvärr inte hitta den kombinationen.
-        </p>
-        <div className="mt-6 flex justify-center">
-          <Link
-            to="/utforska"
-            trackaton-on-click="pseo-back-explore"
-            className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
-          >
-            Till utforska
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
-  const relatedCities = getAllCities().filter((item) => item.slug !== city)
-  const relatedSports = getAllSports().filter((item) => item.slug !== sport)
+  const relatedCities = getAllCities().filter(
+    (item) => item.slug !== copy.city.slug,
+  )
+  const relatedSports = getAllSports().filter(
+    (item) => item.slug !== copy.sport.slug,
+  )
 
   return (
     <main className="min-h-screen bg-slate-50">
