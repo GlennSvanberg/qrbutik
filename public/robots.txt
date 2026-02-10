@@ -5,4 +5,6 @@ Disallow: /tack/
 Allow: /
 
 Sitemap: https://qrbutik.se/sitemap.xml
+Sitemap: https://qrbutik.se/sitemap-static.xml
+Sitemap: https://qrbutik.se/sitemap-pseo.xml
 LLMS: https://qrbutik.se/llms.txt
