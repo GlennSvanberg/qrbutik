@@ -35,8 +35,8 @@ function PurchaseHistoryPage() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -48,8 +48,8 @@ function PurchaseHistoryPage() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -97,12 +97,12 @@ function PurchaseHistoryPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -173,8 +173,8 @@ function PurchaseHistoryContent({ email }: { email: string }) {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -183,7 +183,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -195,8 +195,8 @@ function PurchaseHistoryContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -205,7 +205,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -216,7 +216,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <AdminHeader
           ownerEmail={email}
@@ -227,7 +227,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
         />
 
         <section className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+          <div className="relaxed-divider flex flex-wrap items-center justify-between gap-2 border-b pb-3">
             <div>
               <h2 className="text-base font-semibold text-slate-900">
                 Alla köp
@@ -241,7 +241,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
             </span>
           </div>
 
-          <div className="divide-y divide-slate-200/70 rounded-2xl border border-slate-200 bg-white">
+          <div className="relaxed-surface divide-y divide-slate-200/70">
             <div className="grid grid-cols-[auto_1fr_auto] gap-4 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
               <span>Verifiera</span>
               <span>Datum &amp; referens</span>
@@ -322,7 +322,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
                       </span>
                     </div>
                     {isExpanded ? (
-                      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+                      <div className="relaxed-surface-soft mt-3 bg-slate-50/70 px-4 py-3 text-xs text-slate-600">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                           Varor
                         </p>

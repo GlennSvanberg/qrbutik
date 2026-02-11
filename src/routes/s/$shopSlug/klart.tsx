@@ -26,8 +26,8 @@ function ShopActivationSuccessPage() {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -36,7 +36,7 @@ function ShopActivationSuccessPage() {
           </p>
           <Link
             to="/"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="activation-back-home"
           >
             Till startsidan
@@ -47,7 +47,7 @@ function ShopActivationSuccessPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-12">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 py-12">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="flex flex-col gap-2 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -59,12 +59,12 @@ function ShopActivationSuccessPage() {
           <p className="text-sm text-slate-600">Vad vill du gora nu?</p>
         </header>
 
-        <section className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <section className="relaxed-surface flex flex-col gap-4 p-8 text-center">
           <div className="flex flex-col gap-3">
             <Link
               to="/s/$shopSlug/qr"
               params={{ shopSlug: shop.slug }}
-              className="cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button cursor-pointer px-5 py-3 text-sm font-semibold text-white"
               trackaton-on-click="activation-view-qr"
             >
               Visa QR-kod
@@ -72,14 +72,14 @@ function ShopActivationSuccessPage() {
             <Link
               to="/s/$shopSlug"
               params={{ shopSlug: shop.slug }}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
               trackaton-on-click="activation-view-shop"
             >
               Visa butik
             </Link>
             <Link
               to="/admin"
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
               trackaton-on-click="activation-admin"
             >
               Adminpanel

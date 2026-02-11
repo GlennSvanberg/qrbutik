@@ -38,7 +38,7 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="relaxed-page-shell min-h-screen bg-transparent">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(67,56,202,0.12),_transparent_60%)]" />
@@ -67,7 +67,7 @@ function Home() {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
                 <Link
                   to="/skapa"
-                  className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                  className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
                   trackaton-on-click="primary-cta"
                 >
                   Skapa din Swish-kiosk &mdash; 10 kr
@@ -87,15 +87,15 @@ function Home() {
                 Vi mejlar en inloggning. Klicka i mejlet s&aring; &auml;r du inne.
               </p>
             </div>
-            <div className="flex flex-wrap justify-center gap-6 text-xs uppercase tracking-[0.25em] text-slate-500">
-              <span>2 minuter</span>
-              <span>Ingen app</span>
-              <span>Swish direkt</span>
+            <div className="flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500">
+              <span className="relaxed-chip px-3 py-1">2 minuter</span>
+              <span className="relaxed-chip px-3 py-1">Ingen app</span>
+              <span className="relaxed-chip px-3 py-1">Swish direkt</span>
             </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.48fr_0.52fr]">
-            <div className="flex flex-col justify-center gap-6 rounded-3xl border border-slate-200 bg-white/80 p-8 shadow-sm backdrop-blur">
+            <div className="relaxed-surface flex flex-col justify-center gap-6 p-8 rotate-[-0.2deg]">
               <div className="flex flex-col gap-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
                   Före och efter
@@ -110,7 +110,7 @@ function Home() {
               </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2">
-              <div className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+              <div className="relaxed-surface-soft flex flex-col gap-3 bg-slate-50/70 p-4 rotate-[0.25deg]">
                 <div className="flex items-center justify-between text-xs uppercase tracking-[0.25em] text-slate-500">
                   <span>Före</span>
                   <span>Handskrivet</span>
@@ -123,7 +123,7 @@ function Home() {
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="relaxed-surface-soft flex flex-col gap-3 p-4 rotate-[-0.2deg]">
                 <div className="flex items-center justify-between text-xs uppercase tracking-[0.25em] text-slate-500">
                   <span>Efter</span>
                   <span>Digital meny</span>
@@ -143,7 +143,7 @@ function Home() {
 
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-20 px-6 pb-16">
         {/* Problem vs Solution */}
-        <section className="grid gap-12 rounded-2xl border border-slate-200 bg-white p-10 shadow-sm lg:grid-cols-2">
+        <section className="relaxed-surface grid gap-12 p-10 lg:grid-cols-2">
           <div className="flex flex-col gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
               Vanliga problem
@@ -225,7 +225,7 @@ function Home() {
             </h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <div className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-200 hover:shadow-md">
+            <div className="relaxed-surface-soft group flex flex-col gap-4 p-6 transition hover:border-indigo-200 hover:bg-white">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
                 <svg
                   className="h-6 w-6"
@@ -251,7 +251,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-200 hover:shadow-md">
+            <div className="relaxed-surface-soft group flex flex-col gap-4 p-6 transition hover:border-indigo-200 hover:bg-white">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
                 <svg
                   className="h-6 w-6"
@@ -277,7 +277,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-200 hover:shadow-md">
+            <div className="relaxed-surface-soft group flex flex-col gap-4 p-6 transition hover:border-indigo-200 hover:bg-white">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
                 <svg
                   className="h-6 w-6"
@@ -303,7 +303,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-indigo-200 hover:shadow-md">
+            <div className="relaxed-surface-soft group flex flex-col gap-4 p-6 transition hover:border-indigo-200 hover:bg-white">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
                 <svg
                   className="h-6 w-6"
@@ -345,7 +345,7 @@ function Home() {
             </h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+            <div className="relaxed-surface-soft flex flex-col items-center gap-3 p-6 text-center rotate-[0.15deg]">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-700">
                 <svg
                   aria-hidden="true"
@@ -371,7 +371,7 @@ function Home() {
                 visa på en iPad.
               </p>
             </div>
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+            <div className="relaxed-surface-soft flex flex-col items-center gap-3 p-6 text-center rotate-[-0.15deg]">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-700">
                 <svg
                   aria-hidden="true"
@@ -400,7 +400,7 @@ function Home() {
         </section>
 
         {/* Pricing */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
+        <section className="relaxed-surface p-10">
           <div className="flex flex-col gap-3">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
               Priser
@@ -410,7 +410,7 @@ function Home() {
             </h2>
           </div>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <div className="relaxed-surface-soft flex flex-col gap-4 bg-slate-50/70 p-6">
               <div>
                 <p className="text-sm font-semibold text-slate-500">
                   Event-pass
@@ -422,13 +422,13 @@ function Home() {
               </p>
               <Link
                 to="/skapa"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
                 trackaton-on-click="start-event-pass"
               >
                 Starta event-pass
               </Link>
             </div>
-            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <div className="relaxed-surface-soft flex flex-col gap-4 bg-slate-50/70 p-6">
               <div>
                 <p className="text-sm font-semibold text-slate-500">
                   Säsongs-pass
@@ -440,7 +440,7 @@ function Home() {
               </p>
               <Link
                 to="/skapa"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-900"
                 trackaton-on-click="start-season-pass"
               >
                 Starta säsong
@@ -453,7 +453,7 @@ function Home() {
         </section>
 
         {/* Testimonial */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
+        <section className="relaxed-surface rotate-[-0.2deg] p-10">
           <blockquote className="flex flex-col gap-4">
             <p className="text-pretty text-xl font-semibold text-slate-900">
               “Vår kassör älskar säljrapporten! Sparar oss timmar av pusslande

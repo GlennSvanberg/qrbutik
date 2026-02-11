@@ -35,8 +35,8 @@ function ShopQrPublicPage() {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -45,7 +45,7 @@ function ShopQrPublicPage() {
           </p>
           <Link
             to="/"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="public-qr-back-home"
           >
             Till startsidan
@@ -61,7 +61,7 @@ function ShopQrPublicPage() {
   const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-12">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 py-12">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="flex items-start justify-between">
           <div className="flex flex-col gap-2">
@@ -81,33 +81,35 @@ function ShopQrPublicPage() {
           </Link>
         </header>
 
-        <section className="flex flex-col items-center gap-6 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-            <QRCodeSVG value={qrValue} size={240} level="M" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-lg font-semibold text-slate-900">
-              Skanna för att handla
-            </p>
-            <p className="text-sm text-slate-500">{displayUrl}</p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/s/$shopSlug"
-              params={{ shopSlug: shop.slug }}
-              className="cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
-              trackaton-on-click="public-qr-view-shop"
-            >
-              Visa butik
-            </Link>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
-              trackaton-on-click="public-qr-print"
-            >
-              Skriv ut QR-kod
-            </button>
+        <section className="flex flex-col items-center">
+          <div className="relaxed-surface flex flex-col items-center gap-6 p-8 text-center">
+            <div className="relaxed-surface-soft rounded-3xl bg-slate-50/70 p-6">
+              <QRCodeSVG value={qrValue} size={240} level="M" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-lg font-semibold text-slate-900">
+                Skanna för att handla
+              </p>
+              <p className="text-sm text-slate-500">{displayUrl}</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/s/$shopSlug"
+                params={{ shopSlug: shop.slug }}
+                className="relaxed-primary-button cursor-pointer px-5 py-3 text-sm font-semibold text-white"
+                trackaton-on-click="public-qr-view-shop"
+              >
+                Visa butik
+              </Link>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
+                trackaton-on-click="public-qr-print"
+              >
+                Skriv ut QR-kod
+              </button>
+            </div>
           </div>
         </section>
       </div>

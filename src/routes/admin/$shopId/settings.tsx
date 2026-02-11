@@ -37,8 +37,8 @@ function SettingsPage() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -50,8 +50,8 @@ function SettingsPage() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -99,12 +99,12 @@ function SettingsPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -195,8 +195,8 @@ function SettingsContent({ email }: { email: string }) {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -205,7 +205,7 @@ function SettingsContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -217,8 +217,8 @@ function SettingsContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -227,7 +227,7 @@ function SettingsContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -238,7 +238,7 @@ function SettingsContent({ email }: { email: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AdminHeader
           ownerEmail={email}
@@ -260,7 +260,7 @@ function SettingsContent({ email }: { email: string }) {
           </Link>
         </header>
 
-        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+        <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-slate-900">
               Butiksinfo
@@ -292,14 +292,14 @@ function SettingsContent({ email }: { email: string }) {
                 }
               }
             }}
-            className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
             trackaton-on-click="admin-save-shop-info"
           >
             Spara butiksinfo
           </button>
         </section>
 
-        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+        <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <div className="flex flex-col gap-1">
             <h2 className="text-base font-semibold text-slate-900">
               Aktivering
@@ -310,7 +310,7 @@ function SettingsContent({ email }: { email: string }) {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
+          <div className="relaxed-surface-soft bg-slate-50/70 px-5 py-4 text-sm text-slate-600">
             <div className="flex items-center justify-between">
               <span>Status</span>
               <span className="font-semibold text-slate-900">
@@ -395,7 +395,7 @@ function SettingsContent({ email }: { email: string }) {
                 setActivationMessage('Event aktiverad. Öppnar Swish...')
                 window.location.href = link
               }}
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white"
               trackaton-on-click="admin-activate-event"
             >
               Aktivera event 10 kr
@@ -419,7 +419,7 @@ function SettingsContent({ email }: { email: string }) {
                 setActivationMessage('Säsong aktiverad. Öppnar Swish...')
                 window.location.href = link
               }}
-              className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700"
               trackaton-on-click="admin-activate-season"
             >
               Aktivera säsong 99 kr
@@ -427,7 +427,7 @@ function SettingsContent({ email }: { email: string }) {
           </div>
         </section>
 
-        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+        <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <h2 className="text-base font-semibold text-slate-900">
@@ -445,7 +445,7 @@ function SettingsContent({ email }: { email: string }) {
                 setDeleteStatus(null)
                 setDeleteError(null)
               }}
-              className="h-12 cursor-pointer rounded-xl border border-rose-200 bg-rose-50 px-5 text-sm font-semibold text-rose-700 transition hover:border-rose-300"
+              className="relaxed-secondary-button h-12 cursor-pointer border-rose-200 bg-rose-50 px-5 text-sm font-semibold text-rose-700 hover:border-rose-300"
               trackaton-on-click="admin-delete-toggle"
             >
               {isDeleteOpen ? 'Stäng' : 'Radera butik'}
@@ -453,7 +453,7 @@ function SettingsContent({ email }: { email: string }) {
           </div>
 
           {isDeleteOpen ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50/60 px-5 py-4">
+            <div className="relaxed-surface-soft border-rose-200 bg-rose-50/60 px-5 py-4">
               <div className="flex flex-col gap-3">
                 <p className="text-sm text-rose-700">
                   Skriv butikens namn exakt för att bekräfta borttagning.
@@ -464,7 +464,7 @@ function SettingsContent({ email }: { email: string }) {
                     type="text"
                     value={deleteShopName}
                     onChange={(event) => setDeleteShopName(event.target.value)}
-                    className="h-12 rounded-xl border border-rose-200 bg-white px-4 text-base text-slate-900 outline-none focus:border-rose-400"
+                    className="relaxed-input h-12 border-rose-200 bg-white px-4 text-base text-slate-900 outline-none focus:border-rose-400"
                     placeholder={shop.name}
                   />
                 </label>
@@ -491,7 +491,7 @@ function SettingsContent({ email }: { email: string }) {
                       }
                     }
                   }}
-                  className="h-12 cursor-pointer rounded-xl bg-rose-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
+                  className="relaxed-danger-button h-12 cursor-pointer px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:cursor-not-allowed disabled:bg-rose-300"
                   trackaton-on-click="admin-delete-confirm"
                 >
                   Ta bort butik permanent
