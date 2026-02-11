@@ -74,12 +74,12 @@ export function AdminHeader({
   return (
     <header
       ref={containerRef}
-      className="relative border-b border-slate-200 pb-4"
+      className="relative border-b pb-4 relaxed-divider"
     >
       <div className="flex items-center justify-between gap-3">
         <Link
           to="/admin"
-          className="inline-flex h-12 items-center justify-center rounded-xl border border-transparent px-3 text-xs font-semibold text-indigo-700 transition hover:border-indigo-200 hover:bg-indigo-50"
+          className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-3 text-xs font-semibold text-indigo-700"
           trackaton-on-click="admin-back"
         >
           Tillbaka
@@ -102,7 +102,7 @@ export function AdminHeader({
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          className="relaxed-secondary-button flex h-12 w-12 items-center justify-center text-slate-700"
           aria-expanded={isOpen}
           aria-controls="admin-header-menu"
           trackaton-on-click="admin-menu-toggle"
@@ -121,7 +121,7 @@ export function AdminHeader({
           id="admin-header-menu"
           role="menu"
           aria-label="Välj butik"
-          className="absolute left-0 right-0 top-full z-20 mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg"
+          className="relaxed-surface absolute left-0 right-0 top-full z-20 mt-3 p-4"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Mina butiker
@@ -142,8 +142,8 @@ export function AdminHeader({
                 }}
                 className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition ${
                   shop._id === shopId
-                    ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
-                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                    ? 'border-indigo-200 bg-indigo-50/80 text-indigo-700'
+                    : 'border-slate-200/80 bg-white/80 text-slate-700 hover:border-indigo-200 hover:bg-indigo-50/40'
                 }`}
               >
                 <span>{shop.name}</span>

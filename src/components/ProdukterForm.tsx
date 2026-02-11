@@ -40,13 +40,13 @@ export function ProdukterForm({
         {products.map((product) => (
           <div
             key={product.id}
-            className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-[1.4fr_0.6fr_auto]"
+            className="relaxed-surface-soft grid gap-3 p-4 odd:rotate-[-0.15deg] even:rotate-[0.15deg] sm:grid-cols-[1.4fr_0.6fr_auto]"
           >
             <label className="flex flex-col gap-2 text-sm text-slate-700">
               Produktnamn
               <input
                 required
-                className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-sm text-slate-900 outline-none"
                 value={product.name}
                 onChange={(event) =>
                   updateProduct(product.id, { name: event.target.value })
@@ -58,7 +58,7 @@ export function ProdukterForm({
               <input
                 required
                 inputMode="decimal"
-                className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-sm text-slate-900 outline-none"
                 value={product.price}
                 onChange={(event) =>
                   updateProduct(product.id, { price: event.target.value })
@@ -69,7 +69,7 @@ export function ProdukterForm({
               <button
                 type="button"
                 onClick={() => removeProduct(product.id)}
-                className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700"
+                className="relaxed-secondary-button h-12 cursor-pointer px-4 text-sm font-semibold text-slate-600"
                 trackaton-on-click="product-remove-row"
               >
                 Ta bort
@@ -82,7 +82,7 @@ export function ProdukterForm({
       <button
         type="button"
         onClick={onAddRow}
-        className="h-12 cursor-pointer rounded-xl border border-dashed border-indigo-200 bg-indigo-50 px-6 text-sm font-semibold text-indigo-700 shadow-sm transition hover:border-indigo-300 hover:bg-indigo-100"
+        className="relaxed-secondary-button h-12 cursor-pointer border-dashed px-6 text-sm font-semibold text-indigo-700"
         trackaton-on-click="product-add-row"
       >
         Lägg till en ny rad

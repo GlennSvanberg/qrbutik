@@ -1,17 +1,65 @@
 @import 'tailwindcss';
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
   html,
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
-    font-family: "Inter", "Geist", "Segoe UI", system-ui, sans-serif;
+    min-height: 100%;
+    background:
+      radial-gradient(
+        circle at 12% 8%,
+        rgba(129, 140, 248, 0.14),
+        transparent 34%
+      ),
+      radial-gradient(
+        circle at 88% 0%,
+        rgba(14, 165, 233, 0.1),
+        transparent 30%
+      ),
+      linear-gradient(180deg, #f8f5ef 0%, #f5f6fb 52%, #f7f7f7 100%);
+    color: #1f2937;
+    font-family: "Inter", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
   }
 
   button,
   [role="button"],
   a {
     cursor: pointer;
+  }
+
+  a,
+  button {
+    transition:
+      transform 160ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 220ms ease,
+      color 200ms ease,
+      opacity 200ms ease;
+  }
+
+  button:hover,
+  a:where([class*="rounded"], [class*="inline-flex"]):hover {
+    transform: translateY(-1px);
+  }
+
+  button:active,
+  a:where([class*="rounded"], [class*="inline-flex"]):active {
+    transform: translateY(0);
+  }
+
+  input,
+  textarea,
+  select {
+    transition:
+      border-color 200ms ease,
+      box-shadow 220ms ease,
+      background-color 200ms ease;
   }
 
   /* Hide outlines only for mouse focus, never for keyboard focus. */
@@ -29,5 +77,121 @@
   [tabindex]:focus-visible {
     outline: 2px solid #4338ca;
     outline-offset: 3px;
+  }
+
+  ::selection {
+    background: rgba(99, 102, 241, 0.22);
+    color: #111827;
+  }
+}
+
+@layer components {
+  .relaxed-page-shell {
+    position: relative;
+  }
+
+  .relaxed-page-shell::before {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(100, 116, 139, 0.09) 1px, transparent 0);
+    background-size: 18px 18px;
+    opacity: 0.35;
+  }
+
+  .relaxed-surface {
+    border: 1px solid #e4ded4;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow:
+      0 16px 34px -30px rgba(15, 23, 42, 0.55),
+      0 8px 16px -14px rgba(79, 70, 229, 0.38);
+    backdrop-filter: blur(4px);
+  }
+
+  .relaxed-surface-soft {
+    border: 1px solid #e7e2d8;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: 0 10px 26px -24px rgba(15, 23, 42, 0.45);
+  }
+
+  .relaxed-chip {
+    border: 1px solid #ddd7cd;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #4b5563;
+  }
+
+  .relaxed-primary-button {
+    border: 1px solid transparent;
+    border-radius: 0.95rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    box-shadow:
+      0 12px 22px -17px rgba(79, 70, 229, 0.85),
+      0 7px 16px -14px rgba(15, 23, 42, 0.55);
+  }
+
+  .relaxed-primary-button:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #5b5cf0 100%);
+    box-shadow:
+      0 16px 26px -17px rgba(79, 70, 229, 0.95),
+      0 9px 20px -14px rgba(15, 23, 42, 0.6);
+  }
+
+  .relaxed-secondary-button {
+    border: 1px solid #d8dbe7;
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.86);
+    color: #334155;
+    box-shadow: 0 10px 20px -20px rgba(15, 23, 42, 0.65);
+  }
+
+  .relaxed-secondary-button:hover {
+    border-color: #c3cbe8;
+    background: rgba(246, 248, 255, 0.92);
+    color: #1e293b;
+  }
+
+  .relaxed-danger-button {
+    border: 1px solid #f9b8c1;
+    border-radius: 0.95rem;
+    background: linear-gradient(150deg, #f43f5e 0%, #fb7185 100%);
+    color: #fff;
+  }
+
+  .relaxed-input {
+    border: 1px solid #d8dce8;
+    border-radius: 0.95rem;
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  .relaxed-input:focus {
+    border-color: #6366f1;
+    background: #fff;
+    box-shadow:
+      0 0 0 4px rgba(99, 102, 241, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+
+  .relaxed-divider {
+    border-color: #e7e1d6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button {
+    transition: none;
+  }
+
+  button:hover,
+  a:where([class*="rounded"], [class*="inline-flex"]):hover {
+    transform: none;
   }
 }

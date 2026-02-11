@@ -117,7 +117,7 @@ function CreateShopWizard() {
     )
 
   return (
-    <main className="min-h-screen px-6 py-12">
+    <main className="relaxed-page-shell min-h-screen px-6 py-12">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-10">
         <header className="flex flex-col gap-3 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -131,7 +131,7 @@ function CreateShopWizard() {
           </p>
         </header>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <section className="relaxed-surface p-8">
           <div className="mb-6 flex items-center justify-between text-sm text-slate-500">
             <span>Steg {step} av 3</span>
             {step !== 3 ? (
@@ -187,7 +187,7 @@ function CreateShopWizard() {
               />
               <button
                 type="submit"
-                className="mt-2 h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                className="relaxed-primary-button mt-2 h-12 cursor-pointer px-6 text-base font-semibold text-white"
                 trackaton-on-click="create-step1-continue"
               >
                 Fortsätt till produkter
@@ -219,7 +219,7 @@ function CreateShopWizard() {
                     },
                   )
                 }}
-                className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 disabled:cursor-not-allowed disabled:text-slate-400"
+                className="relaxed-secondary-button h-12 cursor-pointer px-6 text-base font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
                 trackaton-on-click="create-send-magic-link"
               >
                 Skicka inloggningsmejl
@@ -281,7 +281,7 @@ function CreateShopWizard() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-600 hover:border-slate-300"
+                  className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-600"
                   trackaton-on-click="create-step2-back"
                 >
                   Tillbaka
@@ -289,7 +289,7 @@ function CreateShopWizard() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300"
+                  className="relaxed-primary-button h-12 cursor-pointer px-7 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
                   trackaton-on-click="create-submit-shop"
                 >
                   {isSubmitting ? 'Skapar butik...' : 'Skapa butik'}
@@ -313,7 +313,7 @@ function CreateShopWizard() {
                 den manuellt.
               </p>
 
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600">
+              <div className="relaxed-surface-soft bg-slate-50/70 px-5 py-4 text-sm text-slate-600">
                 <div className="flex items-center justify-between">
                   <span>Butik</span>
                   <span className="font-semibold text-slate-900">
@@ -350,7 +350,7 @@ function CreateShopWizard() {
                       window.location.href = `/s/${createdShop.slug}/klart`
                     }, 2000)
                   }}
-                  className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                  className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white"
                   trackaton-on-click="create-activate-event"
                 >
                   Aktivera event 10 kr
@@ -376,7 +376,7 @@ function CreateShopWizard() {
                       window.location.href = `/s/${createdShop.slug}/klart`
                     }, 2000)
                   }}
-                  className="h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                  className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700"
                   trackaton-on-click="create-activate-season"
                 >
                   Aktivera säsong 99 kr
@@ -412,7 +412,7 @@ function CreateShopWizard() {
                         },
                       )
                     }}
-                    className="mx-auto h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                    className="relaxed-secondary-button mx-auto h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700"
                     trackaton-on-click="create-send-admin-link"
                   >
                     Skicka admininloggning via mejl

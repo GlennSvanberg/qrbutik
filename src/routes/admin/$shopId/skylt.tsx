@@ -35,8 +35,8 @@ function ShopQrPage() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -48,8 +48,8 @@ function ShopQrPage() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -97,12 +97,12 @@ function ShopQrPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -139,8 +139,8 @@ function ShopQrContent({ email }: { email: string }) {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -149,7 +149,7 @@ function ShopQrContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -161,8 +161,8 @@ function ShopQrContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -171,7 +171,7 @@ function ShopQrContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -187,7 +187,7 @@ function ShopQrContent({ email }: { email: string }) {
   const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6 print:bg-white print:px-0 print:pb-0 print:pt-0">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6 print:bg-white print:px-0 print:pb-0 print:pt-0">
       <style>{`@page { size: A4 portrait; margin: 0; }
         @media print {
           html, body { margin: 0; padding: 0; }
@@ -211,7 +211,7 @@ function ShopQrContent({ email }: { email: string }) {
             <button
               type="button"
               onClick={() => window.print()}
-              className="cursor-pointer rounded-xl bg-indigo-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button cursor-pointer px-4 py-2 text-sm font-semibold text-white"
               trackaton-on-click="admin-print-qr"
             >
               Skriv ut A4
@@ -219,7 +219,7 @@ function ShopQrContent({ email }: { email: string }) {
             <Link
               to="/s/$shopSlug/qr"
               params={{ shopSlug: shop.slug }}
-              className="cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              className="relaxed-secondary-button cursor-pointer px-4 py-2 text-sm font-semibold text-slate-700"
               trackaton-on-click="admin-public-qr-page"
             >
               Publik QR-sida
@@ -227,8 +227,8 @@ function ShopQrContent({ email }: { email: string }) {
           </div>
         </header>
 
-        <section className="flex flex-col items-center gap-6 border-t border-slate-200 pt-6 text-center">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section className="relaxed-divider flex flex-col items-center gap-6 border-t pt-6 text-center">
+          <div className="relaxed-surface p-6">
             <QRCodeSVG value={qrValue} size={220} level="M" />
           </div>
           <div className="flex flex-col gap-2">
@@ -237,7 +237,7 @@ function ShopQrContent({ email }: { email: string }) {
             </p>
             <p className="text-sm text-slate-500">{displayUrl}</p>
           </div>
-          <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm text-slate-600">
+          <div className="relaxed-surface-soft flex flex-col gap-2 px-6 py-4 text-sm text-slate-600">
             <p>1. Skanna QR-koden med mobilkamera.</p>
             <p>2. Lägg varor i varukorgen.</p>
             <p>3. Betala direkt med Swish.</p>

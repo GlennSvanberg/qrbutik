@@ -31,8 +31,8 @@ function AdminDashboard() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -44,8 +44,8 @@ function AdminDashboard() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -93,12 +93,12 @@ function AdminDashboard() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -150,8 +150,8 @@ function AdminDashboardContent({ email }: { email: string }) {
   }, [salesSummaries])
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="relative overflow-hidden border-b border-slate-200/80 bg-white">
+    <main className="relaxed-page-shell min-h-screen bg-transparent">
+      <div className="relative overflow-hidden border-b border-slate-200/70 bg-white/70 backdrop-blur">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(67,56,202,0.12),_transparent_65%)]" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10">
           <header className="flex flex-col gap-3">
@@ -169,7 +169,7 @@ function AdminDashboardContent({ email }: { email: string }) {
               </div>
               <Link
                 to="/skapa"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-2xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
                 trackaton-on-click="admin-create-shop"
               >
                 Skapa ny butik
@@ -177,10 +177,10 @@ function AdminDashboardContent({ email }: { email: string }) {
             </div>
           </header>
           <div className="flex flex-wrap gap-3 text-sm text-slate-600">
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1">
+            <span className="relaxed-chip px-3 py-1">
               {shops.length} butiker kopplade
             </span>
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1">
+            <span className="relaxed-chip px-3 py-1">
               Totalsiffror uppdateras i realtid
             </span>
           </div>
@@ -196,7 +196,7 @@ function AdminDashboardContent({ email }: { email: string }) {
           </div>
 
           {shops.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
+            <div className="relaxed-surface rounded-3xl border-dashed p-10 text-center text-sm text-slate-500">
               Ingen butik är kopplad till den här e-posten ännu.
             </div>
           ) : (
@@ -210,7 +210,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                 return (
                   <article
                     key={shop._id}
-                    className="flex h-full flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+                    className="relaxed-surface flex h-full flex-col gap-5 p-6"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <h3 className="text-xl font-semibold text-slate-900">
@@ -230,7 +230,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                     </div>
 
                     <div className="grid gap-3 text-center sm:grid-cols-2">
-                      <div className="rounded-2xl bg-slate-50 p-4">
+                      <div className="relaxed-surface-soft bg-slate-50/70 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                           Total försäljning
                         </p>
@@ -238,7 +238,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                           {formatCurrency(totalRevenue)}
                         </p>
                       </div>
-                      <div className="rounded-2xl bg-slate-50 p-4">
+                      <div className="relaxed-surface-soft bg-slate-50/70 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                           Senaste köp
                         </p>
@@ -263,7 +263,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                       <Link
                         to="/admin/$shopId"
                         params={{ shopId: shop._id }}
-                        className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl bg-indigo-700 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+                        className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
                         trackaton-on-click="admin-edit-shop"
                       >
                         Redigera butik
@@ -272,7 +272,7 @@ function AdminDashboardContent({ email }: { email: string }) {
                         <Link
                           to="/s/$shopSlug"
                           params={{ shopSlug: shop.slug }}
-                          className="inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+                          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
                           trackaton-on-click="admin-visit-shop"
                         >
                           Besök butik

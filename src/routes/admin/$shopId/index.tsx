@@ -37,8 +37,8 @@ function AdminShopDashboard() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -50,8 +50,8 @@ function AdminShopDashboard() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -99,12 +99,12 @@ function AdminShopDashboard() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -156,8 +156,8 @@ function AdminShopContent({ email }: { email: string }) {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -166,7 +166,7 @@ function AdminShopContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -178,8 +178,8 @@ function AdminShopContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -188,7 +188,7 @@ function AdminShopContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -208,7 +208,7 @@ function AdminShopContent({ email }: { email: string }) {
     : '-'
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <AdminHeader
           ownerEmail={email}
@@ -217,9 +217,9 @@ function AdminShopContent({ email }: { email: string }) {
           shopName={shop.name}
         />
 
-        <section className="flex flex-col gap-5 border-b border-slate-200 pb-6">
+        <section className="relaxed-divider flex flex-col gap-5 border-b pb-6">
           <div className="flex items-center justify-center">
-            <div className="grid w-full max-w-2xl grid-cols-5 gap-2 rounded-full border border-slate-200 bg-white p-1">
+            <div className="relaxed-surface-soft grid w-full max-w-2xl grid-cols-5 gap-2 rounded-full p-1">
               {periodOptions.map((option) => {
                 const isActive = period === option.value
                 return (
@@ -230,8 +230,8 @@ function AdminShopContent({ email }: { email: string }) {
                     onClick={() => setPeriod(option.value)}
                     className={`min-h-[2.5rem] w-full whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
                       isActive
-                        ? 'bg-indigo-700 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'relaxed-primary-button text-white'
+                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
                     }`}
                   >
                     {option.label}
@@ -241,7 +241,7 @@ function AdminShopContent({ email }: { email: string }) {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="relaxed-surface-soft p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Totalt
               </p>
@@ -249,7 +249,7 @@ function AdminShopContent({ email }: { email: string }) {
                 {formattedTotal} kr
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="relaxed-surface-soft p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Betalningar
               </p>
@@ -257,7 +257,7 @@ function AdminShopContent({ email }: { email: string }) {
                 {transactionCount}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="relaxed-surface-soft p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Snittköp
               </p>
@@ -265,7 +265,7 @@ function AdminShopContent({ email }: { email: string }) {
                 {formattedAverage} kr
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="relaxed-surface-soft p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                 Senaste köp
               </p>
@@ -276,14 +276,14 @@ function AdminShopContent({ email }: { email: string }) {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4 border-b border-slate-200 pb-6">
+        <section className="relaxed-divider flex flex-col gap-4 border-b pb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-slate-900">
               Topplista
             </h2>
             <span className="text-xs text-slate-500">Topp 5</span>
           </div>
-          <div className="divide-y divide-slate-200/70 rounded-2xl border border-slate-200 bg-white px-4">
+          <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
             {topItems.length === 0 ? (
               <div className="p-6 text-center text-sm text-slate-500">
                 Ingen försäljning ännu.
@@ -318,7 +318,7 @@ function AdminShopContent({ email }: { email: string }) {
             </h2>
             <span className="text-xs text-slate-500">Realtid</span>
           </div>
-          <div className="divide-y divide-slate-200/70 rounded-2xl border border-slate-200 bg-white px-4">
+          <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
             {recentSales.length === 0 ? (
               <div className="p-6 text-center text-sm text-slate-500">
                 Inga köp ännu.

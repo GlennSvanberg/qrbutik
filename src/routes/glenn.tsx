@@ -18,9 +18,9 @@ export const Route = createFileRoute('/glenn')({
 
 function GlennDemoLanding() {
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-12">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 py-12">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
-        <header className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <header className="relaxed-surface p-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             QRButik.se
           </p>
@@ -33,7 +33,7 @@ function GlennDemoLanding() {
           </p>
         </header>
 
-        <section className="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-8 text-center shadow-sm">
+        <section className="relaxed-surface border-indigo-100 bg-indigo-50/60 p-8 text-center">
           <h2 className="text-xl font-semibold text-slate-900">
             Skapa din egen Swish-kiosk
           </h2>
@@ -44,7 +44,7 @@ function GlennDemoLanding() {
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               to="/skapa"
-              className="inline-flex h-12 items-center justify-center rounded-2xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button inline-flex h-12 items-center justify-center px-6 text-base font-semibold text-white"
               trackaton-on-click="glenn-landing-cta"
             >
               Skapa din kiosk
@@ -52,7 +52,7 @@ function GlennDemoLanding() {
             <Link
               to="/s/$shopSlug"
               params={{ shopSlug: 'glenn' }}
-              className="inline-flex h-12 items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+              className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-6 text-base font-semibold text-slate-700"
               trackaton-on-click="glenn-landing-back-demo"
             >
               Tillbaka till demo

@@ -184,8 +184,8 @@ function ShopView() {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -194,7 +194,7 @@ function ShopView() {
           </p>
           <Link
             to="/"
-            className="mx-auto w-fit rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="shop-back-home"
           >
             Till startsidan
@@ -206,8 +206,8 @@ function ShopView() {
 
   if (shop.activationStatus !== 'active' || shop.activeUntil <= Date.now()) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
             QRButik.se
           </p>
@@ -226,7 +226,7 @@ function ShopView() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 pb-32">
+    <main className="relaxed-page-shell min-h-screen bg-transparent pb-32">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8">
         <header className="flex flex-col gap-2 text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
@@ -239,7 +239,7 @@ function ShopView() {
         </header>
 
         {shopSlug === 'glenn' ? (
-          <section className="rounded-3xl border border-indigo-100 bg-indigo-50/60 px-6 py-5 text-center shadow-sm">
+          <section className="relaxed-surface border-indigo-100 bg-indigo-50/60 px-6 py-5 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500">
               Demo av QRButik
             </p>
@@ -251,7 +251,7 @@ function ShopView() {
             </p>
             <Link
               to="/glenn"
-              className="mt-4 inline-flex h-12 items-center justify-center rounded-xl bg-indigo-700 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button mt-4 inline-flex h-12 items-center justify-center px-6 text-sm font-semibold text-white"
               trackaton-on-click="glenn-demo-cta"
             >
               Skapa din kiosk
@@ -269,7 +269,7 @@ function ShopView() {
               return (
                 <div
                   key={product._id}
-                  className="flex items-center justify-between rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-slate-300"
+                  className="relaxed-surface-soft flex items-center justify-between p-5 transition-all hover:border-indigo-200"
                 >
                   <div className="flex flex-col gap-1">
                     <h3 className="font-semibold text-slate-900">
@@ -284,7 +284,7 @@ function ShopView() {
                       <>
                         <button
                           onClick={() => removeFromCart(product._id)}
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 active:scale-95"
+                          className="relaxed-secondary-button flex h-12 w-12 items-center justify-center rounded-full text-slate-600 active:scale-95"
                           trackaton-on-click="shop-remove-from-cart"
                         >
                           <svg
@@ -307,7 +307,7 @@ function ShopView() {
                     )}
                     <button
                       onClick={() => addToCart(product)}
-                      className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-700 transition-colors hover:bg-indigo-100 active:scale-95"
+                      className="relaxed-primary-button flex h-12 w-12 items-center justify-center rounded-full text-white active:scale-95"
                       trackaton-on-click="shop-add-to-cart"
                     >
                       <svg
@@ -330,7 +330,7 @@ function ShopView() {
             })}
 
             {products.length === 0 && (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center text-slate-400">
+              <div className="relaxed-surface rounded-3xl border-dashed p-12 text-center text-slate-400">
                 Inga produkter tillgangliga just nu.
               </div>
             )}
@@ -339,7 +339,7 @@ function ShopView() {
       </div>
 
       {totalPrice > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/80 p-4 backdrop-blur-md">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/70 p-4 backdrop-blur-xl">
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             <div className="flex items-center justify-between px-2">
               <span className="text-slate-500 font-medium">
@@ -352,7 +352,7 @@ function ShopView() {
             <button
               onClick={handlePay}
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-indigo-700 py-4 text-lg font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-800 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+              className="relaxed-primary-button flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-lg font-bold text-white shadow-lg shadow-indigo-300/40 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
               trackaton-on-click="shop-pay-swish"
             >
               {isSubmitting ? (

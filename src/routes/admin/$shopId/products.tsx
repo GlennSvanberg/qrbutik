@@ -43,8 +43,8 @@ function ProductsPage() {
 
   if (isPending) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Laddar adminpanelen...
           </h1>
@@ -56,8 +56,8 @@ function ProductsPage() {
 
   if (!session?.user.email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
           <header className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               QRButik.se
@@ -105,12 +105,12 @@ function ProductsPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-base text-slate-900 outline-none focus:border-indigo-500"
+                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
               />
             </label>
             <button
               type="submit"
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
               trackaton-on-click="admin-login-magic-link"
             >
               Skicka inloggningsmejl
@@ -201,8 +201,8 @@ function ProductsContent({ email }: { email: string }) {
 
   if (!shop) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Butiken hittades inte
           </h1>
@@ -211,7 +211,7 @@ function ProductsContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -223,8 +223,8 @@ function ProductsContent({ email }: { email: string }) {
 
   if (shop.ownerEmail !== email) {
     return (
-      <main className="min-h-screen px-6 py-12">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
             Du har inte behörighet
           </h1>
@@ -233,7 +233,7 @@ function ProductsContent({ email }: { email: string }) {
           </p>
           <Link
             to="/admin"
-            className="mx-auto w-fit cursor-pointer rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
             trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
@@ -244,7 +244,7 @@ function ProductsContent({ email }: { email: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-28 pt-6">
+    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AdminHeader
           ownerEmail={email}
@@ -252,7 +252,7 @@ function ProductsContent({ email }: { email: string }) {
           section="products"
           shopName={shop.name}
         />
-        <section className="flex flex-col gap-6 border-t border-slate-200 pt-6">
+        <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <ProdukterForm
             products={productDrafts}
             onChange={updateProductDrafts}
@@ -309,7 +309,7 @@ function ProductsContent({ email }: { email: string }) {
                   }
                 }
               }}
-              className="h-12 cursor-pointer rounded-xl bg-indigo-700 px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
+              className="relaxed-primary-button h-12 cursor-pointer px-7 text-sm font-semibold text-white"
               trackaton-on-click="admin-products-save"
             >
               Spara ändringar
