@@ -35,8 +35,8 @@ function DiscoverPage() {
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(67,56,202,0.12),_transparent_60%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-slate-50" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(234,88,12,0.14),_transparent_60%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-amber-50" />
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-14 sm:pb-20 sm:pt-20">
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="flex flex-col gap-4">
@@ -116,7 +116,7 @@ function DiscoverPage() {
                   key={page.slug}
                   to={page.slug}
                   trackaton-on-click="discover-page"
-                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white/85 px-4 py-3 transition hover:border-indigo-200 hover:bg-white"
+                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white/85 px-4 py-3 transition hover:border-amber-200 hover:bg-white"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-slate-900">
@@ -126,7 +126,7 @@ function DiscoverPage() {
                       {page.city.region} • {page.sport.name}
                     </p>
                   </div>
-                  <span className="text-sm font-semibold text-indigo-700 transition group-hover:translate-x-0.5">
+                  <span className="text-sm font-semibold text-amber-700 transition group-hover:translate-x-0.5">
                     →
                   </span>
                 </Link>

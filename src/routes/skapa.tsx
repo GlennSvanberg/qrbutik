@@ -313,7 +313,7 @@ function CreateShopWizard() {
                 den manuellt.
               </p>
 
-              <div className="relaxed-surface-soft bg-slate-50/70 px-5 py-4 text-sm text-slate-600">
+              <div className="relaxed-surface-soft bg-amber-50/70 px-5 py-4 text-sm text-slate-600">
                 <div className="flex items-center justify-between">
                   <span>Butik</span>
                   <span className="font-semibold text-slate-900">

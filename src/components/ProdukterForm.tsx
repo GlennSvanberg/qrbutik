@@ -82,7 +82,7 @@ export function ProdukterForm({
       <button
         type="button"
         onClick={onAddRow}
-        className="relaxed-secondary-button h-12 cursor-pointer border-dashed px-6 text-sm font-semibold text-indigo-700"
+        className="relaxed-secondary-button h-12 cursor-pointer border-dashed px-6 text-sm font-semibold text-amber-700"
         trackaton-on-click="product-add-row"
       >
         Lägg till en ny rad
