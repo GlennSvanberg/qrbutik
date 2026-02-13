@@ -166,8 +166,8 @@ function PseoPage() {
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(234,88,12,0.14),_transparent_60%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-amber-50" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(146,116,84,0.14),_transparent_60%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-stone-50" />
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-14 sm:pb-20 sm:pt-20">
           <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="flex flex-col gap-7">
@@ -557,7 +557,7 @@ function PseoPage() {
                 ))}
               </div>
 
-              <blockquote className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/70 p-5">
+              <blockquote className="mt-6 rounded-2xl border border-stone-200 bg-stone-50/70 p-5">
                 <p className="text-pretty text-lg font-semibold text-slate-900">
                   {copy.testimonial.quote}
                 </p>

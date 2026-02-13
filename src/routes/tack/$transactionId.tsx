@@ -79,7 +79,7 @@ function ThankYouView() {
 
         <section className="relaxed-surface flex flex-col gap-6 p-8">
           <div className="flex flex-col gap-4">
-            <div className="relaxed-surface-soft flex flex-col items-center justify-center gap-1 bg-amber-50/80 py-6 text-center">
+            <div className="relaxed-surface-soft flex flex-col items-center justify-center gap-1 bg-stone-50/80 py-6 text-center">
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
                 Referensnummer
               </p>
@@ -96,7 +96,7 @@ function ThankYouView() {
                 {transaction.items.map((item, index) => (
                   <div key={index} className="flex justify-between py-3">
                     <div className="flex gap-3">
-                      <span className="font-bold text-amber-700">
+                      <span className="font-bold text-stone-700">
                         {item.quantity}x
                       </span>
                       <span className="font-medium text-slate-700">
@@ -111,7 +111,7 @@ function ThankYouView() {
               </div>
               <div className="flex justify-between border-t border-slate-200 pt-4">
                 <span className="text-lg font-bold text-slate-900">Totalt</span>
-                <span className="text-xl font-black text-amber-700">
+                <span className="text-xl font-black text-stone-700">
                   {transaction.amount} kr
                 </span>
               </div>
@@ -120,8 +120,8 @@ function ThankYouView() {
         </section>
 
         {transaction.shopName.toLowerCase().includes('glenn') ? (
-          <section className="relaxed-surface border-amber-200 bg-amber-50/70 p-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-600">
+          <section className="relaxed-surface border-stone-200 bg-stone-50/70 p-6 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
               QRButik-demo
             </p>
             <h2 className="mt-2 text-lg font-semibold text-slate-900">
@@ -147,7 +147,7 @@ function ThankYouView() {
           </p>
           <Link
             to="/"
-            className="text-sm font-semibold text-amber-700 hover:text-amber-800"
+            className="text-sm font-semibold text-stone-700 hover:text-stone-800"
             trackaton-on-click="thankyou-back-home"
           >
             ← Till startsidan

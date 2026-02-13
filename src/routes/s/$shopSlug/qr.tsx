@@ -83,7 +83,7 @@ function ShopQrPublicPage() {
 
         <section className="flex flex-col items-center">
           <div className="relaxed-surface flex flex-col items-center gap-6 p-8 text-center">
-            <div className="relaxed-surface-soft rounded-3xl bg-amber-50/70 p-6">
+            <div className="relaxed-surface-soft rounded-3xl bg-stone-50/70 p-6">
               <QRCodeSVG value={qrValue} size={240} level="M" />
             </div>
             <div className="flex flex-col gap-1">

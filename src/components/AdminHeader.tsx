@@ -79,7 +79,7 @@ export function AdminHeader({
       <div className="flex items-center justify-between gap-3">
         <Link
           to="/admin"
-          className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-3 text-xs font-semibold text-amber-700"
+          className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-3 text-xs font-semibold text-stone-700"
           trackaton-on-click="admin-back"
         >
           Tillbaka
@@ -142,13 +142,13 @@ export function AdminHeader({
                 }}
                 className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition ${
                   shop._id === shopId
-                    ? 'border-amber-200 bg-amber-50/80 text-amber-700'
-                    : 'border-slate-200/80 bg-white/80 text-slate-700 hover:border-amber-200 hover:bg-amber-50/40'
+                    ? 'border-stone-200 bg-stone-50/80 text-stone-700'
+                    : 'border-slate-200/80 bg-white/80 text-slate-700 hover:border-stone-200 hover:bg-stone-50/40'
                 }`}
               >
                 <span>{shop.name}</span>
                 {shop._id === shopId ? (
-                  <span className="text-xs text-amber-600">Aktiv</span>
+                  <span className="text-xs text-stone-600">Aktiv</span>
                 ) : null}
               </button>
             ))}

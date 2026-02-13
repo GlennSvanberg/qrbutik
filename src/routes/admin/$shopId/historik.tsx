@@ -297,7 +297,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
                               }
                             }
                           }}
-                          className="h-4 w-4 cursor-pointer accent-amber-700"
+                          className="h-4 w-4 cursor-pointer accent-stone-700"
                           trackaton-on-click="admin-verify-transaction"
                         />
                       </span>
@@ -322,7 +322,7 @@ function PurchaseHistoryContent({ email }: { email: string }) {
                       </span>
                     </div>
                     {isExpanded ? (
-                      <div className="relaxed-surface-soft mt-3 bg-amber-50/70 px-4 py-3 text-xs text-slate-600">
+                      <div className="relaxed-surface-soft mt-3 bg-stone-50/70 px-4 py-3 text-xs text-slate-600">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                           Varor
                         </p>

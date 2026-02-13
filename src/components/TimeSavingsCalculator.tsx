@@ -14,13 +14,13 @@ export function TimeSavingsCalculator({
   const totalSavedMinutes = Math.round((customers * timeSavedPerCustomer) / 60)
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-amber-200/70 bg-gradient-to-br from-amber-700 via-orange-700 to-rose-600 p-8 text-white shadow-xl shadow-orange-900/25 sm:p-12">
-      <div className="absolute right-0 top-0 -mr-10 -mt-10 h-64 w-64 rounded-full bg-amber-300 opacity-20 blur-3xl" />
-      <div className="absolute bottom-0 left-0 -mb-10 -ml-10 h-64 w-64 rounded-full bg-rose-300 opacity-20 blur-3xl" />
+    <div className="relative overflow-hidden rounded-3xl border border-stone-300/70 bg-gradient-to-br from-stone-700 via-amber-700 to-stone-600 p-8 text-white shadow-xl shadow-stone-900/25 sm:p-12">
+      <div className="absolute right-0 top-0 -mr-10 -mt-10 h-64 w-64 rounded-full bg-amber-200 opacity-20 blur-3xl" />
+      <div className="absolute bottom-0 left-0 -mb-10 -ml-10 h-64 w-64 rounded-full bg-stone-300 opacity-20 blur-3xl" />
 
       <div className="relative z-10">
         <h2 className="mb-2 text-2xl font-semibold">{title}</h2>
-        <p className="mb-8 text-orange-100/90">{subtitle}</p>
+        <p className="mb-8 text-amber-100/90">{subtitle}</p>
 
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-8">
@@ -38,13 +38,13 @@ export function TimeSavingsCalculator({
                 step="10"
                 value={customers}
                 onChange={(e) => setCustomers(parseInt(e.target.value))}
-                className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-orange-500/70 accent-white outline-none ring-offset-2 focus:ring-2 focus:ring-amber-300"
+                className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-amber-500/70 accent-white outline-none ring-offset-2 focus:ring-2 focus:ring-amber-200"
                 trackaton-on-click="adjust-customers"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-xl bg-orange-900/30 p-4 backdrop-blur-sm">
+              <div className="rounded-xl bg-stone-900/30 p-4 backdrop-blur-sm">
                 <div className="mb-1 text-xs uppercase tracking-wider text-amber-200">
                   Traditionellt
                 </div>
@@ -54,13 +54,13 @@ export function TimeSavingsCalculator({
                 <div className="text-xs text-amber-200">kötid</div>
               </div>
               <div className="rotate-[0.25deg] rounded-xl border border-white/25 bg-white/12 p-4 backdrop-blur-sm">
-                <div className="mb-1 text-xs uppercase tracking-wider text-orange-100">
+                <div className="mb-1 text-xs uppercase tracking-wider text-amber-100">
                   Med QRButik
                 </div>
                 <div className="text-2xl font-bold text-white">
                   ~{Math.round((customers * 15) / 60)} min
                 </div>
-                <div className="text-xs text-orange-200">kötid</div>
+                <div className="text-xs text-amber-200">kötid</div>
               </div>
             </div>
           </div>
@@ -70,8 +70,8 @@ export function TimeSavingsCalculator({
               <div className="mb-2 text-6xl font-bold text-emerald-300">
                 {totalSavedMinutes} min
               </div>
-              <div className="text-lg text-orange-100">sparad tid totalt</div>
-              <p className="mx-auto mt-4 max-w-xs text-sm text-orange-200">
+              <div className="text-lg text-amber-100">sparad tid totalt</div>
+              <p className="mx-auto mt-4 max-w-xs text-sm text-amber-200">
                 Tid ni kan lägga på att se matchen eller prata med besökarna
                 istället för att räkna växel.
               </p>

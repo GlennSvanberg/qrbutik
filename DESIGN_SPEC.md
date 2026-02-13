@@ -7,7 +7,7 @@ The design should evoke **Trust & Clarity**. It should be clean, functional, and
 All theming should be maintained in `src/styles/app.css`.
 
 - **Background:** `#FFF7ED` (Amber 50) - light, warm, and welcoming.
-- **Primary (Buttons):** Warm Terracotta (`#C2410C`) - clear and energetic without feeling harsh.
+- **Primary (Buttons):** Caramel Brown (`#7C5A3A`) - warm and calm without warning-like tones.
 - **Success:** Emerald Green (`#10B981`) - for verified payments and positive feedback.
 - **Typography:** Inter or Geist (Sans-serif) - modern and readable.
 
