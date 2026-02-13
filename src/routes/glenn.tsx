@@ -33,7 +33,7 @@ function GlennDemoLanding() {
           </p>
         </header>
 
-        <section className="relaxed-surface border-indigo-100 bg-indigo-50/60 p-8 text-center">
+        <section className="relaxed-surface border-stone-200 bg-stone-50/70 p-8 text-center">
           <h2 className="text-xl font-semibold text-slate-900">
             Skapa din egen Swish-kiosk
           </h2>

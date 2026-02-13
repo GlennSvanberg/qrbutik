@@ -239,8 +239,8 @@ function ShopView() {
         </header>
 
         {shopSlug === 'glenn' ? (
-          <section className="relaxed-surface border-indigo-100 bg-indigo-50/60 px-6 py-5 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500">
+          <section className="relaxed-surface border-stone-200 bg-stone-50/70 px-6 py-5 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
               Demo av QRButik
             </p>
             <h2 className="mt-2 text-lg font-semibold text-slate-900">
@@ -269,7 +269,7 @@ function ShopView() {
               return (
                 <div
                   key={product._id}
-                  className="relaxed-surface-soft flex items-center justify-between p-5 transition-all hover:border-indigo-200"
+                  className="relaxed-surface-soft flex items-center justify-between p-5 transition-all hover:border-stone-200"
                 >
                   <div className="flex flex-col gap-1">
                     <h3 className="font-semibold text-slate-900">
@@ -352,7 +352,7 @@ function ShopView() {
             <button
               onClick={handlePay}
               disabled={isSubmitting}
-              className="relaxed-primary-button flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-lg font-bold text-white shadow-lg shadow-indigo-300/40 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+              className="relaxed-primary-button flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-lg font-bold text-white shadow-lg shadow-stone-300/40 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
               trackaton-on-click="shop-pay-swish"
             >
               {isSubmitting ? (

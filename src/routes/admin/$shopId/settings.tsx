@@ -253,7 +253,7 @@ function SettingsContent({ email }: { email: string }) {
           <Link
             to="/s/$shopSlug"
             params={{ shopSlug: shop.slug }}
-            className="w-fit cursor-pointer text-sm font-semibold text-indigo-700 hover:text-indigo-600"
+            className="w-fit cursor-pointer text-sm font-semibold text-stone-700 hover:text-stone-600"
             trackaton-on-click="admin-open-shop"
           >
             Öppna butiken
@@ -310,7 +310,7 @@ function SettingsContent({ email }: { email: string }) {
             </p>
           </div>
 
-          <div className="relaxed-surface-soft bg-slate-50/70 px-5 py-4 text-sm text-slate-600">
+          <div className="relaxed-surface-soft bg-stone-50/70 px-5 py-4 text-sm text-slate-600">
             <div className="flex items-center justify-between">
               <span>Status</span>
               <span className="font-semibold text-slate-900">
