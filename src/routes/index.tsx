@@ -202,7 +202,7 @@ function Home() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-50/90">
                     <img
                       src="/before.jpg"
                       alt="Handskriven prislista"
@@ -212,7 +212,7 @@ function Home() {
                       F&ouml;re: handskrivet
                     </p>
                   </div>
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-50/90">
                     <img
                       src="/after.jpg"
                       alt="Digital kiosk med meny"
@@ -321,7 +321,7 @@ function Home() {
                 {pricingPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className="rounded-2xl border border-slate-200 bg-white/80 p-5"
+                    className="rounded-2xl border border-stone-200 bg-stone-50/85 p-5"
                   >
                     <div className="flex items-end justify-between gap-4">
                       <div>

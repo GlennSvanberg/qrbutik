@@ -464,7 +464,7 @@ function SettingsContent({ email }: { email: string }) {
                     type="text"
                     value={deleteShopName}
                     onChange={(event) => setDeleteShopName(event.target.value)}
-                    className="relaxed-input h-12 border-rose-200 bg-white px-4 text-base text-slate-900 outline-none focus:border-rose-400"
+                    className="relaxed-input h-12 border-rose-200 bg-stone-50 px-4 text-base text-slate-900 outline-none focus:border-rose-400"
                     placeholder={shop.name}
                   />
                 </label>

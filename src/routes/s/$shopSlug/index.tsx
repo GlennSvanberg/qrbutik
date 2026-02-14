@@ -339,7 +339,7 @@ function ShopView() {
       </div>
 
       {totalPrice > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/80 bg-white/70 p-4 backdrop-blur-xl">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-stone-200/80 bg-stone-50/80 p-4 backdrop-blur-xl">
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             <div className="flex items-center justify-between px-2">
               <span className="text-slate-500 font-medium">

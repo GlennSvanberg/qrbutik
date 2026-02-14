@@ -255,7 +255,7 @@ function ShopQrContent({ email }: { email: string }) {
         </div>
 
         <div className="flex flex-col items-center gap-8">
-          <div className="rounded-[44px] border border-slate-200 bg-white p-10">
+          <div className="rounded-[44px] border border-stone-200 bg-stone-50 p-10">
             <QRCodeSVG value={qrValue} size={420} level="M" />
           </div>
           <div className="h-px w-40 bg-slate-200" />

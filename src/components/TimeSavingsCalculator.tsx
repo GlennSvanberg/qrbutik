@@ -53,7 +53,7 @@ export function TimeSavingsCalculator({
                 </div>
                 <div className="text-xs text-amber-200">kötid</div>
               </div>
-              <div className="rotate-[0.25deg] rounded-xl border border-white/25 bg-white/12 p-4 backdrop-blur-sm">
+              <div className="rotate-[0.25deg] rounded-xl border border-amber-100/30 bg-amber-50/15 p-4 backdrop-blur-sm">
                 <div className="mb-1 text-xs uppercase tracking-wider text-amber-100">
                   Med QRButik
                 </div>

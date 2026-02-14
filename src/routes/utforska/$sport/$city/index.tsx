@@ -256,7 +256,7 @@ function PseoPage() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-50/90">
                     <img
                       src="/before.jpg"
                       alt="Handskriven prislista"
@@ -266,7 +266,7 @@ function PseoPage() {
                       F&ouml;re: handskrivet
                     </p>
                   </div>
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <div className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-50/90">
                     <img
                       src="/after.jpg"
                       alt="Digital kiosk med meny"
@@ -338,7 +338,7 @@ function PseoPage() {
                 {copy.steps.map((step, idx) => (
                   <li
                     key={step.title}
-                    className="rounded-xl border border-slate-200 bg-white/80 p-4"
+                    className="rounded-xl border border-stone-200 bg-stone-50/85 p-4"
                   >
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
                       Steg 0{idx + 1}
@@ -371,7 +371,7 @@ function PseoPage() {
                 beställningen till sista avstämningen.
               </p>
 
-              <div className="rounded-2xl border border-slate-200 bg-white/80 p-5 text-sm text-slate-600">
+              <div className="rounded-2xl border border-stone-200 bg-stone-50/85 p-5 text-sm text-slate-600">
                 <p className="font-semibold text-slate-900">Stadens karaktär</p>
                 <p className="mt-2">{copy.heritageText}</p>
               </div>
@@ -412,7 +412,7 @@ function PseoPage() {
               </ul>
 
               <div className="space-y-3">
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+                <div className="rounded-2xl border border-stone-200 bg-stone-50/85 p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
                     {copy.environment.title}
                   </p>
@@ -420,7 +420,7 @@ function PseoPage() {
                     {copy.environment.text}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+                <div className="rounded-2xl border border-stone-200 bg-stone-50/85 p-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
                     {copy.season.title}
                   </p>
@@ -493,7 +493,7 @@ function PseoPage() {
                 ))}
               </ul>
 
-              <div className="rounded-2xl border border-slate-200 bg-white/80 p-6">
+              <div className="rounded-2xl border border-stone-200 bg-stone-50/85 p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
                   Vanliga frågor
                 </p>
@@ -527,7 +527,7 @@ function PseoPage() {
                 {pricingPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className="rounded-2xl border border-slate-200 bg-white/80 p-5"
+                    className="rounded-2xl border border-stone-200 bg-stone-50/85 p-5"
                   >
                     <div className="flex items-end justify-between gap-4">
                       <div>
