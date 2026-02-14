@@ -7,21 +7,21 @@ export function MarketingFooter() {
       <div className="flex flex-wrap justify-center gap-6">
         <a
           href="/kontakt"
-          className="rounded-full px-3 py-1 transition hover:bg-white/70 hover:text-slate-900"
+          className="rounded-full px-3 py-1 transition hover:bg-stone-50/80 hover:text-slate-900"
           trackaton-on-click="footer-kontakt"
         >
           Kontakt
         </a>
         <a
           href="/support"
-          className="rounded-full px-3 py-1 transition hover:bg-white/70 hover:text-slate-900"
+          className="rounded-full px-3 py-1 transition hover:bg-stone-50/80 hover:text-slate-900"
           trackaton-on-click="footer-support"
         >
           Support
         </a>
         <a
           href="/villkor"
-          className="rounded-full px-3 py-1 transition hover:bg-white/70 hover:text-slate-900"
+          className="rounded-full px-3 py-1 transition hover:bg-stone-50/80 hover:text-slate-900"
           trackaton-on-click="footer-villkor"
         >
           Villkor

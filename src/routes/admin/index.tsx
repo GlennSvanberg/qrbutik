@@ -151,7 +151,7 @@ function AdminDashboardContent({ email }: { email: string }) {
 
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
-      <div className="relative overflow-hidden border-b border-slate-200/70 bg-white/70 backdrop-blur">
+      <div className="relative overflow-hidden border-b border-stone-200/70 bg-stone-50/80 backdrop-blur">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(146,116,84,0.14),_transparent_65%)]" />
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10">
           <header className="flex flex-col gap-3">

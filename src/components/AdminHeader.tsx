@@ -143,7 +143,7 @@ export function AdminHeader({
                 className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition ${
                   shop._id === shopId
                     ? 'border-stone-200 bg-stone-50/80 text-stone-700'
-                    : 'border-slate-200/80 bg-white/80 text-slate-700 hover:border-stone-200 hover:bg-stone-50/40'
+                    : 'border-stone-200/80 bg-stone-50/80 text-slate-700 hover:border-stone-300 hover:bg-stone-100/60'
                 }`}
               >
                 <span>{shop.name}</span>

@@ -150,7 +150,7 @@ export const Route = createRootRouteWithContext<{
           sizes: '16x16',
           href: '/qrbutik_logo.png',
         },
-        { rel: 'manifest', href: '/site.webmanifest', color: '#fffff' },
+        { rel: 'manifest', href: '/site.webmanifest', color: '#fff7ed' },
         { rel: 'icon', href: '/qrbutik_logo.png' },
         { rel: 'canonical', href: canonicalUrl },
       ],

@@ -116,7 +116,7 @@ function DiscoverPage() {
                   key={page.slug}
                   to={page.slug}
                   trackaton-on-click="discover-page"
-                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white/85 px-4 py-3 transition hover:border-stone-200 hover:bg-white"
+                  className="group flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-stone-200 bg-stone-50/90 px-4 py-3 transition hover:border-stone-300 hover:bg-stone-50"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-slate-900">
