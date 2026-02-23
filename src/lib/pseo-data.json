@@ -4095,6 +4095,246 @@
           "url": "https://www.visitkiruna.se/"
         }
       ]
+    },
+    {
+      "slug": "gavle",
+      "name": "Gävle",
+      "region": "Gävleborgs län",
+      "heritageTextVariants": [
+        "Gävle är en kuststad i Gästrikland med ett aktivt föreningsliv. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Gävle samlas publik kring matcher och cuper året runt. En digital kiosk håller flödet enkelt även när trycket ökar.",
+        "Gävles idrottsarrangemang ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Många matcher spelas med korta pauser där publiken vill handla snabbt.",
+          "Tydliga menyer minskar väntan vid kiosken."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel i stressen."
+        ],
+        [
+          "Cuper och ungdomsturneringar ger återkommande köp under dagen.",
+          "Självbetjäning avlastar när ideella turas om."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där flera lag delar kioskansvaret.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Gävle kommun",
+          "url": "https://www.gavle.se/"
+        },
+        {
+          "label": "Visit Gävle",
+          "url": "https://www.visitgavle.se/"
+        }
+      ]
+    },
+    {
+      "slug": "falun",
+      "name": "Falun",
+      "region": "Dalarnas län",
+      "heritageTextVariants": [
+        "Falun har ett levande föreningsliv och stark idrottstradition. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Falun arrangeras matcher och cuper under hela året. En digital kiosk håller flödet enkelt även när trycket är högt.",
+        "Faluns evenemang ger återkommande köptoppar i pauser och raster. QRButik hjälper er att hålla kön rörlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Hallar med korta pauser kräver snabba köp och tydliga val.",
+          "Tydliga priser minskar frågor vid disken."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Publiken vill hinna handla utan att missa nästa start."
+        ],
+        [
+          "Turneringar kan ge många beställningar i vågor.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher där flödet ökar i pauserna."
+        ],
+        [
+          "Cuphelger där flera lag turas om i kiosken.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Falu kommun",
+          "url": "https://www.falun.se/"
+        },
+        {
+          "label": "Visit Dalarna",
+          "url": "https://www.visitdalarna.se/"
+        }
+      ]
+    },
+    {
+      "slug": "borlange",
+      "name": "Borlänge",
+      "region": "Dalarnas län",
+      "heritageTextVariants": [
+        "Borlänge har ett brett idrottsliv med arrangemang året runt. QRButik gör kiosken smidig när många vill handla samtidigt.",
+        "I Borlänge samlas publik kring hallar, planer och cuphelger. En digital kiosk håller köerna korta när tempot stiger.",
+        "Borlänges matchdagar ger tydliga toppar i kiosken. QRButik gör betalningen snabb och tydlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Många matcher spelas med korta pauser där publiken vill handla direkt.",
+          "Tydliga menyer gör köerna mer hanterbara."
+        ],
+        [
+          "Cuper med flera lag ger återkommande köp under dagen.",
+          "Swish med rätt belopp minskar fel och följdfrågor."
+        ],
+        [
+          "Utomhusmatcher kräver synlig QR-kod och enkel skyltning.",
+          "Självbetjäning avlastar när ideella turas om."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta raster.",
+          "Utomhusmatcher med publik i vågor."
+        ],
+        [
+          "Cuphelger där flera lag delar kioskansvar.",
+          "Föreningsdagar med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig rapport efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Borlänge kommun",
+          "url": "https://www.borlange.se/"
+        },
+        {
+          "label": "Visit Dalarna",
+          "url": "https://www.visitdalarna.se/"
+        }
+      ]
+    },
+    {
+      "slug": "karlstad",
+      "name": "Karlstad",
+      "region": "Värmlands län",
+      "heritageTextVariants": [
+        "Karlstad har ett aktivt föreningsliv med matcher och cuper året runt. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Karlstad samlas publik i hallar och på planer under hela säsongen. En digital kiosk håller flödet enkelt även vid hög belastning.",
+        "Karlstads idrottsarrangemang ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla kön rörlig."
+      ],
+      "localNotesVariants": [
+        [
+          "Hallar med tajta raster kräver snabba köp och tydliga val.",
+          "Publiken vill handla utan att missa nästa period."
+        ],
+        [
+          "Utomhusarrangemang behöver synlig QR-kod och enkel skyltning.",
+          "Tydliga priser minskar frågor i kön."
+        ],
+        [
+          "Cuper och turneringar ger återkommande köp under dagen.",
+          "Självbetjäning avlastar när bemanningen roterar."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med korta pauser.",
+          "Utomhusmatcher med publik som kommer i vågor."
+        ],
+        [
+          "Cuphelger där flera lag turas om i kiosken.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha enkel avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell hantering."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Karlstads kommun",
+          "url": "https://karlstad.se/"
+        },
+        {
+          "label": "Visit Karlstad",
+          "url": "https://www.visitkarlstad.se/"
+        }
+      ]
+    },
+    {
+      "slug": "vaxjo",
+      "name": "Växjö",
+      "region": "Kronobergs län",
+      "heritageTextVariants": [
+        "Växjö har ett aktivt föreningsliv och många idrottsarrangemang. QRButik gör kiosken smidig när publiken vill handla snabbt.",
+        "I Växjö samlas publik kring matcher och cuper året runt. En digital kiosk håller flödet enkelt även när trycket ökar.",
+        "Växjös matchdagar ger tydliga köptoppar i pauserna. QRButik hjälper er att hålla köerna korta."
+      ],
+      "localNotesVariants": [
+        [
+          "Många matcher spelas med korta pauser där snabb betalning är viktig.",
+          "Tydliga menyer minskar väntan vid kiosken."
+        ],
+        [
+          "Utomhusarrangemang kräver synlig QR-kod och enkel skyltning.",
+          "Swish med rätt belopp minskar fel i stressen."
+        ],
+        [
+          "Cuper och föreningsdagar ger återkommande köp under dagen.",
+          "Självbetjäning avlastar när ideella turas om."
+        ]
+      ],
+      "useCasesVariants": [
+        [
+          "Inomhusmatcher med tajta raster.",
+          "Utomhusmatcher med publik i vågor."
+        ],
+        [
+          "Cuphelger där flera lag delar kioskansvar.",
+          "Föreningsarrangemang med hög belastning."
+        ],
+        [
+          "Kioskdrift där ni vill ha tydlig avstämning efteråt.",
+          "Arrangemang där ni vill slippa manuell totalsumma."
+        ]
+      ],
+      "officialLinks": [
+        {
+          "label": "Växjö kommun",
+          "url": "https://www.vaxjo.se/"
+        },
+        {
+          "label": "Visit Småland",
+          "url": "https://www.visitsmaland.se/"
+        }
+      ]
     }
   ]
 }
