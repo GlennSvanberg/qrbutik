@@ -5,11 +5,15 @@ import {
   getAllCities,
   getAllSports,
   getPseoCopy,
+  getPseoPagesForSport,
   getPseoSlug,
+  getPseoSportHubSlug,
 } from '~/lib/pseo'
 
 const SITE_URL =
   (import.meta as any).env.VITE_SITE_URL ?? 'https://qrbutik.se'
+
+const MAX_RELATED_CITIES = 18
 
 const buildAbsoluteUrl = (pathname: string) => {
   try {
@@ -44,10 +48,23 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
     }
 
     const title = `QR-kiosk för ${copy.sport.name} i ${copy.city.name} | QRButik`
-    const description = `${copy.sport.name} i ${copy.city.name}: snabb kiosk med Swish. Kortare köer, tydliga priser och smart rapport för föreningar.`
+    const localAngle =
+      copy.localNotes[0] ??
+      `${copy.matchContext} i ${copy.city.name} innebär ofta ${copy.crowdContext}.`
+    const description = `${copy.sport.name} i ${copy.city.name}, ${copy.city.region}. ${localAngle} QRButik ger snabb Swish-kiosk med tydlig försäljningsrapport.`
     const pageUrl = buildAbsoluteUrl(
       `/utforska/${copy.sport.slug}/${copy.city.slug}`,
     )
+    const sportHubUrl = buildAbsoluteUrl(getPseoSportHubSlug(copy.sport.slug))
+    const breadcrumb = [
+      { name: 'Hem', item: buildAbsoluteUrl('/') },
+      { name: 'Utforska', item: buildAbsoluteUrl('/utforska') },
+      { name: copy.sport.name, item: sportHubUrl },
+      { name: `${copy.sport.name} i ${copy.city.name}`, item: pageUrl },
+    ]
+    const relatedSportPages = getPseoPagesForSport(copy.sport.slug)
+      .filter((page) => page.city.slug !== copy.city.slug)
+      .slice(0, 24)
 
     return {
       meta: [
@@ -69,6 +86,10 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
         {
           property: 'og:url',
           content: pageUrl,
+        },
+        {
+          property: 'og:type',
+          content: 'article',
         },
         {
           name: 'twitter:title',
@@ -107,6 +128,26 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
                   },
                 })),
               },
+              {
+                '@type': 'BreadcrumbList',
+                '@id': `${pageUrl}#breadcrumb`,
+                itemListElement: breadcrumb.map((entry, idx) => ({
+                  '@type': 'ListItem',
+                  position: idx + 1,
+                  name: entry.name,
+                  item: entry.item,
+                })),
+              },
+              {
+                '@type': 'ItemList',
+                '@id': `${pageUrl}#relatedPages`,
+                itemListElement: relatedSportPages.map((entry, idx) => ({
+                  '@type': 'ListItem',
+                  position: idx + 1,
+                  name: `${copy.sport.name} i ${entry.city.name}`,
+                  url: buildAbsoluteUrl(entry.slug),
+                })),
+              },
             ],
           },
         },
@@ -119,8 +160,20 @@ export const Route = createFileRoute('/utforska/$sport/$city/')({
 function PseoPage() {
   const copy = Route.useLoaderData()
 
-  const relatedCities = getAllCities().filter(
-    (item) => item.slug !== copy.city.slug,
+  const sportHubSlug = getPseoSportHubSlug(copy.sport.slug)
+  const totalSportCities = getPseoPagesForSport(copy.sport.slug).length
+  const allOtherCities = getAllCities()
+    .filter((item) => item.slug !== copy.city.slug)
+    .sort((a, b) => a.name.localeCompare(b.name, 'sv'))
+  const sameRegionCities = allOtherCities.filter(
+    (item) => item.region === copy.city.region,
+  )
+  const differentRegionCities = allOtherCities.filter(
+    (item) => item.region !== copy.city.region,
+  )
+  const relatedCities = [...sameRegionCities, ...differentRegionCities].slice(
+    0,
+    MAX_RELATED_CITIES,
   )
   const relatedSports = getAllSports().filter(
     (item) => item.slug !== copy.sport.slug,
@@ -172,6 +225,33 @@ function PseoPage() {
           <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="flex flex-col gap-7">
               <div className="flex flex-col gap-4">
+                <nav
+                  aria-label="Brödsmulor"
+                  className="flex flex-wrap items-center gap-2 text-xs text-slate-500"
+                >
+                  <Link
+                    to="/"
+                    className="cursor-pointer underline decoration-slate-300 underline-offset-4"
+                  >
+                    Hem
+                  </Link>
+                  <span>/</span>
+                  <Link
+                    to="/utforska"
+                    className="cursor-pointer underline decoration-slate-300 underline-offset-4"
+                  >
+                    Utforska
+                  </Link>
+                  <span>/</span>
+                  <Link
+                    to={sportHubSlug}
+                    className="cursor-pointer underline decoration-slate-300 underline-offset-4"
+                  >
+                    {copy.sport.name}
+                  </Link>
+                  <span>/</span>
+                  <span className="font-semibold text-slate-700">{copy.city.name}</span>
+                </nav>
                 <div className="flex items-center gap-3">
                   <img
                     src="/qrbutik_logo.png"
@@ -194,7 +274,7 @@ function PseoPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
+                <Link
                   to="/skapa"
                   trackaton-on-click="pseo-create-kiosk-hero"
                   className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
@@ -573,11 +653,15 @@ function PseoPage() {
           <div className="premium-shell grid gap-8 lg:grid-cols-2">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
-                Fler städer
+                Utvalda städer
               </p>
               <h3 className="mt-3 text-lg font-semibold text-slate-900">
                 {copy.sport.name} i andra städer
               </h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Prioriterat med städer nära {copy.city.name}, plus fler relevanta
+                alternativ.
+              </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {relatedCities.map((item) => (
                   <Link
@@ -589,6 +673,12 @@ function PseoPage() {
                   </Link>
                 ))}
               </div>
+              <Link
+                to={sportHubSlug}
+                className="mt-4 inline-flex cursor-pointer text-sm font-semibold text-slate-700 underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900"
+              >
+                Se alla {totalSportCities} städer för {copy.sport.name}
+              </Link>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
@@ -597,6 +687,10 @@ function PseoPage() {
               <h3 className="mt-3 text-lg font-semibold text-slate-900">
                 {copy.city.name} för fler idrotter
               </h3>
+              <p className="mt-2 text-sm text-slate-600">
+                Byt sport eller gå tillbaka till utforskaren för att jämföra alla
+                kombinationer.
+              </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {relatedSports.map((item) => (
                   <Link
