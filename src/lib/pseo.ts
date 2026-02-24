@@ -217,6 +217,8 @@ const seasonCopy = {
 const buildSlug = (sportSlug: string, citySlug: string) =>
   `/utforska/${sportSlug}/${citySlug}`
 
+const buildSportHubSlug = (sportSlug: string) => `/utforska/${sportSlug}`
+
 const pickVariant = <T,>(variants: Array<T>, seed: string): T => {
   let hash = 0
   for (let i = 0; i < seed.length; i += 1) {
@@ -248,6 +250,19 @@ export const getAllPseoPages = (): Array<PseoPage> => {
       slug: buildSlug(sport.slug, city.slug)
     }))
   )
+}
+
+export const getPseoPagesForSport = (sportSlug: string): Array<PseoPage> => {
+  const sport = getSportBySlug(sportSlug)
+  if (!sport) {
+    return []
+  }
+
+  return getAllCities().map((city) => ({
+    sport,
+    city,
+    slug: buildSlug(sport.slug, city.slug),
+  }))
 }
 
 export const getPseoCopy = (sportSlug: string, citySlug: string) => {
@@ -324,3 +339,4 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
 }
 
 export const getPseoSlug = buildSlug
+export const getPseoSportHubSlug = buildSportHubSlug

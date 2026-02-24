@@ -99,6 +99,7 @@ const run = async () => {
     'src/lib/pseo-data.json',
     'src/lib/pseo.ts',
     'src/routes/utforska/index.tsx',
+    'src/routes/utforska/$sport/index.tsx',
     'src/routes/utforska/$sport/$city/index.tsx',
   ])
 
@@ -125,13 +126,22 @@ const run = async () => {
   const dynamicPaths = sports.flatMap((sport) =>
     cities.map((city) => `/utforska/${sport.slug}/${city.slug}`),
   )
+  const sportHubPaths = sports.map((sport) => `/utforska/${sport.slug}`)
   const uniqueDynamicPaths = [...new Set(dynamicPaths)].sort()
-  const pseoEntries = uniqueDynamicPaths.map((pathname) => ({
-    loc: buildAbsoluteUrl(pathname),
-    lastmod: pseoLastmod,
-    changefreq: 'daily',
-    priority: '0.7',
-  }))
+  const pseoEntries = [
+    ...sportHubPaths.map((pathname) => ({
+      loc: buildAbsoluteUrl(pathname),
+      lastmod: pseoLastmod,
+      changefreq: 'daily',
+      priority: '0.8',
+    })),
+    ...uniqueDynamicPaths.map((pathname) => ({
+      loc: buildAbsoluteUrl(pathname),
+      lastmod: pseoLastmod,
+      changefreq: 'daily',
+      priority: '0.7',
+    })),
+  ]
   const sitemapIndexEntries = [
     {
       loc: buildAbsoluteUrl(staticSitemapPath),
