@@ -24,11 +24,20 @@ const buildAbsoluteUrl = (pathname: string) => {
   }
 }
 
+const normalizePathname = (pathname: string) => {
+  if (!pathname || pathname === '/') {
+    return '/'
+  }
+  return pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
+}
+
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
   head: ({ match }) => {
-    const canonicalUrl = buildAbsoluteUrl(match.pathname || '/')
+    const canonicalUrl = buildAbsoluteUrl(
+      normalizePathname(match.pathname || '/'),
+    )
     const ogImageUrl = buildAbsoluteUrl(OG_IMAGE_PATH)
 
     return {

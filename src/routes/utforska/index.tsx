@@ -1,5 +1,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { getAllCities, getAllPseoPages, getAllSports } from '~/lib/pseo'
+import {
+  getAllCities,
+  getAllPseoPages,
+  getAllSports,
+  getPseoSportHubSlug,
+} from '~/lib/pseo'
 
 export const Route = createFileRoute('/utforska/')({
   head: () => ({
@@ -20,6 +25,11 @@ export const Route = createFileRoute('/utforska/')({
         property: 'og:description',
         content:
           'Hitta QRButik-lösningar för din sport och stad. Utforska fotboll, handboll och fler föreningar i Sverige.',
+      },
+      {
+        name: 'robots',
+        content:
+          'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
       },
     ],
   }),
@@ -48,7 +58,8 @@ function DiscoverPage() {
               </h1>
               <p className="max-w-2xl text-pretty text-base text-slate-600 sm:text-lg">
                 Välj sport och stad för att se hur QRButik gör kiosken snabbare,
-                tydligare och enklare att driva.
+                tydligare och enklare att driva. Börja gärna med en sportsida och
+                välj sedan rätt stad.
               </p>
               <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-500">
                 <span className="premium-pill">{sports.length} sporter</span>
@@ -65,12 +76,13 @@ function DiscoverPage() {
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {sports.map((sport) => (
-                      <span
+                      <Link
                         key={sport.slug}
-                        className="premium-pill normal-case tracking-normal text-xs"
+                        to={getPseoSportHubSlug(sport.slug)}
+                        className="premium-pill cursor-pointer normal-case tracking-normal text-xs"
                       >
                         {sport.name}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -106,6 +118,40 @@ function DiscoverPage() {
                 <span>Välj sport och stad för att komma igång.</span>
               </div>
               <h2 className="text-pretty text-2xl font-semibold text-slate-900">
+                Börja med en sport
+              </h2>
+            </div>
+
+            <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {sports.map((sport) => (
+                <Link
+                  key={sport.slug}
+                  to={getPseoSportHubSlug(sport.slug)}
+                  className="group flex cursor-pointer flex-col gap-2 rounded-xl border border-stone-200 bg-stone-50/90 px-4 py-4 transition hover:border-stone-300 hover:bg-stone-50"
+                >
+                  <p className="text-sm font-semibold text-slate-900">{sport.name}</p>
+                  <p className="text-xs text-slate-500">
+                    {sport.matchContext} • {sport.crowdContext}
+                  </p>
+                  <span className="text-xs font-semibold text-stone-700">
+                    Se alla städer →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="premium-panel p-8 sm:p-10">
+          <div className="premium-shell">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                <span className="premium-pill normal-case tracking-normal">
+                  {totalPages} kombinationer
+                </span>
+                <span>Direktlänkar till varje sport och stad.</span>
+              </div>
+              <h2 className="text-pretty text-2xl font-semibold text-slate-900">
                 Hitta rätt sida direkt
               </h2>
             </div>
@@ -137,16 +183,16 @@ function DiscoverPage() {
 
         <div className="premium-panel p-8 text-center">
           <div className="premium-shell flex flex-col items-center gap-3">
-          <p className="text-sm text-slate-600">
-            Vill du starta kiosken direkt?
-          </p>
-          <Link
-            to="/skapa"
-            className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-white"
-            trackaton-on-click="discover-create-kiosk"
-          >
-            Skapa kiosk på 2 minuter
-          </Link>
+            <p className="text-sm text-slate-600">
+              Vill du starta kiosken direkt?
+            </p>
+            <Link
+              to="/skapa"
+              className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-white"
+              trackaton-on-click="discover-create-kiosk"
+            >
+              Skapa kiosk på 2 minuter
+            </Link>
           </div>
         </div>
       </section>

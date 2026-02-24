@@ -78,4 +78,5 @@ Add these 10 cities between Göteborg and Varberg/Borås:
 
 ## URL pattern summary
 - Discover hub: `/utforska`
+- Sport hub: `/utforska/{sportSlug}`
 - P-SEO page: `/utforska/{sportSlug}/{citySlug}`
