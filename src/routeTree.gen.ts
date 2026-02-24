@@ -18,6 +18,7 @@ import { Route as UtforskaSportRouteImport } from './routes/utforska/$sport'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
+import { Route as UtforskaSportIndexRouteImport } from './routes/utforska/$sport/index'
 import { Route as SShopSlugIndexRouteImport } from './routes/s/$shopSlug/index'
 import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
 import { Route as SShopSlugQrRouteImport } from './routes/s/$shopSlug/qr'
@@ -72,6 +73,11 @@ const AdminShopIdRoute = AdminShopIdRouteImport.update({
   id: '/admin/$shopId',
   path: '/admin/$shopId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UtforskaSportIndexRoute = UtforskaSportIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UtforskaSportRoute,
 } as any)
 const SShopSlugIndexRoute = SShopSlugIndexRouteImport.update({
   id: '/',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
   '/s/$shopSlug/': typeof SShopSlugIndexRoute
+  '/utforska/$sport/': typeof UtforskaSportIndexRoute
   '/utforska/$sport/$city': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRoutesByTo {
@@ -144,7 +151,6 @@ export interface FileRoutesByTo {
   '/glenn': typeof GlennRoute
   '/skapa': typeof SkapaRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
-  '/utforska/$sport': typeof UtforskaSportRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
@@ -155,6 +161,7 @@ export interface FileRoutesByTo {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId': typeof AdminShopIdIndexRoute
   '/s/$shopSlug': typeof SShopSlugIndexRoute
+  '/utforska/$sport': typeof UtforskaSportIndexRoute
   '/utforska/$sport/$city': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRoutesById {
@@ -176,6 +183,7 @@ export interface FileRoutesById {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
   '/s/$shopSlug/': typeof SShopSlugIndexRoute
+  '/utforska/$sport/': typeof UtforskaSportIndexRoute
   '/utforska/$sport/$city/': typeof UtforskaSportCityIndexRoute
 }
 export interface FileRouteTypes {
@@ -198,6 +206,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
     | '/s/$shopSlug/'
+    | '/utforska/$sport/'
     | '/utforska/$sport/$city'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,7 +214,6 @@ export interface FileRouteTypes {
     | '/glenn'
     | '/skapa'
     | '/tack/$transactionId'
-    | '/utforska/$sport'
     | '/admin'
     | '/utforska'
     | '/admin/$shopId/historik'
@@ -216,6 +224,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId'
     | '/s/$shopSlug'
+    | '/utforska/$sport'
     | '/utforska/$sport/$city'
   id:
     | '__root__'
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
     | '/s/$shopSlug/'
+    | '/utforska/$sport/'
     | '/utforska/$sport/$city/'
   fileRoutesById: FileRoutesById
 }
@@ -315,6 +325,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/$shopId'
       preLoaderRoute: typeof AdminShopIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/utforska/$sport/': {
+      id: '/utforska/$sport/'
+      path: '/'
+      fullPath: '/utforska/$sport/'
+      preLoaderRoute: typeof UtforskaSportIndexRouteImport
+      parentRoute: typeof UtforskaSportRoute
     }
     '/s/$shopSlug/': {
       id: '/s/$shopSlug/'
@@ -419,10 +436,12 @@ const SShopSlugRouteWithChildren = SShopSlugRoute._addFileChildren(
 )
 
 interface UtforskaSportRouteChildren {
+  UtforskaSportIndexRoute: typeof UtforskaSportIndexRoute
   UtforskaSportCityIndexRoute: typeof UtforskaSportCityIndexRoute
 }
 
 const UtforskaSportRouteChildren: UtforskaSportRouteChildren = {
+  UtforskaSportIndexRoute: UtforskaSportIndexRoute,
   UtforskaSportCityIndexRoute: UtforskaSportCityIndexRoute,
 }
 
