@@ -5,6 +5,7 @@ import { useMutation } from 'convex/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { generateSwishLink } from '../../../lib/swish'
+import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/s/$shopSlug/')({
   head: () => ({
@@ -30,14 +31,80 @@ type CartItem = {
 
 function ShopView() {
   const { shopSlug } = Route.useParams()
-  const navigate = useNavigate()
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopBySlug, { slug: shopSlug }),
   )
 
+  if (!shop) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Butiken hittades inte
+          </h1>
+          <p className="text-sm text-slate-600">
+            Kontrollera länken eller skapa en ny butik.
+          </p>
+          <Link
+            to="/"
+            className="relaxed-primary-button mx-auto w-fit px-5 py-3 text-sm font-semibold text-white"
+            trackaton-on-click="shop-back-home"
+          >
+            Till startsidan
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  if (shop.activationStatus !== 'active' || shop.activeUntil <= Date.now()) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+            QRButik.se
+          </p>
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Butiken ar inaktiv
+          </h1>
+          <p className="text-sm text-slate-600">
+            Butiken behover aktiveras igen for att kunna ta emot kop.
+          </p>
+          <p className="text-sm text-slate-500">
+            Oppna adminpanelen och valj en ny aktivering.
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <ActiveShopView
+      shopId={shop._id}
+      shopName={shop.name}
+      shopSlug={shopSlug}
+      shopSwishNumber={shop.swishNumber}
+    />
+  )
+}
+
+type ActiveShopViewProps = {
+  shopId: Id<'shops'>
+  shopName: string
+  shopSlug: string
+  shopSwishNumber: string
+}
+
+function ActiveShopView({
+  shopId,
+  shopName,
+  shopSlug,
+  shopSwishNumber,
+}: ActiveShopViewProps) {
+  const navigate = useNavigate()
   const { data: products } = useSuspenseQuery(
     convexQuery(api.products.listByShop, {
-      shopId: (shop?._id ?? '') as any,
+      shopId,
     }),
   )
 
@@ -134,20 +201,20 @@ function ShopView() {
   }
 
   const handlePay = async () => {
-    if (totalPrice === 0 || !shop) return
+    if (totalPrice === 0) return
 
     setIsSubmitting(true)
     try {
       const timestamp = Date.now().toString(36).toUpperCase().slice(-6)
-      const reference = `QRB-${shop.name.substring(0, 10).toUpperCase()}-${timestamp}`
+      const reference = `QRB-${shopName.substring(0, 10).toUpperCase()}-${timestamp}`
 
       const swishMessage = [
-        shop.name,
+        shopName,
         ...cartItems.map((item) => `${item.name} x${item.quantity}`),
       ].join('\n')
 
       const transactionId = await createTransaction({
-        shopId: shop._id,
+        shopId,
         amount: totalPrice,
         reference,
         items: cartItems.map((item) => ({
@@ -160,7 +227,7 @@ function ShopView() {
       const callbackUrl = `${origin}/tack/${transactionId}`
 
       const swishLink = generateSwishLink(
-        shop.swishNumber,
+        shopSwishNumber,
         totalPrice,
         swishMessage,
         callbackUrl,
@@ -182,49 +249,6 @@ function ShopView() {
     }
   }
 
-  if (!shop) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken hittades inte
-          </h1>
-          <p className="text-sm text-slate-600">
-            Kontrollera länken eller skapa en ny butik.
-          </p>
-          <Link
-            to="/"
-            className="relaxed-primary-button mx-auto w-fit px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="shop-back-home"
-          >
-            Till startsidan
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
-  if (shop.activationStatus !== 'active' || shop.activeUntil <= Date.now()) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-            QRButik.se
-          </p>
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken ar inaktiv
-          </h1>
-          <p className="text-sm text-slate-600">
-            Butiken behover aktiveras igen for att kunna ta emot kop.
-          </p>
-          <p className="text-sm text-slate-500">
-            Oppna adminpanelen och valj en ny aktivering.
-          </p>
-        </div>
-      </main>
-    )
-  }
-
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent pb-32">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8">
@@ -232,7 +256,7 @@ function ShopView() {
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-bold text-slate-900">{shop.name}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{shopName}</h1>
           <p className="text-sm text-slate-500">
             Valj varor nedan och betala smidigt med Swish.
           </p>
