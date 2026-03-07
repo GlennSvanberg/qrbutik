@@ -13,7 +13,6 @@
 - **Docs:** Use `context7` to fetch the latest documentation for any library.
 
 ## Project Resources
-- **Roadmap & Plan:** See `plan.md`
 - **Design System:** See `DESIGN_SPEC.md`
 
 ## Dev Env
