@@ -1,16 +1,18 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useAction, useQuery } from 'convex/react'
 import { useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
 import { SignOutButton } from '../../components/auth/ShopAccessGate'
+import { daysUntil } from '../../lib/billing'
 import type { Id } from '../../../convex/_generated/dataModel'
 
 type BillingSearch = {
   organizationId?: string
   success?: string
   canceled?: string
+  invoice?: string
 }
 
 export const Route = createFileRoute('/admin/billing')({
@@ -21,6 +23,7 @@ export const Route = createFileRoute('/admin/billing')({
         : undefined,
     success: typeof search.success === 'string' ? search.success : undefined,
     canceled: typeof search.canceled === 'string' ? search.canceled : undefined,
+    invoice: typeof search.invoice === 'string' ? search.invoice : undefined,
   }),
   component: BillingPage,
 })
@@ -34,14 +37,47 @@ const subscriptionLabel: Record<string, string> = {
 }
 
 function BillingPage() {
-  const { organizationId: organizationIdFromSearch, success, canceled } =
-    Route.useSearch()
-  const { data: organizations } = useSuspenseQuery(
-    convexQuery(api.organizations.getMyOrganizations, {}),
+  const {
+    organizationId: organizationIdFromSearch,
+    success,
+    canceled,
+    invoice,
+  } = Route.useSearch()
+  const { data: organizations, isPending: isOrganizationsPending } =
+    useTanstackQuery(convexQuery(api.organizations.getMyOrganizations, {}))
+  const organizationFromSearch = useQuery(
+    api.organizations.getOrganization,
+    organizationIdFromSearch
+      ? { organizationId: organizationIdFromSearch as Id<'organizations'> }
+      : 'skip',
   )
   const stripeConfigured = useQuery(api.organizations.isStripeConfigured, {})
 
-  if (organizations.length === 0) {
+  const orgList = organizations ?? []
+
+  const resolvedOrganizations =
+    orgList.length > 0
+      ? orgList
+      : organizationFromSearch
+        ? [organizationFromSearch]
+        : []
+
+  const isResolvingOrganization =
+    resolvedOrganizations.length === 0 &&
+    (isOrganizationsPending ||
+      (organizationIdFromSearch && organizationFromSearch === undefined))
+
+  if (isResolvingOrganization) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-12">
+        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
+          <p className="text-sm text-slate-600">Laddar förening...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (resolvedOrganizations.length === 0) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
@@ -61,17 +97,20 @@ function BillingPage() {
 
   const initialOrgId =
     organizationIdFromSearch &&
-    organizations.some((org) => org._id === organizationIdFromSearch)
+    resolvedOrganizations.some(
+      (org: { _id: string }) => org._id === organizationIdFromSearch,
+    )
       ? (organizationIdFromSearch as Id<'organizations'>)
-      : organizations[0]._id
+      : resolvedOrganizations[0]._id
 
   return (
     <BillingContent
-      organizations={organizations}
+      organizations={resolvedOrganizations}
       initialOrganizationId={initialOrgId}
       stripeConfigured={stripeConfigured?.configured ?? false}
       success={success === '1'}
       canceled={canceled === '1'}
+      invoiceSuccess={invoice === '1'}
     />
   )
 }
@@ -82,6 +121,7 @@ function BillingContent({
   stripeConfigured,
   success,
   canceled,
+  invoiceSuccess,
 }: {
   organizations: Array<{
     _id: Id<'organizations'>
@@ -89,22 +129,29 @@ function BillingContent({
     subscriptionStatus: string
     trialEndsAt?: number
     stripeCustomerId?: string
+    stripeSubscriptionId?: string
     role: 'owner' | 'treasurer' | 'editor'
   }>
   initialOrganizationId: Id<'organizations'>
   stripeConfigured: boolean
   success: boolean
   canceled: boolean
+  invoiceSuccess: boolean
 }) {
   const [organizationId, setOrganizationId] =
     useState<Id<'organizations'>>(initialOrganizationId)
   const createCheckoutSession = useAction(api.stripeActions.createCheckoutSession)
+  const createInvoiceSubscription = useAction(
+    api.stripeActions.createInvoiceSubscription,
+  )
   const createPortalSession = useAction(
     api.stripeActions.createCustomerPortalSession,
   )
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false)
+  const [isLoadingInvoice, setIsLoadingInvoice] = useState(false)
   const [isLoadingPortal, setIsLoadingPortal] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [invoiceMessage, setInvoiceMessage] = useState<string | null>(null)
 
   const activeOrg = useMemo(
     () =>
@@ -114,6 +161,31 @@ function BillingContent({
 
   const canManageBilling =
     activeOrg.role === 'owner' || activeOrg.role === 'treasurer'
+
+  const trialDaysLeft = daysUntil(activeOrg.trialEndsAt)
+  const hasPaidSubscription =
+    activeOrg.subscriptionStatus === 'active' &&
+    Boolean(activeOrg.stripeSubscriptionId)
+  const hasBillingSetup = Boolean(activeOrg.stripeSubscriptionId)
+  const canActivate =
+    stripeConfigured &&
+    !hasPaidSubscription &&
+    !hasBillingSetup &&
+    activeOrg.subscriptionStatus !== 'canceled'
+  const needsPaymentUrgently =
+    activeOrg.subscriptionStatus === 'past_due' ||
+    (activeOrg.subscriptionStatus === 'inactive' &&
+      activeOrg.trialEndsAt !== undefined &&
+      activeOrg.trialEndsAt < Date.now())
+
+  const trialCopy =
+    activeOrg.subscriptionStatus === 'trialing' && trialDaysLeft !== null
+      ? trialDaysLeft > 0
+        ? `${trialDaysLeft} dag${trialDaysLeft === 1 ? '' : 'ar'} kvar av provperioden.`
+        : 'Provperioden slutar idag.'
+      : activeOrg.trialEndsAt
+        ? `Provperiod gällde till ${new Date(activeOrg.trialEndsAt).toLocaleDateString('sv-SE')}.`
+        : 'Ingen aktiv provperiod.'
 
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
@@ -163,9 +235,34 @@ function BillingContent({
             uppdateras.
           </p>
         ) : null}
+        {invoiceSuccess || invoiceMessage ? (
+          <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {invoiceMessage ??
+              'Fakturering är aktiverad. Faktura skickas till föreningens faktura-e-post.'}
+          </p>
+        ) : null}
         {canceled ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             Checkout avbröts. Du kan försöka igen när du vill.
+          </p>
+        ) : null}
+        {needsPaymentUrgently ? (
+          <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+            {activeOrg.subscriptionStatus === 'past_due'
+              ? 'Betalningen misslyckades. Kiosker kan pausas tills betalningen är reglerad.'
+              : 'Provperioden är slut. Aktivera klubblicensen för att fortsätta ta emot köp.'}
+          </p>
+        ) : null}
+        {hasPaidSubscription ? (
+          <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            Klubblicensen är aktiv. Hantera kort, fakturor och uppsägning via
+            kundportalen.
+          </p>
+        ) : null}
+        {!hasPaidSubscription && hasBillingSetup ? (
+          <p className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
+            Betalning är konfigurerad. Kiosker fortsätter under provperioden;
+            debitering sker enligt vald metod (kort eller faktura).
           </p>
         ) : null}
 
@@ -204,10 +301,7 @@ function BillingContent({
               ) : (
                 <p className="mt-1 text-sm text-slate-600">Ingen aktiv provperiod</p>
               )}
-              <p className="mt-2 text-sm text-slate-600">
-                Just nu krävs inget betalkort — lägg till betalning när Stripe är
-                aktiverat.
-              </p>
+              <p className="mt-2 text-sm text-slate-600">{trialCopy}</p>
             </div>
           </div>
 
@@ -219,30 +313,64 @@ function BillingContent({
           ) : null}
 
           {canManageBilling ? (
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                disabled={!stripeConfigured || isLoadingCheckout}
-                onClick={async () => {
-                  setError(null)
-                  setIsLoadingCheckout(true)
-                  try {
-                    const result = await createCheckoutSession({ organizationId })
-                    window.location.href = result.url
-                  } catch (checkoutError) {
-                    setError(
-                      checkoutError instanceof Error
-                        ? checkoutError.message
-                        : 'Kunde inte starta checkout.',
-                    )
-                  } finally {
-                    setIsLoadingCheckout(false)
-                  }
-                }}
-                className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isLoadingCheckout ? 'Öppnar...' : 'Lägg till betalning'}
-              </button>
+            <div className="flex flex-col gap-3">
+              {canActivate ? (
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    disabled={isLoadingCheckout}
+                    onClick={async () => {
+                      setError(null)
+                      setInvoiceMessage(null)
+                      setIsLoadingCheckout(true)
+                      try {
+                        const result = await createCheckoutSession({
+                          organizationId,
+                        })
+                        window.location.href = result.url
+                      } catch (checkoutError) {
+                        setError(
+                          checkoutError instanceof Error
+                            ? checkoutError.message
+                            : 'Kunde inte starta checkout.',
+                        )
+                      } finally {
+                        setIsLoadingCheckout(false)
+                      }
+                    }}
+                    className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isLoadingCheckout ? 'Öppnar...' : 'Betala med kort'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isLoadingInvoice}
+                    onClick={async () => {
+                      setError(null)
+                      setInvoiceMessage(null)
+                      setIsLoadingInvoice(true)
+                      try {
+                        const result = await createInvoiceSubscription({
+                          organizationId,
+                        })
+                        setInvoiceMessage(result.message)
+                      } catch (invoiceError) {
+                        setError(
+                          invoiceError instanceof Error
+                            ? invoiceError.message
+                            : 'Kunde inte aktivera fakturering.',
+                        )
+                      } finally {
+                        setIsLoadingInvoice(false)
+                      }
+                    }}
+                    className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isLoadingInvoice ? 'Aktiverar...' : 'Betala med faktura'}
+                  </button>
+                </div>
+              ) : null}
+
               <button
                 type="button"
                 disabled={
@@ -266,17 +394,27 @@ function BillingContent({
                     setIsLoadingPortal(false)
                   }
                 }}
-                className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="relaxed-secondary-button h-12 w-fit cursor-pointer px-6 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoadingPortal ? 'Öppnar...' : 'Hantera prenumeration'}
               </button>
+
+              {canActivate ? (
+                <p className="text-sm text-slate-500">
+                  Kortbetalning via Stripe Checkout. Faktura skickas som PDF till
+                  faktura-e-post — passar kassörer utan föreningskort.
+                </p>
+              ) : null}
             </div>
           ) : null}
 
           {!stripeConfigured ? (
             <p className="text-sm text-slate-500">
-              Stripe är inte konfigurerat ännu. Betalningsknappar aktiveras när
-              STRIPE_SECRET_KEY och STRIPE_PRICE_ID finns i miljön.
+              Stripe är inte konfigurerat ännu. Kör{' '}
+              <code className="rounded bg-stone-100 px-1">npm run stripe:setup</code>{' '}
+              och starta{' '}
+              <code className="rounded bg-stone-100 px-1">npm run stripe:listen</code>{' '}
+              under utveckling.
             </p>
           ) : null}
 

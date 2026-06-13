@@ -1,6 +1,7 @@
 import { v } from 'convex/values'
 import { internalMutation } from './_generated/server'
-import type { SubscriptionStatus } from './lib/validators'
+import { internal } from './_generated/api'
+import { mapStripeSubscriptionStatus } from './lib/stripeHelpers'
 import type { Id } from './_generated/dataModel'
 
 const stripeSubscriptionStatusValidator = v.union(
@@ -13,20 +14,6 @@ const stripeSubscriptionStatusValidator = v.union(
   v.literal('incomplete_expired'),
   v.literal('paused'),
 )
-
-function mapStripeSubscriptionStatus(status: string): SubscriptionStatus {
-  switch (status) {
-    case 'active':
-    case 'trialing':
-      return status
-    case 'past_due':
-      return 'past_due'
-    case 'canceled':
-      return 'canceled'
-    default:
-      return 'inactive'
-  }
-}
 
 export const recordStripeEvent = internalMutation({
   args: {
@@ -62,19 +49,38 @@ export const handleCheckoutCompleted = internalMutation({
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const organization = await ctx.db.get(
-      'organizations',
-      args.organizationId as Id<'organizations'>,
-    )
+    const organizationId = args.organizationId as Id<'organizations'>
+    const organization = await ctx.db.get('organizations', organizationId)
     if (!organization) {
       return null
     }
 
+    const mappedStatus = mapStripeSubscriptionStatus(args.subscriptionStatus)
+
     await ctx.db.patch('organizations', organization._id, {
       stripeCustomerId: args.stripeCustomerId,
       stripeSubscriptionId: args.stripeSubscriptionId,
-      subscriptionStatus: mapStripeSubscriptionStatus(args.subscriptionStatus),
+      subscriptionStatus: mappedStatus,
     })
+
+    if (
+      mappedStatus === 'active' &&
+      organization.subscriptionActivatedEmailSentAt === undefined
+    ) {
+      await ctx.db.patch('organizations', organization._id, {
+        subscriptionActivatedEmailSentAt: Date.now(),
+      })
+
+      await ctx.scheduler.runAfter(
+        0,
+        internal.email.sendSubscriptionActivatedEmail,
+        {
+          to: organization.billingEmail,
+          organizationName: organization.name,
+          organizationId: organization._id,
+        },
+      )
+    }
 
     return null
   },
@@ -99,10 +105,31 @@ export const handleSubscriptionUpdated = internalMutation({
       return null
     }
 
+    const mappedStatus = mapStripeSubscriptionStatus(args.subscriptionStatus)
+
     await ctx.db.patch('organizations', organization._id, {
       stripeSubscriptionId: args.stripeSubscriptionId,
-      subscriptionStatus: mapStripeSubscriptionStatus(args.subscriptionStatus),
+      subscriptionStatus: mappedStatus,
     })
+
+    if (
+      mappedStatus === 'active' &&
+      organization.subscriptionActivatedEmailSentAt === undefined
+    ) {
+      await ctx.db.patch('organizations', organization._id, {
+        subscriptionActivatedEmailSentAt: Date.now(),
+      })
+
+      await ctx.scheduler.runAfter(
+        0,
+        internal.email.sendSubscriptionActivatedEmail,
+        {
+          to: organization.billingEmail,
+          organizationName: organization.name,
+          organizationId: organization._id,
+        },
+      )
+    }
 
     return null
   },
@@ -128,6 +155,23 @@ export const handlePaymentFailed = internalMutation({
     await ctx.db.patch('organizations', organization._id, {
       subscriptionStatus: 'past_due',
     })
+
+    const oneDayMs = 24 * 60 * 60 * 1000
+    const recentlyNotified =
+      organization.paymentFailedEmailSentAt !== undefined &&
+      Date.now() - organization.paymentFailedEmailSentAt < oneDayMs
+
+    if (!recentlyNotified) {
+      await ctx.db.patch('organizations', organization._id, {
+        paymentFailedEmailSentAt: Date.now(),
+      })
+
+      await ctx.scheduler.runAfter(0, internal.email.sendPaymentFailedEmail, {
+        to: organization.billingEmail,
+        organizationName: organization.name,
+        organizationId: organization._id,
+      })
+    }
 
     return null
   },

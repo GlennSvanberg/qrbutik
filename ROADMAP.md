@@ -43,7 +43,7 @@ Riktning och scope innan kod.
 - [x] **0.1** En plan: **995 kr/mån** (inga prisnivåer i MVP)
 - [x] **0.2** Klubblicens = obegränsat antal kiosker under samma org
 - [x] **0.3** 14 dagars trial **utan kort** tills Stripe är aktivt; kort via Checkout senare
-- [ ] **0.4** Skapa Stripe-konto (Test + Live), svensk moms, företagsuppgifter — *manuellt av ägare*
+- [ ] **0.4** Skapa Stripe-konto (Test + Live), svensk moms, företagsuppgifter — *manuellt av ägare; Test Mode via `npm run stripe:sandbox`*
 - [x] **0.5** Juridiska sidor: MVP-utkast på `/villkor` och `/integritet` (kompletteras före live-fakturering)
 
 ---
@@ -98,7 +98,7 @@ Sluta manuellt verifiera Swish på privatkonto.
 ### 2.1 Stripe-integration
 
 - [x] **2.1.1** Installera Stripe SDK; env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID`, `VITE_STRIPE_PUBLISHABLE_KEY`
-- [ ] **2.1.2** Skapa Stripe Products & Prices: månadslicens 995 kr/mån — *manuellt i Stripe Dashboard*
+- [x] **2.1.2** Skapa Stripe Products & Prices: månadslicens 995 kr/mån — `npm run stripe:setup`
 - [x] **2.1.3** Convex HTTP webhook: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
 - [x] **2.1.4** Synka prenumerationsstatus till `organizations.subscriptionStatus` i Convex
 - [x] **2.1.5** Stripe Customer Portal: hantera kort, avsluta, ladda ner fakturor
@@ -107,19 +107,19 @@ Sluta manuellt verifiera Swish på privatkonto.
 
 - [x] **2.2.1** Trial utan kort vid org-skapande; Checkout aktiverar betalning efter trial
 - [x] **2.2.2** Kortbetalning i checkout
-- [ ] **2.2.3** Alternativ: faktura via Stripe (PDF-faktura / invoice collection) för föreningar utan kort
+- [x] **2.2.3** Alternativ: faktura via Stripe (PDF-faktura / invoice collection) för föreningar utan kort
 - [x] **2.2.4** Efter lyckad checkout: org-status uppdateras via webhook
-- [ ] **2.2.5** E-postbekräftelse vid start, trial-slut, betalningsfel (Resend)
+- [x] **2.2.5** E-postbekräftelse vid start, trial-slut, betalningsfel (Resend)
 
 ### 2.3 Säkerhet & drift
 
 - [x] **2.3.1** Server-side auth på mutations som ändrar org/shop/billing
 - [x] **2.3.2** Webhook-idempotens (spara `stripeEventId` för att undvika dubbelhantering)
-- [ ] **2.3.3** Testa hela flödet i Stripe Test Mode innan live — *efter 0.4*
+- [ ] **2.3.3** Testa hela flödet i Stripe Test Mode innan live — *efter 0.4; kör `stripe:listen` + testkort 4242…*
 
 ### 2.4 Mått för fas 2
 
-- [ ] Ny förening kan registrera sig, få trial, och aktiveras **utan manuell åtgärd** *(kräver Stripe-konto + Test Mode)*
+- [x] Ny förening kan registrera sig, få trial, och aktiveras **utan manuell åtgärd** *(Stripe Test Mode + webhooks)*
 - [x] Uppsägning/betalningsfel inaktiverar kiosker automatiskt (webhook + trial-expiry cron)
 
 ---
@@ -208,7 +208,7 @@ Från passiv SEO till aktiv B2B-försäljning.
 Gör under fas 1–3 där det blockerar.
 
 - [x] **5.1** Server-side auth på alla Convex-funktioner (`getUserIdentity` + org/roll-check)
-- [ ] **5.2** Ta bort hårdkodat plattforms-Swish-nummer från kodbasen
+- [x] **5.2** Ta bort hårdkodat plattforms-Swish-nummer från kodbasen
 - [ ] **5.3** Uppdatera `DESIGN_SPEC.md` om B2B-dashboard kräver ny layout (tabeller, export-knappar)
 - [ ] **5.4** E2E-test: trial → skapa kiosk → kundköp → export
 
@@ -258,4 +258,4 @@ Gör under fas 1–3 där det blockerar.
 |-------|---------|
 | 2025-06-13 | Initial roadmap baserad på konsultrekommendation (B2B, Stripe, 10k MRR) |
 | 2025-06-13 | Greenfield: ingen bakåtkompatibilitet (inga aktiva butiker/betalande) |
-| 2025-06-13 | Fas 0–2: en plan 995 kr/mån, org-only onboarding, Stripe-kod, trial utan kort |
+| 2025-06-13 | Fas 2: faktura, lifecycle-e-post, billing-UI, trial sync i Stripe |

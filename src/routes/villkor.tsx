@@ -50,9 +50,11 @@ function VillkorPage() {
             3. Betalning till QRButik
           </h2>
           <p>
-            Fakturering sker via Stripe med betalkort. Föreningen ansvarar för
-            att hålla betalningsuppgifter aktuella. Vid utebliven betalning kan
-            tjänsten pausas tills betalning regleras.
+            Fakturering sker via Stripe. Föreningen kan betala med betalkort
+            (Checkout) eller välja faktura som skickas som PDF till angiven
+            faktura-e-post. Föreningen ansvarar för att hålla betalningsuppgifter
+            aktuella. Vid utebliven betalning kan tjänsten pausas tills
+            betalning regleras.
           </p>
 
           <h2 className="text-lg font-semibold text-slate-900">

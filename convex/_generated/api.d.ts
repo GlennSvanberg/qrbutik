@@ -16,6 +16,7 @@ import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_customFunctions from "../lib/customFunctions.js";
 import type * as lib_stripeAuth from "../lib/stripeAuth.js";
+import type * as lib_stripeHelpers from "../lib/stripeHelpers.js";
 import type * as lib_validators from "../lib/validators.js";
 import type * as organizations from "../organizations.js";
 import type * as products from "../products.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   "lib/auth": typeof lib_auth;
   "lib/customFunctions": typeof lib_customFunctions;
   "lib/stripeAuth": typeof lib_stripeAuth;
+  "lib/stripeHelpers": typeof lib_stripeHelpers;
   "lib/validators": typeof lib_validators;
   organizations: typeof organizations;
   products: typeof products;

@@ -38,6 +38,8 @@ When implementing features, prefer: organizations, roles, central treasurer dash
 Webhook URL: `{CONVEX_SITE_URL}/stripe/webhook`
 
 Until keys exist, org onboarding uses **14-day trial without card**; billing UI at `/admin/billing` stays disabled.
+
+**Stripe CLI bootstrap:** `npm run stripe:sandbox` → `npm run stripe:setup` → `npm run stripe:listen` (keep listen running during webhook tests). Claim sandbox for Customer Portal / dashboard webhooks: `npm run stripe:claim`.
 - **Styling:** Tailwind CSS (v4)
 - **Docs:** Use `context7` to fetch the latest documentation for any library.
 
@@ -50,7 +52,8 @@ Until keys exist, org onboarding uses **14-day trial without card**; billing UI 
 - Keep `AGENTS.md` small and concise.
 - All buttons must have a pointer cursor on hover.
 - Follow the B2B Tech design spec in `DESIGN_SPEC.md`.
-- Before finishing, always run `npx tsc --noEmit` and `npx eslint .` to ensure types are valid and lint rules pass. Type checking is required, but you do not need to run a full build each time.
+- Before finishing, run **`npm run test`**, **`npx tsc --noEmit`**, and **`npx eslint .`**. Add **`npm run test:e2e`** when changing auth, onboarding, or billing flows.
+- Full testing guide: [`TESTING.md`](./TESTING.md)
 - Check `ROADMAP.md` before large features — align with current phase.
 
 <!-- convex-ai-start -->

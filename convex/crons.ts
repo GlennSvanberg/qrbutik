@@ -9,4 +9,10 @@ crons.interval(
   internal.organizations.expireTrials,
 )
 
+crons.interval(
+  'send trial ending reminders',
+  { hours: 12 },
+  internal.organizations.sendTrialReminders,
+)
+
 export default crons

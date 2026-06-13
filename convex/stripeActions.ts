@@ -5,6 +5,14 @@ import { v } from "convex/values";
 import { action, internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOrgMemberForAction } from "./lib/stripeAuth";
+import {
+  assertCanStartSubscription,
+  INVOICE_DAYS_UNTIL_DUE,
+  subscriptionTrialEnd,
+} from "./lib/stripeHelpers";
+import type { SubscriptionStatus } from "./lib/validators";
+
+import type { Id } from "./_generated/dataModel";
 
 const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
 
@@ -22,6 +30,57 @@ function getPriceId(): string {
     throw new Error("Stripe price is not configured.");
   }
   return priceId;
+}
+
+type StripeOrganization = {
+  _id: Id<"organizations">;
+  name: string;
+  billingEmail: string;
+  orgNumber?: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  subscriptionStatus: SubscriptionStatus;
+  trialEndsAt?: number;
+};
+
+async function ensureStripeCustomer(
+  stripe: Stripe,
+  organization: StripeOrganization,
+  organizationId: Id<"organizations">,
+  onCreateCustomer: (customerId: string) => Promise<void>,
+): Promise<string> {
+  if (organization.stripeCustomerId) {
+    const updateParams: Stripe.CustomerUpdateParams = {
+      email: organization.billingEmail,
+      name: organization.name,
+      metadata: {
+        organizationId,
+        ...(organization.orgNumber
+          ? { orgNumber: organization.orgNumber }
+          : {}),
+      },
+    };
+
+    await stripe.customers.update(
+      organization.stripeCustomerId,
+      updateParams,
+    );
+
+    return organization.stripeCustomerId;
+  }
+
+  const customer = await stripe.customers.create({
+    email: organization.billingEmail,
+    name: organization.name,
+    metadata: {
+      organizationId,
+      ...(organization.orgNumber ? { orgNumber: organization.orgNumber } : {}),
+    },
+  });
+
+  await onCreateCustomer(customer.id);
+
+  return customer.id;
 }
 
 export const processWebhook = internalAction({
@@ -135,34 +194,42 @@ export const createCheckoutSession = action({
       "treasurer",
     ]);
 
-    const organization = await ctx.runQuery(internal.stripeQueries.getOrganizationForStripe, {
-      organizationId: args.organizationId,
-    });
+    const organization = await ctx.runQuery(
+      internal.stripeQueries.getOrganizationForStripe,
+      {
+        organizationId: args.organizationId,
+      },
+    );
 
     if (!organization) {
       throw new Error("Föreningen hittades inte.");
     }
 
+    assertCanStartSubscription(organization);
+
     const stripe = getStripe();
     const priceId = getPriceId();
+    const customerId = await ensureStripeCustomer(
+      stripe,
+      organization,
+      args.organizationId,
+      async (newCustomerId) => {
+        await ctx.runMutation(internal.organizations.setSubscriptionStatus, {
+          organizationId: args.organizationId,
+          subscriptionStatus: organization.subscriptionStatus,
+          stripeCustomerId: newCustomerId,
+        });
+      },
+    );
 
-    let customerId = organization.stripeCustomerId;
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: organization.billingEmail,
-        name: organization.name,
+    const trialEnd = subscriptionTrialEnd(organization);
+    const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData =
+      {
         metadata: {
           organizationId: args.organizationId,
         },
-      });
-      customerId = customer.id;
-
-      await ctx.runMutation(internal.organizations.setSubscriptionStatus, {
-        organizationId: args.organizationId,
-        subscriptionStatus: organization.subscriptionStatus,
-        stripeCustomerId: customerId,
-      });
-    }
+        ...(trialEnd !== undefined ? { trial_end: trialEnd } : {}),
+      };
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -173,11 +240,7 @@ export const createCheckoutSession = action({
       metadata: {
         organizationId: args.organizationId,
       },
-      subscription_data: {
-        metadata: {
-          organizationId: args.organizationId,
-        },
-      },
+      subscription_data: subscriptionData,
     });
 
     if (!session.url) {
@@ -185,6 +248,77 @@ export const createCheckoutSession = action({
     }
 
     return { url: session.url };
+  },
+});
+
+export const createInvoiceSubscription = action({
+  args: {
+    organizationId: v.id("organizations"),
+  },
+  returns: v.object({
+    message: v.string(),
+  }),
+  handler: async (ctx, args): Promise<{ message: string }> => {
+    await requireOrgMemberForAction(ctx, args.organizationId, [
+      "owner",
+      "treasurer",
+    ]);
+
+    const organizationRecord = await ctx.runQuery(
+      internal.stripeQueries.getOrganizationForStripe,
+      {
+        organizationId: args.organizationId,
+      },
+    );
+
+    if (!organizationRecord) {
+      throw new Error("Föreningen hittades inte.");
+    }
+
+    const organization: StripeOrganization = organizationRecord;
+
+    assertCanStartSubscription(organization);
+
+    const stripe = getStripe();
+    const priceId = getPriceId();
+    const customerId = await ensureStripeCustomer(
+      stripe,
+      organization,
+      args.organizationId,
+      async (newCustomerId) => {
+        await ctx.runMutation(internal.organizations.setSubscriptionStatus, {
+          organizationId: args.organizationId,
+          subscriptionStatus: organization.subscriptionStatus,
+          stripeCustomerId: newCustomerId,
+        });
+      },
+    );
+
+    const trialEnd = subscriptionTrialEnd(organization);
+    const subscription = await stripe.subscriptions.create({
+      customer: customerId,
+      items: [{ price: priceId }],
+      collection_method: "send_invoice",
+      days_until_due: INVOICE_DAYS_UNTIL_DUE,
+      metadata: {
+        organizationId: args.organizationId,
+      },
+      ...(trialEnd !== undefined ? { trial_end: trialEnd } : {}),
+    });
+
+    await ctx.runMutation(internal.stripeMutations.handleCheckoutCompleted, {
+      organizationId: args.organizationId,
+      stripeCustomerId: customerId,
+      stripeSubscriptionId: subscription.id,
+      subscriptionStatus: subscription.status,
+    });
+
+    const duringTrial = subscription.status === "trialing";
+    return {
+      message: duringTrial
+        ? `Fakturering är kopplad. Första fakturan skickas till ${organization.billingEmail} när provperioden slutar.`
+        : `Faktura skickad till ${organization.billingEmail}. Kiosker aktiveras när betalningen registreras.`,
+    };
   },
 });
 
@@ -201,9 +335,12 @@ export const createCustomerPortalSession = action({
       "treasurer",
     ]);
 
-    const organization = await ctx.runQuery(internal.stripeQueries.getOrganizationForStripe, {
-      organizationId: args.organizationId,
-    });
+    const organization = await ctx.runQuery(
+      internal.stripeQueries.getOrganizationForStripe,
+      {
+        organizationId: args.organizationId,
+      },
+    );
 
     if (!organization?.stripeCustomerId) {
       throw new Error("Ingen Stripe-kund kopplad till föreningen.");

@@ -2,6 +2,8 @@ import { v } from 'convex/values'
 
 import { internalMutation } from './_generated/server'
 
+import { internal } from './_generated/api'
+
 import { authedMutation, authedQuery, orgQuery } from './lib/customFunctions'
 
 import { normalizeEmail, subscriptionStatusValidator } from './lib/validators'
@@ -33,6 +35,16 @@ const organizationSummaryValidator = v.object({
   subscriptionStatus: subscriptionStatusValidator,
 
   trialEndsAt: v.optional(v.number()),
+
+  trialWelcomeEmailSentAt: v.optional(v.number()),
+
+  trialReminderEmailSentAt: v.optional(v.number()),
+
+  trialExpiredEmailSentAt: v.optional(v.number()),
+
+  subscriptionActivatedEmailSentAt: v.optional(v.number()),
+
+  paymentFailedEmailSentAt: v.optional(v.number()),
 
   createdAt: v.number(),
 
@@ -266,6 +278,28 @@ export const createOrganization = authedMutation({
 
 
 
+    await ctx.db.patch('organizations', organizationId, {
+
+      trialWelcomeEmailSentAt: now,
+
+    })
+
+
+
+    await ctx.scheduler.runAfter(0, internal.email.sendTrialWelcomeEmail, {
+
+      to: billingEmail,
+
+      organizationName,
+
+      organizationId,
+
+      trialEndsAt: now + trialDurationMs,
+
+    })
+
+
+
     return { organizationId }
 
   },
@@ -380,7 +414,127 @@ export const expireTrials = internalMutation({
 
         })
 
+
+
+        if (organization.trialExpiredEmailSentAt === undefined) {
+
+          await ctx.db.patch('organizations', organization._id, {
+
+            trialExpiredEmailSentAt: now,
+
+          })
+
+
+
+          await ctx.scheduler.runAfter(
+
+            0,
+
+            internal.email.sendTrialExpiredEmail,
+
+            {
+
+              to: organization.billingEmail,
+
+              organizationName: organization.name,
+
+              organizationId: organization._id,
+
+            },
+
+          )
+
+        }
+
       }
+
+    }
+
+
+
+    return null
+
+  },
+
+})
+
+
+
+export const sendTrialReminders = internalMutation({
+
+  args: {},
+
+  returns: v.null(),
+
+  handler: async (ctx) => {
+
+    const now = Date.now()
+
+    const reminderWindowMs = 3 * 24 * 60 * 60 * 1000
+
+    const organizations = await ctx.db.query('organizations').collect()
+
+
+
+    for (const organization of organizations) {
+
+      if (organization.subscriptionStatus !== 'trialing') {
+
+        continue
+
+      }
+
+      if (organization.stripeSubscriptionId) {
+
+        continue
+
+      }
+
+      if (organization.trialReminderEmailSentAt !== undefined) {
+
+        continue
+
+      }
+
+      if (organization.trialEndsAt === undefined) {
+
+        continue
+
+      }
+
+      if (organization.trialEndsAt <= now) {
+
+        continue
+
+      }
+
+      if (organization.trialEndsAt > now + reminderWindowMs) {
+
+        continue
+
+      }
+
+
+
+      await ctx.db.patch('organizations', organization._id, {
+
+        trialReminderEmailSentAt: now,
+
+      })
+
+
+
+      await ctx.scheduler.runAfter(0, internal.email.sendTrialReminderEmail, {
+
+        to: organization.billingEmail,
+
+        organizationName: organization.name,
+
+        organizationId: organization._id,
+
+        trialEndsAt: organization.trialEndsAt,
+
+      })
 
     }
 

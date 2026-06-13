@@ -1,4 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { convexQuery } from '@convex-dev/react-query'
 import { useMutation } from 'convex/react'
 import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
@@ -40,6 +42,7 @@ function CreateOrganizationPage() {
 
 function CreateOrganizationContent() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { data: session } = authClient.useSession()
   const createOrganization = useMutation(api.organizations.createOrganization)
   const [orgForm, setOrgForm] = useState<OrgFormState>({
@@ -132,12 +135,19 @@ function CreateOrganizationContent() {
               setError(null)
               setIsSubmitting(true)
               try {
-                await createOrganization({
+                const result = await createOrganization({
                   organizationName: orgForm.organizationName.trim(),
                   orgNumber: orgForm.orgNumber.trim() || undefined,
                   billingEmail: orgForm.billingEmail.trim(),
                 })
-                await navigate({ to: '/admin' })
+                await queryClient.invalidateQueries({
+                  queryKey: convexQuery(api.organizations.getMyOrganizations, {})
+                    .queryKey,
+                })
+                await navigate({
+                  to: '/admin/billing',
+                  search: { organizationId: result.organizationId },
+                })
               } catch (submitError) {
                 setError(
                   submitError instanceof Error
