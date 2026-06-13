@@ -1,6 +1,16 @@
-# P-SEO Instructions (QRButik)
+# P-SEO Instructions (QRButik) — DEPRECATED / TA BORT
 
-This guide explains how to add new P-SEO content (cities + sports) and what to consider before you ship.
+> **⚠️ Ska raderas:** Mass-P-SEO på sport×stad ger låg köpintention. Inga aktiva butiker eller SEO-trafik att bevara (greenfield).  
+> **Aktiv SEO-strategi:** [`SEO_INSTRUCTIONS.md`](./SEO_INSTRUCTIONS.md).  
+> **Roadmap:** [`ROADMAP.md`](./ROADMAP.md) Fas 4.1 — ta bort `/utforska/*`, `pseo-data.json`, relaterade routes och sitemap.
+
+**Lägg inte till nytt innehåll här.** Använd filen bara som checklista vid borttagning av P-SEO-kod.
+
+---
+
+## Arkiv: hur P-SEO fungerade
+
+This guide explains how to add P-SEO content (cities + sports) for existing pages.
 
 ## Where to edit
 - `src/lib/pseo-data.json` is the only source of truth.

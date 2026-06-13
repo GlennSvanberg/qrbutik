@@ -7,25 +7,9 @@ import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
 import { ProdukterForm } from '../../../components/ProdukterForm'
-import { authClient } from '../../../lib/authClient'
-import {
-  isDevMagicLinkEnabled,
-  maybeOpenDevMagicLink,
-} from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/products')({
-  head: () => ({
-    meta: [
-      {
-        name: 'robots',
-        content: 'noindex, nofollow',
-      },
-    ],
-  }),
-  headers: () => ({
-    'X-Robots-Tag': 'noindex, nofollow',
-  }),
   component: ProductsPage,
 })
 
@@ -37,105 +21,7 @@ type DraftProduct = {
 }
 
 function ProductsPage() {
-  const { data: session, isPending, error } = authClient.useSession()
-  const [email, setEmail] = useState('')
-  const [statusMessage, setStatusMessage] = useState<string | null>(null)
-
-  if (isPending) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Laddar adminpanelen...
-          </h1>
-          <p className="text-sm text-slate-600">Kontrollerar din session.</p>
-        </div>
-      </main>
-    )
-  }
-
-  if (!session?.user.email) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
-          <header className="text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-              QRButik.se
-            </p>
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Logga in till adminpanelen
-            </h1>
-            <p className="text-sm text-slate-600">
-              Vi skickar ett inloggningsmejl till din e-postadress. Öppna mejlet så är du inne.
-            </p>
-          </header>
-
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={async (event) => {
-              event.preventDefault()
-              setStatusMessage(null)
-              const trimmedEmail = email.trim()
-              if (!trimmedEmail) {
-                setStatusMessage('Fyll i en e-postadress.')
-                return
-              }
-              setStatusMessage('Skickar inloggningsmejl...')
-              await authClient.signIn.magicLink(
-                { email: trimmedEmail, callbackURL: '/admin' },
-                {
-                  onSuccess: async () => {
-                    setStatusMessage(
-                      isDevMagicLinkEnabled()
-                        ? 'Devmode: öppnar inloggningen direkt.'
-                        : 'Inloggningsmejl skickat. Kolla inkorgen.',
-                    )
-                    await maybeOpenDevMagicLink(trimmedEmail)
-                  },
-                  onError: (ctx) =>
-                    setStatusMessage(ctx.error.message || 'Något gick fel.'),
-                },
-              )
-            }}
-          >
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              E-post
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
-              />
-            </label>
-            <button
-              type="submit"
-              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
-              trackaton-on-click="admin-login-magic-link"
-            >
-              Skicka inloggningsmejl
-            </button>
-          </form>
-
-          {statusMessage ? (
-            <p className="text-sm text-slate-600">{statusMessage}</p>
-          ) : null}
-          {error ? (
-            <p className="text-sm text-rose-600">{error.message}</p>
-          ) : null}
-        </div>
-      </main>
-    )
-  }
-
-  return <ProductsContent email={session.user.email} />
-}
-
-function ProductsContent({ email }: { email: string }) {
   const { shopId } = Route.useParams()
-  if (!shopId) {
-    return null
-  }
   const shopIdParam = shopId as Id<'shops'>
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
@@ -149,12 +35,6 @@ function ProductsContent({ email }: { email: string }) {
   const [productDrafts, setProductDrafts] = useState<Array<DraftProduct>>([])
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-
-  void statusMessage
-
-  const updateProductDrafts = (next: Array<DraftProduct>) => {
-    setProductDrafts(next)
-  }
 
   useEffect(() => {
     setProductDrafts(
@@ -204,37 +84,11 @@ function ProductsContent({ email }: { email: string }) {
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken hittades inte
+            Kiosken hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
-            Kontrollera länken eller gå tillbaka till adminpanelen.
-          </p>
           <Link
             to="/admin"
             className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="admin-back-dashboard"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
-  if (shop.ownerEmail !== email) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Du har inte behörighet
-          </h1>
-          <p className="text-sm text-slate-600">
-            Den här butiken är inte kopplad till din e-postadress.
-          </p>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -247,7 +101,7 @@ function ProductsContent({ email }: { email: string }) {
     <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <AdminHeader
-          ownerEmail={email}
+          organizationId={shop.organizationId}
           shopId={shop._id}
           section="products"
           shopName={shop.name}
@@ -255,7 +109,7 @@ function ProductsContent({ email }: { email: string }) {
         <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <ProdukterForm
             products={productDrafts}
-            onChange={updateProductDrafts}
+            onChange={setProductDrafts}
             helperText="Snabbt och enkelt: namn + pris."
             onAddRow={addRow}
           />
@@ -302,15 +156,14 @@ function ProductsContent({ email }: { email: string }) {
                   )
                   setStatusMessage('Produkter sparade.')
                 } catch (saveError) {
-                  if (saveError instanceof Error) {
-                    setError(saveError.message)
-                  } else {
-                    setError('Något gick fel. Försök igen.')
-                  }
+                  setError(
+                    saveError instanceof Error
+                      ? saveError.message
+                      : 'Något gick fel. Försök igen.',
+                  )
                 }
               }}
               className="relaxed-primary-button h-12 cursor-pointer px-7 text-sm font-semibold text-white"
-              trackaton-on-click="admin-products-save"
             >
               Spara ändringar
             </button>

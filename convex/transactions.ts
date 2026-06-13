@@ -1,6 +1,9 @@
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
+import { authedMutation } from './lib/customFunctions'
+import { requireShopAccess } from './lib/auth'
+import { isSubscriptionActive } from './lib/validators'
 import type { Id } from './_generated/dataModel'
 
 export const create = mutation({
@@ -16,7 +19,18 @@ export const create = mutation({
       }),
     ),
   },
+  returns: v.id('transactions'),
   handler: async (ctx, args) => {
+    const shop = await ctx.db.get('shops', args.shopId)
+    if (!shop) {
+      throw new Error('Butiken hittades inte.')
+    }
+
+    const organization = await ctx.db.get('organizations', shop.organizationId)
+    if (!organization || !isSubscriptionActive(organization.subscriptionStatus)) {
+      throw new Error('Kiosken är inte aktiv just nu.')
+    }
+
     const transactionId = await ctx.db.insert('transactions', {
       shopId: args.shopId,
       amount: args.amount,
@@ -291,7 +305,7 @@ export const listByShopPeriod = query({
   },
 })
 
-export const verify = mutation({
+export const verify = authedMutation({
   args: { transactionId: v.id('transactions') },
   returns: v.null(),
   handler: async (ctx, args) => {
@@ -299,6 +313,7 @@ export const verify = mutation({
     if (!transaction) {
       throw new Error('Transaktionen hittades inte.')
     }
+    await requireShopAccess(ctx, transaction.shopId)
     if (transaction.status !== 'verified') {
       await ctx.db.patch('transactions', args.transactionId, {
         status: 'verified',
@@ -308,7 +323,7 @@ export const verify = mutation({
   },
 })
 
-export const setVerified = mutation({
+export const setVerified = authedMutation({
   args: { transactionId: v.id('transactions'), verified: v.boolean() },
   returns: v.null(),
   handler: async (ctx, args) => {
@@ -316,6 +331,7 @@ export const setVerified = mutation({
     if (!transaction) {
       throw new Error('Transaktionen hittades inte.')
     }
+    await requireShopAccess(ctx, transaction.shopId)
     const status = args.verified ? 'verified' : 'pending'
     if (transaction.status !== status) {
       await ctx.db.patch('transactions', args.transactionId, { status })

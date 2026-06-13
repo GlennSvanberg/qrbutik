@@ -20,6 +20,13 @@ export function MarketingFooter() {
           Support
         </a>
         <a
+          href="/integritet"
+          className="rounded-full px-3 py-1 transition hover:bg-brand-accent hover:text-brand-foreground"
+          trackaton-on-click="footer-integritet"
+        >
+          Integritet
+        </a>
+        <a
           href="/villkor"
           className="rounded-full px-3 py-1 transition hover:bg-brand-accent hover:text-brand-foreground"
           trackaton-on-click="footer-villkor"

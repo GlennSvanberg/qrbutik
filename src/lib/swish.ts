@@ -35,11 +35,3 @@ export function generateSwishLink(
 
   return url
 }
-
-export const buildActivationSwishMessage = (shop: {
-  _id: string
-  slug: string
-  name: string
-}) => {
-  return `QRB-AKT ${shop._id} ${shop.slug} ${shop.name}`
-}

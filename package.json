@@ -23,13 +23,16 @@
     "@tanstack/react-start": "^1.132.2",
     "better-auth": "^1.4.9",
     "convex": "^1.31.0",
+    "convex-helpers": "^0.1.119",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "resend": "^6.7.0"
+    "resend": "^6.7.0",
+    "stripe": "^22.2.1"
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
+    "@stripe/cli": "^1.42.13",
     "@tailwindcss/vite": "^4.1.13",
     "@tanstack/eslint-config": "^0.3.2",
     "@types/node": "^25.0.9",

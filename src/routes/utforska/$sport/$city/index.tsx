@@ -197,22 +197,13 @@ function PseoPage() {
     variant: 'primary' | 'secondary'
   }> = [
     {
-      id: 'event',
-      name: 'Event-pass',
-      price: '10 kr',
-      description: `Gäller i 48 timmar. Perfekt för helgens ${copy.sport.name.toLowerCase()}.`,
-      cta: 'Starta event-pass',
-      tracking: 'pseo-start-event-pass',
+      id: 'club',
+      name: 'Klubblicens',
+      price: '995 kr/mån',
+      description: `Hela föreningen — alla lag och kiosker. 14 dagars gratis provperiod.`,
+      cta: 'Skapa förening',
+      tracking: 'pseo-start-club-license',
       variant: 'primary',
-    },
-    {
-      id: 'season',
-      name: 'Säsongs-pass',
-      price: '99 kr',
-      description: 'Gäller i 6 månader och passar hela terminen.',
-      cta: 'Starta säsong',
-      tracking: 'pseo-start-season-pass',
-      variant: 'secondary',
     },
   ]
 
@@ -275,11 +266,12 @@ function PseoPage() {
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
-                  to="/skapa"
+                  to="/logga-in"
+                  search={{ redirect: '/skapa' }}
                   trackaton-on-click="pseo-create-kiosk-hero"
                   className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
                 >
-                  Skapa din Swish-kiosk &mdash; 10 kr
+                  Skapa förening — prova gratis
                 </Link>
                 <Link
                   to="/utforska"
@@ -598,7 +590,7 @@ function PseoPage() {
                   Priser
                 </p>
                 <h2 className="text-pretty text-3xl font-semibold text-slate-900">
-                  Inga abonnemang.
+                  Klubblicens för föreningar.
                 </h2>
                 <p className="text-sm text-slate-600">{copy.closing}</p>
               </div>
@@ -619,7 +611,8 @@ function PseoPage() {
                         </p>
                       </div>
                       <Link
-                        to="/skapa"
+                        to="/logga-in"
+                        search={{ redirect: '/skapa' }}
                         className={
                           plan.variant === 'primary'
                             ? 'relaxed-primary-button inline-flex h-11 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-white'

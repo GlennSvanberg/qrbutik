@@ -31,24 +31,23 @@ type CartItem = {
 
 function ShopView() {
   const { shopSlug } = Route.useParams()
-  const { data: shop } = useSuspenseQuery(
-    convexQuery(api.shops.getShopBySlug, { slug: shopSlug }),
+  const { data: shopData } = useSuspenseQuery(
+    convexQuery(api.shops.getShopWithLicenseBySlug, { slug: shopSlug }),
   )
 
-  if (!shop) {
+  if (!shopData) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken hittades inte
+            Kiosken hittades inte
           </h1>
           <p className="text-sm text-slate-600">
-            Kontrollera länken eller skapa en ny butik.
+            Kontrollera länken eller kontakta föreningen.
           </p>
           <Link
             to="/"
-            className="relaxed-primary-button mx-auto w-fit px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="shop-back-home"
+            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
           >
             Till startsidan
           </Link>
@@ -57,7 +56,7 @@ function ShopView() {
     )
   }
 
-  if (shop.activationStatus !== 'active' || shop.activeUntil <= Date.now()) {
+  if (!shopData.licenseActive) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
@@ -65,13 +64,10 @@ function ShopView() {
             QRButik.se
           </p>
           <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken ar inaktiv
+            Kiosken är tillfälligt stängd
           </h1>
           <p className="text-sm text-slate-600">
-            Butiken behover aktiveras igen for att kunna ta emot kop.
-          </p>
-          <p className="text-sm text-slate-500">
-            Oppna adminpanelen och valj en ny aktivering.
+            {shopData.organization.name} har ingen aktiv klubblicens just nu.
           </p>
         </div>
       </main>
@@ -80,10 +76,10 @@ function ShopView() {
 
   return (
     <ActiveShopView
-      shopId={shop._id}
-      shopName={shop.name}
+      shopId={shopData.shop._id}
+      shopName={shopData.shop.name}
       shopSlug={shopSlug}
-      shopSwishNumber={shop.swishNumber}
+      shopSwishNumber={shopData.shop.swishNumber}
     />
   )
 }

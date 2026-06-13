@@ -1,70 +1,83 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { v } from 'convex/values'
+import { query } from './_generated/server'
+import { authedMutation } from './lib/customFunctions'
+import { requireShopAccess } from './lib/auth'
+
+const productValidator = v.object({
+  _id: v.id('products'),
+  _creationTime: v.number(),
+  shopId: v.id('shops'),
+  name: v.string(),
+  price: v.number(),
+  description: v.optional(v.string()),
+  createdAt: v.number(),
+})
 
 export const listByShop = query({
   args: {
-    shopId: v.id("shops"),
+    shopId: v.id('shops'),
   },
-  returns: v.array(
-    v.object({
-      _id: v.id("products"),
-      _creationTime: v.number(),
-      shopId: v.id("shops"),
-      name: v.string(),
-      price: v.number(),
-      description: v.optional(v.string()),
-      createdAt: v.number(),
-    }),
-  ),
+  returns: v.array(productValidator),
   handler: async (ctx, args) => {
     return await ctx.db
-      .query("products")
-      .withIndex("by_shopId", (q) => q.eq("shopId", args.shopId))
-      .order("asc")
-      .collect();
+      .query('products')
+      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
+      .order('asc')
+      .collect()
   },
-});
+})
 
-export const addProduct = mutation({
+export const addProduct = authedMutation({
   args: {
-    shopId: v.id("shops"),
+    shopId: v.id('shops'),
     name: v.string(),
     price: v.number(),
   },
-  returns: v.id("products"),
+  returns: v.id('products'),
   handler: async (ctx, args) => {
-    return await ctx.db.insert("products", {
+    await requireShopAccess(ctx, args.shopId)
+    return await ctx.db.insert('products', {
       shopId: args.shopId,
-      name: args.name,
+      name: args.name.trim(),
       price: args.price,
       createdAt: Date.now(),
-    });
+    })
   },
-});
+})
 
-export const updateProduct = mutation({
+export const updateProduct = authedMutation({
   args: {
-    productId: v.id("products"),
+    productId: v.id('products'),
     name: v.string(),
     price: v.number(),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    await ctx.db.patch("products", args.productId, {
-      name: args.name,
+    const product = await ctx.db.get('products', args.productId)
+    if (!product) {
+      throw new Error('Produkten hittades inte.')
+    }
+    await requireShopAccess(ctx, product.shopId)
+    await ctx.db.patch('products', args.productId, {
+      name: args.name.trim(),
       price: args.price,
-    });
-    return null;
+    })
+    return null
   },
-});
+})
 
-export const deleteProduct = mutation({
+export const deleteProduct = authedMutation({
   args: {
-    productId: v.id("products"),
+    productId: v.id('products'),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    await ctx.db.delete("products", args.productId);
-    return null;
+    const product = await ctx.db.get('products', args.productId)
+    if (!product) {
+      throw new Error('Produkten hittades inte.')
+    }
+    await requireShopAccess(ctx, product.shopId)
+    await ctx.db.delete('products', args.productId)
+    return null
   },
-});
+})

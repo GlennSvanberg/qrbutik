@@ -1,7 +1,9 @@
 # Design Specification - QRButik
 
 ## Theme: B2B Tech
-The design should evoke **Trust, Speed, and Professionalism**. It should be clean, high-contrast, and mobile-first — suitable for sports clubs and event organizers.
+The design should evoke **Trust, Speed, and Professionalism**. It should be clean, high-contrast, and mobile-first — suitable for **sports club treasurers and boards** (primary) and kiosk volunteers (secondary).
+
+**Product direction:** Club license SaaS — see [`ROADMAP.md`](./ROADMAP.md). Dashboard and export surfaces should feel credible for finance roles (tables, clear totals, export actions), not only mobile kiosk UI.
 
 ## Theming & Colors
 All theming should be maintained in `src/styles/app.css`.

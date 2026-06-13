@@ -9,11 +9,6 @@ import { useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { AdminBottomNav } from '../../../components/AdminBottomNav'
 import { AdminHeader } from '../../../components/AdminHeader'
-import { authClient } from '../../../lib/authClient'
-import {
-  isDevMagicLinkEnabled,
-  maybeOpenDevMagicLink,
-} from '../../../lib/devMagicLink'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/')({
@@ -31,105 +26,7 @@ const periodOptions: Array<{ value: Period; label: string }> = [
 ]
 
 function AdminShopDashboard() {
-  const { data: session, isPending, error } = authClient.useSession()
-  const [email, setEmail] = useState('')
-  const [statusMessage, setStatusMessage] = useState<string | null>(null)
-
-  if (isPending) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Laddar adminpanelen...
-          </h1>
-          <p className="text-sm text-slate-600">Kontrollerar din session.</p>
-        </div>
-      </main>
-    )
-  }
-
-  if (!session?.user.email) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
-          <header className="text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-              QRButik.se
-            </p>
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Logga in till adminpanelen
-            </h1>
-            <p className="text-sm text-slate-600">
-              Vi skickar ett inloggningsmejl till din e-postadress. Öppna mejlet så är du inne.
-            </p>
-          </header>
-
-          <form
-            className="flex flex-col gap-3"
-            onSubmit={async (event) => {
-              event.preventDefault()
-              setStatusMessage(null)
-              const trimmedEmail = email.trim()
-              if (!trimmedEmail) {
-                setStatusMessage('Fyll i en e-postadress.')
-                return
-              }
-              setStatusMessage('Skickar inloggningsmejl...')
-              await authClient.signIn.magicLink(
-                { email: trimmedEmail, callbackURL: '/admin' },
-                {
-                  onSuccess: async () => {
-                    setStatusMessage(
-                      isDevMagicLinkEnabled()
-                        ? 'Devmode: öppnar inloggningen direkt.'
-                        : 'Inloggningsmejl skickat. Kolla inkorgen.',
-                    )
-                    await maybeOpenDevMagicLink(trimmedEmail)
-                  },
-                  onError: (ctx) =>
-                    setStatusMessage(ctx.error.message || 'Något gick fel.'),
-                },
-              )
-            }}
-          >
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
-              E-post
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
-              />
-            </label>
-            <button
-              type="submit"
-              className="relaxed-primary-button h-12 cursor-pointer px-6 text-base font-semibold text-white"
-              trackaton-on-click="admin-login-magic-link"
-            >
-              Skicka inloggningsmejl
-            </button>
-          </form>
-
-          {statusMessage ? (
-            <p className="text-sm text-slate-600">{statusMessage}</p>
-          ) : null}
-          {error ? (
-            <p className="text-sm text-rose-600">{error.message}</p>
-          ) : null}
-        </div>
-      </main>
-    )
-  }
-
-  return <AdminShopContent email={session.user.email} />
-}
-
-function AdminShopContent({ email }: { email: string }) {
   const { shopId } = Route.useParams()
-  if (!shopId) {
-    return null
-  }
   const shopIdParam = shopId as Id<'shops'>
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
@@ -143,31 +40,16 @@ function AdminShopContent({ email }: { email: string }) {
     placeholderData: keepPreviousData,
   })
 
-  if (!summary) {
-    return null
-  }
-
-  const totalRevenue = summary.totalRevenue
-  const transactionCount = summary.transactionCount
-  const averageOrderValue = summary.averageOrderValue
-  const lastSaleTime = summary.lastSaleTime
-  const topItems = summary.topItems
-  const recentSales = summary.recentSales
-
-  if (!shop) {
+  if (!shop || !summary) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
           <h1 className="text-2xl font-semibold text-slate-900">
-            Butiken hittades inte
+            Kiosken hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
-            Kontrollera länken eller gå tillbaka till adminpanelen.
-          </p>
           <Link
             to="/admin"
             className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="admin-back-dashboard"
           >
             Till adminpanelen
           </Link>
@@ -176,32 +58,12 @@ function AdminShopContent({ email }: { email: string }) {
     )
   }
 
-  if (shop.ownerEmail !== email) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Du har inte behörighet
-          </h1>
-          <p className="text-sm text-slate-600">
-            Den här butiken är inte kopplad till din e-postadress.
-          </p>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-            trackaton-on-click="admin-back-dashboard"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
-  const formattedTotal = Math.round(totalRevenue).toLocaleString('sv-SE')
-  const formattedAverage = Math.round(averageOrderValue).toLocaleString('sv-SE')
-  const formattedLastSale = lastSaleTime
-    ? new Date(lastSaleTime).toLocaleTimeString('sv-SE', {
+  const formattedTotal = Math.round(summary.totalRevenue).toLocaleString('sv-SE')
+  const formattedAverage = Math.round(summary.averageOrderValue).toLocaleString(
+    'sv-SE',
+  )
+  const formattedLastSale = summary.lastSaleTime
+    ? new Date(summary.lastSaleTime).toLocaleTimeString('sv-SE', {
         hour: '2-digit',
         minute: '2-digit',
       })
@@ -211,7 +73,7 @@ function AdminShopContent({ email }: { email: string }) {
     <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <AdminHeader
-          ownerEmail={email}
+          organizationId={shop.organizationId}
           shopId={shop._id}
           section="sales"
           shopName={shop.name}
@@ -226,9 +88,8 @@ function AdminShopContent({ email }: { email: string }) {
                   <button
                     key={option.value}
                     type="button"
-                    trackaton-on-click={`admin-period-${option.value}`}
                     onClick={() => setPeriod(option.value)}
-                    className={`min-h-[2.5rem] w-full whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
+                    className={`min-h-[2.5rem] w-full cursor-pointer whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
                       isActive
                         ? 'relaxed-primary-button text-white'
                         : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
@@ -254,7 +115,7 @@ function AdminShopContent({ email }: { email: string }) {
                 Betalningar
               </p>
               <p className="mt-2 text-xl font-semibold text-slate-900">
-                {transactionCount}
+                {summary.transactionCount}
               </p>
             </div>
             <div className="relaxed-surface-soft p-4">
@@ -278,18 +139,16 @@ function AdminShopContent({ email }: { email: string }) {
 
         <section className="relaxed-divider flex flex-col gap-4 border-b pb-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900">
-              Topplista
-            </h2>
+            <h2 className="text-base font-semibold text-slate-900">Topplista</h2>
             <span className="text-xs text-slate-500">Topp 5</span>
           </div>
           <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
-            {topItems.length === 0 ? (
+            {summary.topItems.length === 0 ? (
               <div className="p-6 text-center text-sm text-slate-500">
                 Ingen försäljning ännu.
               </div>
             ) : (
-              topItems.map((item) => (
+              summary.topItems.map((item) => (
                 <div
                   key={item.name}
                   className="flex items-center justify-between py-3 text-sm text-slate-700"
@@ -319,12 +178,12 @@ function AdminShopContent({ email }: { email: string }) {
             <span className="text-xs text-slate-500">Realtid</span>
           </div>
           <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
-            {recentSales.length === 0 ? (
+            {summary.recentSales.length === 0 ? (
               <div className="p-6 text-center text-sm text-slate-500">
                 Inga köp ännu.
               </div>
             ) : (
-              recentSales.map((sale) => (
+              summary.recentSales.map((sale) => (
                 <div
                   key={sale._id}
                   className="flex items-center justify-between py-3 text-sm"

@@ -16,7 +16,7 @@ const sectionRoutes = {
 type AdminSection = keyof typeof sectionRoutes
 
 type AdminHeaderProps = {
-  ownerEmail: string
+  organizationId: Id<'organizations'>
   shopId: Id<'shops'>
   section: AdminSection
   shopName?: string
@@ -24,7 +24,7 @@ type AdminHeaderProps = {
 }
 
 export function AdminHeader({
-  ownerEmail,
+  organizationId,
   shopId,
   section,
   shopName,
@@ -34,7 +34,7 @@ export function AdminHeader({
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLElement | null>(null)
   const { data: shops } = useSuspenseQuery(
-    convexQuery(api.shops.listByOwnerEmail, { ownerEmail }),
+    convexQuery(api.organizations.listOrganizationShops, { organizationId }),
   )
 
   useEffect(() => {
@@ -79,8 +79,7 @@ export function AdminHeader({
       <div className="flex items-center justify-between gap-3">
         <Link
           to="/admin"
-          className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-3 text-xs font-semibold text-stone-700"
-          trackaton-on-click="admin-back"
+          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-3 text-xs font-semibold text-stone-700"
         >
           Tillbaka
         </Link>
@@ -102,10 +101,9 @@ export function AdminHeader({
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="relaxed-secondary-button flex h-12 w-12 items-center justify-center text-slate-700"
+          className="relaxed-secondary-button flex h-12 w-12 cursor-pointer items-center justify-center text-slate-700"
           aria-expanded={isOpen}
           aria-controls="admin-header-menu"
-          trackaton-on-click="admin-menu-toggle"
           aria-label="Öppna meny"
         >
           <span className="flex h-4 w-5 flex-col justify-between">
@@ -120,11 +118,11 @@ export function AdminHeader({
         <div
           id="admin-header-menu"
           role="menu"
-          aria-label="Välj butik"
+          aria-label="Välj kiosk"
           className="relaxed-surface absolute left-0 right-0 top-full z-20 mt-3 p-4"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            Mina butiker
+            Föreningens kiosker
           </p>
           <div className="mt-3 flex flex-col gap-2">
             {shops.map((shop) => (
@@ -132,7 +130,6 @@ export function AdminHeader({
                 key={shop._id}
                 type="button"
                 role="menuitem"
-                trackaton-on-click="admin-switch-shop"
                 onClick={() => {
                   setIsOpen(false)
                   void navigate({
@@ -140,7 +137,7 @@ export function AdminHeader({
                     params: { shopId: shop._id },
                   })
                 }}
-                className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition ${
+                className={`flex w-full cursor-pointer items-center justify-between rounded-xl border px-3 py-2 text-sm font-semibold transition ${
                   shop._id === shopId
                     ? 'border-stone-200 bg-stone-50/80 text-stone-700'
                     : 'border-stone-200/80 bg-stone-50/80 text-slate-700 hover:border-stone-300 hover:bg-stone-100/60'

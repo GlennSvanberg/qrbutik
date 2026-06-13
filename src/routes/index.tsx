@@ -77,7 +77,7 @@ const platformDetails: Array<{
     id: 'pricing',
     title: 'Byggt för föreningslivet',
     description:
-      'Inga abonnemangskrav. Betala bara när ni faktiskt säljer.',
+      'Klubblicens för hela föreningen — flera kiosker, en faktura.',
   },
 ]
 
@@ -91,22 +91,14 @@ const pricingPlans: Array<{
   variant: 'primary' | 'secondary'
 }> = [
   {
-    id: 'event',
-    name: 'Event-pass',
-    price: '10 kr',
-    description: 'Gäller i 48 timmar. Perfekt för matcher, cuper och loppis.',
-    cta: 'Starta event-pass',
-    tracking: 'start-event-pass',
+    id: 'club',
+    name: 'Klubblicens',
+    price: '995 kr/mån',
+    description:
+      'Hela föreningen — alla lag och kiosker. 14 dagars gratis provperiod.',
+    cta: 'Skapa förening',
+    tracking: 'start-club-license',
     variant: 'primary',
-  },
-  {
-    id: 'season',
-    name: 'Säsongs-pass',
-    price: '99 kr',
-    description: 'Gäller i 6 månader och passar hela terminen.',
-    cta: 'Starta säsong',
-    tracking: 'start-season-pass',
-    variant: 'secondary',
   },
 ]
 
@@ -130,44 +122,46 @@ function Home() {
                   </p>
                 </div>
                 <h1 className="text-pretty text-4xl font-bold leading-tight tracking-tight text-brand-foreground sm:text-5xl lg:text-6xl">
-                  Sälj med Swish, med ett flöde som känns helt klart.
+                  Digital kiosk för hela idrottsföreningen.
                 </h1>
                 <p className="max-w-2xl text-pretty text-base text-brand-muted sm:text-lg">
-                  Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer
-                  varor och betalar direkt. Mindre stress i kön, bättre
-                  kontroll efteråt.
+                  Styrelse och kassör sätter upp kiosker för lag och cuper.
+                  Kunderna betalar med Swish — ni får överblick och export.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
-                  to="/skapa"
+                  to="/logga-in"
+                  search={{ redirect: '/skapa' }}
                   className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
                   trackaton-on-click="primary-cta"
                 >
-                  Skapa din Swish-kiosk &mdash; 10 kr
+                  Skapa förening — prova gratis
                 </Link>
                 <Link
-                  to="/utforska"
+                  to="/logga-in"
+                  search={{ redirect: '/admin' }}
                   className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-brand-foreground"
-                  trackaton-on-click="landing-explore-pseo"
+                  trackaton-on-click="login-admin"
                 >
-                  Utforska sport och stad
+                  Logga in
                 </Link>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 text-sm text-brand-muted">
-                <span>Har du redan en kiosk?</span>
+                <span>Har du redan konto?</span>
                 <Link
-                  to="/admin"
+                  to="/logga-in"
+                  search={{ redirect: '/admin' }}
                   className="cursor-pointer font-semibold text-brand-foreground underline decoration-brand-border underline-offset-4 transition hover:text-brand"
-                  trackaton-on-click="login-admin"
+                  trackaton-on-click="login-admin-link"
                 >
-                  Hantera den h&auml;r
+                  Logga in h&auml;r
                 </Link>
                 <span className="text-brand-border">•</span>
                 <span className="text-brand-muted">
-                  Vi mejlar inloggning direkt till dig.
+                  Magic link till din e-post — inget l&ouml;senord.
                 </span>
               </div>
 
@@ -312,8 +306,12 @@ function Home() {
                   Priser
                 </p>
                 <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
-                  Betala bara n&auml;r ni s&auml;ljer.
+                  Klubblicens för föreningar.
                 </h2>
+                <p className="mt-4 text-sm text-brand-muted">
+                  QRButik riktar sig till idrottsföreningar och cuparrangörer — inte
+                  privatpersoner som säljer på loppis.
+                </p>
               </div>
 
               <div className="mt-8 flex flex-1 flex-col gap-4">
@@ -332,7 +330,8 @@ function Home() {
                         </p>
                       </div>
                       <Link
-                        to="/skapa"
+                        to="/logga-in"
+                        search={{ redirect: '/skapa' }}
                         className={
                           plan.variant === 'primary'
                             ? 'relaxed-primary-button inline-flex h-11 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-white'
@@ -350,7 +349,8 @@ function Home() {
                 ))}
               </div>
               <p className="mt-4 text-sm text-brand-muted">
-                Ingen inloggning krävs för att börja. Ingen app att ladda ner.
+                Logga in med e-post, skapa förening och lägg till kiosker i admin.
+                Kunder behöver aldrig konto.
               </p>
             </div>
           </div>
@@ -374,11 +374,12 @@ function Home() {
             </blockquote>
             <div className="flex flex-col gap-3">
               <Link
-                to="/skapa"
+                to="/logga-in"
+                search={{ redirect: '/skapa' }}
                 className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
                 trackaton-on-click="landing-bottom-cta"
               >
-                Starta kiosken nu
+                Skapa förening — prova gratis
               </Link>
               <p className="text-sm text-brand-muted">
                 G&aring; fr&aring;n handskrivet till ett proffsigt fl&ouml;de idag.

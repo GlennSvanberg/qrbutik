@@ -1,4 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { ShopAccessGate } from '../../components/auth/ShopAccessGate'
+import type { Id } from '../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId')({
   head: () => ({
@@ -16,5 +18,11 @@ export const Route = createFileRoute('/admin/$shopId')({
 })
 
 function AdminShopLayout() {
-  return <Outlet />
+  const { shopId } = Route.useParams()
+
+  return (
+    <ShopAccessGate shopId={shopId as Id<'shops'>}>
+      <Outlet />
+    </ShopAccessGate>
+  )
 }

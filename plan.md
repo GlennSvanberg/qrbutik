@@ -1,89 +1,149 @@
-# QRButik.se – "Kiosken på burk" 🇸🇪
+# QRButik.se — Produktvision
 
-QRButik är en micro-SaaS optimerad för den svenska föreningsmarknaden. Den eliminerar huvudvärk vid försäljning i kiosker, loppisar och idrottsevenemang genom att erbjuda en dynamisk digital varukorg kopplad till Swish-betalningar, utan behov av dyra företagskonton eller komplexa integrationer.
-
----
-
-## 🚀 Vision & Kärnfunktionalitet
-
-### För Skaparen (Lagledaren/Föräldern)
-- **Snabbstart:** Skapa en butik på under 2 minuter genom att ange butiksnamn, Swish-nummer och lägga till produkter.
-- **Lösenordslös Admin:** Ingen kontoskapande krävs initialt. En "Magic Link" skickas till e-posten för att hantera butiken.
-- **Dashboard:** Se inkommande transaktioner i realtid. Verifiera betalningar mot kundens skärm med hjälp av de sista 4 siffrorna i deras telefonnummer.
-- **PDF-skylt:** Generera en snygg A4-skylt (PDF) direkt i webbläsaren med butikens unika QR-kod.
-
-### För Kunden (Köparen)
-- **Smidig Varukorg:** Scanna QR-koden, välj varor i ett mobiloptimerat gränssnitt.
-- **Direktbetalning:** Tryck på "Betala med Swish" → Swish-appen öppnas automatiskt med rätt belopp, mottagare och ett unikt referensnummer ifyllt.
-- **Digitalt Kvitto:** Efter att ha klickat på betala visas en kvittovy som kunden visar upp för personalen för att hämta sina varor.
+> **Strategisk riktning (2025):** B2B SaaS för idrottsföreningar. Mål: 10 000 kr MRR via klubblicenser.  
+> **Operativ plan:** Se [`ROADMAP.md`](./ROADMAP.md) för steg-för-steg med checkboxar.  
+> **Greenfield:** Inga aktiva butiker eller betalande användare — byt schema och kod direkt utan migrering.
 
 ---
 
-## 🛠 Teknisk Stack
+## Vad är QRButik?
 
-- **Framework:** [TanStack Start](https://tanstack.com/router/latest/docs/framework/react/start/overview) (SSR, Typsäkerhet, SEO).
-- **Databas & Realtid:** [Convex](https://convex.dev/) (Realtidssynk för admin-vyn, edge functions).
-- **Auth:** [Better Auth](https://www.better-auth.com/) (Hanterar Magic Links och sessioner).
-- **E-post:** [Resend](https://resend.com/) (Leverans av Magic Links och säljrapporter).
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) (Ren "Swedish Minimalist"-design).
-- **PDF:** `react-pdf` eller liknande bibliotek för generering på klientsidan.
+QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsföreningar och sommarcuper** som vill digitalisera kioskförsäljning med Swish — utan app, utan Swish Business API och utan dyra kassaintegrationer.
 
----
+**Primär köpare:** Föreningens styrelse / kassör (inte enskild förälder eller privatperson på loppis).
 
-## 🔐 Auth & Access-modell
-
-1. **Butiksaccess:** Varje butik har en unik administrativ URL (Magic Link).
-2. **Global Dashboard:** Genom att logga in med sin e-post kan en användare få en länk som listar *alla* butiker de har skapat.
-3. **Säkerhet:** Better Auth hanterar sessionshantering. Ingen lagring av lösenord.
+**Primär användare:** Lagledare som kör kiosk vid match eller cup; föreningens kassör som behöver överblick och bokföring.
 
 ---
 
-## 💸 Betalningsflöde (Deep Linking)
+## Affärsmodell
 
-Vi använder **inte** Swish Business API (för att hålla tröskeln låg).
-1. Kunden klickar "Betala".
-2. Systemet skapar en transaktionspost i Convex med status `pending`.
-3. Systemet genererar en `swish://`-länk:
-   - `amount`: Totalsumma
-   - `payee`: Säljarens Swish-nummer
-   - `message`: "QRB-[Butiksnamn]-[4 sista siffror i kundens tel]"
-4. Kunden slutför betalningen i Swish-appen.
-5. Säljaren ser transaktionen dyka upp i sin realtids-vy och markerar den som `verified` när de sett pengarna på sitt eget konto.
-
----
-
-## 🎨 Designspråk: "Trust & Clarity"
-
-- **Färger:** Trygg blågrå (`#F8FAFC`), djup indigo för knappar, och en tydlig "Success Green" för verifierade betalningar.
-- **UX:** Stora touch-ytor (min 48px), tydlig typografi (Inter/Geist), minimalt med brus.
-- **Mobile First:** 95% av användningen sker i mobilen.
+| | Gammalt (raderas ur kodbasen) | Nytt |
+|--|-------------------------------|------|
+| Pris | 10 kr (48 h) / 99 kr (säsong) | **995 kr/månad** (klubblicens) |
+| Köpare | Enskild förälder/lagledare | **Föreningen** (kansli/styrelse) |
+| Betalning plattform | Manuell Swish till privatnummer | **Stripe Billing** (kort, faktura, 14 dagars trial) |
+| Kundbetalning (kiosk) | Swish deep link → lagets nummer | Oförändrat |
+| Dataägande | `ownerEmail` per butik | `organizations` + `organizationMembers` |
+| MRR-mål | — | 7–10 föreningar ≈ 10 000 kr/månad |
 
 ---
 
-## 🗺 Roadmap
+## Kärnfunktionalitet
 
-### Fas 1: Fundament (MVP)
-- [X] Setup TanStack Start + Convex + Better Auth.
-- [X] Schema för `shops`, `products`, och `transactions`.
-- [X] Grundläggande "Skapa butik"-flöde.
+### För föreningen (B2B)
 
-### Fas 2: Skapa butik
-- [X] Skapa butik flöde genererar url
-- [X] Skapa butik och kunna lägga till artiklar
+- **Klubblicens** — alla lag och kiosker under en organisation
+- **Centralt dashboard** — kassör ser alla aktiva kiosker och aggregerad försäljning
+- **Bokförings-export** — CSV/SIE för Fortnox/Visma (helgens cup på en knapp)
+- **Roller** — owner/treasurer (ekonomi) vs editor/lagledare (egen kiosk, ingen helhets ekonomi)
+- **Flera kiosker** — P08 plan A, F09 plan B, cupkiosk, etc.
 
+### För lagledaren (editor)
 
-### Fas 3: Köpupplevelse
-- [X] Sipmle Buyer view med varukorg.
-- [X] Swish deep-link generator.with items as message and price autocalcualted 
-- [X] "Tack för ditt köp"-sida med instruktioner till personalen.
+- Skapa och hantera produkter för sin kiosk
+- QR-skylt (skärm + A4-utskrift)
+- Verifiera inkommande Swish-betalningar mot kvitto
+- Realtidsförsäljning för sin kiosk
 
-### Fas 4: Admin & PDF
-- [ ] Realtids-dashboard för transaktioner.
-- [ ] PDF-generator för A4-skylt med QR-kod.
-- [ ] Sida för att visa qrkod till butiken
-- [ ] Magic Link e-postutskick via Resend.
+### För köparen (publik, ingen inloggning)
 
-### Fas 5: Polering & Growth
-- [ ] Programmatisk SEO (Landningssidor för städer/nicher).
-- [ ] Säljrapporter (Export till CSV/PDF).
-- [ ] "Powered by QRButik.se" branding.
+- Scanna QR → mobil meny → varukorg
+- Betala med Swish (deep link till kioskens Swish-nummer)
+- Digitalt kvitto att visa kassören
+
+---
+
+## Teknisk stack
+
+| Lager | Teknik |
+|-------|--------|
+| Frontend | TanStack Start (SSR), Tailwind v4 |
+| Backend / DB | Convex (realtid) |
+| Auth | Better Auth (magic link) |
+| **Plattformsbetalning** | **Stripe Billing** (prenumeration, trial, webhooks) |
+| Kundbetalning (kiosk) | Swish `swish://` deep links (inget Business API) |
+| E-post | Resend (magic links, onboarding, billing) |
+
+---
+
+## Auth & åtkomst (implementerat i Fas 1)
+
+1. **Organisation** äger prenumeration och alla kiosker.
+2. **Roller:** `owner`, `treasurer`, `editor` — enforced **server-side** i Convex via `organizationMembers`.
+3. **Magic link** via `/logga-in` — lösenordslöst; `/skapa` och `/admin` kräver session.
+4. **Köpare** behöver aldrig konto.
+
+```
+/logga-in → magic link → session
+/skapa (inloggad) → createOrganization → org (trialing) + owner
+/admin → skapa kiosk via /admin/skapa-kiosk; ShopAccessGate per kiosk
+/admin/billing → Stripe Checkout / Portal (when env configured)
+/s/{slug} → publikt; gated på org.subscriptionStatus
+```
+
+---
+
+## Betalningsflöden
+
+### A) Förening → QRButik (licens)
+
+```
+Styrelse → skapa förening (14 dagars trial utan kort) → lägg till kiosker i admin
+  → vid behov: /admin/billing → Stripe Checkout (kort)
+  → Webhook aktiverar organization → alla kiosker tillåtna
+```
+
+### B) Kund → förening (kiosk, oförändrat)
+
+```
+QR → varukorg → Swish deep link → pending transaction → kvitto
+  → lagledare verifierar manuellt i admin
+```
+
+---
+
+## Design
+
+Se [`DESIGN_SPEC.md`](./DESIGN_SPEC.md) — B2B Tech: trust, tydlighet, 48px touch targets, Inter, electric blue.
+
+Dashboard och export-ytor ska kännas **professionella för kassörer**, inte bara mobil-kiosk.
+
+---
+
+## Marknadsföring
+
+- **Intent-SEO:** "digitalt kiosksystem idrottsförening", "kassa fotbollscup", etc.
+- **Inte:** mass-P-SEO på sport×stad (låg köpintention).
+- **Aktiv försäljning:** cuparrangörer, piloter, styrelsepitch.
+
+Se [`SEO_INSTRUCTIONS.md`](./SEO_INSTRUCTIONS.md).
+
+---
+
+## Status
+
+### Klart (MVP — enskild kiosk)
+
+- [x] TanStack Start + Convex + Better Auth
+- [x] Skapa butik, produkter, Swish-köp, kvitto
+- [x] Admin per kiosk: försäljning, historik, produkter, skylt, inställningar
+- [x] Magic link, flera butiker per e-post
+- [x] Swish deep links för kundbetalning
+
+### Pågående / planerat (B2B-pivot)
+
+Se full lista i [`ROADMAP.md`](./ROADMAP.md):
+
+- [ ] Klubblicens + organisation i schema
+- [ ] Stripe Billing + trial
+- [ ] Centralt föreningsdashboard
+- [ ] CSV/SIE-export
+- [ ] Roller & inbjudningar
+- [ ] Intent-SEO + cup-piloter
+
+### Raderas (greenfield — ingen migrering)
+
+- [ ] Event/Säsongs-pass (10/99 kr) + tabell `shopActivations`
+- [ ] Pass-fält på `shops`, `ownerEmail`, manuell Swish till plattformsnummer
+- [ ] `/utforska/*` P-SEO (valfritt — kan tas bort helt)

@@ -9,14 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SkapaRouteImport } from './routes/skapa'
+import { Route as LoggaInRouteImport } from './routes/logga-in'
+import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as GlennRouteImport } from './routes/glenn'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UtforskaIndexRouteImport } from './routes/utforska/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as UtforskaSportRouteImport } from './routes/utforska/$sport'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
+import { Route as AdminSkapaKioskRouteImport } from './routes/admin/skapa-kiosk'
+import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
 import { Route as UtforskaSportIndexRouteImport } from './routes/utforska/$sport/index'
 import { Route as SShopSlugIndexRouteImport } from './routes/s/$shopSlug/index'
@@ -29,14 +35,34 @@ import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/
 import { Route as AdminShopIdHistorikRouteImport } from './routes/admin/$shopId/historik'
 import { Route as UtforskaSportCityIndexRouteImport } from './routes/utforska/$sport/$city/index'
 
+const VillkorRoute = VillkorRouteImport.update({
+  id: '/villkor',
+  path: '/villkor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SkapaRoute = SkapaRouteImport.update({
   id: '/skapa',
   path: '/skapa',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoggaInRoute = LoggaInRouteImport.update({
+  id: '/logga-in',
+  path: '/logga-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegritetRoute = IntegritetRouteImport.update({
+  id: '/integritet',
+  path: '/integritet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GlennRoute = GlennRouteImport.update({
   id: '/glenn',
   path: '/glenn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -50,9 +76,9 @@ const UtforskaIndexRoute = UtforskaIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const UtforskaSportRoute = UtforskaSportRouteImport.update({
   id: '/utforska/$sport',
@@ -69,10 +95,20 @@ const SShopSlugRoute = SShopSlugRouteImport.update({
   path: '/s/$shopSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSkapaKioskRoute = AdminSkapaKioskRouteImport.update({
+  id: '/skapa-kiosk',
+  path: '/skapa-kiosk',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminBillingRoute = AdminBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminShopIdRoute = AdminShopIdRouteImport.update({
-  id: '/admin/$shopId',
-  path: '/admin/$shopId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$shopId',
+  path: '/$shopId',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const UtforskaSportIndexRoute = UtforskaSportIndexRouteImport.update({
   id: '/',
@@ -127,13 +163,19 @@ const UtforskaSportCityIndexRoute = UtforskaSportCityIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/glenn': typeof GlennRoute
+  '/integritet': typeof IntegritetRoute
+  '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
+  '/admin/billing': typeof AdminBillingRoute
+  '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRouteWithChildren
-  '/admin': typeof AdminIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
@@ -149,7 +191,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/glenn': typeof GlennRoute
+  '/integritet': typeof IntegritetRoute
+  '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/villkor': typeof VillkorRoute
+  '/admin/billing': typeof AdminBillingRoute
+  '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
   '/utforska': typeof UtforskaIndexRoute
@@ -167,9 +214,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/glenn': typeof GlennRoute
+  '/integritet': typeof IntegritetRoute
+  '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
+  '/admin/billing': typeof AdminBillingRoute
+  '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRouteWithChildren
@@ -190,13 +243,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/glenn'
+    | '/integritet'
+    | '/logga-in'
     | '/skapa'
+    | '/villkor'
     | '/admin/$shopId'
+    | '/admin/billing'
+    | '/admin/skapa-kiosk'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
-    | '/admin'
+    | '/admin/'
     | '/utforska'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
@@ -212,7 +271,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/glenn'
+    | '/integritet'
+    | '/logga-in'
     | '/skapa'
+    | '/villkor'
+    | '/admin/billing'
+    | '/admin/skapa-kiosk'
     | '/tack/$transactionId'
     | '/admin'
     | '/utforska'
@@ -229,9 +293,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/glenn'
+    | '/integritet'
+    | '/logga-in'
     | '/skapa'
+    | '/villkor'
     | '/admin/$shopId'
+    | '/admin/billing'
+    | '/admin/skapa-kiosk'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
@@ -251,18 +321,27 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   GlennRoute: typeof GlennRoute
+  IntegritetRoute: typeof IntegritetRoute
+  LoggaInRoute: typeof LoggaInRoute
   SkapaRoute: typeof SkapaRoute
-  AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
+  VillkorRoute: typeof VillkorRoute
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
   UtforskaSportRoute: typeof UtforskaSportRouteWithChildren
-  AdminIndexRoute: typeof AdminIndexRoute
   UtforskaIndexRoute: typeof UtforskaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/villkor': {
+      id: '/villkor'
+      path: '/villkor'
+      fullPath: '/villkor'
+      preLoaderRoute: typeof VillkorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/skapa': {
       id: '/skapa'
       path: '/skapa'
@@ -270,11 +349,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkapaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logga-in': {
+      id: '/logga-in'
+      path: '/logga-in'
+      fullPath: '/logga-in'
+      preLoaderRoute: typeof LoggaInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integritet': {
+      id: '/integritet'
+      path: '/integritet'
+      fullPath: '/integritet'
+      preLoaderRoute: typeof IntegritetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/glenn': {
       id: '/glenn'
       path: '/glenn'
       fullPath: '/glenn'
       preLoaderRoute: typeof GlennRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -293,10 +393,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
+      path: '/'
+      fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/utforska/$sport': {
       id: '/utforska/$sport'
@@ -319,12 +419,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SShopSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/skapa-kiosk': {
+      id: '/admin/skapa-kiosk'
+      path: '/skapa-kiosk'
+      fullPath: '/admin/skapa-kiosk'
+      preLoaderRoute: typeof AdminSkapaKioskRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/billing': {
+      id: '/admin/billing'
+      path: '/billing'
+      fullPath: '/admin/billing'
+      preLoaderRoute: typeof AdminBillingRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/$shopId': {
       id: '/admin/$shopId'
-      path: '/admin/$shopId'
+      path: '/$shopId'
       fullPath: '/admin/$shopId'
       preLoaderRoute: typeof AdminShopIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/utforska/$sport/': {
       id: '/utforska/$sport/'
@@ -419,6 +533,24 @@ const AdminShopIdRouteWithChildren = AdminShopIdRoute._addFileChildren(
   AdminShopIdRouteChildren,
 )
 
+interface AdminRouteRouteChildren {
+  AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
+  AdminBillingRoute: typeof AdminBillingRoute
+  AdminSkapaKioskRoute: typeof AdminSkapaKioskRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminShopIdRoute: AdminShopIdRouteWithChildren,
+  AdminBillingRoute: AdminBillingRoute,
+  AdminSkapaKioskRoute: AdminSkapaKioskRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 interface SShopSlugRouteChildren {
   SShopSlugKlartRoute: typeof SShopSlugKlartRoute
   SShopSlugQrRoute: typeof SShopSlugQrRoute
@@ -451,13 +583,15 @@ const UtforskaSportRouteWithChildren = UtforskaSportRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   GlennRoute: GlennRoute,
+  IntegritetRoute: IntegritetRoute,
+  LoggaInRoute: LoggaInRoute,
   SkapaRoute: SkapaRoute,
-  AdminShopIdRoute: AdminShopIdRouteWithChildren,
+  VillkorRoute: VillkorRoute,
   SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
   UtforskaSportRoute: UtforskaSportRouteWithChildren,
-  AdminIndexRoute: AdminIndexRoute,
   UtforskaIndexRoute: UtforskaIndexRoute,
 }
 export const routeTree = rootRouteImport

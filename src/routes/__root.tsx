@@ -107,7 +107,6 @@ export const Route = createRootRouteWithContext<{
                 name: SITE_NAME,
                 url: SITE_URL,
                 email: 'glenn@inventing.se',
-                telephone: '0735029113',
                 address: {
                   '@type': 'PostalAddress',
                   streetAddress: 'Barometergatan 8',
