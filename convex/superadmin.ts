@@ -6,6 +6,7 @@ import {
 } from './lib/billing'
 import { authedQuery, platformAdminMutation, platformAdminQuery } from './lib/customFunctions'
 import { requirePlatformAdmin } from './lib/platformAdmin'
+import { isE2eTestOrganization, isE2eTestShop } from './lib/testData'
 import {
   isSubscriptionActive,
   subscriptionStatusValidator,
@@ -13,7 +14,6 @@ import {
 import type { SubscriptionStatus } from './lib/validators'
 import type { Doc, Id } from './_generated/dataModel'
 import type { DbReadCtx } from './lib/auth'
-import { isE2eTestOrganization, isE2eTestShop } from './lib/testData'
 
 const dayMs = 24 * 60 * 60 * 1000
 

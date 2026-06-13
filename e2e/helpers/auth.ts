@@ -1,12 +1,12 @@
 import { expect } from '@playwright/test'
-import { getConvexSiteUrl } from './env'
+import { getConvexSiteUrl, getTestBaseUrl } from './env'
 import type { Page } from '@playwright/test'
 
 async function waitForDevMagicLink(
   convexSiteUrl: string,
   email: string,
 ): Promise<string> {
-  const maxAttempts = 30
+  const maxAttempts = 40
   const delayMs = 500
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
@@ -34,6 +34,15 @@ async function waitForDevMagicLink(
   )
 }
 
+async function waitForLoginGateToClear(page: Page): Promise<void> {
+  await expect(page.getByText('Laddar...')).toBeHidden({ timeout: 30_000 }).catch(
+    () => undefined,
+  )
+  await expect(
+    page.getByRole('heading', { name: 'Logga in för att skapa förening' }),
+  ).toBeHidden({ timeout: 5_000 }).catch(() => undefined)
+}
+
 async function waitForAuthenticatedDestination(
   page: Page,
   redirectTo: string,
@@ -41,8 +50,23 @@ async function waitForAuthenticatedDestination(
   const path = redirectTo.split('?')[0] ?? redirectTo
 
   if (path.includes('/skapa')) {
+    await waitForLoginGateToClear(page)
     await expect(page.getByLabel('Föreningsnamn')).toBeVisible({
-      timeout: 30_000,
+      timeout: 45_000,
+    })
+    return
+  }
+
+  if (path.includes('/admin/medlemmar')) {
+    await waitForLoginGateToClear(page)
+    if (redirectTo.includes('invite=')) {
+      await expect(
+        page.getByRole('button', { name: 'Acceptera inbjudan' }),
+      ).toBeVisible({ timeout: 45_000 })
+      return
+    }
+    await expect(page.locator('main h1', { hasText: 'Medlemmar' })).toBeVisible({
+      timeout: 45_000,
     })
     return
   }
@@ -91,16 +115,22 @@ async function completeMagicLinkVerification(
   appBaseUrl: string,
   redirectTo: string,
 ): Promise<void> {
+  const destination = redirectTo.startsWith('http')
+    ? redirectTo
+    : new URL(redirectTo, appBaseUrl).toString()
+  const destinationUrl = new URL(destination)
+
   await page.goto(magicLinkUrl, { waitUntil: 'domcontentloaded' }).catch(() => {
     // Redirect during verify aborts navigation — session may still be established.
   })
 
-  const destination = redirectTo.startsWith('http')
-    ? redirectTo
-    : new URL(redirectTo, appBaseUrl).toString()
-  const destinationPath = new URL(destination).pathname
+  await page.waitForTimeout(1500)
 
-  if (!new URL(page.url()).pathname.startsWith(destinationPath)) {
+  const currentUrl = new URL(page.url())
+  if (
+    currentUrl.pathname !== destinationUrl.pathname ||
+    currentUrl.search !== destinationUrl.search
+  ) {
     await page.goto(destination, { waitUntil: 'domcontentloaded' })
   }
 
@@ -111,9 +141,13 @@ export async function loginWithDevMagicLink(
   page: Page,
   email: string,
   redirectTo = '/admin',
-  appBaseUrl = 'http://localhost:3000',
+  appBaseUrl = getTestBaseUrl(),
 ): Promise<void> {
   const convexSiteUrl = getConvexSiteUrl()
+
+  await page.addInitScript(() => {
+    ;(window as Window & { __E2E_AUTH__?: boolean }).__E2E_AUTH__ = true
+  })
 
   await page.goto(`/logga-in?redirect=${encodeURIComponent(redirectTo)}`)
   await page.getByLabel('E-post').fill(email)
@@ -148,7 +182,7 @@ export async function loginAndOpen(
   page: Page,
   email: string,
   path: string,
-  appBaseUrl = 'http://localhost:3000',
+  appBaseUrl = getTestBaseUrl(),
 ): Promise<void> {
   const normalizedPath = path.split('?')[0] ?? path
 

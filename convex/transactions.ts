@@ -184,7 +184,7 @@ export const listByShop = authedQuery({
   args: { shopId: v.id('shops') },
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
-    await requireShopAccess(ctx, args.shopId)
+    await requireShopAccess(ctx, args.shopId, ['owner', 'treasurer'])
     return await listShopTransactionsAll(ctx, args.shopId)
   },
 })
@@ -246,7 +246,7 @@ export const verify = authedMutation({
     if (!transaction) {
       throw new Error('Transaktionen hittades inte.')
     }
-    await requireShopAccess(ctx, transaction.shopId)
+    await requireShopAccess(ctx, transaction.shopId, ['owner', 'treasurer'])
     if (transaction.status !== 'verified') {
       await ctx.db.patch('transactions', args.transactionId, {
         status: 'verified',
@@ -264,7 +264,7 @@ export const setVerified = authedMutation({
     if (!transaction) {
       throw new Error('Transaktionen hittades inte.')
     }
-    await requireShopAccess(ctx, transaction.shopId)
+    await requireShopAccess(ctx, transaction.shopId, ['owner', 'treasurer'])
     const status = args.verified ? 'verified' : 'pending'
     if (transaction.status !== status) {
       await ctx.db.patch('transactions', args.transactionId, { status })

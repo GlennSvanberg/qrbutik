@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMutation, useQuery } from 'convex/react'
@@ -31,6 +31,84 @@ const roleLabel: Record<string, string> = {
   editor: 'Lagledare',
 }
 
+function InviteAcceptPanel({
+  token,
+  inviteError,
+}: {
+  token: string
+  inviteError?: string
+}) {
+  const navigate = useNavigate()
+  const acceptInvitation = useMutation(api.members.acceptInvitation)
+  const invitation = useQuery(api.members.getInvitationByToken, { token })
+  const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(inviteError ?? null)
+
+  if (invitation === undefined) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+          Laddar inbjudan…
+        </div>
+      </main>
+    )
+  }
+
+  if (invitation === null) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+          Inbjudan hittades inte eller har redan accepterats.
+        </div>
+      </main>
+    )
+  }
+
+  if (invitation.expired) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+          Inbjudan har gått ut. Be föreningens administratör skicka en ny.
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main className="relaxed-page-shell min-h-screen px-6 py-10">
+      <div className="relaxed-surface mx-auto flex max-w-2xl flex-col gap-4 p-8">
+        <h1 className="text-2xl font-semibold text-slate-900">Medlemsinbjudan</h1>
+        <p className="text-sm text-slate-600">
+          Du är inbjuden till {invitation.organizationName} som{' '}
+          {roleLabel[invitation.role]}.
+        </p>
+        <button
+          type="button"
+          onClick={async () => {
+            setError(null)
+            try {
+              const result = await acceptInvitation({ token })
+              setMessage(`Du gick med i ${result.organizationName}.`)
+              await navigate({ to: '/admin' })
+            } catch (acceptError) {
+              setError(
+                acceptError instanceof Error
+                  ? acceptError.message
+                  : 'Kunde inte acceptera inbjudan.',
+              )
+            }
+          }}
+          className="relaxed-primary-button h-11 w-fit cursor-pointer px-4 text-sm font-semibold text-white"
+        >
+          Acceptera inbjudan
+        </button>
+        {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
+        {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+      </div>
+    </main>
+  )
+}
+
 function MedlemmarPage() {
   const {
     organizationId: organizationIdFromSearch,
@@ -41,6 +119,15 @@ function MedlemmarPage() {
     convexQuery(api.organizations.getMyOrganizations, {}),
   )
   const orgList = organizations ?? []
+
+  if (inviteFromSearch && orgList.length === 0) {
+    return (
+      <InviteAcceptPanel
+        token={inviteFromSearch}
+        inviteError={inviteErrorFromSearch}
+      />
+    )
+  }
 
   if (orgList.length === 0) {
     return (
@@ -135,6 +222,15 @@ function MedlemmarContent({
   )
 
   const inviteFromUrl = inviteFromSearch ?? null
+
+  if (inviteFromUrl && !canManage) {
+    return (
+      <InviteAcceptPanel
+        token={inviteFromUrl}
+        inviteError={inviteErrorFromSearch}
+      />
+    )
+  }
 
   if (!canManage) {
     return (

@@ -29,6 +29,7 @@ const baseURL =
 
 export default defineConfig({
   testDir: './e2e',
+  globalSetup: './e2e/global-setup.ts',
   globalTeardown: './e2e/global-teardown.ts',
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
@@ -54,5 +55,11 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    env: {
+      ...process.env,
+      SITE_URL: baseURL,
+      VITE_SITE_URL: baseURL,
+      VITE_DEV_MAGIC_LINK: 'false',
+    },
   },
 })

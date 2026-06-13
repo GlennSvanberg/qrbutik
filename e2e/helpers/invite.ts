@@ -17,6 +17,12 @@ export async function waitForDevInviteToken(
       `${convexSiteUrl}/dev/invite-token?email=${encodeURIComponent(email)}`,
     )
 
+    if (response.status === 404) {
+      throw new Error(
+        `Dev invite token route not found (404). Run \`npx convex dev\` so convex/http.ts is deployed.`,
+      )
+    }
+
     if (response.status === 204) {
       await new Promise((resolve) => setTimeout(resolve, delayMs))
       continue
@@ -33,6 +39,6 @@ export async function waitForDevInviteToken(
   }
 
   throw new Error(
-    `Dev invite token not found for ${email}. Ensure DEV_MAGIC_LINK=true in Convex env.`,
+    `Dev invite token not found for ${email} after ${maxAttempts} polls. Ensure the owner sent an invite and DEV_MAGIC_LINK=true in Convex env.`,
   )
 }

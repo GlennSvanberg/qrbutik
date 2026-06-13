@@ -5,6 +5,12 @@ import { useAction, useMutation, useQuery } from 'convex/react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
 import { daysUntil } from '../../lib/billing'
+import {
+  canActivate,
+  hasBillingSetup,
+  hasPaidSubscription,
+  needsPaymentUrgently,
+} from '../../lib/billingUi'
 import type { Id } from '../../../convex/_generated/dataModel'
 
 type BillingSearch = {
@@ -179,20 +185,10 @@ function BillingContent({
     activeOrg.role === 'owner' || activeOrg.role === 'treasurer'
 
   const trialDaysLeft = daysUntil(activeOrg.trialEndsAt)
-  const hasPaidSubscription =
-    activeOrg.subscriptionStatus === 'active' &&
-    Boolean(activeOrg.stripeSubscriptionId)
-  const hasBillingSetup = Boolean(activeOrg.stripeSubscriptionId)
-  const canActivate =
-    stripeConfigured &&
-    !hasPaidSubscription &&
-    !hasBillingSetup &&
-    activeOrg.subscriptionStatus !== 'canceled'
-  const needsPaymentUrgently =
-    activeOrg.subscriptionStatus === 'past_due' ||
-    (activeOrg.subscriptionStatus === 'inactive' &&
-      activeOrg.trialEndsAt !== undefined &&
-      activeOrg.trialEndsAt < Date.now())
+  const paid = hasPaidSubscription(activeOrg)
+  const billingSetup = hasBillingSetup(activeOrg)
+  const showActivate = canActivate(activeOrg, stripeConfigured)
+  const urgent = needsPaymentUrgently(activeOrg)
 
   useEffect(() => {
     if (!organizationDetails) {
@@ -261,20 +257,20 @@ function BillingContent({
             Checkout avbröts. Du kan försöka igen när du vill.
           </p>
         ) : null}
-        {needsPaymentUrgently ? (
+        {urgent ? (
           <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
             {activeOrg.subscriptionStatus === 'past_due'
               ? 'Betalningen misslyckades. Kiosker kan pausas tills betalningen är reglerad.'
               : 'Provperioden är slut. Aktivera klubblicensen för att fortsätta ta emot köp.'}
           </p>
         ) : null}
-        {hasPaidSubscription ? (
+        {paid ? (
           <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
             Klubblicensen är aktiv. Hantera kort, fakturor och uppsägning via
             kundportalen.
           </p>
         ) : null}
-        {!hasPaidSubscription && hasBillingSetup ? (
+        {!paid && billingSetup ? (
           <p className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
             Betalning är konfigurerad. Kiosker fortsätter under provperioden;
             debitering sker enligt vald metod (kort eller faktura).
@@ -329,7 +325,7 @@ function BillingContent({
 
           {canManageBilling ? (
             <div className="flex flex-col gap-3">
-              {canActivate ? (
+              {showActivate ? (
                 <div className="flex flex-wrap gap-3">
                   <button
                     type="button"
@@ -414,7 +410,7 @@ function BillingContent({
                 {isLoadingPortal ? 'Öppnar...' : 'Hantera prenumeration'}
               </button>
 
-              {canActivate ? (
+              {showActivate ? (
                 <p className="text-sm text-slate-500">
                   Kortbetalning via Stripe Checkout. Faktura skickas som PDF till
                   faktura-e-post — passar kassörer utan föreningskort.

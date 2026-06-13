@@ -48,6 +48,7 @@ test.describe('Role-based navigation', () => {
     browser,
     baseURL,
   }) => {
+    test.setTimeout(180_000)
     const appUrl = getTestBaseUrl(baseURL)
     const ownerEmail = uniqueTestEmail('roles-owner-setup')
     const editorEmail = uniqueTestEmail('roles-editor')
@@ -55,15 +56,15 @@ test.describe('Role-based navigation', () => {
     const kioskSlug = `e2e-roles-editor-${Date.now()}`
     const kioskName = 'Lagkiosk'
 
-    const ownerContext = await browser.newContext()
-    const editorContext = await browser.newContext()
+    const ownerContext = await browser.newContext({ baseURL: appUrl })
+    const editorContext = await browser.newContext({ baseURL: appUrl })
     const ownerPage = await ownerContext.newPage()
     const editorPage = await editorContext.newPage()
 
     try {
       await loginAndOpen(ownerPage, ownerEmail, '/skapa', appUrl)
       await createTestOrg(ownerPage, { email: ownerEmail, orgName })
-      await createTestKiosk(ownerPage, appUrl, {
+      const { shopId } = await createTestKiosk(ownerPage, appUrl, {
         slug: kioskSlug,
         kioskName,
       })
@@ -113,6 +114,14 @@ test.describe('Role-based navigation', () => {
       await expect(
         editorPage.getByRole('link', { name: 'Inställningar' }),
       ).toHaveCount(0)
+
+      await editorPage.goto(`${appUrl}/admin/${shopId}/historik`, {
+        waitUntil: 'domcontentloaded',
+      })
+      await expect(
+        editorPage.getByText('Endast kassör eller ägare kan se köphistorik.'),
+      ).toBeVisible({ timeout: 15_000 })
+      await expect(editorPage.getByRole('checkbox')).toHaveCount(0)
     } finally {
       await ownerContext.close()
       await editorContext.close()

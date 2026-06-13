@@ -9,6 +9,9 @@ export function AdminMemberSync() {
   const syncMemberIdentity = useMutation(api.members.syncMemberIdentity)
   const acceptInvitation = useMutation(api.members.acceptInvitation)
   const hasSynced = useRef(false)
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  })
   const search = useRouterState({
     select: (state) => state.location.search as Record<string, unknown>,
   })
@@ -25,7 +28,9 @@ export function AdminMemberSync() {
       await syncMemberIdentity({})
       const inviteToken =
         typeof search.invite === 'string' ? search.invite : undefined
-      if (inviteToken) {
+      const onMedlemmarInvitePage =
+        pathname.includes('/admin/medlemmar') && Boolean(inviteToken)
+      if (inviteToken && !onMedlemmarInvitePage) {
         try {
           await acceptInvitation({ token: inviteToken })
         } catch (error) {
@@ -43,7 +48,14 @@ export function AdminMemberSync() {
         }
       }
     })()
-  }, [acceptInvitation, navigate, search.invite, session?.user.email, syncMemberIdentity])
+  }, [
+    acceptInvitation,
+    navigate,
+    pathname,
+    search.invite,
+    session?.user.email,
+    syncMemberIdentity,
+  ])
 
   return null
 }

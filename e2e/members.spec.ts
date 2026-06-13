@@ -9,9 +9,11 @@ attachFindingsReporter(test)
 
 test.describe('Member invitations', () => {
   test('owner invites editor and editor accepts via dev invite token', async ({
+    page,
     browser,
     baseURL,
   }) => {
+    test.setTimeout(180_000)
     const appUrl = getTestBaseUrl(baseURL)
     const ownerEmail = uniqueTestEmail('members-owner')
     const editorEmail = uniqueTestEmail('members-editor')
@@ -19,28 +21,26 @@ test.describe('Member invitations', () => {
     const kioskSlug = `e2e-members-${Date.now()}`
     const kioskName = 'Cupkiosk'
 
-    const ownerContext = await browser.newContext()
-    const editorContext = await browser.newContext()
-    const ownerPage = await ownerContext.newPage()
+    const editorContext = await browser.newContext({ baseURL: appUrl })
     const editorPage = await editorContext.newPage()
 
     try {
-      await loginAndOpen(ownerPage, ownerEmail, '/skapa', appUrl)
-      await createTestOrg(ownerPage, { email: ownerEmail, orgName })
-      const { shopId } = await createTestKiosk(ownerPage, appUrl, {
+      await loginAndOpen(page, ownerEmail, '/skapa', appUrl)
+      await createTestOrg(page, { email: ownerEmail, orgName })
+      const { shopId } = await createTestKiosk(page, appUrl, {
         slug: kioskSlug,
         kioskName,
       })
 
-      await inviteMember(ownerPage, appUrl, {
+      await inviteMember(page, appUrl, {
         email: editorEmail,
         role: 'editor',
         assignShopNames: [kioskName],
       })
 
-      await expect(
-        ownerPage.getByText(editorEmail, { exact: false }),
-      ).toBeVisible({ timeout: 15_000 })
+      await expect(page.getByText(editorEmail, { exact: false })).toBeVisible({
+        timeout: 15_000,
+      })
 
       const invite = await acceptInviteAsUser(editorPage, editorEmail, appUrl)
       expect(invite.token.length).toBeGreaterThan(0)
@@ -51,22 +51,25 @@ test.describe('Member invitations', () => {
       await expect(
         editorPage.getByRole('heading', { name: 'Dina kiosker' }),
       ).toBeVisible({ timeout: 30_000 })
-      await expect(editorPage.getByText(orgName)).toBeVisible()
+      await expect(
+        editorPage.getByRole('main').getByText(orgName),
+      ).toBeVisible()
 
       await editorPage.goto(`${appUrl}/admin/${shopId}`, {
         waitUntil: 'domcontentloaded',
       })
       await expect(editorPage.locator('main')).toBeVisible({ timeout: 30_000 })
     } finally {
-      await ownerContext.close()
       await editorContext.close()
     }
   })
 
   test('owner can reassign editor kiosker after invite', async ({
+    page,
     browser,
     baseURL,
   }) => {
+    test.setTimeout(180_000)
     const appUrl = getTestBaseUrl(baseURL)
     const ownerEmail = uniqueTestEmail('members-reassign-owner')
     const editorEmail = uniqueTestEmail('members-reassign-editor')
@@ -74,44 +77,47 @@ test.describe('Member invitations', () => {
     const kioskA = 'Kiosk A'
     const kioskB = 'Kiosk B'
 
-    const ownerContext = await browser.newContext()
-    const ownerPage = await ownerContext.newPage()
+    const editorContext = await browser.newContext({ baseURL: appUrl })
+    const editorPage = await editorContext.newPage()
 
     try {
-      await loginAndOpen(ownerPage, ownerEmail, '/skapa', appUrl)
-      await createTestOrg(ownerPage, { email: ownerEmail, orgName })
-      await createTestKiosk(ownerPage, appUrl, {
+      await loginAndOpen(page, ownerEmail, '/skapa', appUrl)
+      await createTestOrg(page, { email: ownerEmail, orgName })
+      await createTestKiosk(page, appUrl, {
         slug: `e2e-a-${Date.now()}`,
         kioskName: kioskA,
       })
-      await createTestKiosk(ownerPage, appUrl, {
+      await createTestKiosk(page, appUrl, {
         slug: `e2e-b-${Date.now()}`,
         kioskName: kioskB,
       })
 
-      await inviteMember(ownerPage, appUrl, {
+      await inviteMember(page, appUrl, {
         email: editorEmail,
         role: 'editor',
         assignShopNames: [kioskA],
       })
 
-      await ownerPage.goto(`${appUrl}/admin/medlemmar`, {
+      await acceptInviteAsUser(editorPage, editorEmail, appUrl)
+
+      await page.goto(`${appUrl}/admin/medlemmar`, {
         waitUntil: 'domcontentloaded',
       })
-      await expect(ownerPage.getByText(editorEmail)).toBeVisible({
+      await expect(page.getByText(editorEmail)).toBeVisible({
         timeout: 15_000,
       })
-      await ownerPage.getByRole('button', { name: 'Redigera' }).first().click()
-      await ownerPage.getByRole('checkbox', { name: kioskB }).check()
-      await ownerPage.getByRole('button', { name: 'Spara ändringar' }).click()
-      await expect(ownerPage.getByText('Medlemmen uppdaterades.')).toBeVisible({
+      await page.getByRole('button', { name: 'Redigera' }).first().click()
+      await page
+        .getByRole('list')
+        .getByRole('checkbox', { name: kioskB })
+        .check()
+      await page.getByRole('button', { name: 'Spara ändringar' }).click()
+      await expect(page.getByText('Medlemmen uppdaterades.')).toBeVisible({
         timeout: 15_000,
       })
-      await expect(ownerPage.getByText(/Kiosker:/)).toBeVisible()
-      await expect(ownerPage.getByText(kioskA)).toBeVisible()
-      await expect(ownerPage.getByText(kioskB)).toBeVisible()
+      await expect(page.getByText(`Kiosker: ${kioskA}, ${kioskB}`)).toBeVisible()
     } finally {
-      await ownerContext.close()
+      await editorContext.close()
     }
   })
 })

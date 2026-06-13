@@ -113,7 +113,9 @@ export function downloadExportFile(args: {
   const anchor = document.createElement('a')
   anchor.href = url
   anchor.download = args.filename
+  document.body.appendChild(anchor)
   anchor.click()
+  anchor.remove()
   URL.revokeObjectURL(url)
 }
 

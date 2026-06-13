@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery, useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
@@ -6,7 +6,7 @@ import { useMutation } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
 import { AdminExportPanel } from '../../../components/AdminExportPanel'
 import { getDateRangeForPeriod, isTreasurerRole } from '../../../lib/adminDashboard'
-import type { Id } from '../../../../convex/_generated/dataModel'
+import type { Doc, Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/historik')({
   component: PurchaseHistoryPage,
@@ -21,8 +21,46 @@ function PurchaseHistoryPage() {
   const { data: organizations } = useTanstackQuery(
     convexQuery(api.organizations.getMyOrganizations, {}),
   )
+
+  const orgRole = organizations?.find(
+    (org) => org._id === shop?.organizationId,
+  )?.role
+
+  if (!shop) {
+    return null
+  }
+
+  if (organizations !== undefined && orgRole && !isTreasurerRole(orgRole)) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+          <p>Endast kassör eller ägare kan se köphistorik.</p>
+          <Link
+            to="/admin/$shopId"
+            params={{ shopId: shopIdParam }}
+            className="relaxed-primary-button mt-4 inline-flex cursor-pointer px-4 py-2 text-sm font-semibold text-white"
+          >
+            Tillbaka till försäljning
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  return <PurchaseHistoryContent shopId={shopIdParam} shop={shop} orgRole={orgRole} />
+}
+
+function PurchaseHistoryContent({
+  shopId,
+  shop,
+  orgRole,
+}: {
+  shopId: Id<'shops'>
+  shop: Doc<'shops'>
+  orgRole?: 'owner' | 'treasurer' | 'editor'
+}) {
   const { data: transactions } = useSuspenseQuery(
-    convexQuery(api.transactions.listByShop, { shopId: shopIdParam }),
+    convexQuery(api.transactions.listByShop, { shopId }),
   )
   const verifyTransaction = useMutation(api.transactions.verify)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
@@ -60,18 +98,16 @@ function PurchaseHistoryPage() {
     [transactions],
   )
 
-  const orgRole = organizations?.find(
-    (org) => org._id === shop?.organizationId,
-  )?.role
-  const showExport = orgRole ? isTreasurerRole(orgRole) : false
+  const orgRoleFromOrg = orgRole
+  const showExport = orgRoleFromOrg ? isTreasurerRole(orgRoleFromOrg) : false
   const exportRange = getDateRangeForPeriod('last30')
 
   return (
     <>
-      {showExport && shop ? (
+      {showExport ? (
         <AdminExportPanel
           organizationId={shop.organizationId}
-          shopId={shopIdParam}
+          shopId={shopId}
           start={exportRange.start}
           end={exportRange.end}
           compact

@@ -22,6 +22,7 @@ test.describe('ROADMAP 5.4 — trial to export', () => {
     page,
     baseURL,
   }) => {
+    test.setTimeout(180_000)
     const appUrl = getTestBaseUrl(baseURL)
     const email = uniqueTestEmail('roadmap-5-4')
     const orgName = `E2E Roadmap 5.4 ${Date.now()}`

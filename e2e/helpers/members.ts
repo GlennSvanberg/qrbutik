@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { loginAndOpen } from './auth'
+import { loginWithDevMagicLink } from './auth'
 import { waitForDevInviteToken } from './invite'
 
 import type { Page } from '@playwright/test'
@@ -44,20 +44,18 @@ export async function acceptInviteAsUser(
   baseURL: string,
 ): Promise<{ token: string; organizationId: string }> {
   const invite = await waitForDevInviteToken(email)
-  await loginAndOpen(
-    page,
-    email,
-    `/admin/medlemmar?invite=${invite.token}`,
-    baseURL,
-  )
+  await loginWithDevMagicLink(page, email, '/admin', baseURL)
+  await page.goto(`${baseURL}/admin/medlemmar?invite=${invite.token}`, {
+    waitUntil: 'domcontentloaded',
+  })
 
   await expect(
     page.getByRole('button', { name: 'Acceptera inbjudan' }),
-  ).toBeVisible({ timeout: 15_000 })
+  ).toBeVisible({ timeout: 30_000 })
   await page.getByRole('button', { name: 'Acceptera inbjudan' }).click()
-  await expect(page.getByText(/Du gick med i/)).toBeVisible({
-    timeout: 15_000,
-  })
+  await expect(
+    page.getByRole('heading', { name: 'Dina kiosker' }),
+  ).toBeVisible({ timeout: 30_000 })
 
   return invite
 }

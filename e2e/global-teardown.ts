@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process'
 
-export default async function globalTeardown() {
+export default function globalTeardown() {
   try {
     execSync('npx convex run internal.testCleanup.cleanupE2eData', {
       cwd: process.cwd(),

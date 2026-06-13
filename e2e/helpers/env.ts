@@ -36,7 +36,10 @@ export function getConvexSiteUrl(): string {
 }
 
 export function isStripeE2EEnabled(): boolean {
-  return process.env.STRIPE_E2E === 'true'
+  return (
+    process.env.STRIPE_E2E === 'true' ||
+    readEnvLocal('STRIPE_E2E') === 'true'
+  )
 }
 
 export function uniqueTestEmail(label: string): string {
@@ -49,6 +52,7 @@ export function getTestBaseUrl(baseURL?: string): string {
     baseURL ??
     process.env.PLAYWRIGHT_BASE_URL ??
     readEnvLocal('VITE_SITE_URL') ??
+    readEnvLocal('SITE_URL') ??
     'http://127.0.0.1:3000'
   )
 }

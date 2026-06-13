@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   isE2eTestEmail,
-  isE2eTestOrganization,
   isE2eTestOrgName,
+  isE2eTestOrganization,
   isE2eTestShop,
   isE2eTestShopSlug,
 } from './testData'

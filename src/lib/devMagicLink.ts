@@ -3,12 +3,22 @@ import { convexSiteUrl } from "./authClient";
 const devMagicLinkEnabled =
   (import.meta as any).env.VITE_DEV_MAGIC_LINK === "true";
 
+function isPlaywrightE2E(): boolean {
+  if (typeof navigator !== "undefined" && navigator.webdriver) {
+    return true;
+  }
+  if (typeof window !== "undefined") {
+    return (window as Window & { __E2E_AUTH__?: boolean }).__E2E_AUTH__ === true;
+  }
+  return false;
+}
+
 export const isDevMagicLinkEnabled = (): boolean => devMagicLinkEnabled;
 
 export const maybeOpenDevMagicLink = async (
   email: string,
 ): Promise<boolean> => {
-  if (!devMagicLinkEnabled) {
+  if (!devMagicLinkEnabled || isPlaywrightE2E()) {
     return false;
   }
 

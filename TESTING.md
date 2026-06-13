@@ -74,7 +74,7 @@ For **production**, run `npm run demo:seed` once after deploy.
    - `DEV_MAGIC_LINK=true` — stores magic links instead of sending email
 2. **`.env.local`** must include:
    - `VITE_CONVEX_SITE_URL` — used by auth helper to fetch dev magic links
-   - `VITE_SITE_URL` or default `http://127.0.0.1:3000` — Playwright base URL (matches Vite dev port)
+   - `SITE_URL` and `VITE_SITE_URL` — **same origin everywhere** (recommend `http://127.0.0.1:3000`). Playwright `baseURL`, Vite, and magic-link redirects must match; mixing `localhost` and `127.0.0.1` breaks session cookies.
 
 Install browser binaries once:
 
@@ -82,16 +82,24 @@ Install browser binaries once:
 npx playwright install chromium
 ```
 
-### Optional: Stripe checkout E2E
+### Stripe checkout E2E
 
-One Playwright test opens real Stripe Checkout. Run only when Stripe Test Mode is configured:
+One Playwright test opens real Stripe Checkout (redirect to `checkout.stripe.com`). Enabled when `STRIPE_E2E=true` in `.env.local` or the environment.
+
+Prerequisites:
 
 ```powershell
-npm run stripe:setup
-npm run stripe:listen   # separate terminal
-$env:STRIPE_E2E = "true"
+npm run stripe:setup    # product/price + Convex env vars
+# npm run stripe:listen   # only needed for webhook / subscription flip tests
+```
+
+Run billing specs only:
+
+```powershell
 npm run test:e2e -- e2e/billing.spec.ts
 ```
+
+Disable without removing keys: `STRIPE_E2E=false` in `.env.local`.
 
 ---
 
@@ -173,15 +181,33 @@ npm run test:e2e -- e2e/onboarding.spec.ts
 | `e2e/public.spec.ts` | Landing page B2B copy, live demo kiosk `/s/demo`, `/villkor`, `/integritet` |
 | `e2e/auth.spec.ts` | Dev magic link login → `/admin` (redirects to `/admin/org/{id}`) |
 | `e2e/onboarding.spec.ts` | Create org at `/skapa` → redirect to `/admin/billing` |
-| `e2e/billing.spec.ts` | Billing UI; optional Stripe Checkout (`STRIPE_E2E=true`) |
+| `e2e/billing.spec.ts` | Billing UI + Stripe Checkout redirect (`STRIPE_E2E=true` in `.env.local`) |
 | `e2e/members.spec.ts` | Invite editor, accept via dev invite token |
-| `e2e/roles.spec.ts` | Owner vs editor nav and export gating |
+| `e2e/roles.spec.ts` | Owner vs editor nav, export gating, editor historik deep-link blocked |
 | `e2e/export.spec.ts` | Trial → kiosk → purchase → verify → CSV/SIE export |
 | `e2e/kiosk-closed.spec.ts` | Inactive org → public kiosk “tillfälligt stängd” |
 | `e2e/kiosk-checkout.spec.ts` | Demo kiosk checkout → thank-you page |
 | `e2e/kiosk-verify.spec.ts` | Admin historik verify after checkout |
-| `e2e/roadmap-5-4.spec.ts` | ROADMAP 5.4 full flow (may fail — see TEST_FINDINGS) |
+| `e2e/roadmap-5-4.spec.ts` | ROADMAP 5.4 full flow (trial → kiosk → purchase → verify → export) |
 | `e2e/products.spec.ts` | Product admin |
+
+### Global setup
+
+Before the suite runs, `e2e/global-setup.ts` (wired in `playwright.config.ts`):
+
+1. Probes `{VITE_CONVEX_SITE_URL}/dev/magic-link?email=healthcheck` — fails loudly if `DEV_MAGIC_LINK` is off or Convex is not deployed
+2. Runs `npm run demo:seed` for the public demo kiosk
+
+If global setup fails, fix Convex env and run `npx convex dev` before retrying E2E.
+
+### E2E environment (Playwright webServer)
+
+Playwright starts the dev server with:
+
+- `VITE_DEV_MAGIC_LINK=false` — prevents in-browser auto-open of magic links (avoids race with Playwright navigation)
+- `SITE_URL` / `VITE_SITE_URL` aligned with `baseURL`
+
+The app also skips dev magic-link auto-open when `navigator.webdriver === true` or `window.__E2E_AUTH__` is set (`src/lib/devMagicLink.ts`).
 
 ### Stripe sign-off
 
@@ -204,10 +230,10 @@ See `e2e/helpers/auth.ts`.
 
 ### Configuration
 
-- `playwright.config.ts` — base URL, webServer, Chromium project
-- `PLAYWRIGHT_BASE_URL` — override app URL (default from `.env.local` or `http://127.0.0.1:3000`)
+- `playwright.config.ts` — base URL, `globalSetup`, webServer env, Chromium project
+- `PLAYWRIGHT_BASE_URL` — override app URL (default from `VITE_SITE_URL` / `SITE_URL` or `http://127.0.0.1:3000`)
 - `PLAYWRIGHT_CONVEX_SITE_URL` — override Convex HTTP URL for magic links
-- `reuseExistingServer: true` locally — start `npm run dev` yourself to iterate faster
+- `reuseExistingServer: true` locally — start `npm run dev` yourself to iterate faster; ensure your running server uses the **same origin** as Playwright `baseURL`
 
 Artifacts on failure: `test-results/`, `playwright-report/` (gitignored).
 
