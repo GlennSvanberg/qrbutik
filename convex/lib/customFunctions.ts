@@ -61,3 +61,11 @@ export function orgRoleMutation(allowedRoles: ReadonlyArray<OrgRole>) {
     },
   })
 }
+
+export function requireTreasurerMembership(
+  membership: { role: OrgRole },
+): void {
+  if (!['owner', 'treasurer'].includes(membership.role)) {
+    throw new Error('Unauthorized: treasurer access required')
+  }
+}

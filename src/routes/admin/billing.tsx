@@ -1,8 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useAction, useQuery } from 'convex/react'
-import { useMemo, useState } from 'react'
+import { useAction, useMutation, useQuery } from 'convex/react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
 import { daysUntil } from '../../lib/billing'
 import type { Id } from '../../../convex/_generated/dataModel'
@@ -146,6 +146,16 @@ function BillingContent({
   const createPortalSession = useAction(
     api.stripeActions.createCustomerPortalSession,
   )
+  const updateOrganizationSettings = useMutation(
+    api.orgDashboard.updateOrganizationSettings,
+  )
+  const organizationDetails = useQuery(api.organizations.getOrganization, {
+    organizationId,
+  })
+  const [orgNumber, setOrgNumber] = useState('')
+  const [sieRevenueAccount, setSieRevenueAccount] = useState('')
+  const [settingsMessage, setSettingsMessage] = useState<string | null>(null)
+  const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false)
   const [isLoadingInvoice, setIsLoadingInvoice] = useState(false)
   const [isLoadingPortal, setIsLoadingPortal] = useState(false)
@@ -176,6 +186,14 @@ function BillingContent({
     (activeOrg.subscriptionStatus === 'inactive' &&
       activeOrg.trialEndsAt !== undefined &&
       activeOrg.trialEndsAt < Date.now())
+
+  useEffect(() => {
+    if (!organizationDetails) {
+      return
+    }
+    setOrgNumber(organizationDetails.orgNumber ?? '')
+    setSieRevenueAccount(organizationDetails.sieRevenueAccount ?? '3010')
+  }, [organizationDetails])
 
   const trialCopy =
     activeOrg.subscriptionStatus === 'trialing' && trialDaysLeft !== null
@@ -410,6 +428,72 @@ function BillingContent({
 
           {error ? <p className="text-sm text-rose-600">{error}</p> : null}
         </section>
+
+        {canManageBilling ? (
+          <section className="relaxed-surface flex flex-col gap-4 p-8">
+            <h2 className="text-base font-semibold text-slate-900">
+              Bokföring &amp; SIE-export
+            </h2>
+            <p className="text-sm text-slate-600">
+              Används när du exporterar SIE från dashboarden. Standardkonto 3010
+              om inget annat anges.
+            </p>
+            <form
+              className="grid gap-4 sm:grid-cols-2"
+              onSubmit={async (event) => {
+                event.preventDefault()
+                setSettingsMessage(null)
+                setError(null)
+                setIsSavingSettings(true)
+                try {
+                  await updateOrganizationSettings({
+                    organizationId,
+                    orgNumber,
+                    sieRevenueAccount,
+                  })
+                  setSettingsMessage('Inställningarna sparades.')
+                } catch (settingsError) {
+                  setError(
+                    settingsError instanceof Error
+                      ? settingsError.message
+                      : 'Kunde inte spara inställningarna.',
+                  )
+                } finally {
+                  setIsSavingSettings(false)
+                }
+              }}
+            >
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                Organisationsnummer
+                <input
+                  value={orgNumber}
+                  onChange={(event) => setOrgNumber(event.target.value)}
+                  placeholder="556677-8899"
+                  className="relaxed-input h-11 px-3"
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm text-slate-700">
+                Intäktskonto (SIE)
+                <input
+                  value={sieRevenueAccount}
+                  onChange={(event) => setSieRevenueAccount(event.target.value)}
+                  placeholder="3010"
+                  className="relaxed-input h-11 px-3"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={isSavingSettings}
+                className="relaxed-secondary-button h-11 w-fit cursor-pointer px-5 text-sm font-semibold text-slate-700 sm:col-span-2"
+              >
+                {isSavingSettings ? 'Sparar…' : 'Spara exportinställningar'}
+              </button>
+            </form>
+            {settingsMessage ? (
+              <p className="text-sm text-emerald-700">{settingsMessage}</p>
+            ) : null}
+          </section>
+        ) : null}
       </div>
     </main>
   )

@@ -1,35 +1,19 @@
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
-import { authedMutation } from './lib/customFunctions'
-import { requireShopAccess } from './lib/auth'
+import { authedMutation, authedQuery } from './lib/customFunctions'
+import { requireShopAccess, requireShopIdsAccess } from './lib/auth'
 import { isSubscriptionActive } from './lib/validators'
+import {
+  buildSummary,
+  getCustomRange,
+  getPeriodRange,
+  getTodayRange,
+  listShopTransactionsAll,
+  listShopTransactionsInRange,
+  periodArgsValidator,
+} from './lib/transactions'
 import type { Id } from './_generated/dataModel'
-import type { QueryCtx } from './_generated/server'
-
-function filterTransactionsByCreatedAtRange<
-  T extends { createdAt: number },
->(transactions: Array<T>, start: number, end: number): Array<T> {
-  return transactions.filter(
-    (transaction) =>
-      transaction.createdAt >= start && transaction.createdAt <= end,
-  )
-}
-
-async function listShopTransactionsInRange(
-  ctx: QueryCtx,
-  shopId: Id<'shops'>,
-  start: number,
-  end: number,
-) {
-  const transactions = await ctx.db
-    .query('transactions')
-    .withIndex('by_shopId', (q) => q.eq('shopId', shopId))
-    .order('desc')
-    .collect()
-
-  return filterTransactionsByCreatedAtRange(transactions, start, end)
-}
 
 export const create = mutation({
   args: {
@@ -70,6 +54,26 @@ export const create = mutation({
 
 export const get = query({
   args: { transactionId: v.id('transactions') },
+  returns: v.union(
+    v.object({
+      _id: v.id('transactions'),
+      _creationTime: v.number(),
+      shopId: v.id('shops'),
+      amount: v.number(),
+      status: v.union(v.literal('pending'), v.literal('verified')),
+      reference: v.string(),
+      items: v.array(
+        v.object({
+          name: v.string(),
+          price: v.number(),
+          quantity: v.number(),
+        }),
+      ),
+      createdAt: v.number(),
+      shopName: v.string(),
+    }),
+    v.null(),
+  ),
   handler: async (ctx, args) => {
     const transaction = await ctx.db.get('transactions', args.transactionId)
     if (!transaction) return null
@@ -99,125 +103,29 @@ const transactionPayload = v.object({
   createdAt: v.number(),
 })
 
-type Period = 'today' | 'yesterday' | 'last7' | 'last30' | 'all'
+const summaryReturns = v.object({
+  totalRevenue: v.number(),
+  transactionCount: v.number(),
+  averageOrderValue: v.number(),
+  lastSaleTime: v.union(v.number(), v.null()),
+  topItems: v.array(
+    v.object({
+      name: v.string(),
+      quantity: v.number(),
+      revenue: v.number(),
+    }),
+  ),
+  recentSales: v.array(
+    v.object({
+      _id: v.id('transactions'),
+      amount: v.number(),
+      createdAt: v.number(),
+      itemsCount: v.number(),
+    }),
+  ),
+})
 
-const periodValidator = v.union(
-  v.literal('today'),
-  v.literal('yesterday'),
-  v.literal('last7'),
-  v.literal('last30'),
-  v.literal('all'),
-)
-
-const dayMs = 24 * 60 * 60 * 1000
-
-const getStartOfToday = () => {
-  const now = new Date()
-  return new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0,
-    0,
-  ).getTime()
-}
-
-const getPeriodRange = (period: Period) => {
-  const now = new Date()
-  const end = now.getTime()
-  const startOfToday = getStartOfToday()
-
-  if (period === 'today') {
-    return { start: startOfToday, end }
-  }
-
-  if (period === 'yesterday') {
-    const start = startOfToday - dayMs
-    return { start, end: startOfToday - 1 }
-  }
-
-  if (period === 'last7') {
-    return { start: startOfToday - 6 * dayMs, end }
-  }
-
-  if (period === 'last30') {
-    return { start: startOfToday - 29 * dayMs, end }
-  }
-
-  return { start: 0, end }
-}
-
-const getTodayRange = () => getPeriodRange('today')
-
-const buildSummary = (
-  transactions: Array<{
-    _id: Id<'transactions'>
-    amount: number
-    createdAt: number
-    items: Array<{ name: string; price: number; quantity: number }>
-  }>,
-) => {
-  if (transactions.length === 0) {
-    return {
-      totalRevenue: 0,
-      transactionCount: 0,
-      averageOrderValue: 0,
-      lastSaleTime: null,
-      topItems: [],
-      recentSales: [],
-    }
-  }
-
-  const totalRevenue = transactions.reduce(
-    (sum, transaction) => sum + transaction.amount,
-    0,
-  )
-  const transactionCount = transactions.length
-  const averageOrderValue = totalRevenue / transactionCount
-  const lastSaleTime = transactions[0]?.createdAt ?? null
-
-  const itemMap = new Map<string, { quantity: number; revenue: number }>()
-  transactions.forEach((transaction) => {
-    transaction.items.forEach((item) => {
-      const existing = itemMap.get(item.name) ?? {
-        quantity: 0,
-        revenue: 0,
-      }
-      existing.quantity += item.quantity
-      existing.revenue += item.price * item.quantity
-      itemMap.set(item.name, existing)
-    })
-  })
-
-  const topItems = Array.from(itemMap.entries())
-    .map(([name, data]) => ({
-      name,
-      quantity: data.quantity,
-      revenue: data.revenue,
-    }))
-    .sort((a, b) => b.quantity - a.quantity)
-    .slice(0, 5)
-
-  const recentSales = transactions.slice(0, 5).map((transaction) => ({
-    _id: transaction._id,
-    amount: transaction.amount,
-    createdAt: transaction.createdAt,
-    itemsCount: transaction.items.reduce((sum, item) => sum + item.quantity, 0),
-  }))
-
-  return {
-    totalRevenue,
-    transactionCount,
-    averageOrderValue,
-    lastSaleTime,
-    topItems,
-    recentSales,
-  }
-}
-
-export const getSalesSummaryByShopIds = query({
+export const getSalesSummaryByShopIds = authedQuery({
   args: { shopIds: v.array(v.id('shops')) },
   returns: v.array(
     v.object({
@@ -232,6 +140,8 @@ export const getSalesSummaryByShopIds = query({
       return []
     }
 
+    await requireShopIdsAccess(ctx, args.shopIds)
+
     const summaries = [] as Array<{
       shopId: Id<'shops'>
       totalRevenue: number
@@ -240,11 +150,7 @@ export const getSalesSummaryByShopIds = query({
     }>
 
     for (const shopId of args.shopIds) {
-      const transactions = await ctx.db
-        .query('transactions')
-        .withIndex('by_shopId', (q) => q.eq('shopId', shopId))
-        .order('desc')
-        .collect()
+      const transactions = await listShopTransactionsAll(ctx, shopId)
 
       if (transactions.length === 0) {
         summaries.push({
@@ -274,24 +180,22 @@ export const getSalesSummaryByShopIds = query({
   },
 })
 
-export const listByShop = query({
+export const listByShop = authedQuery({
   args: { shopId: v.id('shops') },
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
-    return await ctx.db
-      .query('transactions')
-      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
-      .order('desc')
-      .collect()
+    await requireShopAccess(ctx, args.shopId)
+    return await listShopTransactionsAll(ctx, args.shopId)
   },
 })
 
-export const listByShopPaginated = query({
+export const listByShopPaginated = authedQuery({
   args: {
     shopId: v.id('shops'),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
     return await ctx.db
       .query('transactions')
       .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
@@ -300,20 +204,36 @@ export const listByShopPaginated = query({
   },
 })
 
-export const listTodayByShop = query({
+export const listTodayByShop = authedQuery({
   args: { shopId: v.id('shops') },
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
     const { start, end } = getTodayRange()
     return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
 })
 
-export const listByShopPeriod = query({
-  args: { shopId: v.id('shops'), period: periodValidator },
+export const listByShopPeriod = authedQuery({
+  args: { shopId: v.id('shops'), period: periodArgsValidator },
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
     const { start, end } = getPeriodRange(args.period)
+    return await listShopTransactionsInRange(ctx, args.shopId, start, end)
+  },
+})
+
+export const listByShopDateRange = authedQuery({
+  args: {
+    shopId: v.id('shops'),
+    start: v.number(),
+    end: v.number(),
+  },
+  returns: v.array(transactionPayload),
+  handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
+    const { start, end } = getCustomRange(args.start, args.end)
     return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
 })
@@ -353,30 +273,11 @@ export const setVerified = authedMutation({
   },
 })
 
-export const getTodaySummary = query({
+export const getTodaySummary = authedQuery({
   args: { shopId: v.id('shops') },
-  returns: v.object({
-    totalRevenue: v.number(),
-    transactionCount: v.number(),
-    averageOrderValue: v.number(),
-    lastSaleTime: v.union(v.number(), v.null()),
-    topItems: v.array(
-      v.object({
-        name: v.string(),
-        quantity: v.number(),
-        revenue: v.number(),
-      }),
-    ),
-    recentSales: v.array(
-      v.object({
-        _id: v.id('transactions'),
-        amount: v.number(),
-        createdAt: v.number(),
-        itemsCount: v.number(),
-      }),
-    ),
-  }),
+  returns: summaryReturns,
   handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
     const { start, end } = getTodayRange()
     const transactions = await listShopTransactionsInRange(
       ctx,
@@ -389,31 +290,33 @@ export const getTodaySummary = query({
   },
 })
 
-export const getPeriodSummary = query({
-  args: { shopId: v.id('shops'), period: periodValidator },
-  returns: v.object({
-    totalRevenue: v.number(),
-    transactionCount: v.number(),
-    averageOrderValue: v.number(),
-    lastSaleTime: v.union(v.number(), v.null()),
-    topItems: v.array(
-      v.object({
-        name: v.string(),
-        quantity: v.number(),
-        revenue: v.number(),
-      }),
-    ),
-    recentSales: v.array(
-      v.object({
-        _id: v.id('transactions'),
-        amount: v.number(),
-        createdAt: v.number(),
-        itemsCount: v.number(),
-      }),
-    ),
-  }),
+export const getPeriodSummary = authedQuery({
+  args: { shopId: v.id('shops'), period: periodArgsValidator },
+  returns: summaryReturns,
   handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
     const { start, end } = getPeriodRange(args.period)
+    const transactions = await listShopTransactionsInRange(
+      ctx,
+      args.shopId,
+      start,
+      end,
+    )
+
+    return buildSummary(transactions)
+  },
+})
+
+export const getDateRangeSummary = authedQuery({
+  args: {
+    shopId: v.id('shops'),
+    start: v.number(),
+    end: v.number(),
+  },
+  returns: summaryReturns,
+  handler: async (ctx, args) => {
+    await requireShopAccess(ctx, args.shopId)
+    const { start, end } = getCustomRange(args.start, args.end)
     const transactions = await listShopTransactionsInRange(
       ctx,
       args.shopId,

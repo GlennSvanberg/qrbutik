@@ -19,6 +19,7 @@ export default defineSchema({
   organizations: defineTable({
     name: v.string(),
     orgNumber: v.optional(v.string()),
+    sieRevenueAccount: v.optional(v.string()),
     billingEmail: v.string(),
     stripeCustomerId: v.optional(v.string()),
     stripeSubscriptionId: v.optional(v.string()),
@@ -36,13 +37,30 @@ export default defineSchema({
     email: v.string(),
     tokenIdentifier: v.optional(v.string()),
     role: orgRoleValidator,
+    assignedShopIds: v.optional(v.array(v.id('shops'))),
     createdAt: v.number(),
   })
     .index('by_organizationId_and_email', ['organizationId', 'email'])
+    .index('by_organizationId', ['organizationId'])
     .index('by_email', ['email']),
+  organizationInvitations: defineTable({
+    organizationId: v.id('organizations'),
+    email: v.string(),
+    role: v.union(v.literal('treasurer'), v.literal('editor')),
+    assignedShopIds: v.optional(v.array(v.id('shops'))),
+    token: v.string(),
+    expiresAt: v.number(),
+    acceptedAt: v.optional(v.number()),
+    invitedByEmail: v.string(),
+    createdAt: v.number(),
+  })
+    .index('by_token', ['token'])
+    .index('by_organizationId', ['organizationId'])
+    .index('by_organizationId_and_email', ['organizationId', 'email']),
   shops: defineTable({
     organizationId: v.id('organizations'),
     name: v.string(),
+    teamLabel: v.optional(v.string()),
     slug: v.string(),
     swishNumber: v.string(),
     createdEmailSentAt: v.optional(v.number()),
@@ -70,7 +88,9 @@ export default defineSchema({
       }),
     ),
     createdAt: v.number(),
-  }).index('by_shopId', ['shopId']),
+  })
+    .index('by_shopId', ['shopId'])
+    .index('by_shopId_and_createdAt', ['shopId', 'createdAt']),
   stripeEvents: defineTable({
     eventId: v.string(),
     processedAt: v.number(),

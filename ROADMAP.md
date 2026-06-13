@@ -195,6 +195,7 @@ Från passiv SEO till aktiv B2B-försäljning.
 - [ ] **4.3.1** En-sida PDF för styrelse: ROI, bokföring, trial, pris
 - [ ] **4.3.2** Demo-video: skapa kiosk → QR → Swish → export (2–3 min)
 - [ ] **4.3.3** Prissida med tydlig jämförelse mot manuell kassa / Excel
+- [x] **4.3.4** Persistent demokiosk (`/s/demo`) + landningslänk + seed-script
 
 ### 4.4 Mått för fas 4
 

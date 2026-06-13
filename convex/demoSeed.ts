@@ -82,7 +82,7 @@ async function syncDemoProducts(
     .withIndex('by_shopId', (q) => q.eq('shopId', shopId))
     .collect()
 
-  const desiredByName = new Map(
+  const desiredByName = new Map<string, number>(
     DEMO_PRODUCTS.map((product) => [product.name, product.price]),
   )
   const now = Date.now()

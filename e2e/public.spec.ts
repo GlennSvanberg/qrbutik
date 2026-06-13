@@ -10,6 +10,20 @@ test.describe('Public marketing pages', () => {
     await expect(
       page.getByRole('link', { name: 'Logga in' }).first(),
     ).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: 'Prova live kiosk' }).first(),
+    ).toBeVisible()
+  })
+
+  test('demo kiosk shows products and demo banner', async ({ page }) => {
+    await page.goto('/s/demo')
+    await expect(
+      page.getByRole('heading', { name: 'Demokiosk' }),
+    ).toBeVisible()
+    await expect(page.getByText('Demo av QRButik')).toBeVisible()
+    await expect(page.getByText('Korv med bröd')).toBeVisible()
+    await expect(page.getByText('Kaffe')).toBeVisible()
+    await expect(page.getByText('Läsk 33 cl')).toBeVisible()
   })
 
   test('legal pages are reachable', async ({ page }) => {

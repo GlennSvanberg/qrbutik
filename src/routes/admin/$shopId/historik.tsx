@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery, useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
+import { AdminExportPanel } from '../../../components/AdminExportPanel'
+import { getDateRangeForPeriod, isTreasurerRole } from '../../../lib/adminDashboard'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/historik')({
@@ -13,6 +15,12 @@ export const Route = createFileRoute('/admin/$shopId/historik')({
 function PurchaseHistoryPage() {
   const { shopId } = Route.useParams()
   const shopIdParam = shopId as Id<'shops'>
+  const { data: shop } = useSuspenseQuery(
+    convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
+  )
+  const { data: organizations } = useTanstackQuery(
+    convexQuery(api.organizations.getMyOrganizations, {}),
+  )
   const { data: transactions } = useSuspenseQuery(
     convexQuery(api.transactions.listByShop, { shopId: shopIdParam }),
   )
@@ -22,12 +30,6 @@ function PurchaseHistoryPage() {
   const [expandedTransactionId, setExpandedTransactionId] = useState<
     string | null
   >(null)
-
-  const pendingTransactions = useMemo(
-    () =>
-      transactions.filter((transaction) => transaction.status === 'pending'),
-    [transactions],
-  )
 
   const formattedTransactions = useMemo(
     () =>
@@ -52,8 +54,30 @@ function PurchaseHistoryPage() {
     [transactions],
   )
 
+  const pendingTransactions = useMemo(
+    () =>
+      transactions.filter((transaction) => transaction.status === 'pending'),
+    [transactions],
+  )
+
+  const orgRole = organizations?.find(
+    (org) => org._id === shop?.organizationId,
+  )?.role
+  const showExport = orgRole ? isTreasurerRole(orgRole) : false
+  const exportRange = getDateRangeForPeriod('last30')
+
   return (
     <>
+      {showExport && shop ? (
+        <AdminExportPanel
+          organizationId={shop.organizationId}
+          shopId={shopIdParam}
+          start={exportRange.start}
+          end={exportRange.end}
+          compact
+        />
+      ) : null}
+
       <section className="flex flex-col gap-4">
           <div className="relaxed-divider flex flex-wrap items-center justify-between gap-2 border-b pb-3">
             <div>

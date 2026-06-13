@@ -3,11 +3,11 @@ import { MarketingCtas } from '~/components/MarketingCtas'
 import { MarketingFooter } from '~/components/MarketingFooter'
 import { MarketingHeader } from '~/components/MarketingHeader'
 import { TimeSavingsCalculator } from '~/components/TimeSavingsCalculator'
+import { DEMO_SHOP_SLUG } from '~/lib/demo'
 import {
   CLUB_LICENSE_PRICE,
   DEFAULT_DESCRIPTION,
   LIVE_KIOSK_LABEL,
-  LIVE_KIOSK_PATH,
   SITE_NAME,
   SITE_TAGLINE,
   TRIAL_LABEL,
@@ -145,14 +145,45 @@ function Home() {
               <div className="premium-shell flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
-                    Kioskkontroll i realtid
+                    Så ser QRButik ut
                   </p>
-                  <span className="premium-pill">Live</span>
                 </div>
-                <p className="text-sm text-brand-muted">
-                  En samlad vy f&ouml;r skapande, betalning och avst&auml;mning.
-                  F&auml;rre moment, tydligare fl&ouml;de.
-                </p>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="overflow-hidden rounded-lg border border-brand-border-accent bg-white ring-1 ring-brand/20">
+                    <img
+                      src="/after.jpg"
+                      alt="Digital kiosk med meny"
+                      className="h-40 w-full object-cover sm:h-44"
+                    />
+                    <div className="border-l-4 border-brand px-4 py-3">
+                      <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand">
+                        Kundvy (live)
+                      </p>
+                      <p className="mt-1 text-sm text-brand-muted">
+                        Prova demokiosken med korv, kaffe och vanliga artiklar.
+                      </p>
+                      <Link
+                        to="/s/$shopSlug"
+                        params={{ shopSlug: DEMO_SHOP_SLUG }}
+                        className="mt-3 inline-flex cursor-pointer text-sm font-semibold text-brand underline decoration-brand-border underline-offset-4"
+                        trackaton-on-click="home-hero-live-kiosk"
+                      >
+                        {LIVE_KIOSK_LABEL} →
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden rounded-lg border border-brand-border bg-[#F8FAFC]">
+                    <img
+                      src="/admin-demo-dashboard.svg"
+                      alt="Exempel på adminpanel med försäljningsöversikt"
+                      className="h-40 w-full object-cover object-top sm:h-44"
+                    />
+                    <p className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-brand-muted">
+                      Adminvy (exempel)
+                    </p>
+                  </div>
+                </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   {heroKpis.map((kpi) => (
@@ -161,29 +192,6 @@ function Home() {
                       <p className="premium-kpi-value">{kpi.value}</p>
                     </div>
                   ))}
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="overflow-hidden rounded-lg border border-brand-border bg-[#F8FAFC]">
-                    <img
-                      src="/before.jpg"
-                      alt="Handskriven prislista"
-                      className="h-44 w-full object-cover sm:h-48"
-                    />
-                    <p className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-brand-muted">
-                      F&ouml;re: handskrivet
-                    </p>
-                  </div>
-                  <div className="overflow-hidden rounded-lg border border-brand-border-accent bg-white ring-1 ring-brand/20">
-                    <img
-                      src="/after.jpg"
-                      alt="Digital kiosk med meny"
-                      className="h-44 w-full object-cover sm:h-48"
-                    />
-                    <p className="border-l-4 border-brand px-4 py-3 text-xs font-bold uppercase tracking-[0.25em] text-brand">
-                      Efter: digital meny
-                    </p>
-                  </div>
                 </div>
 
                 <ul className="premium-divider-list text-sm text-brand-muted">

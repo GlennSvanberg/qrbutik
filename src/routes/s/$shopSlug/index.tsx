@@ -230,14 +230,21 @@ function ActiveShopView({
         callbackUrl,
       )
 
-      window.location.href = swishLink
+      const isLocalDev =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
 
+      if (!isLocalDev) {
+        window.location.href = swishLink
+      }
+
+      const redirectDelayMs = isLocalDev ? 0 : 3000
       setTimeout(() => {
         navigate({
           to: '/tack/$transactionId',
           params: { transactionId },
         })
-      }, 3000)
+      }, redirectDelayMs)
     } catch (error) {
       console.error('Payment failed:', error)
       alert('Något gick fel vid skapandet av betalningen. Försök igen.')

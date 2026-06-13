@@ -4,6 +4,7 @@ import { LoginForm } from '../components/auth/LoginForm'
 
 type LoggaInSearch = {
   redirect?: string
+  invite?: string
 }
 
 export const Route = createFileRoute('/logga-in')({
@@ -12,6 +13,7 @@ export const Route = createFileRoute('/logga-in')({
       typeof search.redirect === 'string' && search.redirect.startsWith('/')
         ? search.redirect
         : '/admin',
+    invite: typeof search.invite === 'string' ? search.invite : undefined,
   }),
   head: () => ({
     meta: [
@@ -28,13 +30,16 @@ export const Route = createFileRoute('/logga-in')({
 })
 
 function LoggaInPage() {
-  const { redirect = '/admin' } = Route.useSearch()
+  const { redirect = '/admin', invite } = Route.useSearch()
+  const redirectTo = invite
+    ? `${redirect}${redirect.includes('?') ? '&' : '?'}invite=${encodeURIComponent(invite)}`
+    : redirect
 
   return (
-    <AuthRedirectGate to={redirect}>
+    <AuthRedirectGate to={redirectTo}>
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <LoginForm
-          redirectTo={redirect}
+          redirectTo={redirectTo}
           title="Logga in till QRButik"
           description="För styrelse, kassör och lagledare. Vi skickar en säker länk till din e-post — inget lösenord."
         />

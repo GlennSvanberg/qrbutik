@@ -1,9 +1,18 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { api } from '../../../convex/_generated/api'
 import { authClient } from '../../lib/authClient'
+import { AdminDashboardFilters } from '../../components/AdminDashboardFilters'
+import { AdminExportPanel } from '../../components/AdminExportPanel'
+import {
+  
+  buildDashboardFilter,
+  getDateRangeForPeriod,
+  isTreasurerRole
+} from '../../lib/adminDashboard'
+import type {DashboardPeriod} from '../../lib/adminDashboard';
 import type { Id } from '../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/')({
@@ -70,7 +79,9 @@ function AdminDashboard() {
     )
   }
 
-  return <AdminDashboardWithOrganizations email={email} organizations={organizations} />
+  return (
+    <AdminDashboardWithOrganizations email={email} organizations={organizations} />
+  )
 }
 
 function AdminDashboardWithOrganizations({
@@ -88,9 +99,16 @@ function AdminDashboardWithOrganizations({
   const [selectedOrgId, setSelectedOrgId] = useState<Id<'organizations'>>(
     organizations[0]._id,
   )
+  const [period, setPeriod] = useState<DashboardPeriod>('last7')
+  const [customStart, setCustomStart] = useState('')
+  const [customEnd, setCustomEnd] = useState('')
+  const [selectedShopId, setSelectedShopId] = useState<Id<'shops'> | 'all'>(
+    'all',
+  )
 
   const activeOrg =
     organizations.find((org) => org._id === selectedOrgId) ?? organizations[0]
+  const isTreasurer = isTreasurerRole(activeOrg.role)
 
   const { data: shops } = useSuspenseQuery(
     convexQuery(api.organizations.listOrganizationShops, {
@@ -98,23 +116,46 @@ function AdminDashboardWithOrganizations({
     }),
   )
 
-  const shopIds = useMemo(() => shops.map((shop) => shop._id), [shops])
-  const { data: salesSummaries } = useSuspenseQuery(
-    convexQuery(api.transactions.getSalesSummaryByShopIds, { shopIds }),
-  )
+  const filter = buildDashboardFilter(period, customStart, customEnd)
+  const { start, end } = getDateRangeForPeriod(period, customStart, customEnd)
 
-  const salesByShop = useMemo(() => {
-    return new Map(salesSummaries.map((summary) => [summary.shopId, summary]))
-  }, [salesSummaries])
+  const dashboardQueryArgs = {
+    organizationId: activeOrg._id,
+    filter,
+    shopId: selectedShopId === 'all' ? undefined : selectedShopId,
+  }
+
+  const { data: dashboard } = useQuery({
+    ...convexQuery(
+      api.orgDashboard.getOrganizationDashboardSummary,
+      dashboardQueryArgs,
+    ),
+    enabled: isTreasurer && shops.length > 0,
+  })
 
   const licenseActive =
     activeOrg.subscriptionStatus === 'trialing' ||
     activeOrg.subscriptionStatus === 'active'
 
+  const shopCards = isTreasurer
+    ? (dashboard?.shops ?? [])
+    : shops.map((shop) => ({
+        shopId: shop._id,
+        shopName: shop.name,
+        teamLabel: shop.teamLabel ?? null,
+        licenseActive,
+        periodRevenue: 0,
+        transactionCount: 0,
+        latestSaleAt: null as number | null,
+        latestSaleAmount: null as number | null,
+      }))
+
+  const singleAssignedShop =
+    activeOrg.role === 'editor' && shops.length === 1 ? shops[0] : null
+
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
-      <div className="relative overflow-hidden border-b border-stone-200/70 bg-stone-50/80 backdrop-blur">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(146,116,84,0.14),_transparent_65%)]" />
+      <div className="relative overflow-hidden border-b border-stone-200/70 bg-white backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10">
           <header className="flex flex-col gap-3">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
@@ -122,7 +163,7 @@ function AdminDashboardWithOrganizations({
             </p>
             <div className="flex flex-col gap-2">
               <h1 className="text-3xl font-semibold text-slate-900">
-                Föreningens kiosker
+                {isTreasurer ? 'Centralt dashboard' : 'Dina kiosker'}
               </h1>
               <p className="text-sm text-slate-600">
                 Inloggad som <span className="font-medium">{email}</span>
@@ -159,100 +200,225 @@ function AdminDashboardWithOrganizations({
               {shops.length} kiosk{shops.length === 1 ? '' : 'er'}
             </span>
           </div>
+
+          {singleAssignedShop ? (
+            <Link
+              to="/admin/$shopId"
+              params={{ shopId: singleAssignedShop._id }}
+              className="relaxed-primary-button inline-flex h-12 w-fit cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
+            >
+              Gå till din kiosk
+            </Link>
+          ) : null}
         </div>
       </div>
 
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
+        {isTreasurer && shops.length > 0 ? (
+          <>
+            <AdminDashboardFilters
+              period={period}
+              onPeriodChange={setPeriod}
+              customStart={customStart}
+              customEnd={customEnd}
+              onCustomStartChange={setCustomStart}
+              onCustomEndChange={setCustomEnd}
+              shopId={selectedShopId}
+              shopOptions={shops}
+              onShopChange={setSelectedShopId}
+            />
+
+            {dashboard ? (
+              <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div className="relaxed-surface p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    Omsättning
+                  </p>
+                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                    {formatCurrency(dashboard.totalRevenue)}
+                  </p>
+                </div>
+                <div className="relaxed-surface p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    Antal köp
+                  </p>
+                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                    {dashboard.transactionCount}
+                  </p>
+                </div>
+                <div className="relaxed-surface p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    Snittorder
+                  </p>
+                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                    {formatCurrency(dashboard.averageOrderValue)}
+                  </p>
+                </div>
+                <div className="relaxed-surface p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                    Senaste köp
+                  </p>
+                  <p className="mt-2 text-lg font-semibold text-slate-900">
+                    {dashboard.lastSaleTime
+                      ? formatSaleTime(dashboard.lastSaleTime)
+                      : 'Ingen försäljning'}
+                  </p>
+                </div>
+              </section>
+            ) : null}
+
+            {dashboard && dashboard.topItems.length > 0 ? (
+              <section className="relaxed-surface p-5">
+                <h2 className="text-base font-semibold text-slate-900">
+                  Toppartiklar
+                </h2>
+                <ul className="mt-4 divide-y divide-slate-200/70">
+                  {dashboard.topItems.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex items-center justify-between py-3 text-sm"
+                    >
+                      <span className="font-medium text-slate-900">
+                        {item.name}
+                      </span>
+                      <span className="text-slate-600">
+                        {item.quantity} st · {formatCurrency(item.revenue)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            <AdminExportPanel
+              organizationId={activeOrg._id}
+              shopId={selectedShopId === 'all' ? undefined : selectedShopId}
+              start={start}
+              end={end}
+            />
+
+            <details className="relaxed-surface p-5">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-900">
+                Hjälp: exportformat (CSV &amp; SIE)
+              </summary>
+              <div className="mt-4 space-y-3 text-sm text-slate-600">
+                <p>
+                  CSV använder semikolon och fungerar direkt i svensk Excel.
+                  Kolumner: datum, kiosk, belopp, referens, status, artiklar.
+                </p>
+                <p>
+                  SIE4 exporteras med standardkonto 3010 om inget annat anges
+                  under Fakturering. Sätt organisationsnummer där för korrekt
+                  #ORGNR i filen.
+                </p>
+                <Link
+                  to="/hjalp/export"
+                  className="inline-flex cursor-pointer text-brand hover:underline"
+                >
+                  Läs mer om export
+                </Link>
+              </div>
+            </details>
+          </>
+        ) : null}
+
         {shops.length === 0 ? (
           <div className="relaxed-surface rounded-3xl border-dashed p-10 text-center">
             <p className="text-sm text-slate-600">
               Inga kiosker i den här föreningen ännu.
             </p>
-            <Link
-              to="/admin/skapa-kiosk"
-              search={{ organizationId: activeOrg._id }}
-              className="relaxed-primary-button mt-4 inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
-            >
-              Skapa kiosk
-            </Link>
+            {isTreasurer ? (
+              <Link
+                to="/admin/skapa-kiosk"
+                search={{ organizationId: activeOrg._id }}
+                className="relaxed-primary-button mt-4 inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
+              >
+                Skapa kiosk
+              </Link>
+            ) : null}
           </div>
         ) : (
           <section className="grid gap-6 lg:grid-cols-2">
-            {shops.map((shop) => {
-              const summary = salesByShop.get(shop._id)
-              const latestSaleAt = summary?.latestSaleAt ?? null
-              const latestSaleAmount = summary?.latestSaleAmount ?? null
-              const totalRevenue = summary?.totalRevenue ?? 0
-
+            {shopCards.map((shop) => {
+              const shopDoc = shops.find((item) => item._id === shop.shopId)
               return (
-                <article
-                  key={shop._id}
-                  className="relaxed-surface flex h-full flex-col gap-5 p-6"
-                >
-                  <div className="flex items-center justify-between gap-3">
+              <article
+                key={shop.shopId}
+                className="relaxed-surface flex h-full flex-col gap-5 p-6"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div>
                     <h3 className="text-xl font-semibold text-slate-900">
-                      {shop.name}
+                      {shop.shopName}
                     </h3>
-                    <span
-                      className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-                        licenseActive
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          : 'border-rose-200 bg-rose-50 text-rose-700'
-                      }`}
-                    >
-                      {licenseActive ? 'Öppen' : 'Stängd'}
-                    </span>
+                    {shop.teamLabel ? (
+                      <span className="relaxed-chip mt-2 inline-flex px-2 py-1 text-xs">
+                        {shop.teamLabel}
+                      </span>
+                    ) : null}
                   </div>
+                  <span
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+                      shop.licenseActive
+                        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                        : 'border-rose-200 bg-rose-50 text-rose-700'
+                    }`}
+                  >
+                    {shop.licenseActive ? 'Öppen' : 'Stängd'}
+                  </span>
+                </div>
 
+                {isTreasurer ? (
                   <div className="grid gap-3 text-center sm:grid-cols-2">
                     <div className="relaxed-surface-soft bg-stone-50/70 p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                        Total försäljning
+                        Omsättning (period)
                       </p>
                       <p className="text-2xl font-semibold text-slate-900">
-                        {formatCurrency(totalRevenue)}
+                        {formatCurrency(shop.periodRevenue)}
                       </p>
                     </div>
                     <div className="relaxed-surface-soft bg-stone-50/70 p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
                         Senaste köp
                       </p>
-                      {latestSaleAt && latestSaleAmount !== null ? (
+                      {shop.latestSaleAt && shop.latestSaleAmount !== null ? (
                         <div className="flex flex-col gap-1">
                           <p className="text-2xl font-semibold text-slate-900">
-                            {formatCurrency(latestSaleAmount)}
+                            {formatCurrency(shop.latestSaleAmount)}
                           </p>
                           <p className="text-xs text-slate-500">
-                            {formatSaleTime(latestSaleAt)}
+                            {formatSaleTime(shop.latestSaleAt)}
                           </p>
                         </div>
                       ) : (
                         <p className="text-sm text-slate-500">
-                          Ingen försäljning ännu
+                          Ingen försäljning i perioden
                         </p>
                       )}
                     </div>
                   </div>
+                ) : null}
 
-                  <div className="mt-auto flex flex-wrap justify-center gap-2">
+                <div className="mt-auto flex flex-wrap justify-center gap-2">
+                  <Link
+                    to="/admin/$shopId"
+                    params={{ shopId: shop.shopId }}
+                    className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
+                  >
+                    Hantera kiosk
+                  </Link>
+                  {shop.licenseActive && shopDoc ? (
                     <Link
-                      to="/admin/$shopId"
-                      params={{ shopId: shop._id }}
-                      className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
+                      to="/s/$shopSlug"
+                      params={{ shopSlug: shopDoc.slug }}
+                      className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
                     >
-                      Hantera kiosk
+                      Besök kiosk
                     </Link>
-                    {licenseActive ? (
-                      <Link
-                        to="/s/$shopSlug"
-                        params={{ shopSlug: shop.slug }}
-                        className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
-                      >
-                        Besök kiosk
-                      </Link>
-                    ) : null}
-                  </div>
-                </article>
+                  ) : null}
+                </div>
+              </article>
               )
             })}
           </section>

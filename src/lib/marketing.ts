@@ -7,4 +7,3 @@ export const TRIAL_LABEL = 'Starta 14 dagars provperiod'
 export const DEMO_LABEL = 'Boka demo'
 export const DEMO_EMAIL = 'kontakt@qrbutik.se'
 export const LIVE_KIOSK_LABEL = 'Prova live kiosk'
-export const LIVE_KIOSK_PATH = '/s/demo' as const

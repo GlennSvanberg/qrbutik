@@ -22,7 +22,9 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as UtforskaSportRouteImport } from './routes/utforska/$sport'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
+import { Route as HjalpExportRouteImport } from './routes/hjalp/export'
 import { Route as AdminSkapaKioskRouteImport } from './routes/admin/skapa-kiosk'
+import { Route as AdminMedlemmarRouteImport } from './routes/admin/medlemmar'
 import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
 import { Route as UtforskaSportIndexRouteImport } from './routes/utforska/$sport/index'
@@ -101,9 +103,19 @@ const SShopSlugRoute = SShopSlugRouteImport.update({
   path: '/s/$shopSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HjalpExportRoute = HjalpExportRouteImport.update({
+  id: '/hjalp/export',
+  path: '/hjalp/export',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSkapaKioskRoute = AdminSkapaKioskRouteImport.update({
   id: '/skapa-kiosk',
   path: '/skapa-kiosk',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMedlemmarRoute = AdminMedlemmarRouteImport.update({
+  id: '/medlemmar',
+  path: '/medlemmar',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminBillingRoute = AdminBillingRouteImport.update({
@@ -178,7 +190,9 @@ export interface FileRoutesByFullPath {
   '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/admin/billing': typeof AdminBillingRoute
+  '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRouteWithChildren
@@ -204,7 +218,9 @@ export interface FileRoutesByTo {
   '/skapa': typeof SkapaRoute
   '/villkor': typeof VillkorRoute
   '/admin/billing': typeof AdminBillingRoute
+  '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/hjalp/export': typeof HjalpExportRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/admin': typeof AdminIndexRoute
   '/utforska': typeof UtforskaIndexRoute
@@ -231,7 +247,9 @@ export interface FileRoutesById {
   '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/admin/billing': typeof AdminBillingRoute
+  '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRouteWithChildren
@@ -261,7 +279,9 @@ export interface FileRouteTypes {
     | '/villkor'
     | '/admin/$shopId'
     | '/admin/billing'
+    | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
@@ -287,7 +307,9 @@ export interface FileRouteTypes {
     | '/skapa'
     | '/villkor'
     | '/admin/billing'
+    | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/hjalp/export'
     | '/tack/$transactionId'
     | '/admin'
     | '/utforska'
@@ -313,7 +335,9 @@ export interface FileRouteTypes {
     | '/villkor'
     | '/admin/$shopId'
     | '/admin/billing'
+    | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
@@ -340,6 +364,7 @@ export interface RootRouteChildren {
   LoggaInRoute: typeof LoggaInRoute
   SkapaRoute: typeof SkapaRoute
   VillkorRoute: typeof VillkorRoute
+  HjalpExportRoute: typeof HjalpExportRoute
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
   UtforskaSportRoute: typeof UtforskaSportRouteWithChildren
@@ -439,11 +464,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SShopSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hjalp/export': {
+      id: '/hjalp/export'
+      path: '/hjalp/export'
+      fullPath: '/hjalp/export'
+      preLoaderRoute: typeof HjalpExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/skapa-kiosk': {
       id: '/admin/skapa-kiosk'
       path: '/skapa-kiosk'
       fullPath: '/admin/skapa-kiosk'
       preLoaderRoute: typeof AdminSkapaKioskRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/medlemmar': {
+      id: '/admin/medlemmar'
+      path: '/medlemmar'
+      fullPath: '/admin/medlemmar'
+      preLoaderRoute: typeof AdminMedlemmarRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/billing': {
@@ -556,6 +595,7 @@ const AdminShopIdRouteWithChildren = AdminShopIdRoute._addFileChildren(
 interface AdminRouteRouteChildren {
   AdminShopIdRoute: typeof AdminShopIdRouteWithChildren
   AdminBillingRoute: typeof AdminBillingRoute
+  AdminMedlemmarRoute: typeof AdminMedlemmarRoute
   AdminSkapaKioskRoute: typeof AdminSkapaKioskRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -563,6 +603,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminShopIdRoute: AdminShopIdRouteWithChildren,
   AdminBillingRoute: AdminBillingRoute,
+  AdminMedlemmarRoute: AdminMedlemmarRoute,
   AdminSkapaKioskRoute: AdminSkapaKioskRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -610,6 +651,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoggaInRoute: LoggaInRoute,
   SkapaRoute: SkapaRoute,
   VillkorRoute: VillkorRoute,
+  HjalpExportRoute: HjalpExportRoute,
   SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
   UtforskaSportRoute: UtforskaSportRouteWithChildren,

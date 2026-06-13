@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingCtas } from '~/components/MarketingCtas'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
+import { SITE_TAGLINE } from '~/lib/marketing'
 
 export const Route = createFileRoute('/glenn')({
   head: () => ({

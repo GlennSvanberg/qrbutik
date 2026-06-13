@@ -21,9 +21,6 @@ type DraftProduct = {
 function ProductsPage() {
   const { shopId } = Route.useParams()
   const shopIdParam = shopId as Id<'shops'>
-  const { data: shop } = useSuspenseQuery(
-    convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
-  )
   const { data: products } = useSuspenseQuery(
     convexQuery(api.products.listByShop, { shopId: shopIdParam }),
   )
@@ -77,34 +74,9 @@ function ProductsPage() {
     ])
   }
 
-  if (!shop) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Kiosken hittades inte
-          </h1>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
   return (
-    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
-        <AdminHeader
-          organizationId={shop.organizationId}
-          shopId={shop._id}
-          section="products"
-          shopName={shop.name}
-        />
-        <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
+      <section className="flex flex-col gap-6">
           <ProdukterForm
             products={productDrafts}
             onChange={setProductDrafts}
@@ -137,7 +109,7 @@ function ProductsPage() {
                         return { ...product, isNew: false }
                       }
                       const productId = await addProduct({
-                        shopId: shop._id,
+                        shopId: shopIdParam,
                         name: product.name,
                         price: product.price,
                       })
@@ -169,11 +141,9 @@ function ProductsPage() {
         </section>
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-        {statusMessage ? (
-          <p className="text-sm text-slate-600">{statusMessage}</p>
-        ) : null}
-      </div>
-      <AdminBottomNav shopId={shop._id} active="products" />
-    </main>
+      {statusMessage ? (
+        <p className="text-sm text-slate-600">{statusMessage}</p>
+      ) : null}
+    </div>
   )
 }

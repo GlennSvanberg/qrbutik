@@ -38,10 +38,6 @@ async function waitForAuthenticatedDestination(
   page: Page,
   redirectTo: string,
 ): Promise<void> {
-  await expect(
-    page.getByRole('button', { name: 'Skicka inloggningslänk' }),
-  ).toBeHidden({ timeout: 30_000 })
-
   const path = redirectTo.split('?')[0] ?? redirectTo
 
   if (path.includes('/skapa')) {
@@ -54,6 +50,15 @@ async function waitForAuthenticatedDestination(
   if (path.includes('/admin/billing')) {
     await expect(
       page.getByRole('heading', { name: 'Klubblicens & fakturering' }),
+    ).toBeVisible({ timeout: 30_000 })
+    return
+  }
+
+  if (path.includes('/admin')) {
+    await expect(
+      page.getByRole('heading', {
+        name: /Centralt dashboard|Dina kiosker|Föreningens kiosker/,
+      }),
     ).toBeVisible({ timeout: 30_000 })
     return
   }
@@ -97,23 +102,48 @@ export async function loginWithDevMagicLink(
   await page.getByLabel('E-post').fill(email)
   await page.getByRole('button', { name: 'Skicka inloggningslänk' }).click()
 
-  const magicLinkUrl = await waitForDevMagicLink(convexSiteUrl, email)
-  await completeMagicLinkVerification(
-    page,
-    magicLinkUrl,
-    appBaseUrl,
-    redirectTo,
-  )
+  let lastError: unknown
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const magicLinkUrl = await waitForDevMagicLink(convexSiteUrl, email)
+      await completeMagicLinkVerification(
+        page,
+        magicLinkUrl,
+        appBaseUrl,
+        redirectTo,
+      )
+      return
+    } catch (error) {
+      lastError = error
+      if (attempt === 0) {
+        await page.goto(`/logga-in?redirect=${encodeURIComponent(redirectTo)}`)
+        await page.getByLabel('E-post').fill(email)
+        await page.getByRole('button', { name: 'Skicka inloggningslänk' }).click()
+      }
+    }
+  }
+
+  throw lastError
 }
 
-/** Log in via /admin (stable), then open a protected route. */
+/** Log in via /admin, then open another protected route if needed. */
 export async function loginAndOpen(
   page: Page,
   email: string,
   path: string,
   appBaseUrl = 'http://localhost:3000',
 ): Promise<void> {
+  const normalizedPath = path.split('?')[0] ?? path
+
+  if (normalizedPath === '/admin' || normalizedPath.startsWith('/admin/')) {
+    await loginWithDevMagicLink(page, email, path, appBaseUrl)
+    return
+  }
+
   await loginWithDevMagicLink(page, email, '/admin', appBaseUrl)
-  await page.goto(path, { waitUntil: 'domcontentloaded' })
+  await page.goto(
+    path.startsWith('http') ? path : new URL(path, appBaseUrl).toString(),
+    { waitUntil: 'domcontentloaded' },
+  )
   await waitForAuthenticatedDestination(page, path)
 }

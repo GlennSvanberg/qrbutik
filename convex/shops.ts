@@ -47,6 +47,7 @@ const shopValidator = v.object({
   _creationTime: v.number(),
   organizationId: v.id('organizations'),
   name: v.string(),
+  teamLabel: v.optional(v.string()),
   slug: v.string(),
   swishNumber: v.string(),
   createdEmailSentAt: v.optional(v.number()),
@@ -186,7 +187,7 @@ export const createShopInOrganization = authedMutation({
     slug: v.string(),
   }),
   handler: async (ctx, args) => {
-    await requireOrgMember(ctx, args.organizationId)
+    await requireOrgMember(ctx, args.organizationId, ['owner', 'treasurer'])
 
     const organization = await ctx.db.get('organizations', args.organizationId)
     if (!organization) {

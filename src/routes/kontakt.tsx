@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingFooter } from '~/components/MarketingFooter'
-import { CLUB_LICENSE_PRICE, DEMO_EMAIL, LIVE_KIOSK_LABEL, LIVE_KIOSK_PATH, SITE_TAGLINE } from '~/lib/marketing'
+import { CLUB_LICENSE_PRICE, DEMO_EMAIL, LIVE_KIOSK_LABEL, SITE_TAGLINE } from '~/lib/marketing'
+import { DEMO_SHOP_SLUG } from '~/lib/demo'
 
 export const Route = createFileRoute('/kontakt')({
   head: () => ({
@@ -70,7 +71,8 @@ function KontaktPage() {
               </p>
               <div className="mt-4">
                 <Link
-                  to={LIVE_KIOSK_PATH}
+                  to="/s/$shopSlug"
+                  params={{ shopSlug: DEMO_SHOP_SLUG }}
                   className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-brand-foreground"
                   trackaton-on-click="kontakt-live-kiosk"
                 >

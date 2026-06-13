@@ -6,6 +6,8 @@ import { internal } from './_generated/api'
 
 import { authedMutation, authedQuery, orgQuery } from './lib/customFunctions'
 
+import { canAccessShopForMember, getAccessibleShopIds } from './lib/auth'
+
 import { normalizeEmail, subscriptionStatusValidator } from './lib/validators'
 
 
@@ -25,6 +27,8 @@ const organizationSummaryValidator = v.object({
   name: v.string(),
 
   orgNumber: v.optional(v.string()),
+
+  sieRevenueAccount: v.optional(v.string()),
 
   billingEmail: v.string(),
 
@@ -71,6 +75,8 @@ const shopSummaryValidator = v.object({
   organizationId: v.id('organizations'),
 
   name: v.string(),
+
+  teamLabel: v.optional(v.string()),
 
   slug: v.string(),
 
@@ -182,7 +188,7 @@ export const listOrganizationShops = orgQuery({
 
   handler: async (ctx, args) => {
 
-    return await ctx.db
+    const shops = await ctx.db
 
       .query('shops')
 
@@ -195,6 +201,20 @@ export const listOrganizationShops = orgQuery({
       .order('desc')
 
       .collect()
+
+    const accessibleShopIds = await getAccessibleShopIds(
+
+      ctx,
+
+      args.organizationId,
+
+      ctx.membership,
+
+    )
+
+    const accessibleSet = new Set(accessibleShopIds)
+
+    return shops.filter((shop) => accessibleSet.has(shop._id))
 
   },
 
@@ -612,7 +632,7 @@ export const canAccessShop = authedQuery({
 
     return {
 
-      canAccess: Boolean(membership),
+      canAccess: membership ? canAccessShopForMember(membership, args.shopId) : false,
 
       shop,
 

@@ -2,8 +2,8 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../convex/_generated/api";
-import { isDemoShopName } from "~/lib/demo";
 import type { Id } from "../../../convex/_generated/dataModel";
+import { isDemoShopName } from "~/lib/demo";
 
 export const Route = createFileRoute("/tack/$transactionId")({
   head: () => ({

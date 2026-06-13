@@ -4,8 +4,6 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useMemo } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { api } from '../../../../convex/_generated/api'
-import { AdminBottomNav } from '../../../components/AdminBottomNav'
-import { AdminHeader } from '../../../components/AdminHeader'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/skylt')({
@@ -27,21 +25,7 @@ function ShopQrPage() {
   }, [])
 
   if (!shop) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Kiosken hittades inte
-          </h1>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
+    return null
   }
 
   const qrValue = origin
@@ -50,19 +34,13 @@ function ShopQrPage() {
   const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (
-    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6 print:bg-white print:px-0 print:pb-0 print:pt-0">
+    <>
       <style>{`@page { size: A4 portrait; margin: 0; }
         @media print {
           html, body { margin: 0; padding: 0; }
         }
       `}</style>
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 print:hidden">
-        <AdminHeader
-          organizationId={shop.organizationId}
-          shopId={shop._id}
-          section="skylt"
-          shopName={shop.name}
-        />
         <header className="flex flex-col gap-2 text-center">
           <h2 className="text-2xl font-semibold text-slate-900">
             Skylt för {shop.name}
@@ -124,10 +102,6 @@ function ShopQrPage() {
           <div className="h-px w-40 bg-slate-200" />
         </div>
       </section>
-
-      <div className="print:hidden">
-        <AdminBottomNav shopId={shop._id} active="skylt" />
-      </div>
-    </main>
+    </>
   )
 }

@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import type { ReactNode } from 'react'
 import { api } from '../../convex/_generated/api'
 import { AdminHeader } from './AdminHeader'
 import { AdminShopNav } from './AdminShopNav'
+import type { ReactNode } from 'react'
 import type { Id } from '../../convex/_generated/dataModel'
 
 type AdminShopShellProps = {
@@ -44,10 +44,10 @@ export function AdminShopShell({ shopId, children }: AdminShopShellProps) {
             shopId={shop._id}
             shopName={shop.name}
           />
-          <AdminShopNav shopId={shop._id} />
+          <AdminShopNav shopId={shop._id} organizationId={shop.organizationId} />
         </div>
       </div>
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-6 pb-10">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-6 pb-10 print:max-w-none print:p-0">
         {children}
       </div>
     </main>

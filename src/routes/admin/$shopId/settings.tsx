@@ -4,8 +4,6 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useMutation } from 'convex/react'
 import { useEffect, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
-import { AdminBottomNav } from '../../../components/AdminBottomNav'
-import { AdminHeader } from '../../../components/AdminHeader'
 import { ButiksinfoForm } from '../../../components/ButiksinfoForm'
 import type { Doc, Id } from '../../../../convex/_generated/dataModel'
 
@@ -22,21 +20,7 @@ function SettingsPage() {
   )
 
   if (!shop) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Kiosken hittades inte
-          </h1>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
+    return null
   }
 
   return <SettingsContent shop={shop} navigate={navigate} />
@@ -84,15 +68,8 @@ function SettingsContent({
     organization.subscriptionStatus === 'active'
 
   return (
-    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
-        <AdminHeader
-          organizationId={shop.organizationId}
-          shopId={shop._id}
-          section="settings"
-          shopName={shop.name}
-        />
-        <header className="flex flex-col gap-2 text-left">
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
+      <header className="flex flex-col gap-2 text-left">
           <p className="text-sm text-slate-600">
             {organization.name} · {shop.name} ·{' '}
             <span className="font-medium">/s/{shop.slug}</span>
@@ -246,11 +223,9 @@ function SettingsContent({
         </section>
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-        {statusMessage ? (
-          <p className="text-sm text-slate-600">{statusMessage}</p>
-        ) : null}
-      </div>
-      <AdminBottomNav shopId={shop._id} active="settings" />
-    </main>
+      {statusMessage ? (
+        <p className="text-sm text-slate-600">{statusMessage}</p>
+      ) : null}
+    </div>
   )
 }

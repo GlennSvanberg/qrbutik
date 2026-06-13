@@ -25,3 +25,13 @@ All theming should be maintained in `src/styles/app.css`.
 - Custom base styles and global overrides belong in `src/styles/app.css`.
 - Primary buttons: 8px border-radius, subtle blue shadow on hover.
 - Cards/panels: 12px border-radius, thin light borders, minimal gray shadows.
+
+## Treasurer dashboard (`/admin/`)
+
+Surfaces for **owner** and **treasurer** roles only (editors see assigned kiosk cards without org KPIs).
+
+- **Layout:** White page background; KPI row in four equal cards; filter pills use brand blue active state.
+- **Filters:** Period pills (Idag, Igår, Helgen, 7/30 dagar, Anpassat) + optional kiosk dropdown.
+- **Export panel:** Primary CSV button, secondary SIE button; same filter context as KPIs.
+- **Tables/lists:** Top articles and member lists use `relaxed-surface` dividers; amounts right-aligned.
+- **Role gating:** Export, billing, and member management hidden from editors in nav and UI.

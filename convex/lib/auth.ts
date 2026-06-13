@@ -1,14 +1,18 @@
-import {  normalizeEmail } from './validators'
-import type {OrgRole} from './validators';
+import { normalizeEmail } from './validators'
+import type { OrgRole } from './validators'
 import type { Doc, Id } from '../_generated/dataModel'
-import type { MutationCtx, QueryCtx } from '../_generated/server'
+import type { QueryCtx } from '../_generated/server'
 
 export type AuthUser = {
   email: string
   tokenIdentifier: string
 }
 
-type AuthCtx = QueryCtx | MutationCtx
+export type DbReadCtx = Pick<QueryCtx, 'db'>
+
+type AuthCtx = DbReadCtx & Pick<QueryCtx, 'auth'>
+
+const treasurerRoles: ReadonlyArray<OrgRole> = ['owner', 'treasurer']
 
 export async function getCurrentUser(ctx: AuthCtx): Promise<AuthUser> {
   const identity = await ctx.auth.getUserIdentity()
@@ -59,6 +63,41 @@ export async function requireOrgMember(
   return membership
 }
 
+export function canAccessShopForMember(
+  membership: Doc<'organizationMembers'>,
+  shopId: Id<'shops'>,
+): boolean {
+  if (treasurerRoles.includes(membership.role)) {
+    return true
+  }
+
+  const assignedShopIds = membership.assignedShopIds ?? []
+  return assignedShopIds.includes(shopId)
+}
+
+export async function getAccessibleShopIds(
+  ctx: DbReadCtx,
+  organizationId: Id<'organizations'>,
+  membership: Doc<'organizationMembers'>,
+): Promise<Array<Id<'shops'>>> {
+  const shops = await ctx.db
+    .query('shops')
+    .withIndex('by_organizationId', (q) => q.eq('organizationId', organizationId))
+    .collect()
+
+  if (treasurerRoles.includes(membership.role)) {
+    return shops.map((shop) => shop._id)
+  }
+
+  const assignedShopIds = membership.assignedShopIds ?? []
+  if (assignedShopIds.length === 0) {
+    throw new Error('Du har ingen kiosk tilldelad. Kontakta föreningens administratör.')
+  }
+
+  const orgShopIds = new Set(shops.map((shop) => shop._id))
+  return assignedShopIds.filter((shopId) => orgShopIds.has(shopId))
+}
+
 export async function requireShopAccess(
   ctx: AuthCtx,
   shopId: Id<'shops'>,
@@ -75,5 +114,22 @@ export async function requireShopAccess(
     allowedRoles,
   )
 
+  if (!canAccessShopForMember(membership, shopId)) {
+    throw new Error('Unauthorized: no access to this kiosk')
+  }
+
   return { shop, membership }
+}
+
+export async function requireShopIdsAccess(
+  ctx: AuthCtx,
+  shopIds: Array<Id<'shops'>>,
+): Promise<void> {
+  for (const shopId of shopIds) {
+    await requireShopAccess(ctx, shopId)
+  }
+}
+
+export function isTreasurerRole(role: OrgRole): boolean {
+  return treasurerRoles.includes(role)
 }

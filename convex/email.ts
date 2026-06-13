@@ -119,6 +119,27 @@ export const sendPaymentFailedEmail = internalAction({
   },
 });
 
+export const sendMemberInvitationEmail = internalAction({
+  args: {
+    to: v.string(),
+    organizationName: v.string(),
+    invitedByEmail: v.string(),
+    role: v.union(v.literal("treasurer"), v.literal("editor")),
+    token: v.string(),
+  },
+  returns: v.null(),
+  handler: async (_ctx, args) => {
+    const roleLabel = args.role === "treasurer" ? "kassör" : "lagledare";
+    const loginUrl = `${siteUrl}/logga-in?invite=${encodeURIComponent(args.token)}&redirect=${encodeURIComponent("/admin/medlemmar")}`;
+    await sendEmail({
+      to: args.to,
+      subject: `Inbjudan till ${args.organizationName} på QRButik`,
+      html: `<p>Hej!</p><p>${args.invitedByEmail} har bjudit in dig som <strong>${roleLabel}</strong> i föreningen <strong>${args.organizationName}</strong> på QRButik.</p><p>Logga in med den här e-postadressen för att acceptera inbjudan:</p><p><a href="${loginUrl}">${loginUrl}</a></p><p>Länken gäller i 7 dagar.</p>`,
+    });
+    return null;
+  },
+});
+
 export const sendStoreCreatedEmail = action({
   args: {
     to: v.string(),

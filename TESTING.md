@@ -29,6 +29,29 @@ npm run test:all
 
 ---
 
+## Demo kiosk seed
+
+The public demo shop at `/s/demo` is provisioned via Convex — not checked into the database.
+
+```powershell
+# After `npx convex dev` is running (or once against your deployment)
+npm run demo:seed
+```
+
+This creates (or updates):
+
+- Organization **QRButik Demo IF** with `subscriptionStatus: active`
+- Shop slug **`demo`** (Demokiosk) with 8 typical kiosk products
+- Demo Swish number `1234567890` (checkout deep link only; no real payment expected)
+
+Verify in the browser: `http://127.0.0.1:3000/s/demo`
+
+Playwright runs `demo:seed` in `e2e/global-setup.ts` before public tests. If seed fails, run it manually.
+
+For **production**, run `npm run demo:seed` once after deploy.
+
+---
+
 ## Prerequisites
 
 ### All tests
@@ -110,7 +133,7 @@ npm run test:e2e -- e2e/onboarding.spec.ts
 
 | Spec | Flow |
 |------|------|
-| `e2e/public.spec.ts` | Landing page B2B copy, `/villkor`, `/integritet` |
+| `e2e/public.spec.ts` | Landing page B2B copy, live demo kiosk `/s/demo`, `/villkor`, `/integritet` |
 | `e2e/auth.spec.ts` | Dev magic link login → `/admin` |
 | `e2e/onboarding.spec.ts` | Create org at `/skapa` → redirect to `/admin/billing` |
 | `e2e/billing.spec.ts` | Billing UI; optional Stripe Checkout (`STRIPE_E2E=true`) |

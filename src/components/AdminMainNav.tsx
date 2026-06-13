@@ -9,7 +9,12 @@ import type { Id } from '../../convex/_generated/dataModel'
 type NavLinkItem = {
   id: string
   label: string
-  to: '/admin' | '/admin/skapa-kiosk' | '/admin/billing' | '/skapa'
+  to:
+    | '/admin'
+    | '/admin/skapa-kiosk'
+    | '/admin/billing'
+    | '/admin/medlemmar'
+    | '/skapa'
   search?: { organizationId: Id<'organizations'> }
 }
 
@@ -20,6 +25,9 @@ function useActivePath() {
 function isNavItemActive(pathname: string, item: NavLinkItem) {
   if (item.to === '/admin') {
     return pathname === '/admin' || pathname === '/admin/'
+  }
+  if (item.to === '/admin/medlemmar') {
+    return pathname.startsWith('/admin/medlemmar')
   }
   return pathname.startsWith(item.to)
 }
@@ -99,21 +107,29 @@ export function AdminMainNav() {
     const orgSearch = { organizationId: activeOrg._id }
     const links: Array<NavLinkItem> = [
       { id: 'kiosks', label: 'Kiosker', to: '/admin' },
-      {
-        id: 'create-kiosk',
-        label: 'Skapa kiosk',
-        to: '/admin/skapa-kiosk',
-        search: orgSearch,
-      },
     ]
 
     if (canManageBilling) {
-      links.push({
-        id: 'billing',
-        label: 'Fakturering',
-        to: '/admin/billing',
-        search: orgSearch,
-      })
+      links.push(
+        {
+          id: 'create-kiosk',
+          label: 'Skapa kiosk',
+          to: '/admin/skapa-kiosk',
+          search: orgSearch,
+        },
+        {
+          id: 'members',
+          label: 'Medlemmar',
+          to: '/admin/medlemmar',
+          search: orgSearch,
+        },
+        {
+          id: 'billing',
+          label: 'Fakturering',
+          to: '/admin/billing',
+          search: orgSearch,
+        },
+      )
     }
 
     return links

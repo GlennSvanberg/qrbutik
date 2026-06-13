@@ -1,14 +1,25 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { adminShopTabs, getActiveShopTab } from '../lib/adminShopNav'
+import { useQuery } from '@tanstack/react-query'
+import { convexQuery } from '@convex-dev/react-query'
+import { getActiveShopTab, getVisibleShopTabs } from '../lib/adminShopNav'
+import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
 
 type AdminShopNavProps = {
   shopId: Id<'shops'>
+  organizationId: Id<'organizations'>
 }
 
-export function AdminShopNav({ shopId }: AdminShopNavProps) {
+export function AdminShopNav({ shopId, organizationId }: AdminShopNavProps) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const activeTab = getActiveShopTab(pathname)
+  const { data: organizations } = useQuery(
+    convexQuery(api.organizations.getMyOrganizations, {}),
+  )
+
+  const role =
+    organizations?.find((org) => org._id === organizationId)?.role ?? 'editor'
+  const tabs = getVisibleShopTabs(role)
 
   return (
     <nav
@@ -16,14 +27,13 @@ export function AdminShopNav({ shopId }: AdminShopNavProps) {
       className="-mx-6 border-b border-stone-200/80 px-6"
     >
       <div className="flex overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {adminShopTabs.map((tab) => {
+        {tabs.map((tab) => {
           const isActive = tab.id === activeTab
           return (
             <Link
               key={tab.id}
               to={tab.to}
               params={{ shopId }}
-              trackaton-on-click={`admin-tab-${tab.id}`}
               className={`inline-flex h-12 shrink-0 cursor-pointer items-center border-b-2 px-4 text-sm font-semibold whitespace-nowrap transition ${
                 isActive
                   ? 'border-brand text-brand'
