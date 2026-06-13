@@ -41,7 +41,12 @@ function LoggaInPage() {
         <LoginForm
           redirectTo={redirectTo}
           title="Logga in till QRButik"
-          description="För styrelse, kassör och lagledare. Vi skickar en säker länk till din e-post — inget lösenord."
+          description="För styrelse, kassör och lagledare. Logga in med e-postlänk eller Google."
+          inviteHint={
+            invite
+              ? 'Logga in med samma e-postadress som inbjudan skickades till.'
+              : undefined
+          }
         />
       </main>
     </AuthRedirectGate>

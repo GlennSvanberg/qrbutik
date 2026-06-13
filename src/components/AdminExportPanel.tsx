@@ -19,21 +19,23 @@ export function AdminExportPanel({
   end,
   compact = false,
 }: AdminExportPanelProps) {
-  const exportCsv = useAction(api.exportActions.exportTransactionsCsv)
+  const exportExcel = useAction(api.exportExcelActions.exportTransactionsExcel)
   const exportSie = useAction(api.exportActions.exportTransactionsSie)
-  const [isExporting, setIsExporting] = useState<'csv' | 'sie' | null>(null)
+  const [isExporting, setIsExporting] = useState<'excel' | 'sie' | null>(null)
+  const [includePending, setIncludePending] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleExport = async (format: 'csv' | 'sie') => {
+  const handleExport = async (format: 'excel' | 'sie') => {
     setError(null)
     setIsExporting(format)
     try {
-      const action = format === 'csv' ? exportCsv : exportSie
+      const action = format === 'excel' ? exportExcel : exportSie
       const result = await action({
         organizationId,
         shopId,
         start,
         end,
+        includePending: format === 'excel' ? includePending : undefined,
       })
       downloadExportFile(result)
     } catch (exportError) {
@@ -56,18 +58,28 @@ export function AdminExportPanel({
           Exportera till bokföring
         </h2>
         <p className="text-sm text-slate-600">
-          CSV för Excel och SIE4 för Fortnox/Visma. Endast verifierade köp
-          ingår i SIE-exporten.
+          Excel för översikt och SIE4 för Fortnox/Visma. SIE inkluderar alltid
+          endast verifierade köp.
         </p>
       </div>
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+        <input
+          type="checkbox"
+          checked={includePending}
+          onChange={(event) => setIncludePending(event.target.checked)}
+          disabled={isExporting !== null}
+          className="h-4 w-4 cursor-pointer disabled:cursor-not-allowed"
+        />
+        Inkludera icke verifierade köp i Excel-filen
+      </label>
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          onClick={() => void handleExport('csv')}
+          onClick={() => void handleExport('excel')}
           disabled={isExporting !== null}
           className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isExporting === 'csv' ? 'Exporterar…' : 'Exportera CSV'}
+          {isExporting === 'excel' ? 'Exporterar…' : 'Exportera Excel'}
         </button>
         <button
           type="button"

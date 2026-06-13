@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
+import { SuperAdminActivity } from './SuperAdminActivity'
 import { SuperAdminKioskTable } from './SuperAdminKioskTable'
 import { SuperAdminOrgTable } from './SuperAdminOrgTable'
 import { SuperAdminOverview } from './SuperAdminOverview'
@@ -24,7 +25,20 @@ export function SuperAdminDashboard() {
     convexQuery(api.superadmin.listAllShops, { now }),
   )
 
-  const isPending = overviewPending || orgsPending || shopsPending
+  const { data: activitySummary, isPending: activitySummaryPending } = useQuery(
+    convexQuery(api.superadmin.getActivitySummary, { now }),
+  )
+
+  const { data: recentEvents, isPending: recentEventsPending } = useQuery(
+    convexQuery(api.superadmin.listRecentPlatformEvents, { limit: 50 }),
+  )
+
+  const isPending =
+    overviewPending ||
+    orgsPending ||
+    shopsPending ||
+    activitySummaryPending ||
+    recentEventsPending
 
   const handleSelectOrganization = (organizationId: string) => {
     setHighlightedOrganizationId(organizationId)
@@ -32,7 +46,14 @@ export function SuperAdminDashboard() {
     element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
-  if (isPending || !overview || !organizations || !shops) {
+  if (
+    isPending ||
+    !overview ||
+    !organizations ||
+    !shops ||
+    !activitySummary ||
+    !recentEvents
+  ) {
     return (
       <main className="relaxed-page-shell flex-1 px-6 py-10">
         <div className="relaxed-surface mx-auto max-w-7xl p-8 text-center">
@@ -49,6 +70,7 @@ export function SuperAdminDashboard() {
           overview={overview}
           onSelectOrganization={handleSelectOrganization}
         />
+        <SuperAdminActivity summary={activitySummary} events={recentEvents} />
         <SuperAdminOrgTable
           organizations={organizations}
           highlightedOrganizationId={highlightedOrganizationId}

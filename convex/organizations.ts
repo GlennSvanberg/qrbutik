@@ -320,6 +320,22 @@ export const createOrganization = authedMutation({
 
 
 
+    await ctx.scheduler.runAfter(0, internal.platformEvents.recordInternal, {
+
+      type: 'org_created',
+
+      createdAt: now,
+
+      organizationId,
+
+      organizationName,
+
+      actorEmail: normalizeEmail(ctx.user.email),
+
+    })
+
+
+
     return { organizationId }
 
   },

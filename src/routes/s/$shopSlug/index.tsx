@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { generateSwishLink } from '../../../lib/swish'
 import { isDemoShopSlug } from '../../../lib/demo'
+import { useRecordPlatformVisit } from '../../../lib/platformTracking'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/s/$shopSlug/')({
@@ -98,6 +99,8 @@ function ActiveShopView({
   shopSlug,
   shopSwishNumber,
 }: ActiveShopViewProps) {
+  useRecordPlatformVisit({ type: 'shop_view', shopSlug })
+
   const navigate = useNavigate()
   const { data: products } = useSuspenseQuery(
     convexQuery(api.products.listByShop, {

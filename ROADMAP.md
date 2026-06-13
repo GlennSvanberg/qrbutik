@@ -60,6 +60,7 @@ Ersätt engångspass-modellen med föreningslicens — **ren rewrite, ingen migr
 - [x] **1.0.4** Login-first `/skapa` — skapa förening (trialing utan Stripe); kiosk separat i admin
 - [x] **1.0.5** Sign out i admin
 - [x] **1.0.6** Server-side org-medlemskap ersätter `ownerEmail`
+- [x] **1.0.7** Google OAuth på `/logga-in` (magic link kvar som alternativ)
 
 ### 1.1 Radera gammal modell (kod + schema)
 

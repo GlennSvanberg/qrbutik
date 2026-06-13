@@ -12,6 +12,7 @@ import {
   SITE_TAGLINE,
   TRIAL_LABEL,
 } from '~/lib/marketing'
+import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -111,6 +112,8 @@ const pricingPlans: Array<{
 ]
 
 function Home() {
+  useRecordPlatformVisit({ type: 'page_view', path: '/' })
+
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <MarketingHeader loginTracking="home-header-login" />

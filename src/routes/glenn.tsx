@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingCtas } from '~/components/MarketingCtas'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
 import { SITE_TAGLINE } from '~/lib/marketing'
+import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
 export const Route = createFileRoute('/glenn')({
   head: () => ({
@@ -20,6 +21,8 @@ export const Route = createFileRoute('/glenn')({
 })
 
 function GlennDemoLanding() {
+  useRecordPlatformVisit({ type: 'page_view', path: '/glenn' })
+
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent px-6 py-12">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">

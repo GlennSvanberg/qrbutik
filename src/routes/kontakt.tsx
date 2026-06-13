@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingFooter } from '~/components/MarketingFooter'
 import { CLUB_LICENSE_PRICE, DEMO_EMAIL, LIVE_KIOSK_LABEL, SITE_TAGLINE } from '~/lib/marketing'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
+import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
 export const Route = createFileRoute('/kontakt')({
   head: () => ({
@@ -24,6 +25,8 @@ export const Route = createFileRoute('/kontakt')({
 })
 
 function KontaktPage() {
+  useRecordPlatformVisit({ type: 'page_view', path: '/kontakt' })
+
   const demoMailto = `mailto:${DEMO_EMAIL}?subject=${encodeURIComponent('Boka demo — QRButik')}`
 
   return (

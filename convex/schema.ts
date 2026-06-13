@@ -15,6 +15,15 @@ const orgRoleValidator = v.union(
   v.literal('editor'),
 )
 
+const platformEventTypeValidator = v.union(
+  v.literal('org_created'),
+  v.literal('shop_created'),
+  v.literal('checkout_started'),
+  v.literal('subscription_activated'),
+  v.literal('shop_view'),
+  v.literal('page_view'),
+)
+
 export default defineSchema({
   organizations: defineTable({
     name: v.string(),
@@ -101,4 +110,21 @@ export default defineSchema({
     url: v.string(),
     updatedAt: v.number(),
   }).index('by_email', ['email']),
+  platformEvents: defineTable({
+    type: platformEventTypeValidator,
+    createdAt: v.number(),
+    organizationId: v.optional(v.id('organizations')),
+    shopId: v.optional(v.id('shops')),
+    shopSlug: v.optional(v.string()),
+    shopName: v.optional(v.string()),
+    organizationName: v.optional(v.string()),
+    amountKr: v.optional(v.number()),
+    transactionId: v.optional(v.id('transactions')),
+    path: v.optional(v.string()),
+    visitorId: v.optional(v.string()),
+    actorEmail: v.optional(v.string()),
+  }).index('by_createdAt', ['createdAt']),
+  platformReportState: defineTable({
+    lastReportSentAt: v.number(),
+  }),
 })

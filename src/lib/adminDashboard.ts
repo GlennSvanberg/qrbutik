@@ -107,8 +107,15 @@ export function downloadExportFile(args: {
   filename: string
   content: string
   mimeType: string
+  encoding?: 'base64'
 }) {
-  const blob = new Blob([args.content], { type: args.mimeType })
+  const bytes =
+    args.encoding === 'base64'
+      ? Uint8Array.from(atob(args.content), (character) =>
+          character.charCodeAt(0),
+        )
+      : new TextEncoder().encode(args.content)
+  const blob = new Blob([bytes], { type: args.mimeType })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   anchor.href = url

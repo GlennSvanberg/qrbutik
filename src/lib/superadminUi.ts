@@ -69,3 +69,12 @@ export const SUBSCRIPTION_STATUS_OPTIONS = [
 
 export type SubscriptionStatusOption =
   (typeof SUBSCRIPTION_STATUS_OPTIONS)[number]
+
+export const platformEventTypeLabel: Record<string, string> = {
+  org_created: 'Ny förening',
+  shop_created: 'Ny kiosk',
+  checkout_started: 'Köp påbörjat',
+  subscription_activated: 'Licens aktiverad',
+  shop_view: 'Kioskbesök',
+  page_view: 'Sidvisning',
+}

@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
 import { loginAndOpen } from './helpers/auth'
 import {
-  assertCsvExportHeaders,
+  assertExcelExportHeaders,
   assertSieExportHeaders,
-  downloadCsvExport,
+  downloadExcelExport,
   downloadSieExport,
   openTreasurerExportPanel,
 } from './helpers/export'
@@ -47,10 +47,12 @@ test.describe('ROADMAP 5.4 — trial to export', () => {
 
     await openTreasurerExportPanel(page, appUrl)
 
-    const csv = await downloadCsvExport(page)
-    assertCsvExportHeaders(csv.content)
-    expect(csv.content).toContain(productName)
-    expect(csv.content).toContain('25')
+    const excel = await downloadExcelExport(page)
+    assertExcelExportHeaders(excel.headers)
+    expect(excel.rows.some((row) => row.join(' ').includes(productName))).toBe(
+      true,
+    )
+    expect(excel.rows.some((row) => row.join(' ').includes('25'))).toBe(true)
 
     const sie = await downloadSieExport(page)
     assertSieExportHeaders(sie.content)

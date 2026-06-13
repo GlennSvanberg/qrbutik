@@ -24,11 +24,13 @@ function ExportHelpPage() {
         </header>
 
         <section className="relaxed-surface p-6 text-sm text-slate-700">
-          <h2 className="text-base font-semibold text-slate-900">CSV</h2>
+          <h2 className="text-base font-semibold text-slate-900">Excel</h2>
           <p className="mt-2">
-            Filen använder semikolon som avgränsare och UTF-8 med BOM så att
-            svensk Excel öppnar den korrekt. Kolumner: datum, kiosk, belopp,
-            referens, status, artiklar och antal rader.
+            Filen öppnas direkt i Excel med formaterad tabell, anpassade
+            kolumnbredder och filter. Kolumner: datum, kiosk, belopp, referens,
+            status, artiklar och antal rader. En summa-rad visar total
+            försäljning. Kryssa i &quot;Inkludera icke verifierade köp&quot;
+            om du vill se väntande betalningar också.
           </p>
         </section>
 
@@ -51,7 +53,7 @@ function ExportHelpPage() {
           </h2>
           <p className="mt-2">
             Välj filtret &quot;Helgen&quot; på dashboarden, kontrollera att rätt
-            kiosker ingår, och klicka Exportera CSV eller Exportera SIE.
+            kiosker ingår, och klicka Exportera Excel eller Exportera SIE.
           </p>
         </section>
 

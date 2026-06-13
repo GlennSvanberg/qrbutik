@@ -80,6 +80,13 @@ export const handleCheckoutCompleted = internalMutation({
           organizationId: organization._id,
         },
       )
+
+      await ctx.scheduler.runAfter(0, internal.platformEvents.recordInternal, {
+        type: 'subscription_activated',
+        createdAt: Date.now(),
+        organizationId: organization._id,
+        organizationName: organization.name,
+      })
     }
 
     return null
@@ -129,6 +136,13 @@ export const handleSubscriptionUpdated = internalMutation({
           organizationId: organization._id,
         },
       )
+
+      await ctx.scheduler.runAfter(0, internal.platformEvents.recordInternal, {
+        type: 'subscription_activated',
+        createdAt: Date.now(),
+        organizationId: organization._id,
+        organizationName: organization.name,
+      })
     }
 
     return null

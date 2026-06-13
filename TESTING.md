@@ -228,6 +228,17 @@ See `e2e/helpers/auth.ts`.
 - `createTestOrg`, `createTestKiosk`, `createTrialOrgWithKiosk` — see `e2e/helpers/org.ts`
 - `waitForDevInviteToken` — poll `/dev/invite-token?email=` (requires `DEV_MAGIC_LINK=true` + deployed `devInviteToken.ts`)
 
+### Google sign-in (manual)
+
+E2E does **not** automate Google OAuth. Use magic link in Playwright (`e2e/auth.spec.ts`). To verify Google locally:
+
+1. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on the Convex deployment (see [`AGENTS.md`](./AGENTS.md)).
+2. Add redirect URI `{CONVEX_SITE_URL}/api/auth/callback/google` in Google Cloud Console.
+3. Open `/logga-in` → **Fortsätt med Google** → consent → land on `/admin`.
+4. For invites: sign in with the **same email** the invitation was sent to.
+
+Dev without Google keys: magic link remains fully usable; the Google button surfaces a Better Auth error if clicked.
+
 ### Configuration
 
 - `playwright.config.ts` — base URL, `globalSetup`, webServer env, Chromium project

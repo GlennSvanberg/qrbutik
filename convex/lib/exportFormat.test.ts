@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { buildExcelExport } from './buildExcelExport'
 import {
-  buildCsvExport,
   buildExportFilename,
   buildItemsSummary,
   buildSieExport,
@@ -29,11 +29,10 @@ describe('exportFormat', () => {
     ).toBe('2x Korv (60 kr), 1x Läsk (20 kr)')
   })
 
-  it('builds CSV with BOM and semicolon delimiter', () => {
-    const csv = buildCsvExport(sampleRows)
-    expect(csv.startsWith('\uFEFF')).toBe(true)
-    expect(csv).toContain('Cup-kiosken')
-    expect(csv).toContain('Verifierad')
+  it('builds formatted Excel export', async () => {
+    const buffer = await buildExcelExport(sampleRows)
+    expect(buffer.length).toBeGreaterThan(1000)
+    expect(buffer.subarray(0, 2).toString()).toBe('PK')
   })
 
   it('builds minimal SIE4 export', () => {
@@ -51,11 +50,11 @@ describe('exportFormat', () => {
   it('builds export filename', () => {
     const filename = buildExportFilename({
       organizationName: 'Test IF',
-      extension: 'csv',
+      extension: 'xlsx',
       start: new Date('2025-06-14').getTime(),
       end: new Date('2025-06-15').getTime(),
     })
-    expect(filename).toMatch(/^qrbutik-test-if-.*\.csv$/)
+    expect(filename).toMatch(/^qrbutik-test-if-.*\.xlsx$/)
   })
 
   it('SIE excludes pending transactions from TRANS lines', () => {

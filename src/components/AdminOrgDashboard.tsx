@@ -320,12 +320,13 @@ export function AdminOrgDashboard({
 
             <details className="relaxed-surface p-5">
               <summary className="cursor-pointer text-sm font-semibold text-slate-900">
-                Hjälp: exportformat (CSV &amp; SIE)
+                Hjälp: exportformat (Excel &amp; SIE)
               </summary>
               <div className="mt-4 space-y-3 text-sm text-slate-600">
                 <p>
-                  CSV använder semikolon och fungerar direkt i svensk Excel.
-                  Kolumner: datum, kiosk, belopp, referens, status, artiklar.
+                  Excel-filen har formaterad tabell med kolumnbredd, filter och
+                  summa-rad. Kolumner: datum, kiosk, belopp, referens, status,
+                  artiklar. Du kan välja att inkludera icke verifierade köp.
                 </p>
                 <p>
                   SIE4 exporteras med standardkonto 3010 om inget annat anges

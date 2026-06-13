@@ -15,4 +15,10 @@ crons.interval(
   internal.organizations.sendTrialReminders,
 )
 
+crons.interval(
+  'send platform activity report',
+  { hours: 1 },
+  internal.platformReports.sendHourlyReport,
+)
+
 export default crons

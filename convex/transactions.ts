@@ -1,6 +1,7 @@
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
+import { internal } from './_generated/api'
 import { authedMutation, authedQuery } from './lib/customFunctions'
 import { requireShopAccess, requireShopIdsAccess } from './lib/auth'
 import { isSubscriptionActive } from './lib/validators'
@@ -40,14 +41,28 @@ export const create = mutation({
       throw new Error('Kiosken är inte aktiv just nu.')
     }
 
+    const createdAt = Date.now()
     const transactionId = await ctx.db.insert('transactions', {
       shopId: args.shopId,
       amount: args.amount,
       reference: args.reference,
       items: args.items,
       status: 'pending',
-      createdAt: Date.now(),
+      createdAt,
     })
+
+    await ctx.scheduler.runAfter(0, internal.platformEvents.recordInternal, {
+      type: 'checkout_started',
+      createdAt,
+      shopId: args.shopId,
+      shopSlug: shop.slug,
+      shopName: shop.name,
+      organizationId: shop.organizationId,
+      organizationName: organization.name,
+      amountKr: args.amount,
+      transactionId,
+    })
+
     return transactionId
   },
 })

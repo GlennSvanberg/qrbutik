@@ -1,6 +1,6 @@
-# Test Findings ó QRButik
+# Test Findings ù QRButik
 
-> Discovery-first test run. Failing tests are intentional signal ó do not delete without fixing the product bug or correcting the test spec.
+> Discovery-first test run. Failing tests are intentional signal ù do not delete without fixing the product bug or correcting the test spec.
 
 **Last full run:** 2026-06-13 (Wave 6 + Stripe E2E enabled)
 
@@ -8,10 +8,10 @@
 
 | Layer | Passed | Failed | Flaky | Skipped | Notes |
 |-------|--------|--------|-------|---------|-------|
-| Unit (`npm run test:unit`) | 79 | 0 | ó | ó | Pure helpers + frontend RBAC/billing UI |
-| Convex integration (`npm run test:convex`) | 52 | 0 | ó | ó | Auth, Stripe webhooks, gating, export, members, shops, dashboard |
-| **Vitest total** | **131** | **0** | ó | ó | `npm run test` |
-| E2E (`npm run test:e2e`) | **17** | **0** | **0** | **0** | Includes Stripe Checkout when `STRIPE_E2E=true` |
+| Unit (`npm run test:unit`) | 79 | 0 | ù | ù | Pure helpers + frontend RBAC/billing UI |
+| Convex integration (`npm run test:convex`) | 52 | 0 | ù | ù | Auth, Stripe webhooks, gating, export, members, shops, dashboard |
+| **Vitest total** | **131** | **0** | ù | ù | `npm run test` |
+| E2E (`npm run test:e2e`) | **17** | **0** | **1** | **0** | Stripe Checkout enabled via `STRIPE_E2E=true`; occasional auth flake on first billing test |
 
 ---
 
@@ -24,8 +24,8 @@ All items from the original discovery run are fixed. Root causes and fixes:
 | **E2E auth** | Magic-link race, `localhost` vs `127.0.0.1` mismatch, flaky `/skapa` login | `e2e/global-setup.ts`; unified base URL; `VITE_DEV_MAGIC_LINK=false` in Playwright webServer; `devMagicLink.ts` skips auto-open when `navigator.webdriver` or `__E2E_AUTH__`; hardened `e2e/helpers/auth.ts` |
 | **Export download** | Playwright missed blob download | `downloadExportFile` appends anchor to `document.body` before click |
 | **ROADMAP 5.4** | Timeout at CSV download | Same download fix + `test.setTimeout(180_000)` |
-| **Member invites** | Editor saw "Skapa en fˆrening fˆrst" / no accept UI | `InviteAcceptPanel` in `medlemmar.tsx` before org/canManage gates; `AdminMemberSync` skips auto-accept on invite URL |
-| **Member reassign E2E** | Clicked Redigera on pending invite; strict-mode locator collisions | Accept invite first; scope assertions to `Kiosker: Ö` text |
+| **Member invites** | Editor saw "Skapa en fùrening fùrst" / no accept UI | `InviteAcceptPanel` in `medlemmar.tsx` before org/canManage gates; `AdminMemberSync` skips auto-accept on invite URL |
+| **Member reassign E2E** | Clicked Redigera on pending invite; strict-mode locator collisions | Accept invite first; scope assertions to `Kiosker: ù` text |
 | **Editor RBAC** | Editor could deep-link `/historik` | `transactions.ts` treasurer-only; UI guards on `historik.tsx` / `settings.tsx`; E2E deep-link test in `roles.spec.ts` |
 | **Billing UI** | `billingUi.ts` not wired | `billing.tsx` imports shared helpers |
 | **Stripe Checkout E2E** | Skipped unless env flag set | `STRIPE_E2E=true` in `.env.local`; `isStripeE2EEnabled()` reads env + `.env.local`; test opens `checkout.stripe.com` |
@@ -54,10 +54,14 @@ _No open product bugs from the discovery run._
 
 ## Test infra issues
 
-_No open infra issues._ Prerequisites documented in [`TESTING.md`](./TESTING.md):
+| Test file | Issue | Notes |
+|-----------|-------|-------|
+| `e2e/billing.spec.ts` (trial UI test) | **Flaky** ó first run can timeout waiting for `Fˆreningsnamn` after magic link | Passes on retry; same auth cold-start pattern as pre-fix runs |
+
+Other prerequisites in [`TESTING.md`](./TESTING.md):
 
 - Convex dashboard: `DEV_MAGIC_LINK=true`
-- Consistent origin: `SITE_URL` / `VITE_SITE_URL` / Playwright `baseURL` (use one host ó e.g. `http://localhost:3000` or `http://127.0.0.1:3000`, not both)
+- Consistent origin: `SITE_URL` / `VITE_SITE_URL` / Playwright `baseURL` (use one host ù e.g. `http://localhost:3000` or `http://127.0.0.1:3000`, not both)
 - Playwright sets `VITE_DEV_MAGIC_LINK=false` to avoid browser auto-open race
 - `e2e/global-setup.ts` probes magic-link endpoint and runs `demo:seed`
 - Stripe E2E: `STRIPE_E2E=true` + Stripe Test Mode keys in Convex

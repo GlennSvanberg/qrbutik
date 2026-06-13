@@ -42,6 +42,12 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
       },
     },
     database: authComponent.adapter(ctx),
+    socialProviders: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      },
+    },
     plugins: [
       crossDomain({ siteUrl }),
       convex({ authConfig }),

@@ -8,9 +8,15 @@ import { authedQuery, platformAdminMutation, platformAdminQuery } from './lib/cu
 import { requirePlatformAdmin } from './lib/platformAdmin'
 import { isE2eTestOrganization, isE2eTestShop } from './lib/testData'
 import {
+  aggregateActivitySummary,
+  platformEventTypeValidator,
+  shouldIncludeStoredPlatformEvent,
+} from './lib/platformEvents'
+import {
   isSubscriptionActive,
   subscriptionStatusValidator,
 } from './lib/validators'
+import type { PlatformEventRow } from './lib/platformEvents'
 import type { SubscriptionStatus } from './lib/validators'
 import type { Doc, Id } from './_generated/dataModel'
 import type { DbReadCtx } from './lib/auth'
@@ -449,5 +455,163 @@ export const updateSubscriptionStatus = platformAdminMutation({
     })
 
     return null
+  },
+})
+
+const activitySummaryValidator = v.object({
+  orgsCreated: v.number(),
+  shopsCreated: v.number(),
+  checkoutCount: v.number(),
+  checkoutRevenueKr: v.number(),
+  shopVisits: v.array(
+    v.object({
+      shopSlug: v.string(),
+      shopName: v.string(),
+      uniqueVisitors: v.number(),
+    }),
+  ),
+  pageViews: v.array(
+    v.object({
+      path: v.string(),
+      uniqueVisitors: v.number(),
+    }),
+  ),
+})
+
+const platformEventRowValidator = v.object({
+  eventId: v.id('platformEvents'),
+  type: platformEventTypeValidator,
+  createdAt: v.number(),
+  organizationName: v.union(v.string(), v.null()),
+  shopName: v.union(v.string(), v.null()),
+  shopSlug: v.union(v.string(), v.null()),
+  amountKr: v.union(v.number(), v.null()),
+  path: v.union(v.string(), v.null()),
+  actorEmail: v.union(v.string(), v.null()),
+  detail: v.string(),
+})
+
+function formatPlatformEventDetail(event: PlatformEventRow): string {
+  switch (event.type) {
+    case 'org_created':
+      return event.organizationName ?? 'Ny förening'
+    case 'shop_created':
+      return event.shopName
+        ? `${event.shopName} (${event.shopSlug ?? ''})`
+        : (event.shopSlug ?? 'Ny kiosk')
+    case 'checkout_started':
+      return `${event.shopName ?? event.shopSlug ?? 'Kiosk'} — ${event.amountKr ?? 0} kr`
+    case 'subscription_activated':
+      return event.organizationName ?? 'Prenumeration aktiverad'
+    case 'shop_view':
+      return event.shopName
+        ? `${event.shopName} (${event.shopSlug ?? ''})`
+        : (event.shopSlug ?? 'Kioskbesök')
+    case 'page_view':
+      return event.path ?? 'Sidvisning'
+  }
+}
+
+async function listPlatformEventsSince(
+  ctx: DbReadCtx,
+  since: number,
+): Promise<Array<PlatformEventRow & { _id: Id<'platformEvents'> }>> {
+  const events = await ctx.db
+    .query('platformEvents')
+    .withIndex('by_createdAt', (q) => q.gte('createdAt', since))
+    .collect()
+
+  return events
+    .filter((event) =>
+      shouldIncludeStoredPlatformEvent({
+        type: event.type,
+        createdAt: event.createdAt,
+        organizationId: event.organizationId,
+        shopId: event.shopId,
+        shopSlug: event.shopSlug,
+        shopName: event.shopName,
+        organizationName: event.organizationName,
+        amountKr: event.amountKr,
+        transactionId: event.transactionId,
+        path: event.path,
+        visitorId: event.visitorId,
+        actorEmail: event.actorEmail,
+      }),
+    )
+    .map((event) => ({
+      _id: event._id,
+      type: event.type,
+      createdAt: event.createdAt,
+      organizationId: event.organizationId,
+      shopId: event.shopId,
+      shopSlug: event.shopSlug,
+      shopName: event.shopName,
+      organizationName: event.organizationName,
+      amountKr: event.amountKr,
+      transactionId: event.transactionId,
+      path: event.path,
+      visitorId: event.visitorId,
+      actorEmail: event.actorEmail,
+    }))
+}
+
+export const getActivitySummary = platformAdminQuery({
+  args: {
+    now: v.number(),
+  },
+  returns: activitySummaryValidator,
+  handler: async (ctx, args) => {
+    const rangeStart = args.now - 7 * dayMs
+    const events = await listPlatformEventsSince(ctx, rangeStart)
+    return aggregateActivitySummary(events)
+  },
+})
+
+export const listRecentPlatformEvents = platformAdminQuery({
+  args: {
+    limit: v.optional(v.number()),
+  },
+  returns: v.array(platformEventRowValidator),
+  handler: async (ctx, args) => {
+    const limit = Math.min(args.limit ?? 50, 100)
+    const events = await ctx.db.query('platformEvents').order('desc').take(200)
+
+    const rows: Array<PlatformEventRow & { _id: Id<'platformEvents'> }> = []
+    for (const event of events) {
+      const row: PlatformEventRow = {
+        type: event.type,
+        createdAt: event.createdAt,
+        organizationId: event.organizationId,
+        shopId: event.shopId,
+        shopSlug: event.shopSlug,
+        shopName: event.shopName,
+        organizationName: event.organizationName,
+        amountKr: event.amountKr,
+        transactionId: event.transactionId,
+        path: event.path,
+        visitorId: event.visitorId,
+        actorEmail: event.actorEmail,
+      }
+      if (!shouldIncludeStoredPlatformEvent(row)) {
+        continue
+      }
+      rows.push({ ...row, _id: event._id })
+      if (rows.length >= limit) {
+        break
+      }
+    }
+
+    return rows.map((event) => ({
+      eventId: event._id,
+      type: event.type,
+      createdAt: event.createdAt,
+      organizationName: event.organizationName ?? null,
+      shopName: event.shopName ?? null,
+      shopSlug: event.shopSlug ?? null,
+      amountKr: event.amountKr ?? null,
+      path: event.path ?? null,
+      actorEmail: event.actorEmail ?? null,
+      detail: formatPlatformEventDetail(event),
+    }))
   },
 })

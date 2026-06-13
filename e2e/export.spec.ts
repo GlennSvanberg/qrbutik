@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
 import { loginAndOpen } from './helpers/auth'
 import {
-  assertCsvExportHeaders,
+  assertExcelExportHeaders,
   assertSieExportHeaders,
-  downloadCsvExport,
+  downloadExcelExport,
   downloadSieExport,
   openTreasurerExportPanel,
 } from './helpers/export'
@@ -18,7 +18,7 @@ import {
 attachFindingsReporter(test)
 
 test.describe('Treasurer export', () => {
-  test('trial org can sell, verify, and export CSV/SIE', async ({
+  test('trial org can sell, verify, and export Excel/SIE', async ({
     page,
     baseURL,
   }) => {
@@ -48,11 +48,15 @@ test.describe('Treasurer export', () => {
 
     await openTreasurerExportPanel(page, appUrl)
 
-    const csv = await downloadCsvExport(page)
-    assertCsvExportHeaders(csv.content)
-    expect(csv.content).toContain(productName)
-    expect(csv.content).toContain('25')
-    expect(csv.content).toContain('Verifierad')
+    const excel = await downloadExcelExport(page)
+    assertExcelExportHeaders(excel.headers)
+    expect(excel.rows.some((row) => row.join(' ').includes(productName))).toBe(
+      true,
+    )
+    expect(excel.rows.some((row) => row.join(' ').includes('25'))).toBe(true)
+    expect(excel.rows.some((row) => row.join(' ').includes('Verifierad'))).toBe(
+      true,
+    )
 
     const sie = await downloadSieExport(page)
     assertSieExportHeaders(sie.content)

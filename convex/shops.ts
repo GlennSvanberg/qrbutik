@@ -1,6 +1,6 @@
 import { v } from 'convex/values'
 import { query } from './_generated/server'
-import { api } from './_generated/api'
+import { api, internal } from './_generated/api'
 import { authedMutation } from './lib/customFunctions'
 import { requireOrgMember, requireShopAccess } from './lib/auth'
 import {
@@ -261,6 +261,17 @@ export const createShopInOrganization = authedMutation({
     })
     await ctx.db.patch('shops', shopId, {
       createdEmailSentAt: now,
+    })
+
+    await ctx.scheduler.runAfter(0, internal.platformEvents.recordInternal, {
+      type: 'shop_created',
+      createdAt: now,
+      organizationId: args.organizationId,
+      shopId,
+      shopSlug: finalSlug,
+      shopName,
+      organizationName: organization.name,
+      actorEmail: ctx.user.email,
     })
 
     return { shopId, slug: finalSlug }

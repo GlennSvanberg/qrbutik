@@ -9,24 +9,6 @@ export type ExportRow = {
   itemCount: number
 }
 
-function formatCsvCell(value: string | number): string {
-  const text = String(value)
-  if (text.includes('"') || text.includes(';') || text.includes('\n')) {
-    return `"${text.replace(/"/g, '""')}"`
-  }
-  return text
-}
-
-function formatDateSv(timestamp: number): string {
-  return new Intl.DateTimeFormat('sv-SE', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(timestamp))
-}
-
 function formatDateSie(timestamp: number): string {
   const date = new Date(timestamp)
   const year = date.getFullYear()
@@ -41,37 +23,6 @@ export function buildItemsSummary(
   return items
     .map((item) => `${item.quantity}x ${item.name} (${item.price} kr)`)
     .join(', ')
-}
-
-export function buildCsvExport(rows: Array<ExportRow>): string {
-  const header = [
-    'Datum',
-    'Kiosk',
-    'Belopp',
-    'Referens',
-    'Status',
-    'Artiklar',
-    'Antal rader',
-  ]
-
-  const lines = [
-    header.join(';'),
-    ...rows.map((row) =>
-      [
-        formatDateSv(row.createdAt),
-        row.shopName,
-        row.amount,
-        row.reference,
-        row.status === 'verified' ? 'Verifierad' : 'Väntande',
-        row.itemsSummary,
-        row.itemCount,
-      ]
-        .map(formatCsvCell)
-        .join(';'),
-    ),
-  ]
-
-  return `\uFEFF${lines.join('\r\n')}`
 }
 
 export function buildSieExport(args: {
@@ -109,7 +60,7 @@ export function buildSieExport(args: {
 
 export function buildExportFilename(args: {
   organizationName: string
-  extension: 'csv' | 'se'
+  extension: 'xlsx' | 'se'
   start: number
   end: number
 }): string {

@@ -35,8 +35,27 @@ When implementing features, prefer: organizations, roles, central treasurer dash
 | `STRIPE_PRICE_ID` | Convex | 995 kr/mån subscription price |
 | `VITE_STRIPE_PUBLISHABLE_KEY` | Vite (optional) | Future client-side Stripe.js |
 | `PLATFORM_ADMIN_EMAILS` | Convex | Comma-separated emails allowed on `/superadmin` (platform control tower) |
+| `PLATFORM_REPORTS_ENABLED` | Convex **prod only** | Set `true` to send hourly activity digest emails to `PLATFORM_ADMIN_EMAILS` |
 
-When `DEV_MAGIC_LINK=true`, any authenticated user can access `/superadmin` without being on the allowlist (local dev only).
+## Google OAuth (Convex dashboard)
+
+| Variable | Where | Purpose |
+|----------|-------|---------|
+| `GOOGLE_CLIENT_ID` | Convex | OAuth client ID from Google Cloud Console |
+| `GOOGLE_CLIENT_SECRET` | Convex | OAuth client secret |
+
+**Redirect URI** (Google Cloud Console → Authorized redirect URIs): `{CONVEX_SITE_URL}/api/auth/callback/google` — use your dev and prod `.convex.site` URLs (from `VITE_CONVEX_SITE_URL` or Convex dashboard). **Not** the Vite app URL.
+
+Optional **Authorized JavaScript origins**: `http://localhost:3000`, `http://127.0.0.1:3000`, `https://qrbutik.se`, `https://www.qrbutik.se`.
+
+Magic link works without Google keys; the Google button on `/logga-in` shows an error until credentials are set.
+
+```powershell
+npx convex env set GOOGLE_CLIENT_ID "your-client-id"
+npx convex env set GOOGLE_CLIENT_SECRET "your-client-secret"
+```
+
+When `DEV_MAGIC_LINK=true`, any authenticated user can access `/superadmin` without being on the allowlist (local dev only). Hourly activity emails are **not** sent unless `PLATFORM_REPORTS_ENABLED=true` on the deployment (leave unset in dev).
 
 Webhook URL: `{CONVEX_SITE_URL}/stripe/webhook`
 

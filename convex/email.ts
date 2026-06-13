@@ -3,6 +3,12 @@
 import { Resend } from "resend";
 import { v } from "convex/values";
 import { action, internalAction } from "./_generated/server";
+import {
+  aggregatedPlatformReportValidator,
+  formatPlatformReportHtml,
+} from "./lib/platformEvents";
+import { getPlatformAdminEmails } from "./lib/platformAdmin";
+import { canSendPlatformReportEmail } from "./lib/platformReports";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const defaultFrom = process.env.RESEND_FROM ?? "QRButik <no-reply@qrbutik.se>";
@@ -157,6 +163,34 @@ export const sendStoreCreatedEmail = action({
       subject: `Din butik ${args.shopName} är skapad`,
       html: `<p>Hej!</p><p>Din butik <strong>${args.shopName}</strong> är nu redo.</p><p>Öppna butiken här:</p><p><a href="${shopUrl}">${shopUrl}</a></p><p>Adminpanelen hittar du här:</p><p><a href="${adminUrl}">${adminUrl}</a></p><p>Direktlänk till butikens admin:</p><p><a href="${shopAdminUrl}">${shopAdminUrl}</a></p>`,
     });
+    return null;
+  },
+});
+
+export const sendPlatformActivityReport = internalAction({
+  args: {
+    report: aggregatedPlatformReportValidator,
+    windowStart: v.number(),
+    windowEnd: v.number(),
+  },
+  returns: v.null(),
+  handler: async (_ctx, args) => {
+    if (!canSendPlatformReportEmail()) {
+      return null;
+    }
+
+    const recipients = getPlatformAdminEmails();
+    const html = formatPlatformReportHtml(
+      args.report,
+      args.windowStart,
+      args.windowEnd,
+    );
+    const subject = `QRButik aktivitet — ${args.report.totalEvents} händelse${args.report.totalEvents === 1 ? "" : "r"} senaste timmen`;
+
+    for (const to of recipients) {
+      await sendEmail({ to, subject, html });
+    }
+
     return null;
   },
 });

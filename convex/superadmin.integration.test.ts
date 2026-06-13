@@ -232,3 +232,48 @@ describe('superadmin mutations', () => {
     expect(org?.subscriptionStatus).toBe('past_due')
   })
 })
+
+describe('superadmin activity', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('returns activity summary excluding e2e events', async () => {
+    vi.stubEnv('PLATFORM_ADMIN_EMAILS', PLATFORM_ADMIN)
+    const t = convexTest(schema, convexModules)
+    const now = FIXTURE_NOW
+
+    await t.run(async (ctx) => {
+      await ctx.db.insert('platformEvents', {
+        type: 'org_created',
+        createdAt: now,
+        organizationName: 'Glenn IK',
+        actorEmail: 'owner@example.com',
+      })
+      await ctx.db.insert('platformEvents', {
+        type: 'shop_view',
+        createdAt: now,
+        shopSlug: 'e2e-checkout-1',
+        shopName: 'E2E Shop',
+        visitorId: 'bot',
+      })
+      await ctx.db.insert('platformEvents', {
+        type: 'checkout_started',
+        createdAt: now,
+        shopSlug: 'demo',
+        shopName: 'Demokiosk',
+        amountKr: 55,
+      })
+    })
+
+    const summary = await asUser(t, PLATFORM_ADMIN).query(
+      api.superadmin.getActivitySummary,
+      { now },
+    )
+
+    expect(summary.orgsCreated).toBe(1)
+    expect(summary.checkoutCount).toBe(1)
+    expect(summary.checkoutRevenueKr).toBe(55)
+    expect(summary.shopVisits).toEqual([])
+  })
+})

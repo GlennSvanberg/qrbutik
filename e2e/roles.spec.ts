@@ -29,7 +29,7 @@ test.describe('Role-based navigation', () => {
     await expect(page.getByRole('link', { name: 'Medlemmar' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Fakturering' })).toBeVisible()
     await expect(
-      page.getByRole('button', { name: 'Exportera CSV' }),
+      page.getByRole('button', { name: 'Exportera Excel' }),
     ).toBeVisible()
     await expect(
       page.getByRole('button', { name: 'Exportera SIE' }),
@@ -91,7 +91,7 @@ test.describe('Role-based navigation', () => {
         editorPage.getByRole('link', { name: 'Fakturering' }),
       ).toHaveCount(0)
       await expect(
-        editorPage.getByRole('button', { name: 'Exportera CSV' }),
+        editorPage.getByRole('button', { name: 'Exportera Excel' }),
       ).toHaveCount(0)
       await expect(
         editorPage.getByRole('button', { name: 'Exportera SIE' }),
