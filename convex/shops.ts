@@ -77,6 +77,25 @@ export const getShopBySlug = query({
   },
 })
 
+export const getOrganizationLogoUrlByShopSlug = query({
+  args: { slug: v.string() },
+  returns: v.union(v.string(), v.null()),
+  handler: async (ctx, args) => {
+    const shop = await ctx.db
+      .query('shops')
+      .withIndex('by_slug', (q) => q.eq('slug', args.slug))
+      .unique()
+    if (!shop) {
+      return null
+    }
+    const organization = await ctx.db.get('organizations', shop.organizationId)
+    if (!organization?.logoStorageId) {
+      return null
+    }
+    return await ctx.storage.getUrl(organization.logoStorageId)
+  },
+})
+
 export const getShopWithLicenseBySlug = query({
   args: {
     slug: v.string(),

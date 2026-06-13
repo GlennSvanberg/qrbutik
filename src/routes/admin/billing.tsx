@@ -149,13 +149,20 @@ function BillingContent({
   const updateOrganizationSettings = useMutation(
     api.orgDashboard.updateOrganizationSettings,
   )
+  const generateLogoUploadUrl = useMutation(
+    api.orgDashboard.generateLogoUploadUrl,
+  )
   const organizationDetails = useQuery(api.organizations.getOrganization, {
+    organizationId,
+  })
+  const logoUrl = useQuery(api.orgDashboard.getOrganizationLogoUrl, {
     organizationId,
   })
   const [orgNumber, setOrgNumber] = useState('')
   const [sieRevenueAccount, setSieRevenueAccount] = useState('')
   const [settingsMessage, setSettingsMessage] = useState<string | null>(null)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false)
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false)
   const [isLoadingInvoice, setIsLoadingInvoice] = useState(false)
   const [isLoadingPortal, setIsLoadingPortal] = useState(false)
@@ -428,6 +435,114 @@ function BillingContent({
 
           {error ? <p className="text-sm text-rose-600">{error}</p> : null}
         </section>
+
+        {canManageBilling ? (
+          <section className="relaxed-surface flex flex-col gap-4 p-8">
+            <h2 className="text-base font-semibold text-slate-900">
+              Föreningslogotyp (QR-skylt)
+            </h2>
+            <p className="text-sm text-slate-600">
+              Valfri logotyp som visas på alla kioskers QR-skyltar. PNG eller JPG,
+              max 500 KB. Kvadratisk bild rekommenderas.
+            </p>
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={`${activeOrg.name} logotyp`}
+                className="mx-auto h-24 w-24 rounded-2xl border border-stone-200 object-contain p-2"
+              />
+            ) : null}
+            <div className="flex flex-wrap gap-3">
+              <label className="relaxed-secondary-button inline-flex h-11 cursor-pointer items-center px-4 text-sm font-semibold text-slate-700">
+                {isUploadingLogo ? 'Laddar upp…' : 'Ladda upp logotyp'}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg"
+                  className="sr-only"
+                  disabled={isUploadingLogo}
+                  onChange={async (event) => {
+                    const file = event.target.files?.[0]
+                    event.target.value = ''
+                    if (!file) {
+                      return
+                    }
+                    setError(null)
+                    setSettingsMessage(null)
+                    if (
+                      file.type !== 'image/png' &&
+                      file.type !== 'image/jpeg'
+                    ) {
+                      setError('Endast PNG och JPG stöds.')
+                      return
+                    }
+                    if (file.size > 500_000) {
+                      setError('Logotypen får vara max 500 KB.')
+                      return
+                    }
+                    setIsUploadingLogo(true)
+                    try {
+                      const uploadUrl = await generateLogoUploadUrl({
+                        organizationId,
+                      })
+                      const response = await fetch(uploadUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': file.type },
+                        body: file,
+                      })
+                      if (!response.ok) {
+                        throw new Error('Uppladdningen misslyckades.')
+                      }
+                      const payload = (await response.json()) as {
+                        storageId: Id<'_storage'>
+                      }
+                      await updateOrganizationSettings({
+                        organizationId,
+                        logoStorageId: payload.storageId,
+                      })
+                      setSettingsMessage('Logotypen sparades.')
+                    } catch (uploadError) {
+                      setError(
+                        uploadError instanceof Error
+                          ? uploadError.message
+                          : 'Kunde inte ladda upp logotypen.',
+                      )
+                    } finally {
+                      setIsUploadingLogo(false)
+                    }
+                  }}
+                />
+              </label>
+              {logoUrl ? (
+                <button
+                  type="button"
+                  disabled={isUploadingLogo}
+                  onClick={async () => {
+                    setError(null)
+                    setIsUploadingLogo(true)
+                    try {
+                      await updateOrganizationSettings({
+                        organizationId,
+                        logoStorageId: null,
+                      })
+                      setSettingsMessage('Logotypen togs bort.')
+                    } catch (removeError) {
+                      setError(
+                        removeError instanceof Error
+                          ? removeError.message
+                          : 'Kunde inte ta bort logotypen.',
+                      )
+                    } finally {
+                      setIsUploadingLogo(false)
+                    }
+                  }}
+                  className="relaxed-secondary-button h-11 cursor-pointer px-4 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Ta bort logotyp
+                </button>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         {canManageBilling ? (
           <section className="relaxed-surface flex flex-col gap-4 p-8">

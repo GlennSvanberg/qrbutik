@@ -5,6 +5,7 @@ import {
 import { v } from 'convex/values'
 import { mutation, query } from '../_generated/server'
 import { getCurrentUser, requireOrgMember } from './auth'
+import { requirePlatformAdmin } from './platformAdmin'
 import type { OrgRole } from './validators'
 
 export const authedQuery = customQuery(query, {
@@ -19,6 +20,22 @@ export const authedMutation = customMutation(mutation, {
   args: {},
   input: async (ctx, args) => {
     const user = await getCurrentUser(ctx)
+    return { ctx: { ...ctx, user }, args }
+  },
+})
+
+export const platformAdminQuery = customQuery(query, {
+  args: {},
+  input: async (ctx, args) => {
+    const user = await requirePlatformAdmin(ctx)
+    return { ctx: { ...ctx, user }, args }
+  },
+})
+
+export const platformAdminMutation = customMutation(mutation, {
+  args: {},
+  input: async (ctx, args) => {
+    const user = await requirePlatformAdmin(ctx)
     return { ctx: { ...ctx, user }, args }
   },
 })

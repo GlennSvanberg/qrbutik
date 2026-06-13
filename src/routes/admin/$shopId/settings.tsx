@@ -197,7 +197,10 @@ function SettingsContent({
                       await deleteShop({ shopId: shop._id })
                       setDeleteStatus('Kiosken är borttagen. Går tillbaka...')
                       setTimeout(() => {
-                        void navigate({ to: '/admin' })
+                        void navigate({
+                          to: '/admin/org/$orgId',
+                          params: { orgId: shop.organizationId },
+                        })
                       }, 1200)
                     } catch (deleteFailure) {
                       setDeleteError(

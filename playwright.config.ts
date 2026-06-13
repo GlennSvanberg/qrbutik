@@ -29,6 +29,7 @@ const baseURL =
 
 export default defineConfig({
   testDir: './e2e',
+  globalTeardown: './e2e/global-teardown.ts',
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
   retries: 1,
@@ -38,6 +39,7 @@ export default defineConfig({
   expect: { timeout: 15_000 },
   use: {
     baseURL,
+    acceptDownloads: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },

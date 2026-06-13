@@ -57,4 +57,54 @@ describe('exportFormat', () => {
     })
     expect(filename).toMatch(/^qrbutik-test-if-.*\.csv$/)
   })
+
+  it('SIE excludes pending transactions from TRANS lines', () => {
+    const rows = [
+      {
+        ...sampleRows[0],
+        status: 'verified' as const,
+        amount: 100,
+        reference: 'VER-1',
+      },
+      {
+        ...sampleRows[0],
+        status: 'pending' as const,
+        amount: 50,
+        reference: 'PEND-1',
+      },
+    ]
+
+    const sie = buildSieExport({
+      organizationName: 'Test IF',
+      orgNumber: '556677-8899',
+      revenueAccount: '3010',
+      rows,
+    })
+
+    const transLines = sie.split('\n').filter((line) => line.startsWith('#TRANS'))
+    expect(transLines).toHaveLength(1)
+    expect(transLines[0]).toContain('100.00')
+    expect(transLines[0]).not.toContain('PEND-1')
+  })
+
+  it('SIE strips non-digits from org number', () => {
+    const sie = buildSieExport({
+      organizationName: 'Test IF',
+      orgNumber: '55 66-77/8899',
+      revenueAccount: '3010',
+      rows: sampleRows,
+    })
+    expect(sie).toContain('#ORGNR 5566778899')
+  })
+
+  it('SIE uses custom revenue account', () => {
+    const sie = buildSieExport({
+      organizationName: 'Test IF',
+      orgNumber: '5566778899',
+      revenueAccount: '3050',
+      rows: sampleRows,
+    })
+    expect(sie).toContain('#TRANS 3050')
+    expect(sie).toContain('#KONTO 3050')
+  })
 })

@@ -1,10 +1,11 @@
 import { useMutation } from 'convex/react'
 import { useEffect, useRef } from 'react'
-import { useRouterState } from '@tanstack/react-router'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { api } from '../../convex/_generated/api'
 import { authClient } from '../lib/authClient'
 
 export function AdminMemberSync() {
+  const navigate = useNavigate()
   const syncMemberIdentity = useMutation(api.members.syncMemberIdentity)
   const acceptInvitation = useMutation(api.members.acceptInvitation)
   const hasSynced = useRef(false)
@@ -27,12 +28,22 @@ export function AdminMemberSync() {
       if (inviteToken) {
         try {
           await acceptInvitation({ token: inviteToken })
-        } catch {
-          // Invitation errors surface on medlemmar page if needed
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Kunde inte acceptera inbjudan.'
+          await navigate({
+            to: '/admin/medlemmar',
+            search: {
+              invite: inviteToken,
+              inviteError: message,
+            },
+          })
         }
       }
     })()
-  }, [acceptInvitation, search.invite, session?.user.email, syncMemberIdentity])
+  }, [acceptInvitation, navigate, search.invite, session?.user.email, syncMemberIdentity])
 
   return null
 }

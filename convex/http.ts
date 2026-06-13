@@ -105,6 +105,39 @@ http.route({
 });
 
 http.route({
+  path: "/dev/invite-token",
+  method: "GET",
+  handler: httpAction(async (ctx, req) => {
+    if (!isDevMagicLinkEnabled()) {
+      return withCors(req, new Response("Not Found", { status: 404 }));
+    }
+
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+
+    if (!email) {
+      return withCors(req, new Response("Missing email", { status: 400 }));
+    }
+
+    const result = await ctx.runQuery(api.devInviteToken.getDevInviteToken, {
+      email,
+    });
+
+    if (!result) {
+      return withCors(req, new Response(null, { status: 204 }));
+    }
+
+    return withCors(
+      req,
+      new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+  }),
+});
+
+http.route({
   path: "/stripe/webhook",
   method: "POST",
   handler: httpAction(async (ctx, req) => {

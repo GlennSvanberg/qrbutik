@@ -168,7 +168,8 @@ function CreateKioskForm({
 
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/admin"
+              to="/admin/org/$orgId"
+              params={{ orgId: organizationId }}
               className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-slate-700"
             >
               Avbryt

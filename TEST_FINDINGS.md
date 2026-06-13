@@ -1,0 +1,97 @@
+# Test Findings — QRButik
+
+> Discovery-first test run. Failing tests are intentional signal — do not delete without fixing the product bug or correcting the test spec.
+
+**Last full run:** 2026-06-13 (Wave 5 consolidation)
+
+## Summary
+
+| Layer | Passed | Failed | Flaky | Skipped | Notes |
+|-------|--------|--------|-------|---------|-------|
+| Unit (`npm run test:unit`) | 71 | 0 | — | — | Pure helpers + frontend RBAC/billing UI |
+| Convex integration (`npm run test:convex`) | 52 | 0 | — | — | Auth, Stripe, gating, export, members, shops, dashboard |
+| **Vitest total** | **123** | **0** | — | — | `npm run test` |
+| E2E (`npm run test:e2e`) | 8 | 5 | 3 | 1 | Magic-link auth flake; export/roadmap flow failures |
+
+---
+
+## Product bugs
+
+| Test file | Scenario | Expected | Actual | Severity | Area |
+|-----------|----------|----------|--------|----------|------|
+| `e2e/members.spec.ts` | Owner invites editor; editor accepts | Editor lands on assigned kiosk admin | Invite accept or medlemmar UI fails (see Playwright report) | P1 | Members / dev invite |
+| `e2e/members.spec.ts` | Reassign editor kiosker | "Medlemmen uppdaterades." after checkbox | UI flow fails (Redigera / kiosk assignment) | P2 | Members |
+| `e2e/export.spec.ts` | Full trial ? sell ? verify ? export | CSV/SIE download with data rows | Flow fails before export (checkout or dashboard) | P0 | Export / ROADMAP 5.4 |
+| `e2e/roadmap-5-4.spec.ts` | Canonical ROADMAP 5.4 flow | End-to-end pass | Same failure chain as export spec | P0 | ROADMAP 5.4 |
+| `e2e/roles.spec.ts` | Editor blocked from treasurer nav | No Medlemmar/Fakturering/export | Test fails during login/setup (may mask product assertion) | P1 | RBAC E2E |
+
+---
+
+## Test infra issues
+
+| Test file | Issue | Resolution |
+|-----------|-------|------------|
+| Multiple E2E specs | Magic-link auth timeout on `/skapa` — `getByLabel('Föreningsnamn')` not found after verify | Harden `e2e/helpers/auth.ts` (longer poll, retry login); run with stable `npx convex dev` + `DEV_MAGIC_LINK=true` |
+| `e2e/billing.spec.ts`, `kiosk-closed.spec.ts`, `roles.spec.ts` | **Flaky** — pass on retry #1 | Same auth flake; consider serial workers or shared session fixture |
+| `e2e/kiosk-checkout.spec.ts` | Swish redirect must use `addInitScript` before navigation | Fixed in `e2e/helpers/kiosk.ts` |
+| `e2e/kiosk-closed.spec.ts` | No public API to deactivate org | `e2e/helpers/convex.ts` ? `internal.organizations.setSubscriptionStatus` via CLI |
+| `convex/devInviteToken.ts` | E2E invite polling requires Convex deployment with new HTTP route | Run `npx convex dev` so `/dev/invite-token` is live before members E2E |
+| `convex/members.integration.test.ts` | Invitations seeded with `FIXTURE_NOW` (2025) vs `Date.now()` in handler | Use `Date.now() ± offset` for non-expired invites in fixtures (fixed in full run — now passes) |
+
+---
+
+## Spec ambiguities (needs human decision)
+
+| Test file | Question | Strict assertion used |
+|-----------|----------|----------------------|
+| `e2e/export.spec.ts` | Should export include **pending** transactions or verified-only? | Verified-only (matches backend `listTransactionsForShopsInRange`) |
+| `e2e/roles.spec.ts` | Can editor deep-link to `/historik` if tab hidden? | E2E not yet stable enough to assert; follow-up after auth hardening |
+
+---
+
+## Recommended fix order (follow-up sprint)
+
+1. **P0** — Fix export/roadmap E2E flow (checkout ? verify ? download); unblocks ROADMAP 5.4 checkbox
+2. **P0** — Harden magic-link E2E helper (biggest flake source)
+3. **P1** — Members invite E2E + deploy `devInviteToken` route
+4. **P1** — Roles E2E editor nav assertions (after auth stable)
+5. **P2** — Wire `billingUi.ts` into `billing.tsx` (extracted but not imported yet)
+
+---
+
+## Subagent log
+
+| When | Agent | File | Result | Notes |
+|------|-------|------|--------|-------|
+| 2026-06-13 | Wave 0 | `convex/test/*`, vitest projects, `TEST_FINDINGS.md` | infra ready | convex-test + edge-runtime |
+| 2026-06-13 | 1A | `stripeMutations.integration.test.ts` | 6/6 pass | webhooks, dedup, payment failed |
+| 2026-06-13 | 1B | `transactions.gating.integration.test.ts` | 7/7 pass | subscription matrix + expireTrials |
+| 2026-06-13 | 1C | `convex/lib/auth.test.ts` | 8/8 pass | role/shop access matrix |
+| 2026-06-13 | 1D | `exports.integration.test.ts`, `exportFormat.test.ts` | 10/10 pass | SIE rules + export auth |
+| 2026-06-13 | 1E | `members.integration.test.ts` | 4/4 pass | acceptInvitation |
+| 2026-06-13 | 3A–3D | transactions, adminDashboard, adminShopNav, billingUi, shops, orgDashboard | all pass | see subagent c450d244 |
+| 2026-06-13 | 2A–2C | kiosk-closed, kiosk-checkout, kiosk-verify | pass (some flaky auth) | subagent f04cccbb |
+| 2026-06-13 | 4A–4D | roadmap-5-4, roles, members, products, export | mixed | 5 failed, 3 flaky in full suite |
+
+---
+
+## New test file inventory
+
+### Vitest unit (`src/**`, `convex/lib/**`)
+
+- `convex/lib/auth.test.ts`, `transactions.test.ts`, `exportFormat.test.ts` (extended)
+- `src/lib/adminDashboard.test.ts`, `adminShopNav.test.ts`, `billingUi.test.ts`
+
+### Vitest convex integration (`convex/**/*.integration.test.ts`)
+
+- `stripeMutations`, `transactions.gating`, `exports`, `members`, `shops`, `orgDashboard`
+
+### Playwright E2E
+
+- `kiosk-closed`, `kiosk-checkout`, `kiosk-verify`, `roadmap-5-4`, `roles`, `members`, `products`
+- Extended: `export.spec.ts`
+
+### Helpers
+
+- `convex/test/fixtures.ts`, `matrices.ts`, `modules.ts`
+- `e2e/helpers/org.ts`, `invite.ts`, `convex.ts`, `kiosk.ts`, `export.ts`, `purchase.ts`, `members.ts`, `findings.ts`

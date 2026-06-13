@@ -25,6 +25,9 @@ function ShopQrPublicPage() {
   const { data: shop } = useSuspenseQuery(
     convexQuery(api.shops.getShopBySlug, { slug: shopSlug }),
   )
+  const { data: logoUrl } = useSuspenseQuery(
+    convexQuery(api.shops.getOrganizationLogoUrlByShopSlug, { slug: shopSlug }),
+  )
 
   const origin = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -83,6 +86,13 @@ function ShopQrPublicPage() {
 
         <section className="flex flex-col items-center">
           <div className="relaxed-surface flex flex-col items-center gap-6 p-8 text-center">
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Föreningslogotyp"
+                className="h-20 w-20 rounded-2xl border border-stone-200 object-contain p-2"
+              />
+            ) : null}
             <div className="relaxed-surface-soft rounded-3xl bg-stone-50/70 p-6">
               <QRCodeSVG value={qrValue} size={240} level="M" />
             </div>

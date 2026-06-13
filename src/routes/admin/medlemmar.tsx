@@ -2,12 +2,14 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useQuery as useTanstackQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMutation, useQuery } from 'convex/react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { api } from '../../../convex/_generated/api'
 import type { Id } from '../../../convex/_generated/dataModel'
 
 type MedlemmarSearch = {
   organizationId?: string
+  invite?: string
+  inviteError?: string
 }
 
 export const Route = createFileRoute('/admin/medlemmar')({
@@ -16,6 +18,9 @@ export const Route = createFileRoute('/admin/medlemmar')({
       typeof search.organizationId === 'string'
         ? search.organizationId
         : undefined,
+    invite: typeof search.invite === 'string' ? search.invite : undefined,
+    inviteError:
+      typeof search.inviteError === 'string' ? search.inviteError : undefined,
   }),
   component: MedlemmarPage,
 })
@@ -27,7 +32,11 @@ const roleLabel: Record<string, string> = {
 }
 
 function MedlemmarPage() {
-  const { organizationId: organizationIdFromSearch } = Route.useSearch()
+  const {
+    organizationId: organizationIdFromSearch,
+    invite: inviteFromSearch,
+    inviteError: inviteErrorFromSearch,
+  } = Route.useSearch()
   const { data: organizations } = useTanstackQuery(
     convexQuery(api.organizations.getMyOrganizations, {}),
   )
@@ -50,13 +59,33 @@ function MedlemmarPage() {
       : orgList[0]._id
 
   return (
-    <MedlemmarContent organizations={orgList} initialOrganizationId={initialOrgId} />
+    <MedlemmarContent
+      organizations={orgList}
+      initialOrganizationId={initialOrgId}
+      inviteFromSearch={inviteFromSearch}
+      inviteErrorFromSearch={inviteErrorFromSearch}
+    />
   )
+}
+
+function formatShopNames(
+  shopIds: Array<Id<'shops'> | undefined> | undefined,
+  shops: Array<{ _id: Id<'shops'>; name: string }> | undefined,
+) {
+  if (!shopIds || shopIds.length === 0 || !shops) {
+    return null
+  }
+  const names = shopIds
+    .map((id) => shops.find((shop) => shop._id === id)?.name)
+    .filter((name): name is string => Boolean(name))
+  return names.length > 0 ? names.join(', ') : null
 }
 
 function MedlemmarContent({
   organizations,
   initialOrganizationId,
+  inviteFromSearch,
+  inviteErrorFromSearch,
 }: {
   organizations: Array<{
     _id: Id<'organizations'>
@@ -64,6 +93,8 @@ function MedlemmarContent({
     role: 'owner' | 'treasurer' | 'editor'
   }>
   initialOrganizationId: Id<'organizations'>
+  inviteFromSearch?: string
+  inviteErrorFromSearch?: string
 }) {
   const [organizationId, setOrganizationId] =
     useState<Id<'organizations'>>(initialOrganizationId)
@@ -71,7 +102,13 @@ function MedlemmarContent({
   const [inviteRole, setInviteRole] = useState<'editor' | 'treasurer'>('editor')
   const [assignedShopIds, setAssignedShopIds] = useState<Array<Id<'shops'>>>([])
   const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(inviteErrorFromSearch ?? null)
+  const [editingMemberId, setEditingMemberId] =
+    useState<Id<'organizationMembers'> | null>(null)
+  const [editRole, setEditRole] = useState<'editor' | 'treasurer'>('editor')
+  const [editAssignedShopIds, setEditAssignedShopIds] = useState<
+    Array<Id<'shops'>>
+  >([])
 
   const activeOrg =
     organizations.find((org) => org._id === organizationId) ?? organizations[0]
@@ -92,14 +129,12 @@ function MedlemmarContent({
   const revokeInvitation = useMutation(api.members.revokeInvitation)
   const removeMember = useMutation(api.members.removeMember)
   const acceptInvitation = useMutation(api.members.acceptInvitation)
+  const updateMemberRole = useMutation(api.members.updateMemberRole)
+  const setMemberShopAssignments = useMutation(
+    api.members.setMemberShopAssignments,
+  )
 
-  const inviteFromUrl = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return null
-    }
-    const params = new URLSearchParams(window.location.search)
-    return params.get('invite')
-  }, [])
+  const inviteFromUrl = inviteFromSearch ?? null
 
   if (!canManage) {
     return (
@@ -201,6 +236,7 @@ function MedlemmarContent({
             <label className="flex flex-col gap-2 text-sm text-slate-700">
               E-post
               <input
+                id="invite-email"
                 type="email"
                 required
                 value={inviteEmail}
@@ -211,6 +247,7 @@ function MedlemmarContent({
             <label className="flex flex-col gap-2 text-sm text-slate-700">
               Roll
               <select
+                id="invite-role"
                 value={inviteRole}
                 onChange={(event) =>
                   setInviteRole(event.target.value as 'editor' | 'treasurer')
@@ -255,41 +292,152 @@ function MedlemmarContent({
         <section className="relaxed-surface p-6">
           <h2 className="text-base font-semibold text-slate-900">Medlemmar</h2>
           <ul className="mt-4 divide-y divide-slate-200/70">
-            {(members ?? []).map((member) => (
-              <li
-                key={member._id}
-                className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
-              >
-                <div>
-                  <p className="font-medium text-slate-900">{member.email}</p>
-                  <p className="text-slate-500">{roleLabel[member.role]}</p>
-                </div>
-                {member.role !== 'owner' ? (
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setError(null)
-                      try {
-                        await removeMember({
-                          organizationId,
-                          memberId: member._id,
-                        })
-                        setMessage('Medlemmen togs bort.')
-                      } catch (removeError) {
-                        setError(
-                          removeError instanceof Error
-                            ? removeError.message
-                            : 'Kunde inte ta bort medlemmen.',
-                        )
-                      }
-                    }}
-                    className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
-                  >
-                    Ta bort
-                  </button>
-                ) : null}
-              </li>
-            ))}
+            {(members ?? []).map((member) => {
+              const assignedLabel = formatShopNames(
+                member.assignedShopIds,
+                shops ?? undefined,
+              )
+              const isEditing = editingMemberId === member._id
+
+              return (
+                <li key={member._id} className="flex flex-col gap-3 py-4 text-sm">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-slate-900">{member.email}</p>
+                      <p className="text-slate-500">{roleLabel[member.role]}</p>
+                      {member.role === 'editor' && assignedLabel ? (
+                        <p className="mt-1 text-slate-500">
+                          Kiosker: {assignedLabel}
+                        </p>
+                      ) : null}
+                    </div>
+                    {member.role !== 'owner' ? (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingMemberId(isEditing ? null : member._id)
+                            setEditRole(
+                              member.role === 'treasurer' ? 'treasurer' : 'editor',
+                            )
+                            setEditAssignedShopIds(member.assignedShopIds ?? [])
+                          }}
+                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
+                        >
+                          {isEditing ? 'Avbryt' : 'Redigera'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            setError(null)
+                            try {
+                              await removeMember({
+                                organizationId,
+                                memberId: member._id,
+                              })
+                              setMessage('Medlemmen togs bort.')
+                              if (editingMemberId === member._id) {
+                                setEditingMemberId(null)
+                              }
+                            } catch (removeError) {
+                              setError(
+                                removeError instanceof Error
+                                  ? removeError.message
+                                  : 'Kunde inte ta bort medlemmen.',
+                              )
+                            }
+                          }}
+                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
+                        >
+                          Ta bort
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {isEditing && member.role !== 'owner' ? (
+                    <form
+                      className="relaxed-surface-soft flex flex-col gap-3 rounded-2xl bg-stone-50/70 p-4"
+                      onSubmit={async (event) => {
+                        event.preventDefault()
+                        setError(null)
+                        try {
+                          if (editRole !== member.role) {
+                            await updateMemberRole({
+                              organizationId,
+                              memberId: member._id,
+                              role: editRole,
+                            })
+                          }
+                          if (editRole === 'editor') {
+                            await setMemberShopAssignments({
+                              organizationId,
+                              memberId: member._id,
+                              assignedShopIds: editAssignedShopIds,
+                            })
+                          }
+                          setMessage('Medlemmen uppdaterades.')
+                          setEditingMemberId(null)
+                        } catch (editError) {
+                          setError(
+                            editError instanceof Error
+                              ? editError.message
+                              : 'Kunde inte uppdatera medlemmen.',
+                          )
+                        }
+                      }}
+                    >
+                      <label className="flex flex-col gap-2 text-sm text-slate-700">
+                        Roll
+                        <select
+                          value={editRole}
+                          onChange={(event) =>
+                            setEditRole(
+                              event.target.value as 'editor' | 'treasurer',
+                            )
+                          }
+                          className="relaxed-input h-11 cursor-pointer px-3"
+                        >
+                          <option value="editor">Lagledare (editor)</option>
+                          <option value="treasurer">Kassör</option>
+                        </select>
+                      </label>
+                      {editRole === 'editor' && shops ? (
+                        <fieldset className="flex flex-col gap-2 text-sm text-slate-700">
+                          <legend>Tilldelade kiosker</legend>
+                          {shops.map((shop) => (
+                            <label
+                              key={shop._id}
+                              className="flex items-center gap-2"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={editAssignedShopIds.includes(shop._id)}
+                                onChange={(event) => {
+                                  setEditAssignedShopIds((prev) =>
+                                    event.target.checked
+                                      ? [...prev, shop._id]
+                                      : prev.filter((id) => id !== shop._id),
+                                  )
+                                }}
+                                className="h-4 w-4 cursor-pointer"
+                              />
+                              {shop.name}
+                            </label>
+                          ))}
+                        </fieldset>
+                      ) : null}
+                      <button
+                        type="submit"
+                        className="relaxed-primary-button h-10 w-fit cursor-pointer px-4 text-sm font-semibold text-white"
+                      >
+                        Spara ändringar
+                      </button>
+                    </form>
+                  ) : null}
+                </li>
+              )
+            })}
           </ul>
         </section>
 
@@ -299,12 +447,12 @@ function MedlemmarContent({
               Väntande inbjudningar
             </h2>
             <ul className="mt-4 divide-y divide-slate-200/70">
-              {invitations?.map((invitation: {
-                _id: Id<'organizationInvitations'>
-                email: string
-                role: 'treasurer' | 'editor'
-                expiresAt: number
-              }) => (
+              {invitations?.map((invitation) => {
+                const assignedLabel = formatShopNames(
+                  invitation.assignedShopIds,
+                  shops ?? undefined,
+                )
+                return (
                 <li
                   key={invitation._id}
                   className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
@@ -317,6 +465,11 @@ function MedlemmarContent({
                       {roleLabel[invitation.role]} · gäller till{' '}
                       {new Date(invitation.expiresAt).toLocaleDateString('sv-SE')}
                     </p>
+                    {invitation.role === 'editor' && assignedLabel ? (
+                      <p className="mt-1 text-slate-500">
+                        Kiosker: {assignedLabel}
+                      </p>
+                    ) : null}
                   </div>
                   <button
                     type="button"
@@ -331,7 +484,8 @@ function MedlemmarContent({
                     Återkalla
                   </button>
                 </li>
-              ))}
+                )
+              })}
             </ul>
           </section>
         ) : null}
@@ -340,7 +494,8 @@ function MedlemmarContent({
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 
         <Link
-          to="/admin"
+          to="/admin/org/$orgId"
+          params={{ orgId: organizationId }}
           className="text-sm font-semibold text-brand hover:underline"
         >
           Tillbaka till dashboard

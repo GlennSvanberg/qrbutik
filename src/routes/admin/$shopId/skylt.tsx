@@ -4,7 +4,7 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useMemo } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { api } from '../../../../convex/_generated/api'
-import type { Id } from '../../../../convex/_generated/dataModel'
+import type { Doc, Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/skylt')({
   component: ShopQrPage,
@@ -17,16 +17,26 @@ function ShopQrPage() {
     convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
   )
 
+  if (!shop) {
+    return null
+  }
+
+  return <ShopQrSign shop={shop} />
+}
+
+function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
+  const { data: logoUrl } = useSuspenseQuery(
+    convexQuery(api.orgDashboard.getOrganizationLogoUrl, {
+      organizationId: shop.organizationId,
+    }),
+  )
+
   const origin = useMemo(() => {
     if (typeof window === 'undefined') {
       return ''
     }
     return window.location.origin
   }, [])
-
-  if (!shop) {
-    return null
-  }
 
   const qrValue = origin
     ? `${origin}/s/${shop.slug}`
@@ -69,6 +79,13 @@ function ShopQrPage() {
         </header>
 
         <section className="relaxed-divider flex flex-col items-center gap-6 border-t pt-6 text-center">
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt="Föreningslogotyp"
+              className="h-20 w-20 rounded-2xl border border-stone-200 object-contain p-2"
+            />
+          ) : null}
           <div className="relaxed-surface p-6">
             <QRCodeSVG value={qrValue} size={220} level="M" />
           </div>
@@ -91,6 +108,13 @@ function ShopQrPage() {
           <span className="text-[13px] font-semibold uppercase tracking-[0.5em] text-slate-400">
             qrbutik.se
           </span>
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt="Föreningslogotyp"
+              className="h-28 w-28 object-contain"
+            />
+          ) : null}
           <h1 className="text-5xl font-semibold text-slate-900">{shop.name}</h1>
           <p className="text-lg font-semibold text-slate-600">{displayUrl}</p>
         </div>

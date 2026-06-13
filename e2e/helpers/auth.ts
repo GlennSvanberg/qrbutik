@@ -54,6 +54,23 @@ async function waitForAuthenticatedDestination(
     return
   }
 
+  if (path.includes('/admin/skapa-kiosk')) {
+    await expect(
+      page.getByRole('heading', { name: /Skapa kiosk|Ny kiosk/i }),
+    ).toBeVisible({ timeout: 30_000 })
+    return
+  }
+
+  if (path.match(/\/admin\/[^/]+\/(historik|products|settings|skylt)/)) {
+    await expect(page.locator('main')).toBeVisible({ timeout: 30_000 })
+    return
+  }
+
+  if (path.match(/\/admin\/[^/]+$/)) {
+    await expect(page.locator('main')).toBeVisible({ timeout: 30_000 })
+    return
+  }
+
   if (path.includes('/admin')) {
     await expect(
       page.getByRole('heading', {
@@ -140,7 +157,12 @@ export async function loginAndOpen(
     return
   }
 
-  await loginWithDevMagicLink(page, email, '/admin', appBaseUrl)
+  await loginWithDevMagicLink(page, email, path, appBaseUrl)
+  if (page.url().includes(normalizedPath)) {
+    await waitForAuthenticatedDestination(page, path)
+    return
+  }
+
   await page.goto(
     path.startsWith('http') ? path : new URL(path, appBaseUrl).toString(),
     { waitUntil: 'domcontentloaded' },

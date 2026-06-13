@@ -6,9 +6,12 @@ import {
   buildSummary,
   getCustomRange,
   getPeriodRange,
+  getTodayRange,
+  getWeekendRange,
   listTransactionsForShopsInRange,
   periodArgsValidator,
 } from './lib/transactions'
+import type { Id } from './_generated/dataModel'
 
 const dashboardFilterValidator = v.union(
   v.object({
@@ -28,7 +31,21 @@ const shopBreakdownValidator = v.object({
   teamLabel: v.union(v.string(), v.null()),
   licenseActive: v.boolean(),
   periodRevenue: v.number(),
+  todayRevenue: v.number(),
+  weekendRevenue: v.number(),
   transactionCount: v.number(),
+  latestSaleAt: v.union(v.number(), v.null()),
+  latestSaleAmount: v.union(v.number(), v.null()),
+})
+
+const editorShopSummaryValidator = v.object({
+  shopId: v.id('shops'),
+  shopName: v.string(),
+  teamLabel: v.union(v.string(), v.null()),
+  licenseActive: v.boolean(),
+  todayRevenue: v.number(),
+  weekendRevenue: v.number(),
+  periodRevenue: v.number(),
   latestSaleAt: v.union(v.number(), v.null()),
   latestSaleAmount: v.union(v.number(), v.null()),
 })
@@ -120,6 +137,21 @@ export const getOrganizationDashboardSummary = orgQuery({
       end,
     )
 
+    const todayRange = getTodayRange()
+    const weekendRange = getWeekendRange()
+    const todayTransactions = await listTransactionsForShopsInRange(
+      ctx,
+      accessibleShopIds,
+      todayRange.start,
+      todayRange.end,
+    )
+    const weekendTransactions = await listTransactionsForShopsInRange(
+      ctx,
+      accessibleShopIds,
+      weekendRange.start,
+      weekendRange.end,
+    )
+
     const summary = buildSummary(transactions)
 
     const shopNameById = new Map(shops.map((shop) => [shop._id, shop.name]))
@@ -146,6 +178,12 @@ export const getOrganizationDashboardSummary = orgQuery({
         (transaction) => transaction.shopId === shop._id,
       )
       const shopSummary = buildSummary(shopTransactions)
+      const shopTodayTransactions = todayTransactions.filter(
+        (transaction) => transaction.shopId === shop._id,
+      )
+      const shopWeekendTransactions = weekendTransactions.filter(
+        (transaction) => transaction.shopId === shop._id,
+      )
       const latestSaleAt =
         shopTransactions.length > 0 ? shopTransactions[0].createdAt : null
       const latestSaleAmount =
@@ -157,6 +195,8 @@ export const getOrganizationDashboardSummary = orgQuery({
         teamLabel: shop.teamLabel ?? null,
         licenseActive,
         periodRevenue: shopSummary.totalRevenue,
+        todayRevenue: buildSummary(shopTodayTransactions).totalRevenue,
+        weekendRevenue: buildSummary(shopWeekendTransactions).totalRevenue,
         transactionCount: shopSummary.transactionCount,
         latestSaleAt,
         latestSaleAmount,
@@ -175,17 +215,104 @@ export const getOrganizationDashboardSummary = orgQuery({
   },
 })
 
+export const getEditorShopSummaries = orgQuery({
+  args: { organizationId: v.id('organizations') },
+  returns: v.array(editorShopSummaryValidator),
+  handler: async (ctx, args) => {
+    if (ctx.membership.role !== 'editor') {
+      throw new Error('Endast för lagledare')
+    }
+
+    const organization = await ctx.db.get('organizations', args.organizationId)
+    if (!organization) {
+      throw new Error('Föreningen hittades inte.')
+    }
+
+    const accessibleShopIds = await getAccessibleShopIds(
+      ctx,
+      args.organizationId,
+      ctx.membership,
+    )
+    const licenseActive = isSubscriptionActive(organization.subscriptionStatus)
+
+    const todayRange = getTodayRange()
+    const weekendRange = getWeekendRange()
+    const periodRange = getPeriodRange('last7')
+
+    const todayTransactions = await listTransactionsForShopsInRange(
+      ctx,
+      accessibleShopIds,
+      todayRange.start,
+      todayRange.end,
+    )
+    const weekendTransactions = await listTransactionsForShopsInRange(
+      ctx,
+      accessibleShopIds,
+      weekendRange.start,
+      weekendRange.end,
+    )
+    const periodTransactions = await listTransactionsForShopsInRange(
+      ctx,
+      accessibleShopIds,
+      periodRange.start,
+      periodRange.end,
+    )
+
+    const summaries = []
+    for (const shopId of accessibleShopIds) {
+      const shop = await ctx.db.get('shops', shopId)
+      if (!shop) {
+        continue
+      }
+
+      const shopPeriodTransactions = periodTransactions.filter(
+        (transaction) => transaction.shopId === shopId,
+      )
+      const shopTodayTransactions = todayTransactions.filter(
+        (transaction) => transaction.shopId === shopId,
+      )
+      const shopWeekendTransactions = weekendTransactions.filter(
+        (transaction) => transaction.shopId === shopId,
+      )
+      const latestSaleAt =
+        shopPeriodTransactions.length > 0
+          ? shopPeriodTransactions[0].createdAt
+          : null
+      const latestSaleAmount =
+        shopPeriodTransactions.length > 0
+          ? shopPeriodTransactions[0].amount
+          : null
+
+      summaries.push({
+        shopId: shop._id,
+        shopName: shop.name,
+        teamLabel: shop.teamLabel ?? null,
+        licenseActive,
+        todayRevenue: buildSummary(shopTodayTransactions).totalRevenue,
+        weekendRevenue: buildSummary(shopWeekendTransactions).totalRevenue,
+        periodRevenue: buildSummary(shopPeriodTransactions).totalRevenue,
+        latestSaleAt,
+        latestSaleAmount,
+      })
+    }
+
+    return summaries
+  },
+})
+
 export const updateOrganizationSettings = orgRoleMutation(['owner', 'treasurer'])({
   args: {
     organizationId: v.id('organizations'),
     orgNumber: v.optional(v.string()),
     sieRevenueAccount: v.optional(v.string()),
+    logoStorageId: v.optional(v.union(v.id('_storage'), v.null())),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
     const patch: {
       orgNumber?: string
       sieRevenueAccount?: string
+      logoStorageId?: Id<'_storage'>
     } = {}
 
     if (args.orgNumber !== undefined) {
@@ -194,8 +321,39 @@ export const updateOrganizationSettings = orgRoleMutation(['owner', 'treasurer']
     if (args.sieRevenueAccount !== undefined) {
       patch.sieRevenueAccount = args.sieRevenueAccount.trim() || undefined
     }
+    if (args.logoStorageId !== undefined) {
+      if (args.logoStorageId === null) {
+        await ctx.db.patch('organizations', args.organizationId, {
+          logoStorageId: undefined,
+        })
+      } else {
+        patch.logoStorageId = args.logoStorageId
+      }
+    }
 
-    await ctx.db.patch('organizations', args.organizationId, patch)
+    if (Object.keys(patch).length > 0) {
+      await ctx.db.patch('organizations', args.organizationId, patch)
+    }
     return null
+  },
+})
+
+export const generateLogoUploadUrl = orgRoleMutation(['owner', 'treasurer'])({
+  args: { organizationId: v.id('organizations') },
+  returns: v.string(),
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl()
+  },
+})
+
+export const getOrganizationLogoUrl = orgQuery({
+  args: { organizationId: v.id('organizations') },
+  returns: v.union(v.string(), v.null()),
+  handler: async (ctx, args) => {
+    const organization = await ctx.db.get('organizations', args.organizationId)
+    if (!organization?.logoStorageId) {
+      return null
+    }
+    return await ctx.storage.getUrl(organization.logoStorageId)
   },
 })

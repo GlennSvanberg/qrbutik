@@ -34,6 +34,9 @@ When implementing features, prefer: organizations, roles, central treasurer dash
 | `STRIPE_WEBHOOK_SECRET` | Convex | Webhook signature |
 | `STRIPE_PRICE_ID` | Convex | 995 kr/mån subscription price |
 | `VITE_STRIPE_PUBLISHABLE_KEY` | Vite (optional) | Future client-side Stripe.js |
+| `PLATFORM_ADMIN_EMAILS` | Convex | Comma-separated emails allowed on `/superadmin` (platform control tower) |
+
+When `DEV_MAGIC_LINK=true`, any authenticated user can access `/superadmin` without being on the allowlist (local dev only).
 
 Webhook URL: `{CONVEX_SITE_URL}/stripe/webhook`
 

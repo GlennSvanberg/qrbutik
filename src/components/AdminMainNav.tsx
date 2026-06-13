@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { adminOrgDashboardPath, parseOrgIdFromAdminPath } from '../lib/adminOrgPath'
 import { SignOutButton } from './auth/ShopAccessGate'
 import type { Id } from '../../convex/_generated/dataModel'
 
@@ -10,11 +11,12 @@ type NavLinkItem = {
   id: string
   label: string
   to:
-    | '/admin'
+    | '/admin/org/$orgId'
     | '/admin/skapa-kiosk'
     | '/admin/billing'
     | '/admin/medlemmar'
     | '/skapa'
+  params?: { orgId: Id<'organizations'> }
   search?: { organizationId: Id<'organizations'> }
 }
 
@@ -23,8 +25,8 @@ function useActivePath() {
 }
 
 function isNavItemActive(pathname: string, item: NavLinkItem) {
-  if (item.to === '/admin') {
-    return pathname === '/admin' || pathname === '/admin/'
+  if (item.to === '/admin/org/$orgId' && item.params) {
+    return pathname === adminOrgDashboardPath(item.params.orgId)
   }
   if (item.to === '/admin/medlemmar') {
     return pathname.startsWith('/admin/medlemmar')
@@ -48,6 +50,7 @@ function NavLink({
   return (
     <Link
       to={item.to}
+      params={item.params}
       search={item.search}
       onClick={onNavigate}
       className={`inline-flex h-11 cursor-pointer items-center rounded-xl px-4 text-sm font-semibold transition ${
@@ -74,6 +77,8 @@ export function AdminMainNav() {
   const orgList = organizations ?? []
   const hasOrganizations = orgList.length > 0
 
+  const organizationIdFromPath = parseOrgIdFromAdminPath(pathname)
+
   const organizationIdFromSearch = useRouterState({
     select: (state) => {
       const search = state.location.search as Record<string, unknown>
@@ -87,14 +92,12 @@ export function AdminMainNav() {
     if (orgList.length === 0) {
       return null
     }
-    if (
-      organizationIdFromSearch &&
-      orgList.some((org) => org._id === organizationIdFromSearch)
-    ) {
-      return orgList.find((org) => org._id === organizationIdFromSearch) ?? orgList[0]
+    const orgId = organizationIdFromPath ?? organizationIdFromSearch
+    if (orgId && orgList.some((org) => org._id === orgId)) {
+      return orgList.find((org) => org._id === orgId) ?? orgList[0]
     }
     return orgList[0]
-  }, [orgList, organizationIdFromSearch])
+  }, [orgList, organizationIdFromPath, organizationIdFromSearch])
 
   const canManageBilling =
     activeOrg?.role === 'owner' || activeOrg?.role === 'treasurer'
@@ -105,8 +108,14 @@ export function AdminMainNav() {
     }
 
     const orgSearch = { organizationId: activeOrg._id }
+    const orgParams = { orgId: activeOrg._id }
     const links: Array<NavLinkItem> = [
-      { id: 'kiosks', label: 'Kiosker', to: '/admin' },
+      {
+        id: 'kiosks',
+        label: 'Kiosker',
+        to: '/admin/org/$orgId',
+        params: orgParams,
+      },
     ]
 
     if (canManageBilling) {
@@ -134,6 +143,10 @@ export function AdminMainNav() {
 
     return links
   }, [activeOrg, canManageBilling, hasOrganizations])
+
+  const homeLink = activeOrg
+    ? { to: '/admin/org/$orgId' as const, params: { orgId: activeOrg._id } }
+    : { to: '/admin' as const }
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
@@ -180,7 +193,7 @@ export function AdminMainNav() {
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">
         <Link
-          to="/admin"
+          {...homeLink}
           className="flex min-h-11 cursor-pointer flex-col justify-center"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">

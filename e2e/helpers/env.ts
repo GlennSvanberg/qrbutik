@@ -43,3 +43,12 @@ export function uniqueTestEmail(label: string): string {
   const slug = label.replace(/[^a-z0-9]+/gi, '-').toLowerCase()
   return `e2e+${slug}-${Date.now()}@qrbutik.test`
 }
+
+export function getTestBaseUrl(baseURL?: string): string {
+  return (
+    baseURL ??
+    process.env.PLAYWRIGHT_BASE_URL ??
+    readEnvLocal('VITE_SITE_URL') ??
+    'http://127.0.0.1:3000'
+  )
+}

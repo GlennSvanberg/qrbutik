@@ -26,12 +26,32 @@ All theming should be maintained in `src/styles/app.css`.
 - Primary buttons: 8px border-radius, subtle blue shadow on hover.
 - Cards/panels: 12px border-radius, thin light borders, minimal gray shadows.
 
-## Treasurer dashboard (`/admin/`)
+## Treasurer dashboard (`/admin/org/{orgId}`)
 
 Surfaces for **owner** and **treasurer** roles only (editors see assigned kiosk cards without org KPIs).
 
+- **Canonical route:** `/admin/org/{orgId}` — `/admin` redirects to first org
 - **Layout:** White page background; KPI row in four equal cards; filter pills use brand blue active state.
 - **Filters:** Period pills (Idag, Igår, Helgen, 7/30 dagar, Anpassat) + optional kiosk dropdown.
+- **Kiosk cards:** Period + Idag + Helgen revenue snapshots; senaste köp per kiosk.
+- **Lists:** Senaste köp (org-wide), toppartiklar.
 - **Export panel:** Primary CSV button, secondary SIE button; same filter context as KPIs.
-- **Tables/lists:** Top articles and member lists use `relaxed-surface` dividers; amounts right-aligned.
 - **Role gating:** Export, billing, and member management hidden from editors in nav and UI.
+
+## Billing (`/admin/billing`)
+
+- Trial status chips; checkout buttons (kort / faktura) when Stripe configured.
+- Customer Portal link for active subscriptions.
+- Org settings: organisationsnummer, SIE-konto, **föreningslogotyp** (PNG/JPG upload).
+
+## Members (`/admin/medlemmar`)
+
+- Invite form: email, role (lagledare/kassör), kiosk checkboxes for editors.
+- Member list: assigned kiosker, inline edit (roll + kiosk-tilldelning), remove.
+- Pending invitations with kiosk assignments.
+
+## QR skylt (`/admin/{shopId}/skylt`)
+
+- Screen preview + A4 print layout.
+- Optional org logo above kiosk name (uploaded under Fakturering).
+- Print header retains `qrbutik.se` branding.

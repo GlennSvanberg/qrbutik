@@ -31,6 +31,7 @@ export default defineSchema({
     subscriptionActivatedEmailSentAt: v.optional(v.number()),
     paymentFailedEmailSentAt: v.optional(v.number()),
     createdAt: v.number(),
+    logoStorageId: v.optional(v.id('_storage')),
   }).index('by_stripeCustomerId', ['stripeCustomerId']),
   organizationMembers: defineTable({
     organizationId: v.id('organizations'),

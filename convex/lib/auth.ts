@@ -10,7 +10,7 @@ export type AuthUser = {
 
 export type DbReadCtx = Pick<QueryCtx, 'db'>
 
-type AuthCtx = DbReadCtx & Pick<QueryCtx, 'auth'>
+export type AuthCtx = DbReadCtx & Pick<QueryCtx, 'auth'>
 
 const treasurerRoles: ReadonlyArray<OrgRole> = ['owner', 'treasurer']
 

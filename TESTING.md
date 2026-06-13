@@ -4,8 +4,11 @@ QRButik uses two layers of automated tests:
 
 | Layer | Tool | What it covers |
 |-------|------|----------------|
-| **Unit / logic** | [Vitest](https://vitest.dev) | Pure functions: validators, Stripe helpers, Swish links, billing UI helpers |
-| **End-to-end** | [Playwright](https://playwright.dev) | Real browser flows: login, org onboarding, billing UI, optional Stripe checkout |
+| **Unit / logic** | [Vitest](https://vitest.dev) | Pure functions: validators, Stripe helpers, Swish links, billing UI helpers, RBAC nav |
+| **Convex integration** | Vitest + [convex-test](https://docs.convex.dev/testing/convex-test) | Mutations/queries: webhooks, gating, export auth, members, shops |
+| **End-to-end** | [Playwright](https://playwright.dev) | Real browser flows: login, onboarding, kiosk checkout, export, roles |
+
+**Discovery-first policy:** Tests assert correct product behavior. Failing tests that reveal bugs are a valid outcome — see [`TEST_FINDINGS.md`](./TEST_FINDINGS.md). Do not weaken assertions or patch production code just to get green during test authoring.
 
 Manual Stripe webhook testing still uses `npm run stripe:listen` during development (see below).
 
@@ -17,8 +20,14 @@ Manual Stripe webhook testing still uses `npm run stripe:listen` during developm
 # Install dependencies (first time)
 npm install
 
-# Unit tests (fast, no servers)
+# All Vitest (unit + convex integration)
 npm run test
+
+# Unit only (fast)
+npm run test:unit
+
+# Convex integration only
+npm run test:convex
 
 # E2E (starts `npm run dev` automatically unless a server is already running)
 npm run test:e2e
@@ -86,15 +95,29 @@ npm run test:e2e -- e2e/billing.spec.ts
 
 ---
 
-## Vitest (unit tests)
+## Vitest (unit + integration)
 
 ### Run commands
 
 | Command | Purpose |
 |---------|---------|
-| `npm run test` | Run all unit tests once |
+| `npm run test` | Run all Vitest projects (unit + convex) |
+| `npm run test:unit` | Node env: `src/**/*.test.ts`, `convex/lib/**/*.test.ts` |
+| `npm run test:convex` | Edge-runtime: `convex/**/*.integration.test.ts` |
 | `npm run test:watch` | Watch mode while developing |
 | `npm run test:coverage` | Coverage report (`coverage/` folder) |
+
+### Layout
+
+```
+convex/test/fixtures.ts   # shared seeds for integration tests
+convex/test/matrices.ts   # table-driven status/role inputs
+convex/test/modules.ts    # import.meta.glob for convex-test
+convex/lib/*.test.ts      # pure function unit tests
+convex/*.integration.test.ts
+src/lib/*.test.ts
+TEST_FINDINGS.md          # failure report from discovery runs
+```
 
 ### What we test
 
@@ -102,14 +125,28 @@ npm run test:e2e -- e2e/billing.spec.ts
 |------|---------|
 | `convex/lib/validators.test.ts` | Email normalization, subscription gating |
 | `convex/lib/stripeHelpers.test.ts` | Stripe status mapping, trial sync, duplicate subscription guard |
+| `convex/lib/auth.test.ts` | Shop access matrix per role |
+| `convex/lib/transactions.test.ts` | buildSummary, period ranges, pending filter |
+| `convex/lib/exportFormat.test.ts` | CSV/SIE formatting, verified-only SIE lines |
+| `convex/stripeMutations.integration.test.ts` | Webhook mutations, dedup |
+| `convex/transactions.gating.integration.test.ts` | Purchase gating + trial expiry |
+| `convex/exports.integration.test.ts` | Export authorization |
+| `convex/members.integration.test.ts` | acceptInvitation |
+| `convex/shops.integration.test.ts` | createShop, delete cascade |
+| `convex/orgDashboard.integration.test.ts` | Dashboard vs export row parity |
 | `src/lib/swish.test.ts` | Swish deep link generation |
 | `src/lib/billing.test.ts` | Trial countdown helper |
+| `src/lib/billingUi.test.ts` | canActivate, needsPaymentUrgently |
+| `src/lib/adminDashboard.test.ts` | Date range filters |
+| `src/lib/adminShopNav.test.ts` | Tab visibility per role |
 
 ### Conventions
 
-- Test files live next to source: `foo.ts` → `foo.test.ts`
-- Pure logic is extracted to testable modules (`convex/lib/stripeHelpers.ts`, `src/lib/billing.ts`) instead of testing Convex handlers directly
-- Vitest config: `vitest.config.ts` (excludes `e2e/`)
+- Test files live next to source: `foo.ts` → `foo.test.ts` or `foo.integration.test.ts`
+- Pure logic is extracted to testable modules instead of testing Convex handlers directly when possible
+- Integration tests import seeds from `convex/test/fixtures.ts` only — no duplicated inline seeds
+- Vitest config: `vitest.config.ts` — two projects (`unit`, `convex`)
+- Fixed timestamps in fixtures (`FIXTURE_NOW`) for deterministic assertions; use `Date.now()` only when testing time-relative behavior
 
 ---
 
@@ -134,9 +171,21 @@ npm run test:e2e -- e2e/onboarding.spec.ts
 | Spec | Flow |
 |------|------|
 | `e2e/public.spec.ts` | Landing page B2B copy, live demo kiosk `/s/demo`, `/villkor`, `/integritet` |
-| `e2e/auth.spec.ts` | Dev magic link login → `/admin` |
+| `e2e/auth.spec.ts` | Dev magic link login → `/admin` (redirects to `/admin/org/{id}`) |
 | `e2e/onboarding.spec.ts` | Create org at `/skapa` → redirect to `/admin/billing` |
 | `e2e/billing.spec.ts` | Billing UI; optional Stripe Checkout (`STRIPE_E2E=true`) |
+| `e2e/members.spec.ts` | Invite editor, accept via dev invite token |
+| `e2e/roles.spec.ts` | Owner vs editor nav and export gating |
+| `e2e/export.spec.ts` | Trial → kiosk → purchase → verify → CSV/SIE export |
+| `e2e/kiosk-closed.spec.ts` | Inactive org → public kiosk “tillfälligt stängd” |
+| `e2e/kiosk-checkout.spec.ts` | Demo kiosk checkout → thank-you page |
+| `e2e/kiosk-verify.spec.ts` | Admin historik verify after checkout |
+| `e2e/roadmap-5-4.spec.ts` | ROADMAP 5.4 full flow (may fail — see TEST_FINDINGS) |
+| `e2e/products.spec.ts` | Product admin |
+
+### Stripe sign-off
+
+See [`docs/STRIPE_GO_LIVE.md`](./docs/STRIPE_GO_LIVE.md) for Test Mode and Live promotion checklist (ROADMAP 0.4 + 2.3.3).
 
 ### Auth helper
 
@@ -150,6 +199,8 @@ See `e2e/helpers/auth.ts`.
 
 - `loginWithDevMagicLink(page, email, redirectTo)` — log in and land on `redirectTo` (use `/admin` for reliability).
 - `loginAndOpen(page, email, path)` — log in via `/admin`, then navigate to routes like `/skapa` (used by onboarding/billing specs).
+- `createTestOrg`, `createTestKiosk`, `createTrialOrgWithKiosk` — see `e2e/helpers/org.ts`
+- `waitForDevInviteToken` — poll `/dev/invite-token?email=` (requires `DEV_MAGIC_LINK=true` + deployed `devInviteToken.ts`)
 
 ### Configuration
 

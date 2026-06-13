@@ -115,7 +115,7 @@ Sluta manuellt verifiera Swish på privatkonto.
 
 - [x] **2.3.1** Server-side auth på mutations som ändrar org/shop/billing
 - [x] **2.3.2** Webhook-idempotens (spara `stripeEventId` för att undvika dubbelhantering)
-- [ ] **2.3.3** Testa hela flödet i Stripe Test Mode innan live — *efter 0.4; kör `stripe:listen` + testkort 4242…*
+- [ ] **2.3.3** Testa hela flödet i Stripe Test Mode innan live — *se `docs/STRIPE_GO_LIVE.md`; Live-konto (0.4) kvarstår hos ägare*
 
 ### 2.4 Mått för fas 2
 
@@ -130,38 +130,38 @@ Värde för föreningens kassör och styrelse.
 
 ### 3.1 Centralt dashboard (kassör)
 
-- [ ] **3.1.1** Ny route `/org` eller `/admin/org/{orgId}` — översikt alla kiosker
-- [ ] **3.1.2** Visa: kiosknamn, lag/plan, status, dagens/helgens omsättning, senaste försäljning
-- [ ] **3.1.3** Aggregerad KPI: total omsättning per period, antal transaktioner, toppartiklar över alla kiosker
-- [ ] **3.1.4** Filter: datumintervall, enskild kiosk, "helgen"
-- [ ] **3.1.5** Roll `treasurer` / `owner` ser ekonomi; `editor` ser bara sin kiosk
+- [x] **3.1.1** Ny route `/org` eller `/admin/org/{orgId}` — översikt alla kiosker
+- [x] **3.1.2** Visa: kiosknamn, lag/plan, status, dagens/helgens omsättning, senaste försäljning
+- [x] **3.1.3** Aggregerad KPI: total omsättning per period, antal transaktioner, toppartiklar över alla kiosker
+- [x] **3.1.4** Filter: datumintervall, enskild kiosk, "helgen"
+- [x] **3.1.5** Roll `treasurer` / `owner` ser ekonomi; `editor` ser bara sin kiosk
 
 ### 3.2 Bokförings-export (säljarargument #1)
 
-- [ ] **3.2.1** Knapp: "Exportera till CSV" — transaktioner med datum, kiosk, belopp, referens, artiklar, status
-- [ ] **3.2.2** Knapp: "Exportera SIE" — format kompatibelt med Fortnox/Visma (version 4 typisk för SE)
-- [ ] **3.2.3** Export per kiosk eller hela föreningen
-- [ ] **3.2.4** Export per datumintervall (t.ex. "helgens cup")
-- [ ] **3.2.5** Dokumentera exportformat i hjälp/FAQ för kassörer
+- [x] **3.2.1** Knapp: "Exportera till CSV" — transaktioner med datum, kiosk, belopp, referens, artiklar, status
+- [x] **3.2.2** Knapp: "Exportera SIE" — format kompatibelt med Fortnox/Visma (version 4 typisk för SE)
+- [x] **3.2.3** Export per kiosk eller hela föreningen
+- [x] **3.2.4** Export per datumintervall (t.ex. "helgens cup")
+- [x] **3.2.5** Dokumentera exportformat i hjälp/FAQ för kassörer
 
 ### 3.3 Multi-kassa / inbjudningar
 
-- [ ] **3.3.1** Org-owner kan bjuda in e-post som `editor` (lagledare)
-- [ ] **3.3.2** Editor: skapa/redigera produkter och se försäljning **för tilldelad kiosk** — inte hela föreningens ekonomi
-- [ ] **3.3.3** Owner/treasurer: bjuda in, ta bort medlemmar, tilldela kiosker
-- [ ] **3.3.4** Magic link eller inbjudningslänk med roll vid första inloggning
+- [x] **3.3.1** Org-owner kan bjuda in e-post som `editor` (lagledare)
+- [x] **3.3.2** Editor: skapa/redigera produkter och se försäljning **för tilldelad kiosk** — inte hela föreningens ekonomi
+- [x] **3.3.3** Owner/treasurer: bjuda in, ta bort medlemmar, tilldela kiosker
+- [x] **3.3.4** Magic link eller inbjudningslänk med roll vid första inloggning
 - [x] **3.3.5** Org-medlemmar kan skapa flera kiosker (P08 plan A, F09 plan B, …)
 
 ### 3.4 Övrigt B2B-värde (prioritera efter 3.1–3.3)
 
 - [x] **3.4.1** Prenumerationshantering i admin (länk till Stripe Portal via `/admin/billing`)
-- [ ] **3.4.2** Föreningslogotyp på QR-skylt (valfritt, differentiering)
+- [x] **3.4.2** Föreningslogotyp på QR-skylt (valfritt, differentiering)
 - [ ] **3.4.3** "Powered by QRButik" kan diskuteras — B2B kan vilja vit etikett senare
 
 ### 3.5 Mått för fas 3
 
-- [ ] Kassör kan på <5 min exportera helgens försäljning för bokföring
-- [ ] Minst två roller fungerar med korrekt åtkomstseparation
+- [x] Kassör kan på <5 min exportera helgens försäljning för bokföring
+- [x] Minst två roller fungerar med korrekt åtkomstseparation
 
 ---
 
@@ -210,8 +210,8 @@ Gör under fas 1–3 där det blockerar.
 
 - [x] **5.1** Server-side auth på alla Convex-funktioner (`getUserIdentity` + org/roll-check)
 - [x] **5.2** Ta bort hårdkodat plattforms-Swish-nummer från kodbasen
-- [ ] **5.3** Uppdatera `DESIGN_SPEC.md` om B2B-dashboard kräver ny layout (tabeller, export-knappar)
-- [ ] **5.4** E2E-test: trial → skapa kiosk → kundköp → export
+- [x] **5.3** Uppdatera `DESIGN_SPEC.md` om B2B-dashboard kräver ny layout (tabeller, export-knappar)
+- [x] **5.4** E2E-test: trial → skapa kiosk → kundköp → export
 
 ---
 
@@ -259,4 +259,4 @@ Gör under fas 1–3 där det blockerar.
 |-------|---------|
 | 2025-06-13 | Initial roadmap baserad på konsultrekommendation (B2B, Stripe, 10k MRR) |
 | 2025-06-13 | Greenfield: ingen bakåtkompatibilitet (inga aktiva butiker/betalande) |
-| 2025-06-13 | Fas 2: faktura, lifecycle-e-post, billing-UI, trial sync i Stripe |
+| 2025-06-13 | Fas 3: `/admin/org/{orgId}`, dashboard-polish, medlemshantering UI, org-logotyp, STRIPE_GO_LIVE.md |
