@@ -135,6 +135,19 @@ export const Route = createRootRouteWithContext<{
         },
       ],
       links: [
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossOrigin: 'anonymous',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
+        },
         { rel: 'stylesheet', href: appCss },
         {
           rel: 'apple-touch-icon',
@@ -159,7 +172,7 @@ export const Route = createRootRouteWithContext<{
           sizes: '16x16',
           href: '/qrbutik_logo.png',
         },
-        { rel: 'manifest', href: '/site.webmanifest', color: '#fff7ed' },
+        { rel: 'manifest', href: '/site.webmanifest', color: '#ffffff' },
         { rel: 'icon', href: '/qrbutik_logo.png' },
         { rel: 'canonical', href: canonicalUrl },
       ],
