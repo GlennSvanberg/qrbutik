@@ -16,7 +16,9 @@ test.describe('Organization onboarding', () => {
     await expect(
       page.getByRole('heading', { name: 'Klubblicens & fakturering' }),
     ).toBeVisible({ timeout: 30_000 })
-    await expect(page.getByText(orgName)).toBeVisible({ timeout: 30_000 })
-    await expect(page.getByText('995 kr/mån').first()).toBeVisible()
+    await expect(page.getByRole('main').getByText(orgName)).toBeVisible({
+      timeout: 30_000,
+    })
+    await expect(page.getByText('från 995 kr/mån').first()).toBeVisible()
   })
 })

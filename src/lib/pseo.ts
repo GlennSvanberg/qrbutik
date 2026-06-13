@@ -27,191 +27,188 @@ export type PseoPage = {
   slug: string
 }
 
-type ReplaceCtx = {
+type SportReplaceCtx = {
   sport: string
   sportLower: string
-  city: string
-  region: string
   matchContext: string
   crowdContext: string
   environmentTitle: string
   seasonTitle: string
 }
 
-const replaceTokens = (input: string, ctx: ReplaceCtx) =>
+const replaceSportTokens = (input: string, ctx: SportReplaceCtx) =>
   input
     .replaceAll('{sport}', ctx.sport)
     .replaceAll('{sportLower}', ctx.sportLower)
-    .replaceAll('{city}', ctx.city)
-    .replaceAll('{region}', ctx.region)
     .replaceAll('{matchContext}', ctx.matchContext)
     .replaceAll('{crowdContext}', ctx.crowdContext)
     .replaceAll('{environmentTitle}', ctx.environmentTitle)
     .replaceAll('{seasonTitle}', ctx.seasonTitle)
 
-const introVariants: Array<string> = [
-  '{sport} i {city} kräver ett snabbt kioskflöde, tydliga priser och korta köer. QRButik gör det enkelt att sälja mer utan extra jobb.',
-  'Föreningar som driver {sport} i {city} behöver en kiosk som rullar på även när trycket är högt. Med QRButik blir flödet smidigt.',
-  'När {sport} spelas i {city} vill ingen stå och räkna i huvudet. QRButik ger er en digital kiosk som sparar tid.'
+const sportIntroVariants: Array<string> = [
+  'Styrelse och kassör i {sportLower}föreningen behöver kiosker som håller när det är {crowdContext}. QRButik ger hela klubben ett gemensamt system — flera kiosker, Swish och export.',
+  'QRButik är byggt för {sportLower}föreningar som vill slippa manuell kassa och samla all försäljning på ett ställe. Perfekt vid {matchContext}.',
+  'Med klubblicens får er {sportLower}förening obegränsat antal kiosker, central överblick och export — utan app eller dyra kassaintegrationer.',
 ]
 
-const closingVariants: Array<string> = [
-  'Redo att göra kiosken lika snabb som laget? Starta er digitala kiosk på några minuter.',
-  'Sätt upp kiosken innan nästa match och låt publiken betala direkt med Swish.',
-  'Gör som fler föreningar i {city} och uppgradera kioskflödet redan idag.'
+const sportClosingVariants: Array<string> = [
+  'Starta 14 dagars provperiod och sätt upp kiosker för lag och cuper under samma licens.',
+  'Ge kassören kontroll över hela föreningens kioskförsäljning — från provperiod till export.',
+  'Ett kiosksystem för hela {sportLower}föreningen, inte en kiosk i taget.',
 ]
 
-const faqVariants: Array<{ question: string; answer: string }> = [
+const sportFaq: Array<{ question: string; answer: string }> = [
   {
-    question: 'Behöver vi teknikkunskap för att komma igång?',
+    question: 'Vad kostar QRButik för vår förening?',
     answer:
-      'Nej. Ni skapar kiosken på några minuter och får en QR-kod att visa upp. Allt fungerar direkt i mobilen.'
+      'Klubblicens från 995 kr per månad omfattar obegränsat antal kiosker under samma organisation. Ni får 14 dagars provperiod utan betalning vid registrering.',
   },
   {
-    question: 'Hur tar {sportLower}-klubben i {city} betalt i kiosken?',
+    question: 'Passar QRButik för {sportLower}föreningar?',
     answer:
-      'Besökarna skannar QR-koden, väljer varor och betalar med Swish. Ni ser betalningen i realtid.'
+      'Ja. Systemet är anpassat för föreningskiosker vid {matchContext} och liknande arrangemang — med flera lag, kiosker och kassörer under samma tak.',
   },
   {
-    question: 'Passar QRButik för små föreningar?',
+    question: 'Hur tar vi betalt i kiosken?',
     answer:
-      'Ja. QRButik är byggt för föreningslivet och fungerar lika bra för små som stora kiosker.'
+      'Besökarna skannar QR-koden, väljer varor och betalar med Swish direkt till föreningens eget nummer. Ingen Swish Business API krävs.',
   },
   {
-    question: 'Vad händer om vi vill ändra varor eller priser?',
+    question: 'Kan flera lag ha egna kiosker?',
     answer:
-      'Ni kan uppdatera kiosken när som helst. Ändringar syns direkt för kunderna.'
-  }
-]
-
-const benefitVariants: Array<string> = [
-  'Kortare köer när publiken på {sportLower} vill handla snabbt.',
-  'Swish-betalning med rätt belopp och referens automatiskt.',
-  'Tydlig försäljningsöversikt efter varje match.',
-  'Ingen app, ingen installation – allt fungerar i webbläsaren.',
-  'Samma kiosk kan användas för alla lag och arrangemang.'
-]
-
-const howItWorksSteps: Array<{ title: string; description: string }> = [
-  {
-    title: 'Skapa kiosken',
-    description: 'Ange namn och Swish-nummer. Lägg in varor på 2 minuter.'
+      'Ja. Under samma klubblicens kan ni skapa kiosker per lag, plan eller cup — och kassören ser all försäljning centralt.',
   },
   {
-    title: 'Visa QR-koden',
-    description: 'Sätt upp koden vid kiosken, på en skylt eller i hallen.'
+    question: 'Hur fungerar bokföring och export?',
+    answer:
+      'Kassör och styrelse exporterar transaktioner till CSV eller SIE för Fortnox och Visma — per kiosk eller för hela föreningen.',
   },
   {
-    title: 'Ta betalt',
-    description: 'Kunderna väljer varor och betalar med Swish direkt.'
-  }
+    question: 'Vem ska använda QRButik?',
+    answer:
+      'QRButik riktar sig till idrottsföreningar och cuparrangörer — styrelse, kassör och lagledare — inte privatpersoner på loppis.',
+  },
 ]
 
-const problemsTitleVariants: Array<string> = [
-  'När tempot ökar ska kiosken inte bromsa.',
-  'Köer och huvudräkning hör inte hemma vid {matchContext}.',
-  'Kiosken ska vara snabb — även när det är {crowdContext}.',
+const sportBenefitVariants: Array<string> = [
+  'Central överblick för kassör och styrelse över alla kiosker.',
+  'Swish-betalning till föreningens eget nummer — rätt belopp varje gång.',
+  'Export till CSV och SIE för enkel bokföring efter cup och helg.',
+  'Ingen app, ingen installation — QR och webbläsare räcker.',
+  'Obegränsat antal kiosker under samma klubblicens.',
 ]
 
-const problemsBulletsVariants: Array<Array<string>> = [
+const sportHowItWorksSteps: Array<{ title: string; description: string }> = [
+  {
+    title: 'Skapa förening',
+    description:
+      'Registrera klubben och starta 14 dagars provperiod — utan betalkort.',
+  },
+  {
+    title: 'Lägg till kiosker',
+    description:
+      'Sätt upp kiosk per lag, cup eller plan. Ange Swish-nummer och varor.',
+  },
+  {
+    title: 'Överblick och export',
+    description:
+      'Kassören följer försäljningen live och exporterar till bokföring.',
+  },
+]
+
+const sportProblemsTitleVariants: Array<string> = [
+  'Kiosken ska inte bli kassörens sämsta jobb.',
+  'Manuell kassa fungerar inte när det är {crowdContext}.',
+  '500 Swish till olika lagkassor skapar kaos i bokföringen.',
+]
+
+const sportProblemsBulletsVariants: Array<Array<string>> = [
   [
-    'Räkna totalsumman i huvudet när det är {matchContext}.',
-    'Stava Swish-numret gång på gång till nya besökare.',
-    'Tappa överblicken när flera beställer samtidigt.',
-    'Svårt att sammanställa vad som såldes efteråt.',
+    'Räkna totalsumman i huvudet vid {matchContext}.',
+    'Swish-betalningar spridda över flera lag och konton.',
+    'Timmar med manuell avstämning efter cup och helg.',
+    'Ingen samlad bild av vad varje kiosk sålt.',
   ],
   [
-    'Handskrivna listor som blir otydliga i stressen.',
-    'Långa köer när det är {crowdContext}.',
-    'Priser och varor ändras men listan hänger inte med.',
-    'Extra administration för kassören efter matchen.',
+    'Köer växer när det är {crowdContext}.',
+    'Handskrivna listor och felräkning under stress.',
+    'Kassören jagar kvitton mellan olika Swish-nummer.',
+    'Svårt att rapportera till styrelsen efteråt.',
   ],
   [
-    'Manuell hantering tar tid precis när ni behöver tempo.',
-    'Fler fel när betalningar och beställningar blandas ihop.',
-    'Svårt att hålla samma flöde för alla lag och arrangemang.',
-    'Kön växer när alla vill handla snabbt.',
+    'Varje lag kör egen kassa utan gemensam struktur.',
+    'Export till bokföring blir manuellt pussel varje månad.',
+    'Ingen rollstyrning — alla ser allt eller inget.',
+    'Extra administration för ideella kassörer.',
   ],
 ]
 
-const solutionTitleVariants: Array<string> = [
-  'Ett flöde som publiken klarar själv.',
-  'Tydligt, snabbt och redo för {sportLower}.',
-  'Mer ordning — mindre stress i {city}.',
+const sportSolutionTitleVariants: Array<string> = [
+  'Ett kiosksystem för hela {sportLower}föreningen.',
+  'Styrelse och kassör i kontroll — lagledare kör kiosken.',
+  'Från kö till export utan Excel.',
 ]
 
-const solutionBulletsVariants: Array<Array<string>> = [
+const sportSolutionBulletsVariants: Array<Array<string>> = [
   [
-    'Inbyggd varukorg räknar automatiskt ut summan.',
-    'Swish öppnas med rätt belopp och referens direkt.',
-    'Säljrapport redo direkt efteråt — även när det är {matchContext}.',
-    'Samma kiosk återanvänds för fler arrangemang.',
+    'Flera kiosker under samma klubblicens och organisation.',
+    'Swish deep links till föreningens nummer — utan Business API.',
+    'Central dashboard och export till CSV/SIE.',
+    'Roller: owner, kassör och lagledare med rätt åtkomst.',
   ],
   [
-    'Digital meny som är lätt att uppdatera när som helst.',
-    'Kunderna beställer själva – kön rör sig snabbare.',
-    'Ni ser betalningar i realtid i admin-vyn.',
-    'Färre missförstånd när det är mycket folk.',
+    'Digital meny som uppdateras direkt för alla kiosker.',
+    'Kunderna beställer själva — kortare köer vid {matchContext}.',
+    'Live-översikt över inkommande köp i admin.',
+    'Samma flöde för cup, serie och träningsmatch.',
   ],
   [
-    'Allt i webbläsaren – ingen app eller installation.',
-    'Funkar lika bra i {city} som på bortamatcher.',
-    'Tydliga varor och priser för alla besökare.',
-    'Smidigare avstämning för kassören efteråt.',
+    '14 dagars provperiod utan kort vid registrering.',
+    'Klubblicens från 995 kr/mån — en faktura för hela klubben.',
+    'QR-skylt för mobil, surfplatta eller utskrift.',
+    'Byggt för svenska idrottsföreningar och ideellt arbete.',
   ],
-]
-
-const testimonialQuoteVariants: Array<string> = [
-  '“Vi gick från stress och lappar till ett flöde som publiken fattar direkt. Efter {matchContext} i {city} är rapporten klar.”',
-  '“Kön rör sig mycket snabbare nu. Folk beställer själva och Swish blir rätt direkt — perfekt för {sportLower}.”',
-  '“Det bästa är avstämningen. Efter varje arrangemang i {city} har vi koll utan extra jobb.”',
-]
-
-const testimonialBylineVariants: Array<string> = [
-  '— Kassör, {sportLower} i {city}',
-  '— Lagledare, {sport} i {city}',
-  '— Styrelsemedlem, förening i {city}',
 ]
 
 const comparePoints: Array<{ title: string; points: Array<string> }> = [
   {
     title: 'Innan',
     points: [
-      'Handskrivna listor och stressade kassörer.',
-      'Felräkning när kön växer.',
-      'Svårt att sammanställa dagens försäljning.'
-    ]
+      'Manuell kassa och spridda Swish-nummer.',
+      'Kassören sammanställer i Excel efter varje event.',
+      'Ingen gemensam överblick över lagens kiosker.',
+    ],
   },
   {
     title: 'Med QRButik',
     points: [
-      'Digital meny som alltid är uppdaterad.',
-      'Automatisk totalsumma och Swish-länk.',
-      'Rapport redo för kassören direkt.'
-    ]
-  }
+      'Digital kiosk med Swish till föreningens nummer.',
+      'Central export till bokföring — CSV och SIE.',
+      'Alla kiosker under samma klubblicens.',
+    ],
+  },
 ]
 
 const environmentCopy = {
   indoor: {
     title: 'Inomhusflöde',
-    text: 'I hallmiljö är tempot högt och pauserna korta. QRButik håller kön rörlig även när många vill handla samtidigt.'
+    text: 'I hallmiljö är pauserna korta och köerna långa. QRButik håller flödet rörligt när publiken vill handla snabbt.',
   },
   outdoor: {
     title: 'Utomhusflöde',
-    text: 'Utomhusmatcher betyder fler spontana köp och snabba beslut. QRButik gör kiosken tydlig även när matchpulsen är hög.'
-  }
+    text: 'Utomhusmatcher och cuper betyder högt tempo och många spontana köp. QRButik ger tydlig kiosk även när trycket är som störst.',
+  },
 }
 
 const seasonCopy = {
   summer: {
     title: 'Sommarsäsong',
-    text: 'Sommarmatcher lockar många besökare. Med QRButik blir kiosken lika snabb som publiken förväntar sig.'
+    text: 'Cuper och sommarseriespel kräver kiosker som klarar hög belastning. QRButik skalar med antal kiosker under samma licens.',
   },
   winter: {
     title: 'Vintersäsong',
-    text: 'När det är kallt vill publiken bli serverad snabbt. QRButik ger ett smidigt flöde utan extra personal.'
-  }
+    text: 'Inomhussäsong med täta matcher — kiosken ska vara snabb och enkel för ideella kassörer.',
+  },
 }
 
 const buildSlug = (sportSlug: string, citySlug: string) =>
@@ -247,8 +244,8 @@ export const getAllPseoPages = (): Array<PseoPage> => {
     cities.map((city) => ({
       sport,
       city,
-      slug: buildSlug(sport.slug, city.slug)
-    }))
+      slug: buildSlug(sport.slug, city.slug),
+    })),
   )
 }
 
@@ -265,28 +262,20 @@ export const getPseoPagesForSport = (sportSlug: string): Array<PseoPage> => {
   }))
 }
 
-export const getPseoCopy = (sportSlug: string, citySlug: string) => {
+export const getPseoSportCopy = (sportSlug: string) => {
   const sport = getSportBySlug(sportSlug)
-  const city = getCityBySlug(citySlug)
-
-  if (!sport || !city) {
+  if (!sport) {
     return null
   }
 
-  const seed = `${sport.slug}-${city.slug}`
-
-  const heritageText = pickVariant(city.heritageTextVariants, seed)
-  const localNotes = pickVariant(city.localNotesVariants, seed)
-  const useCases = pickVariant(city.useCasesVariants, seed)
-  const operationalNotes = pickVariant(sport.operationalNotesVariants, seed)
+  const seed = sport.slug
   const environment = environmentCopy[sport.environment]
   const season = seasonCopy[sport.season]
+  const operationalNotes = pickVariant(sport.operationalNotesVariants, seed)
 
-  const replaceCtx: ReplaceCtx = {
+  const replaceCtx: SportReplaceCtx = {
     sport: sport.name,
     sportLower: sport.name.toLowerCase(),
-    city: city.name,
-    region: city.region,
     matchContext: sport.matchContext,
     crowdContext: sport.crowdContext,
     environmentTitle: environment.title,
@@ -295,48 +284,50 @@ export const getPseoCopy = (sportSlug: string, citySlug: string) => {
 
   return {
     sport,
-    city,
-    intro: pickVariant(introVariants, seed)
-      .replaceAll('{sport}', sport.name)
-      .replaceAll('{city}', city.name),
-    closing: pickVariant(closingVariants, seed)
-      .replaceAll('{sport}', sport.name)
-      .replaceAll('{city}', city.name),
-    benefits: benefitVariants.map((benefit) => replaceTokens(benefit, replaceCtx)),
+    intro: replaceSportTokens(pickVariant(sportIntroVariants, seed), replaceCtx),
+    closing: replaceSportTokens(
+      pickVariant(sportClosingVariants, seed),
+      replaceCtx,
+    ),
+    benefits: sportBenefitVariants.map((benefit) =>
+      replaceSportTokens(benefit, replaceCtx),
+    ),
     problems: {
-      title: replaceTokens(pickVariant(problemsTitleVariants, seed), replaceCtx),
-      bullets: pickVariant(problemsBulletsVariants, seed).map((item) =>
-        replaceTokens(item, replaceCtx)
+      title: replaceSportTokens(
+        pickVariant(sportProblemsTitleVariants, seed),
+        replaceCtx,
+      ),
+      bullets: pickVariant(sportProblemsBulletsVariants, seed).map((item) =>
+        replaceSportTokens(item, replaceCtx),
       ),
     },
     solution: {
-      title: replaceTokens(pickVariant(solutionTitleVariants, seed), replaceCtx),
-      bullets: pickVariant(solutionBulletsVariants, seed).map((item) =>
-        replaceTokens(item, replaceCtx)
+      title: replaceSportTokens(
+        pickVariant(sportSolutionTitleVariants, seed),
+        replaceCtx,
+      ),
+      bullets: pickVariant(sportSolutionBulletsVariants, seed).map((item) =>
+        replaceSportTokens(item, replaceCtx),
       ),
     },
     compare: comparePoints,
-    steps: howItWorksSteps,
-    faq: faqVariants.map((item) => ({
-      question: replaceTokens(item.question, replaceCtx),
-      answer: item.answer,
+    steps: sportHowItWorksSteps,
+    faq: sportFaq.map((item) => ({
+      question: replaceSportTokens(item.question, replaceCtx),
+      answer: replaceSportTokens(item.answer, replaceCtx),
     })),
     matchContext: sport.matchContext,
     crowdContext: sport.crowdContext,
     commonItems: sport.commonItems,
     environment,
     season,
-    heritageText,
-    localNotes,
-    useCases,
     operationalNotes,
-    officialLinks: city.officialLinks,
-    testimonial: {
-      quote: replaceTokens(pickVariant(testimonialQuoteVariants, seed), replaceCtx),
-      byline: replaceTokens(pickVariant(testimonialBylineVariants, seed), replaceCtx),
-    },
   }
 }
+
+/** @deprecated City pages redirect to sport hub — kept for legacy route redirects. */
+export const getPseoCopy = (sportSlug: string, _citySlug: string) =>
+  getPseoSportCopy(sportSlug)
 
 export const getPseoSlug = buildSlug
 export const getPseoSportHubSlug = buildSportHubSlug

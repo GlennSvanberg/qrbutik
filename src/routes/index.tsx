@@ -1,35 +1,43 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { MarketingCtas } from '~/components/MarketingCtas'
 import { MarketingFooter } from '~/components/MarketingFooter'
+import { MarketingHeader } from '~/components/MarketingHeader'
 import { TimeSavingsCalculator } from '~/components/TimeSavingsCalculator'
+import {
+  CLUB_LICENSE_PRICE,
+  DEFAULT_DESCRIPTION,
+  LIVE_KIOSK_LABEL,
+  LIVE_KIOSK_PATH,
+  SITE_NAME,
+  SITE_TAGLINE,
+  TRIAL_LABEL,
+} from '~/lib/marketing'
 
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
       {
-        title: 'QRbutik – Sälj med Swish utan krångel',
+        title: `${SITE_NAME} – ${SITE_TAGLINE}`,
       },
       {
         name: 'description',
-        content:
-          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+        content: DEFAULT_DESCRIPTION,
       },
       {
         property: 'og:title',
-        content: 'QRbutik – Sälj med Swish utan krångel',
+        content: `${SITE_NAME} – ${SITE_TAGLINE}`,
       },
       {
         property: 'og:description',
-        content:
-          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+        content: DEFAULT_DESCRIPTION,
       },
       {
         name: 'twitter:title',
-        content: 'QRbutik – Sälj med Swish utan krångel',
+        content: `${SITE_NAME} – ${SITE_TAGLINE}`,
       },
       {
         name: 'twitter:description',
-        content:
-          'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.',
+        content: DEFAULT_DESCRIPTION,
       },
     ],
   }),
@@ -37,8 +45,8 @@ export const Route = createFileRoute('/')({
 })
 
 const heroKpis: Array<{ label: string; value: string }> = [
-  { label: 'Starttid', value: '2 min' },
-  { label: 'Installation', value: 'Ingen app' },
+  { label: 'Provperiod', value: '14 dagar' },
+  { label: 'Kiosker', value: 'Obegränsat' },
   { label: 'Betalning', value: 'Swish direkt' },
 ]
 
@@ -63,21 +71,21 @@ const platformDetails: Array<{
 }> = [
   {
     id: 'signal',
-    title: 'Live-kontroll i admin',
+    title: 'Centralt dashboard',
     description:
-      'Se inkommande köp direkt och verifiera snabbt i samma vy.',
+      'Kassör och styrelse ser alla kiosker, omsättning och transaktioner i samma vy.',
   },
   {
     id: 'poster',
     title: 'Automatisk QR-skylt',
     description:
-      'En färdig skylt för mobil, iPad eller utskrift utan extra verktyg.',
+      'En färdig skylt för mobil, surfplatta eller utskrift utan extra verktyg.',
   },
   {
     id: 'pricing',
-    title: 'Byggt för föreningslivet',
+    title: 'Export till bokföring',
     description:
-      'Klubblicens för hela föreningen — flera kiosker, en faktura.',
+      'CSV och SIE för Fortnox och Visma — per kiosk eller hela föreningen.',
   },
 ]
 
@@ -93,10 +101,10 @@ const pricingPlans: Array<{
   {
     id: 'club',
     name: 'Klubblicens',
-    price: '995 kr/mån',
+    price: CLUB_LICENSE_PRICE,
     description:
-      'Hela föreningen — alla lag och kiosker. 14 dagars gratis provperiod.',
-    cta: 'Skapa förening',
+      'Hela föreningen — alla lag och kiosker. 14 dagars provperiod utan betalkort.',
+    cta: TRIAL_LABEL,
     tracking: 'start-club-license',
     variant: 'primary',
   },
@@ -105,24 +113,15 @@ const pricingPlans: Array<{
 function Home() {
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
+      <MarketingHeader loginTracking="home-header-login" />
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(26,115,232,0.04),_transparent_60%)]" />
-        <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-14 sm:pb-20 sm:pt-20">
+        <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-6 sm:pb-20 sm:pt-8">
           <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="flex flex-col gap-7">
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src="/qrbutik_logo.png"
-                    alt="QRButik logo"
-                    className="h-12 w-auto sm:h-14"
-                  />
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
-                    QRButik.se
-                  </p>
-                </div>
                 <h1 className="text-pretty text-4xl font-bold leading-tight tracking-tight text-brand-foreground sm:text-5xl lg:text-6xl">
-                  Digital kiosk för hela idrottsföreningen.
+                  {SITE_TAGLINE}
                 </h1>
                 <p className="max-w-2xl text-pretty text-base text-brand-muted sm:text-lg">
                   Styrelse och kassör sätter upp kiosker för lag och cuper.
@@ -130,45 +129,15 @@ function Home() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link
-                  to="/logga-in"
-                  search={{ redirect: '/skapa' }}
-                  className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
-                  trackaton-on-click="primary-cta"
-                >
-                  Skapa förening — prova gratis
-                </Link>
-                <Link
-                  to="/logga-in"
-                  search={{ redirect: '/admin' }}
-                  className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-brand-foreground"
-                  trackaton-on-click="login-admin"
-                >
-                  Logga in
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 text-sm text-brand-muted">
-                <span>Har du redan konto?</span>
-                <Link
-                  to="/logga-in"
-                  search={{ redirect: '/admin' }}
-                  className="cursor-pointer font-semibold text-brand-foreground underline decoration-brand-border underline-offset-4 transition hover:text-brand"
-                  trackaton-on-click="login-admin-link"
-                >
-                  Logga in h&auml;r
-                </Link>
-                <span className="text-brand-border">•</span>
-                <span className="text-brand-muted">
-                  Magic link till din e-post — inget l&ouml;senord.
-                </span>
-              </div>
+              <MarketingCtas
+                primaryTracking="primary-cta"
+                secondaryTracking="home-demo-cta"
+              />
 
               <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-brand-muted">
-                <span className="premium-pill">2 minuter</span>
+                <span className="premium-pill">{CLUB_LICENSE_PRICE}</span>
                 <span className="premium-pill">Ingen app</span>
-                <span className="premium-pill">Swish direkt</span>
+                <span className="premium-pill">Export CSV/SIE</span>
               </div>
             </div>
 
@@ -359,32 +328,21 @@ function Home() {
         <TimeSavingsCalculator />
 
         <section className="premium-panel p-8 sm:p-10">
-          <div className="premium-shell flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <blockquote className="max-w-3xl space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
-                Omd&ouml;me
-              </p>
-              <p className="text-pretty text-2xl font-bold text-brand-foreground">
-                “V&aring;r kass&ouml;r &auml;lskar s&auml;ljrapporten. Vi sparar
-                timmar varje helg och k&ouml;n r&ouml;r sig snabbare direkt.”
-              </p>
-              <footer className="text-sm text-brand-muted">
-                &mdash; Lagledare, P12 Fotboll
-              </footer>
-            </blockquote>
-            <div className="flex flex-col gap-3">
-              <Link
-                to="/logga-in"
-                search={{ redirect: '/skapa' }}
-                className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
-                trackaton-on-click="landing-bottom-cta"
-              >
-                Skapa förening — prova gratis
-              </Link>
-              <p className="text-sm text-brand-muted">
-                G&aring; fr&aring;n handskrivet till ett proffsigt fl&ouml;de idag.
+          <div className="premium-shell flex flex-col items-center gap-6 text-center">
+            <div className="max-w-2xl">
+              <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
+                Redo att samla kiosken under samma tak?
+              </h2>
+              <p className="mt-3 text-base text-brand-muted">
+                Starta provperiod eller boka demo — vi hjälper styrelse och kassör
+                att komma igång.
               </p>
             </div>
+            <MarketingCtas
+              primaryTracking="landing-bottom-cta"
+              secondaryTracking="landing-bottom-demo"
+              layout="stack"
+            />
           </div>
         </section>
 

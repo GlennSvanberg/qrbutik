@@ -19,7 +19,9 @@ test.describe('Billing', () => {
     await expect(
       page.getByRole('heading', { name: 'Klubblicens & fakturering' }),
     ).toBeVisible({ timeout: 30_000 })
-    await expect(page.getByText(orgName)).toBeVisible({ timeout: 30_000 })
+    await expect(page.getByRole('main').getByText(orgName)).toBeVisible({
+      timeout: 30_000,
+    })
 
     const stripeConfigured = await page
       .getByRole('button', { name: 'Betala med kort' })

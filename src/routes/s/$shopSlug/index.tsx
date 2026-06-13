@@ -5,6 +5,7 @@ import { useMutation } from 'convex/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
 import { generateSwishLink } from '../../../lib/swish'
+import { isDemoShopSlug } from '../../../lib/demo'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/s/$shopSlug/')({
@@ -130,7 +131,7 @@ function ActiveShopView({
     if (prefillAppliedRef.current) {
       return
     }
-    if (shopSlug !== 'glenn') {
+    if (!isDemoShopSlug(shopSlug)) {
       prefillAppliedRef.current = true
       return
     }
@@ -258,23 +259,24 @@ function ActiveShopView({
           </p>
         </header>
 
-        {shopSlug === 'glenn' ? (
+        {isDemoShopSlug(shopSlug) ? (
           <section className="relaxed-surface border-stone-200 bg-stone-50/70 px-6 py-5 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
               Demo av QRButik
             </p>
             <h2 className="mt-2 text-lg font-semibold text-slate-900">
-              Skapa din egen Swish-kiosk pa 2 minuter
+              Digital kiosk för hela föreningen
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Det har ar en riktig QRButik-checkout. Bygg din egen butik direkt.
+              Det här är en riktig QRButik-checkout. Starta provperiod för er
+              förening eller boka demo.
             </p>
             <Link
               to="/glenn"
-              className="relaxed-primary-button mt-4 inline-flex h-12 items-center justify-center px-6 text-sm font-semibold text-white"
-              trackaton-on-click="glenn-demo-cta"
+              className="relaxed-primary-button mt-4 inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-white"
+              trackaton-on-click="demo-kiosk-cta"
             >
-              Skapa din kiosk
+              Läs mer om klubblicens
             </Link>
           </section>
         ) : null}

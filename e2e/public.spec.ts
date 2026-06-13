@@ -6,7 +6,10 @@ test.describe('Public marketing pages', () => {
     await expect(
       page.getByRole('heading', { name: /Klubblicens/i }).first(),
     ).toBeVisible()
-    await expect(page.getByText('995 kr/mån')).toBeVisible()
+    await expect(page.getByText('från 995 kr/mån').first()).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: 'Logga in' }).first(),
+    ).toBeVisible()
   })
 
   test('legal pages are reachable', async ({ page }) => {

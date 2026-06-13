@@ -74,7 +74,7 @@ function CreateOrganizationContent() {
 
         <section className="relaxed-surface flex flex-col gap-4 p-8">
           <div className="rounded-xl border border-brand-border bg-brand-surface/50 p-4 text-sm text-slate-700">
-            <p className="font-semibold text-slate-900">Klubblicens — 995 kr/mån</p>
+            <p className="font-semibold text-slate-900">Klubblicens — från 995 kr/mån</p>
             <p className="mt-1 text-slate-600">
               14 dagars gratis provperiod. Ingen betalning nu — du lägger till
               kiosker i admin när föreningen är skapad.

@@ -1,11 +1,9 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
-import { AdminBottomNav } from '../../../components/AdminBottomNav'
-import { AdminHeader } from '../../../components/AdminHeader'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/historik')({
@@ -15,9 +13,6 @@ export const Route = createFileRoute('/admin/$shopId/historik')({
 function PurchaseHistoryPage() {
   const { shopId } = Route.useParams()
   const shopIdParam = shopId as Id<'shops'>
-  const { data: shop } = useSuspenseQuery(
-    convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
-  )
   const { data: transactions } = useSuspenseQuery(
     convexQuery(api.transactions.listByShop, { shopId: shopIdParam }),
   )
@@ -57,36 +52,9 @@ function PurchaseHistoryPage() {
     [transactions],
   )
 
-  if (!shop) {
-    return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Kiosken hittades inte
-          </h1>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
-    )
-  }
-
   return (
-    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <AdminHeader
-          organizationId={shop.organizationId}
-          shopId={shop._id}
-          section="history"
-          shopName={shop.name}
-          subtitle="Köphistorik"
-        />
-
-        <section className="flex flex-col gap-4">
+    <>
+      <section className="flex flex-col gap-4">
           <div className="relaxed-divider flex flex-wrap items-center justify-between gap-2 border-b pb-3">
             <div>
               <h2 className="text-base font-semibold text-slate-900">
@@ -217,8 +185,6 @@ function PurchaseHistoryPage() {
         {statusMessage ? (
           <p className="text-sm text-slate-600">{statusMessage}</p>
         ) : null}
-      </div>
-      <AdminBottomNav shopId={shopIdParam} active="history" />
-    </main>
+    </>
   )
 }

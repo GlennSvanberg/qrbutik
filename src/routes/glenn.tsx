@@ -1,15 +1,17 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { MarketingCtas } from '~/components/MarketingCtas'
+import { DEMO_SHOP_SLUG } from '~/lib/demo'
 
 export const Route = createFileRoute('/glenn')({
   head: () => ({
     meta: [
       {
-        title: 'Glenn-demo – QRButik',
+        title: 'Demo – QRButik',
       },
       {
         name: 'description',
         content:
-          'Detta är en demo av QRButik-checkout. Skapa din egen Swish-kiosk på 2 minuter.',
+          'Demo av QRButik-checkout för idrottsföreningar. Starta 14 dagars provperiod eller boka demo.',
       },
     ],
   }),
@@ -25,35 +27,31 @@ function GlennDemoLanding() {
             QRButik.se
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-slate-900">
-            Glenn-upplevelsen ar en demo
+            Det här var en demo av QRButik
           </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Du har precis sett hur QRButik fungerar: valj varor, fa
-            totalsumma, betala med Swish och fa ett kvitto.
+            Du har precis sett hur QRButik fungerar: välj varor, få totalsumma,
+            betala med Swish och få ett kvitto — samma flöde som er föreningskiosk.
           </p>
         </header>
 
         <section className="relaxed-surface border-stone-200 bg-stone-50/70 p-8 text-center">
-          <h2 className="text-xl font-semibold text-slate-900">
-            Skapa din egen Swish-kiosk
-          </h2>
+          <h2 className="text-xl font-semibold text-slate-900">{SITE_TAGLINE}</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Perfekt for matcher, loppisar och foreningskiosker. Ingen app, inga
-            abonnemang.
+            QRButik riktar sig till idrottsföreningar och cuper — klubblicens med
+            flera kiosker, central överblick och export för kassör och styrelse.
           </p>
-          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Link
-              to="/skapa"
-              className="relaxed-primary-button inline-flex h-12 items-center justify-center px-6 text-base font-semibold text-white"
-              trackaton-on-click="glenn-landing-cta"
-            >
-              Skapa din kiosk
-            </Link>
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <MarketingCtas
+              primaryTracking="glenn-landing-trial"
+              secondaryTracking="glenn-landing-demo"
+              layout="stack"
+            />
             <Link
               to="/s/$shopSlug"
-              params={{ shopSlug: 'glenn' }}
-              className="relaxed-secondary-button inline-flex h-12 items-center justify-center px-6 text-base font-semibold text-slate-700"
-              trackaton-on-click="glenn-landing-back-demo"
+              params={{ shopSlug: DEMO_SHOP_SLUG }}
+              className="text-sm font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4"
+              trackaton-on-click="demo-landing-back-kiosk"
             >
               Tillbaka till demo
             </Link>

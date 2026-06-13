@@ -1,6 +1,6 @@
-import {  expect } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { getConvexSiteUrl } from './env'
-import type {Page} from '@playwright/test';
+import type { Page } from '@playwright/test'
 
 async function waitForDevMagicLink(
   convexSiteUrl: string,
@@ -38,6 +38,10 @@ async function waitForAuthenticatedDestination(
   page: Page,
   redirectTo: string,
 ): Promise<void> {
+  await expect(
+    page.getByRole('button', { name: 'Skicka inloggningslänk' }),
+  ).toBeHidden({ timeout: 30_000 })
+
   const path = redirectTo.split('?')[0] ?? redirectTo
 
   if (path.includes('/skapa')) {

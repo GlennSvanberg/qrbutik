@@ -4,7 +4,6 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useAction, useQuery } from 'convex/react'
 import { useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
-import { SignOutButton } from '../../components/auth/ShopAccessGate'
 import { daysUntil } from '../../lib/billing'
 import type { Id } from '../../../convex/_generated/dataModel'
 
@@ -190,7 +189,7 @@ function BillingContent({
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-10">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <header className="flex flex-col gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
               QRButik.se
@@ -198,15 +197,6 @@ function BillingContent({
             <h1 className="text-3xl font-semibold text-slate-900">
               Klubblicens &amp; fakturering
             </h1>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              to="/admin"
-              className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
-            >
-              Till admin
-            </Link>
-            <SignOutButton />
           </div>
         </header>
 
@@ -281,7 +271,7 @@ function BillingContent({
                 Pris
               </p>
               <p className="mt-1 text-2xl font-semibold text-slate-900">
-                995 kr/mån
+                från 995 kr/mån
               </p>
               <p className="mt-1 text-sm text-slate-600">
                 Obegränsat antal kiosker under samma förening.

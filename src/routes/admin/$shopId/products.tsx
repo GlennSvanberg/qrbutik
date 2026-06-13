@@ -1,11 +1,9 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMutation } from 'convex/react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
-import { AdminBottomNav } from '../../../components/AdminBottomNav'
-import { AdminHeader } from '../../../components/AdminHeader'
 import { ProdukterForm } from '../../../components/ProdukterForm'
 import type { Id } from '../../../../convex/_generated/dataModel'
 

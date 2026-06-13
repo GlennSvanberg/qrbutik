@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as crons from "../crons.js";
+import type * as demoSeed from "../demoSeed.js";
 import type * as devMagicLink from "../devMagicLink.js";
 import type * as email from "../email.js";
 import type * as http from "../http.js";
@@ -35,6 +36,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   crons: typeof crons;
+  demoSeed: typeof demoSeed;
   devMagicLink: typeof devMagicLink;
   email: typeof email;
   http: typeof http;

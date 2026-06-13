@@ -29,6 +29,13 @@ export function ProdukterForm({
     onChange(products.filter((product) => product.id !== id))
   }
 
+  const addRow = () => {
+    onChange([
+      ...products,
+      { id: crypto.randomUUID(), name: '', price: '' },
+    ])
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -81,7 +88,7 @@ export function ProdukterForm({
 
       <button
         type="button"
-        onClick={onAddRow}
+        onClick={onAddRow ?? addRow}
         className="relaxed-secondary-button h-12 cursor-pointer border-dashed px-6 text-sm font-semibold text-stone-700"
         trackaton-on-click="product-add-row"
       >

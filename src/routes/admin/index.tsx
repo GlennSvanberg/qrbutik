@@ -3,7 +3,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
-import { SignOutButton } from '../../components/auth/ShopAccessGate'
 import { authClient } from '../../lib/authClient'
 import type { Id } from '../../../convex/_generated/dataModel'
 
@@ -112,9 +111,6 @@ function AdminDashboardWithOrganizations({
     activeOrg.subscriptionStatus === 'trialing' ||
     activeOrg.subscriptionStatus === 'active'
 
-  const canManageBilling =
-    activeOrg.role === 'owner' || activeOrg.role === 'treasurer'
-
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <div className="relative overflow-hidden border-b border-stone-200/70 bg-stone-50/80 backdrop-blur">
@@ -124,40 +120,13 @@ function AdminDashboardWithOrganizations({
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
               QRButik.se
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-semibold text-slate-900">
-                  Föreningens kiosker
-                </h1>
-                <p className="text-sm text-slate-600">
-                  Inloggad som <span className="font-medium">{email}</span>
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  to="/admin/skapa-kiosk"
-                  search={{ organizationId: activeOrg._id }}
-                  className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white"
-                >
-                  Skapa kiosk
-                </Link>
-                {canManageBilling ? (
-                  <Link
-                    to="/admin/billing"
-                    search={{ organizationId: activeOrg._id }}
-                    className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
-                  >
-                    Fakturering
-                  </Link>
-                ) : null}
-                <Link
-                  to="/skapa"
-                  className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
-                >
-                  Skapa förening
-                </Link>
-                <SignOutButton />
-              </div>
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-semibold text-slate-900">
+                Föreningens kiosker
+              </h1>
+              <p className="text-sm text-slate-600">
+                Inloggad som <span className="font-medium">{email}</span>
+              </p>
             </div>
           </header>
 

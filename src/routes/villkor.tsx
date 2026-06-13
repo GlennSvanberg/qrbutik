@@ -40,7 +40,7 @@ function VillkorPage() {
             2. Klubblicens och provperiod
           </h2>
           <p>
-            Klubblicensen kostar 995 kr per månad och omfattar obegränsat antal
+            Klubblicensen kostar från 995 kr per månad och omfattar obegränsat antal
             kiosker under samma organisation. Nya föreningar erbjuds 14 dagars
             gratis provperiod utan betalkort. Efter provperiod krävs aktiv
             prenumeration för att kiosker ska acceptera köp.

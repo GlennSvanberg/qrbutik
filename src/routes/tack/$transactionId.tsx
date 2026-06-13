@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../convex/_generated/api";
+import { isDemoShopName } from "~/lib/demo";
 import type { Id } from "../../../convex/_generated/dataModel";
 
 export const Route = createFileRoute("/tack/$transactionId")({
@@ -119,24 +120,24 @@ function ThankYouView() {
           </div>
         </section>
 
-        {transaction.shopName.toLowerCase().includes('glenn') ? (
+        {isDemoShopName(transaction.shopName) ? (
           <section className="relaxed-surface border-stone-200 bg-stone-50/70 p-6 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
               QRButik-demo
             </p>
             <h2 className="mt-2 text-lg font-semibold text-slate-900">
-              Skapa din egen Swish-kiosk
+              Digital kiosk för hela föreningen
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Det har flodet ar byggt med QRButik. Skapa din egen butik pa 2
-              minuter.
+              Det här flödet bygger på QRButik — kiosksystem för idrottsföreningar
+              med Swish, export och flera kiosker under samma licens.
             </p>
             <Link
               to="/glenn"
-              className="relaxed-primary-button mt-4 inline-flex h-12 items-center justify-center px-6 text-sm font-semibold text-white"
-              trackaton-on-click="glenn-thankyou-cta"
+              className="relaxed-primary-button mt-4 inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-white"
+              trackaton-on-click="demo-thankyou-cta"
             >
-              Skapa din kiosk
+              Starta provperiod
             </Link>
           </section>
         ) : null}

@@ -5,6 +5,31 @@ import { authedMutation } from './lib/customFunctions'
 import { requireShopAccess } from './lib/auth'
 import { isSubscriptionActive } from './lib/validators'
 import type { Id } from './_generated/dataModel'
+import type { QueryCtx } from './_generated/server'
+
+function filterTransactionsByCreatedAtRange<
+  T extends { createdAt: number },
+>(transactions: Array<T>, start: number, end: number): Array<T> {
+  return transactions.filter(
+    (transaction) =>
+      transaction.createdAt >= start && transaction.createdAt <= end,
+  )
+}
+
+async function listShopTransactionsInRange(
+  ctx: QueryCtx,
+  shopId: Id<'shops'>,
+  start: number,
+  end: number,
+) {
+  const transactions = await ctx.db
+    .query('transactions')
+    .withIndex('by_shopId', (q) => q.eq('shopId', shopId))
+    .order('desc')
+    .collect()
+
+  return filterTransactionsByCreatedAtRange(transactions, start, end)
+}
 
 export const create = mutation({
   args: {
@@ -280,13 +305,7 @@ export const listTodayByShop = query({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     const { start, end } = getTodayRange()
-    return await ctx.db
-      .query('transactions')
-      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
-      .filter((q) => q.gte(q.field('createdAt'), start))
-      .filter((q) => q.lte(q.field('createdAt'), end))
-      .order('desc')
-      .collect()
+    return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
 })
 
@@ -295,13 +314,7 @@ export const listByShopPeriod = query({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     const { start, end } = getPeriodRange(args.period)
-    return await ctx.db
-      .query('transactions')
-      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
-      .filter((q) => q.gte(q.field('createdAt'), start))
-      .filter((q) => q.lte(q.field('createdAt'), end))
-      .order('desc')
-      .collect()
+    return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
 })
 
@@ -365,13 +378,12 @@ export const getTodaySummary = query({
   }),
   handler: async (ctx, args) => {
     const { start, end } = getTodayRange()
-    const transactions = await ctx.db
-      .query('transactions')
-      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
-      .filter((q) => q.gte(q.field('createdAt'), start))
-      .filter((q) => q.lte(q.field('createdAt'), end))
-      .order('desc')
-      .collect()
+    const transactions = await listShopTransactionsInRange(
+      ctx,
+      args.shopId,
+      start,
+      end,
+    )
 
     return buildSummary(transactions)
   },
@@ -402,13 +414,12 @@ export const getPeriodSummary = query({
   }),
   handler: async (ctx, args) => {
     const { start, end } = getPeriodRange(args.period)
-    const transactions = await ctx.db
-      .query('transactions')
-      .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
-      .filter((q) => q.gte(q.field('createdAt'), start))
-      .filter((q) => q.lte(q.field('createdAt'), end))
-      .order('desc')
-      .collect()
+    const transactions = await listShopTransactionsInRange(
+      ctx,
+      args.shopId,
+      start,
+      end,
+    )
 
     return buildSummary(transactions)
   },

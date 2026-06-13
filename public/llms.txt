@@ -1,42 +1,45 @@
 # QRButik
 
-> QRButik is a Swedish B2B SaaS for sports clubs and summer tournaments: a QR-based kiosk system with Swish checkout for visitors. Clubs pay a monthly license (not per-event passes). Platform billing uses Stripe; customer payments use Swish deep links to the club's own number.
+> QRButik is a Swedish B2B SaaS for sports clubs and tournaments: a QR-based kiosk system with Swish checkout for visitors. Clubs pay a monthly license (from 995 SEK/month). Platform billing uses Stripe; customer payments use Swish deep links to the club's own number.
 
 ## Target audience
 
-- **Buyer:** Sports club board, treasurer, or office (idrottsförening, sommarcup)
-- **Users:** Team leaders running kiosks; treasurer needing consolidated sales and accounting export
-- **Not targeting:** Private individuals running one-off flea markets
+- **Buyer:** Sports club board, treasurer, or office (idrottsförening, cup)
+- **Users:** Team leaders running kiosks; treasurer needing consolidated sales and CSV/SIE export
+- **Not targeting:** Private individuals running flea markets
 
-## Business model (target state)
+## Business model
 
-- Club license: approximately 995–1 495 SEK/month (or annual), unlimited kiosks within the organization
-- 14-day free trial via Stripe Checkout
-- MRR goal: 10 000 SEK/month from 7–10 clubs
+- Club license: from 995 SEK/month, unlimited kiosks within the organization
+- 14-day free trial without card at signup; Stripe Checkout for billing
+- Tagline: Digital kiosk för hela föreningen
 
 ## Core pages
 
-- [Homepage](https://qrbutik.se/): B2B value prop, club license pricing, trial CTA
-- [Create / onboard](https://qrbutik.se/skapa): Organization and kiosk setup (transitioning to Stripe trial)
-- [Admin](https://qrbutik.se/admin): Magic-link login; multi-kiosk and org dashboard (planned)
+- [Homepage](https://qrbutik.se/): B2B value prop, trial + demo CTAs
+- [Solutions by sport](https://qrbutik.se/utforska): Sport-specific landing pages (football, handball, etc.)
+- [Contact / demo](https://qrbutik.se/kontakt): Book a demo or start trial
+- [Create organization](https://qrbutik.se/skapa): Onboarding with 14-day trial
+- [Admin](https://qrbutik.se/admin): Magic-link login; org billing and kiosks
 
 ## Customer-facing (no login)
 
 - [Shop menu](https://qrbutik.se/s/{shopSlug}): Public menu and Swish payment
 - [Receipt](https://qrbutik.se/tack/{transactionId}): Digital receipt after payment
 
-## Planned B2B features
+## Product capabilities (positioning)
 
-- Central dashboard for all club kiosks
+- Multiple kiosks under one club license
+- Central dashboard for treasurer and board
 - CSV and SIE export for Fortnox/Visma
-- Organization roles: owner, treasurer, editor (team leaders)
+- Organization roles: owner, treasurer, editor
 
 ## Documentation for agents
 
-- Roadmap: /ROADMAP.md (repository root)
+- Roadmap: /ROADMAP.md
 - Product vision: /plan.md
-- SEO (intent-based): /SEO_INSTRUCTIONS.md
+- SEO strategy: /SEO_INSTRUCTIONS.md
 
-## Implementation note
+## SEO note
 
-Greenfield rewrite in progress: no production shops or paying users. Old pay-per-activation model and P-SEO are being removed, not migrated. See /ROADMAP.md.
+Sport×city URLs redirect to sport hub pages. Primary SEO surface: homepage + `/utforska/{sport}`.

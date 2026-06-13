@@ -88,7 +88,6 @@ LLMS: ${siteUrl}/llms.txt`
 const run = async () => {
   const data = await loadPseoData()
   const sports = data.sports ?? []
-  const cities = data.cities ?? []
   const staticLastmod = await getLastmodFromSources([
     'src/routes/__root.tsx',
     'src/routes/index.tsx',
@@ -122,26 +121,20 @@ const run = async () => {
       changefreq: 'daily',
       priority: '0.9',
     },
-  ]
-  const dynamicPaths = sports.flatMap((sport) =>
-    cities.map((city) => `/utforska/${sport.slug}/${city.slug}`),
-  )
-  const sportHubPaths = sports.map((sport) => `/utforska/${sport.slug}`)
-  const uniqueDynamicPaths = [...new Set(dynamicPaths)].sort()
-  const pseoEntries = [
-    ...sportHubPaths.map((pathname) => ({
-      loc: buildAbsoluteUrl(pathname),
-      lastmod: pseoLastmod,
-      changefreq: 'daily',
+    {
+      loc: buildAbsoluteUrl('/kontakt'),
+      lastmod: staticLastmod,
+      changefreq: 'monthly',
       priority: '0.8',
-    })),
-    ...uniqueDynamicPaths.map((pathname) => ({
-      loc: buildAbsoluteUrl(pathname),
-      lastmod: pseoLastmod,
-      changefreq: 'daily',
-      priority: '0.7',
-    })),
+    },
   ]
+  const sportHubPaths = sports.map((sport) => `/utforska/${sport.slug}`)
+  const pseoEntries = sportHubPaths.map((pathname) => ({
+    loc: buildAbsoluteUrl(pathname),
+    lastmod: pseoLastmod,
+    changefreq: 'daily',
+    priority: '0.8',
+  }))
   const sitemapIndexEntries = [
     {
       loc: buildAbsoluteUrl(staticSitemapPath),

@@ -1,4 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { AdminShopShell } from '../../components/AdminShopShell'
 import { ShopAccessGate } from '../../components/auth/ShopAccessGate'
 import type { Id } from '../../../convex/_generated/dataModel'
 
@@ -22,7 +23,9 @@ function AdminShopLayout() {
 
   return (
     <ShopAccessGate shopId={shopId as Id<'shops'>}>
-      <Outlet />
+      <AdminShopShell shopId={shopId as Id<'shops'>}>
+        <Outlet />
+      </AdminShopShell>
     </ShopAccessGate>
   )
 }

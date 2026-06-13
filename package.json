@@ -25,7 +25,8 @@
     "stripe:claim": "node node_modules/@stripe/cli/bin/shim.js sandbox claim",
     "stripe:login": "node node_modules/@stripe/cli/bin/shim.js login",
     "stripe:setup": "node scripts/stripe-bootstrap.mjs",
-    "stripe:listen": "node scripts/stripe-listen.mjs"
+    "stripe:listen": "node scripts/stripe-listen.mjs",
+    "demo:seed": "npx convex run demoSeed:ensureDemoShop"
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.10.10",

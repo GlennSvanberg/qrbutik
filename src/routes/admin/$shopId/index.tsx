@@ -1,14 +1,11 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import {
   keepPreviousData,
   useQuery,
-  useSuspenseQuery,
 } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
 import { useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
-import { AdminBottomNav } from '../../../components/AdminBottomNav'
-import { AdminHeader } from '../../../components/AdminHeader'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/')({
@@ -28,9 +25,6 @@ const periodOptions: Array<{ value: Period; label: string }> = [
 function AdminShopDashboard() {
   const { shopId } = Route.useParams()
   const shopIdParam = shopId as Id<'shops'>
-  const { data: shop } = useSuspenseQuery(
-    convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
-  )
   const [period, setPeriod] = useState<Period>('today')
   const { data: summary } = useQuery({
     ...convexQuery(api.transactions.getPeriodSummary, {
@@ -40,21 +34,11 @@ function AdminShopDashboard() {
     placeholderData: keepPreviousData,
   })
 
-  if (!shop || !summary) {
+  if (!summary) {
     return (
-      <main className="relaxed-page-shell min-h-screen px-6 py-12">
-        <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Kiosken hittades inte
-          </h1>
-          <Link
-            to="/admin"
-            className="relaxed-primary-button mx-auto w-fit cursor-pointer px-5 py-3 text-sm font-semibold text-white"
-          >
-            Till adminpanelen
-          </Link>
-        </div>
-      </main>
+      <div className="relaxed-surface p-8 text-center">
+        <p className="text-sm text-slate-600">Laddar försäljning...</p>
+      </div>
     )
   }
 
@@ -70,16 +54,8 @@ function AdminShopDashboard() {
     : '-'
 
   return (
-    <main className="relaxed-page-shell min-h-screen bg-transparent px-6 pb-28 pt-6">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <AdminHeader
-          organizationId={shop.organizationId}
-          shopId={shop._id}
-          section="sales"
-          shopName={shop.name}
-        />
-
-        <section className="relaxed-divider flex flex-col gap-5 border-b pb-6">
+    <>
+      <section className="relaxed-divider flex flex-col gap-5 border-b pb-6">
           <div className="flex items-center justify-center">
             <div className="relaxed-surface-soft grid w-full max-w-2xl grid-cols-5 gap-2 rounded-full p-1">
               {periodOptions.map((option) => {
@@ -207,8 +183,6 @@ function AdminShopDashboard() {
             )}
           </div>
         </section>
-      </div>
-      <AdminBottomNav shopId={shopIdParam} active="sales" />
-    </main>
+    </>
   )
 }

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as LoggaInRouteImport } from './routes/logga-in'
+import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as GlennRouteImport } from './routes/glenn'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
@@ -48,6 +49,11 @@ const SkapaRoute = SkapaRouteImport.update({
 const LoggaInRoute = LoggaInRouteImport.update({
   id: '/logga-in',
   path: '/logga-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontaktRoute = KontaktRouteImport.update({
+  id: '/kontakt',
+  path: '/kontakt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntegritetRoute = IntegritetRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/glenn': typeof GlennRoute
   '/integritet': typeof IntegritetRoute
+  '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
   '/villkor': typeof VillkorRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/glenn': typeof GlennRoute
   '/integritet': typeof IntegritetRoute
+  '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
   '/villkor': typeof VillkorRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/glenn': typeof GlennRoute
   '/integritet': typeof IntegritetRoute
+  '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
   '/villkor': typeof VillkorRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/glenn'
     | '/integritet'
+    | '/kontakt'
     | '/logga-in'
     | '/skapa'
     | '/villkor'
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/'
     | '/glenn'
     | '/integritet'
+    | '/kontakt'
     | '/logga-in'
     | '/skapa'
     | '/villkor'
@@ -296,6 +307,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/glenn'
     | '/integritet'
+    | '/kontakt'
     | '/logga-in'
     | '/skapa'
     | '/villkor'
@@ -324,6 +336,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   GlennRoute: typeof GlennRoute
   IntegritetRoute: typeof IntegritetRoute
+  KontaktRoute: typeof KontaktRoute
   LoggaInRoute: typeof LoggaInRoute
   SkapaRoute: typeof SkapaRoute
   VillkorRoute: typeof VillkorRoute
@@ -354,6 +367,13 @@ declare module '@tanstack/react-router' {
       path: '/logga-in'
       fullPath: '/logga-in'
       preLoaderRoute: typeof LoggaInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontakt': {
+      id: '/kontakt'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/integritet': {
@@ -586,6 +606,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   GlennRoute: GlennRoute,
   IntegritetRoute: IntegritetRoute,
+  KontaktRoute: KontaktRoute,
   LoggaInRoute: LoggaInRoute,
   SkapaRoute: SkapaRoute,
   VillkorRoute: VillkorRoute,

@@ -6,14 +6,15 @@ import {
 } from '@tanstack/react-router'
 import * as React from 'react'
 import type { QueryClient } from '@tanstack/react-query'
+import {
+  DEFAULT_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+} from '~/lib/marketing'
 import appCss from '~/styles/app.css?url'
 
 const SITE_URL =
   (import.meta as any).env.VITE_SITE_URL ?? 'https://qrbutik.se'
-const SITE_NAME = 'QRbutik'
-const SITE_TAGLINE = 'Sälj med Swish utan krångel'
-const DEFAULT_DESCRIPTION =
-  'Skapa en digital kiosk på 2 minuter. Kunderna scannar, väljer varor och betalar direkt med Swish.'
 const OG_IMAGE_PATH = '/og.jpg'
 
 const buildAbsoluteUrl = (pathname: string) => {
