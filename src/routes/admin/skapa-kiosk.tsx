@@ -35,7 +35,7 @@ function CreateKioskPage() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Du behöver en förening innan du kan skapa en kiosk.
           </p>
           <Link
@@ -124,11 +124,11 @@ function CreateKioskForm({
     <main className="relaxed-page-shell min-h-screen px-6 py-12">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-xs uppercase tracking-[0.2em] text-subtle">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900">Skapa kiosk</h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-brand-foreground">Skapa kiosk</h1>
+          <p className="mt-2 text-sm text-brand-muted">
             Lägg till en ny kiosk i föreningen. Varje lag eller cup kan ha sin
             egen.
           </p>
@@ -136,14 +136,14 @@ function CreateKioskForm({
 
         <section className="relaxed-surface flex flex-col gap-6 p-8">
           {organizations.length > 1 ? (
-            <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+            <label className="flex flex-col gap-2 text-sm font-medium text-brand-muted">
               Förening
               <select
                 value={organizationId}
                 onChange={(event) =>
                   setOrganizationId(event.target.value as Id<'organizations'>)
                 }
-                className="relaxed-input h-12 cursor-pointer px-4 text-base text-slate-900 outline-none"
+                className="relaxed-input h-12 cursor-pointer px-4 text-base text-brand-foreground outline-none"
               >
                 {organizations.map((org) => (
                   <option key={org._id} value={org._id}>
@@ -170,7 +170,7 @@ function CreateKioskForm({
             <Link
               to="/admin/org/$orgId"
               params={{ orgId: organizationId }}
-              className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-slate-700"
+              className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-brand-muted"
             >
               Avbryt
             </Link>

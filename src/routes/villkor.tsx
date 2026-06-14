@@ -15,28 +15,28 @@ function VillkorPage() {
         <header className="flex flex-col gap-3">
           <Link
             to="/"
-            className="text-sm font-medium text-slate-500 underline-offset-4 hover:underline"
+            className="text-sm font-medium text-brand-muted underline-offset-4 hover:underline"
           >
             Tillbaka till startsidan
           </Link>
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             Användarvillkor (B2B)
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Senast uppdaterad: 13 juni 2025. Gäller idrottsföreningar och
             organisationer som tecknar klubblicens hos QRButik.se.
           </p>
         </header>
 
-        <section className="relaxed-surface flex flex-col gap-4 p-8 text-sm leading-relaxed text-slate-700">
-          <h2 className="text-lg font-semibold text-slate-900">1. Tjänsten</h2>
+        <section className="relaxed-surface flex flex-col gap-4 p-8 text-sm leading-relaxed text-brand-muted">
+          <h2 className="text-lg font-semibold text-brand-foreground">1. Tjänsten</h2>
           <p>
             QRButik tillhandahåller en digital kioskplattform för
             idrottsföreningar och cuparrangörer. Kundbetalningar sker via Swish
             direkt till föreningens eget nummer — inte till QRButik.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             2. Klubblicens och provperiod
           </h2>
           <p>
@@ -46,7 +46,7 @@ function VillkorPage() {
             prenumeration för att kiosker ska acceptera köp.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             3. Betalning till QRButik
           </h2>
           <p>
@@ -57,7 +57,7 @@ function VillkorPage() {
             betalning regleras.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             4. Användning och ansvar
           </h2>
           <p>
@@ -66,7 +66,7 @@ function VillkorPage() {
             och efterlevnad av gällande lagar vid försäljning i kiosken.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             5. Uppsägning
           </h2>
           <p>
@@ -75,7 +75,7 @@ function VillkorPage() {
             integritetspolicy.
           </p>
 
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-brand-muted">
             Detta är ett utkast för beta/MVP. Fullständiga villkor kompletteras
             innan live-fakturering.
           </p>

@@ -15,20 +15,20 @@ function IntegritetPage() {
         <header className="flex flex-col gap-3">
           <Link
             to="/"
-            className="text-sm font-medium text-slate-500 underline-offset-4 hover:underline"
+            className="text-sm font-medium text-brand-muted underline-offset-4 hover:underline"
           >
             Tillbaka till startsidan
           </Link>
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             Integritetspolicy
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Senast uppdaterad: 13 juni 2025.
           </p>
         </header>
 
-        <section className="relaxed-surface flex flex-col gap-4 p-8 text-sm leading-relaxed text-slate-700">
-          <h2 className="text-lg font-semibold text-slate-900">
+        <section className="relaxed-surface flex flex-col gap-4 p-8 text-sm leading-relaxed text-brand-muted">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             Vilka uppgifter vi behandlar
           </h2>
           <p>
@@ -38,7 +38,7 @@ function IntegritetPage() {
             behöver inget konto hos QRButik.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             Syfte och rättslig grund
           </h2>
           <p>
@@ -47,7 +47,7 @@ function IntegritetPage() {
             berättigat intresse.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             Delning med tredje part
           </h2>
           <p>
@@ -58,7 +58,7 @@ function IntegritetPage() {
             faktura-e-post.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-brand-foreground">
             Lagring och radering
           </h2>
           <p>
@@ -67,19 +67,19 @@ function IntegritetPage() {
             registerutdrag eller radering.
           </p>
 
-          <h2 className="text-lg font-semibold text-slate-900">Kontakt</h2>
+          <h2 className="text-lg font-semibold text-brand-foreground">Kontakt</h2>
           <p>
             Frågor om integritet:{' '}
             <a
               href="/kontakt"
-              className="font-medium text-slate-900 underline underline-offset-4"
+              className="font-medium text-brand-foreground underline underline-offset-4"
             >
               kontakta oss
             </a>
             .
           </p>
 
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-brand-muted">
             Detta är ett utkast för beta/MVP. Policyn kompletteras innan
             live-fakturering.
           </p>

@@ -28,10 +28,10 @@ function ShopActivationSuccessPage() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Butiken hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Kontrollera länken eller skapa en ny butik.
           </p>
           <Link
@@ -50,13 +50,13 @@ function ShopActivationSuccessPage() {
     <main className="relaxed-page-shell min-h-screen bg-transparent px-6 py-12">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="flex flex-col gap-2 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-xs uppercase tracking-[0.2em] text-subtle">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             {shop.name} ar aktiverad
           </h1>
-          <p className="text-sm text-slate-600">Vad vill du gora nu?</p>
+          <p className="text-sm text-brand-muted">Vad vill du gora nu?</p>
         </header>
 
         <section className="relaxed-surface flex flex-col gap-4 p-8 text-center">
@@ -72,14 +72,14 @@ function ShopActivationSuccessPage() {
             <Link
               to="/s/$shopSlug"
               params={{ shopSlug: shop.slug }}
-              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
+              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-brand-muted"
               trackaton-on-click="activation-view-shop"
             >
               Visa butik
             </Link>
             <Link
               to="/admin"
-              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
+              className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-brand-muted"
               trackaton-on-click="activation-admin"
             >
               Adminpanel

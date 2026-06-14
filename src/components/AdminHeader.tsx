@@ -29,17 +29,17 @@ export function AdminHeader({
   return (
     <header className="flex flex-col items-center gap-3 text-center">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-semibold text-slate-900">
+        <h1 className="text-xl font-semibold text-brand-foreground">
           {shopName ?? 'Admin'}
         </h1>
         {subtitle ? (
-          <p className="text-sm text-slate-600">{subtitle}</p>
+          <p className="text-sm text-brand-muted">{subtitle}</p>
         ) : null}
       </div>
 
       {shops.length > 1 ? (
-        <label className="flex w-full max-w-xs flex-col gap-2 text-left text-sm text-slate-700">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        <label className="flex w-full max-w-xs flex-col gap-2 text-left text-sm text-brand-muted">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
             Byt kiosk
           </span>
           <select
@@ -50,7 +50,7 @@ export function AdminHeader({
                 params: { shopId: event.target.value as Id<'shops'> },
               })
             }}
-            className="relaxed-input h-12 w-full cursor-pointer px-4 text-base text-slate-900 outline-none"
+            className="relaxed-input h-12 w-full cursor-pointer px-4 text-base text-brand-foreground outline-none"
           >
             {shops.map((shop) => (
               <option key={shop._id} value={shop._id}>

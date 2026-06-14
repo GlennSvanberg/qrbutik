@@ -143,24 +143,24 @@ export function AdminOrgDashboard({
 
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
-      <div className="relative overflow-hidden border-b border-stone-200/70 bg-white backdrop-blur">
+      <div className="nav-bar relative overflow-hidden border-b">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10">
           <header className="flex flex-col gap-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-subtle">
               QRButik.se
             </p>
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-semibold text-slate-900">
+              <h1 className="text-3xl font-semibold text-brand-foreground">
                 {isTreasurer ? 'Centralt dashboard' : 'Dina kiosker'}
               </h1>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-brand-muted">
                 Inloggad som <span className="font-medium">{email}</span>
               </p>
             </div>
           </header>
 
           {organizations.length > 1 ? (
-            <label className="flex max-w-md flex-col gap-2 text-sm text-slate-700">
+            <label className="flex max-w-md flex-col gap-2 text-sm text-brand-muted">
               Välj förening
               <select
                 value={activeOrg._id}
@@ -171,7 +171,7 @@ export function AdminOrgDashboard({
                     params: { orgId: nextOrgId },
                   })
                 }}
-                className="relaxed-input h-12 cursor-pointer px-4 text-base text-slate-900 outline-none"
+                className="relaxed-input h-12 cursor-pointer px-4 text-base text-brand-foreground outline-none"
               >
                 {organizations.map((org) => (
                   <option key={org._id} value={org._id}>
@@ -182,7 +182,7 @@ export function AdminOrgDashboard({
             </label>
           ) : null}
 
-          <div className="flex flex-wrap gap-3 text-sm text-slate-600">
+          <div className="flex flex-wrap gap-3 text-sm text-brand-muted">
             <span className="relaxed-chip px-3 py-1">{activeOrg.name}</span>
             <span className="relaxed-chip px-3 py-1">
               {subscriptionLabel[activeOrg.subscriptionStatus] ??
@@ -223,34 +223,34 @@ export function AdminOrgDashboard({
             {dashboard ? (
               <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <div className="relaxed-surface p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                     Omsättning
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                  <p className="mt-2 text-3xl font-semibold text-brand-foreground">
                     {formatCurrency(dashboard.totalRevenue)}
                   </p>
                 </div>
                 <div className="relaxed-surface p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                     Antal köp
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                  <p className="mt-2 text-3xl font-semibold text-brand-foreground">
                     {dashboard.transactionCount}
                   </p>
                 </div>
                 <div className="relaxed-surface p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                     Snittorder
                   </p>
-                  <p className="mt-2 text-3xl font-semibold text-slate-900">
+                  <p className="mt-2 text-3xl font-semibold text-brand-foreground">
                     {formatCurrency(dashboard.averageOrderValue)}
                   </p>
                 </div>
                 <div className="relaxed-surface p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                     Senaste köp
                   </p>
-                  <p className="mt-2 text-lg font-semibold text-slate-900">
+                  <p className="mt-2 text-lg font-semibold text-brand-foreground">
                     {dashboard.lastSaleTime
                       ? formatSaleTime(dashboard.lastSaleTime)
                       : 'Ingen försäljning'}
@@ -261,19 +261,19 @@ export function AdminOrgDashboard({
 
             {dashboard && dashboard.topItems.length > 0 ? (
               <section className="relaxed-surface p-5">
-                <h2 className="text-base font-semibold text-slate-900">
+                <h2 className="text-base font-semibold text-brand-foreground">
                   Toppartiklar
                 </h2>
-                <ul className="mt-4 divide-y divide-slate-200/70">
+                <ul className="mt-4 divide-y divide-brand-border/70">
                   {dashboard.topItems.map((item) => (
                     <li
                       key={item.name}
                       className="flex items-center justify-between py-3 text-sm"
                     >
-                      <span className="font-medium text-slate-900">
+                      <span className="font-medium text-brand-foreground">
                         {item.name}
                       </span>
-                      <span className="text-slate-600">
+                      <span className="text-brand-muted">
                         {item.quantity} st · {formatCurrency(item.revenue)}
                       </span>
                     </li>
@@ -284,25 +284,25 @@ export function AdminOrgDashboard({
 
             {dashboard && dashboard.recentSales.length > 0 ? (
               <section className="relaxed-surface p-5">
-                <h2 className="text-base font-semibold text-slate-900">
+                <h2 className="text-base font-semibold text-brand-foreground">
                   Senaste köp
                 </h2>
-                <ul className="mt-4 divide-y divide-slate-200/70">
+                <ul className="mt-4 divide-y divide-brand-border/70">
                   {dashboard.recentSales.map((sale) => (
                     <li
                       key={sale._id}
                       className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm"
                     >
                       <div>
-                        <p className="font-medium text-slate-900">
+                        <p className="font-medium text-brand-foreground">
                           {sale.shopName}
                         </p>
-                        <p className="text-slate-500">
+                        <p className="text-brand-muted">
                           {formatSaleTime(sale.createdAt)} · {sale.itemsCount}{' '}
                           artikel{sale.itemsCount === 1 ? '' : 'ar'}
                         </p>
                       </div>
-                      <span className="font-semibold text-slate-900">
+                      <span className="font-semibold text-brand-foreground">
                         {formatCurrency(sale.amount)}
                       </span>
                     </li>
@@ -319,10 +319,10 @@ export function AdminOrgDashboard({
             />
 
             <details className="relaxed-surface p-5">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-900">
+              <summary className="cursor-pointer text-sm font-semibold text-brand-foreground">
                 Hjälp: exportformat (Excel &amp; SIE)
               </summary>
-              <div className="mt-4 space-y-3 text-sm text-slate-600">
+              <div className="mt-4 space-y-3 text-sm text-brand-muted">
                 <p>
                   Excel-filen har formaterad tabell med kolumnbredd, filter och
                   summa-rad. Kolumner: datum, kiosk, belopp, referens, status,
@@ -346,7 +346,7 @@ export function AdminOrgDashboard({
 
         {shops.length === 0 ? (
           <div className="relaxed-surface rounded-3xl border-dashed p-10 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-brand-muted">
               Inga kiosker i den här föreningen ännu.
             </p>
             {isTreasurer ? (
@@ -370,7 +370,7 @@ export function AdminOrgDashboard({
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <h3 className="text-xl font-semibold text-slate-900">
+                      <h3 className="text-xl font-semibold text-brand-foreground">
                         {shop.shopName}
                       </h3>
                       {shop.teamLabel ? (
@@ -392,27 +392,27 @@ export function AdminOrgDashboard({
 
                   {isTreasurer || editorSummaries ? (
                     <div className="grid gap-3 text-center sm:grid-cols-3">
-                      <div className="relaxed-surface-soft bg-stone-50/70 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                      <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                           {isTreasurer ? 'Period' : '7 dagar'}
                         </p>
-                        <p className="text-xl font-semibold text-slate-900">
+                        <p className="text-xl font-semibold text-brand-foreground">
                           {formatCurrency(shop.periodRevenue)}
                         </p>
                       </div>
-                      <div className="relaxed-surface-soft bg-stone-50/70 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                      <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                           Idag
                         </p>
-                        <p className="text-xl font-semibold text-slate-900">
+                        <p className="text-xl font-semibold text-brand-foreground">
                           {formatCurrency(shop.todayRevenue)}
                         </p>
                       </div>
-                      <div className="relaxed-surface-soft bg-stone-50/70 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                      <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                           Helgen
                         </p>
-                        <p className="text-xl font-semibold text-slate-900">
+                        <p className="text-xl font-semibold text-brand-foreground">
                           {formatCurrency(shop.weekendRevenue)}
                         </p>
                       </div>
@@ -420,7 +420,7 @@ export function AdminOrgDashboard({
                   ) : null}
 
                   {shop.latestSaleAt && shop.latestSaleAmount !== null ? (
-                    <p className="text-center text-xs text-slate-500">
+                    <p className="text-center text-xs text-brand-muted">
                       Senaste köp: {formatCurrency(shop.latestSaleAmount)} ·{' '}
                       {formatSaleTime(shop.latestSaleAt)}
                     </p>
@@ -438,7 +438,7 @@ export function AdminOrgDashboard({
                       <Link
                         to="/s/$shopSlug"
                         params={{ shopSlug: shopDoc.slug }}
-                        className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700"
+                        className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-brand-muted"
                       >
                         Besök kiosk
                       </Link>
@@ -459,15 +459,15 @@ export function AdminOrgDashboardEmpty({ email }: { email: string }) {
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-10">
         <header className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             Föreningens kiosker
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Inloggad som <span className="font-medium">{email}</span>
           </p>
         </header>
         <div className="relaxed-surface rounded-3xl border-dashed p-10 text-center">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Du har ingen förening kopplad till ditt konto ännu.
           </p>
           <Link

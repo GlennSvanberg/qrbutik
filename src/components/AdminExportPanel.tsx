@@ -54,15 +54,15 @@ export function AdminExportPanel({
       className={`relaxed-surface flex flex-col gap-3 ${compact ? 'p-4' : 'p-5'}`}
     >
       <div>
-        <h2 className="text-base font-semibold text-slate-900">
+        <h2 className="text-base font-semibold text-brand-foreground">
           Exportera till bokföring
         </h2>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-brand-muted">
           Excel för översikt och SIE4 för Fortnox/Visma. SIE inkluderar alltid
           endast verifierade köp.
         </p>
       </div>
-      <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-brand-muted">
         <input
           type="checkbox"
           checked={includePending}
@@ -85,7 +85,7 @@ export function AdminExportPanel({
           type="button"
           onClick={() => void handleExport('sie')}
           disabled={isExporting !== null}
-          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isExporting === 'sie' ? 'Exporterar…' : 'Exportera SIE'}
         </button>

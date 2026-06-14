@@ -38,18 +38,18 @@ function DiscoverPage() {
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(26,115,232,0.04),_transparent_60%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-stone-50" />
+        <div className="pointer-events-none absolute inset-0 hero-glow" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-surface-muted" />
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-14 sm:pb-20 sm:pt-20">
           <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="flex flex-col gap-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
                 Lösningar per sport
               </p>
-              <h1 className="text-pretty text-4xl font-semibold text-slate-900 sm:text-5xl">
+              <h1 className="text-pretty text-4xl font-semibold text-brand-foreground sm:text-5xl">
                 {SITE_TAGLINE}
               </h1>
-              <p className="max-w-2xl text-pretty text-base text-slate-600 sm:text-lg">
+              <p className="max-w-2xl text-pretty text-base text-brand-muted sm:text-lg">
                 QRButik är ett kiosksystem för idrottsföreningar — Swish-betalning,
                 flera kiosker under samma klubblicens och export för kassör och
                 styrelse. Välj er sport nedan.
@@ -58,7 +58,7 @@ function DiscoverPage() {
                 primaryTracking="discover-trial"
                 secondaryTracking="discover-demo"
               />
-              <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-slate-500">
+              <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-brand-muted">
                 <span className="premium-pill">{sports.length} sporter</span>
                 <span className="premium-pill">Från 995 kr/mån</span>
                 <span className="premium-pill">14 dagars provperiod</span>
@@ -67,10 +67,10 @@ function DiscoverPage() {
 
             <div className="premium-panel p-6 sm:p-8">
               <div className="premium-shell flex flex-col gap-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-subtle">
                   För styrelse och kassör
                 </p>
-                <ul className="premium-divider-list text-sm text-slate-600">
+                <ul className="premium-divider-list text-sm text-brand-muted">
                   <li>Obegränsat antal kiosker under samma klubblicens</li>
                   <li>Swish till föreningens eget nummer — utan Business API</li>
                   <li>Central överblick och export till CSV/SIE</li>
@@ -85,10 +85,10 @@ function DiscoverPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 pb-16">
         <div className="premium-panel p-8 sm:p-10">
           <div className="premium-shell">
-            <h2 className="text-pretty text-2xl font-semibold text-slate-900">
+            <h2 className="text-pretty text-2xl font-semibold text-brand-foreground">
               Välj er sport
             </h2>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-brand-muted">
               Varje sida beskriver hur QRButik passar just er typ av förening
               och matchmiljö.
             </p>
@@ -98,15 +98,15 @@ function DiscoverPage() {
                 <Link
                   key={sport.slug}
                   to={getPseoSportHubSlug(sport.slug)}
-                  className="group flex cursor-pointer flex-col gap-2 rounded-xl border border-stone-200 bg-stone-50/90 px-4 py-4 transition hover:border-stone-300 hover:bg-stone-50"
+                  className="group flex cursor-pointer flex-col gap-2 rounded-xl border border-brand-border bg-surface-muted/90 px-4 py-4 transition hover:border-brand-border hover:bg-surface-muted"
                 >
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-sm font-semibold text-brand-foreground">
                     Föreningar inom {sport.name.toLowerCase()}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-muted">
                     {sport.matchContext} • {sport.crowdContext}
                   </p>
-                  <span className="text-xs font-semibold text-stone-700">
+                  <span className="text-xs font-semibold text-brand-muted">
                     Läs mer →
                   </span>
                 </Link>

@@ -39,7 +39,7 @@ export function AdminDashboardFilters({
             className={`inline-flex h-11 cursor-pointer items-center rounded-full px-4 text-sm font-semibold transition ${
               period === option.id
                 ? 'bg-brand text-white'
-                : 'bg-stone-100 text-slate-700 hover:bg-stone-200'
+                : 'bg-surface-muted text-brand-muted hover:bg-surface-muted'
             }`}
           >
             {option.label}
@@ -49,7 +49,7 @@ export function AdminDashboardFilters({
 
       {period === 'custom' ? (
         <div className="flex flex-wrap gap-3">
-          <label className="flex flex-col gap-1 text-sm text-slate-700">
+          <label className="flex flex-col gap-1 text-sm text-brand-muted">
             Från
             <input
               type="date"
@@ -58,7 +58,7 @@ export function AdminDashboardFilters({
               className="relaxed-input h-11 cursor-pointer px-3"
             />
           </label>
-          <label className="flex flex-col gap-1 text-sm text-slate-700">
+          <label className="flex flex-col gap-1 text-sm text-brand-muted">
             Till
             <input
               type="date"
@@ -71,7 +71,7 @@ export function AdminDashboardFilters({
       ) : null}
 
       {shopOptions.length > 1 ? (
-        <label className="flex max-w-md flex-col gap-2 text-sm text-slate-700">
+        <label className="flex max-w-md flex-col gap-2 text-sm text-brand-muted">
           Kiosk
           <select
             value={shopId}

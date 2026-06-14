@@ -32,10 +32,10 @@ function ThankYouView() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Betalningen hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Vi kunde inte hitta information om den här betalningen.
           </p>
           <Link
@@ -69,10 +69,10 @@ function ThankYouView() {
             </svg>
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-brand-foreground">
               Tack för ditt köp!
             </h1>
-            <p className="text-lg font-medium text-slate-600">
+            <p className="text-lg font-medium text-brand-muted">
               Visa denna skärm för personalen i {transaction.shopName}
             </p>
           </div>
@@ -80,39 +80,39 @@ function ThankYouView() {
 
         <section className="relaxed-surface flex flex-col gap-6 p-8">
           <div className="flex flex-col gap-4">
-            <div className="relaxed-surface-soft flex flex-col items-center justify-center gap-1 bg-stone-50/80 py-6 text-center">
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            <div className="relaxed-surface-soft flex flex-col items-center justify-center gap-1 bg-surface-muted/80 py-6 text-center">
+              <p className="text-xs font-bold uppercase tracking-widest text-subtle">
                 Referensnummer
               </p>
-              <p className="text-2xl font-black tracking-tight text-slate-900">
+              <p className="text-2xl font-black tracking-tight text-brand-foreground">
                 {transaction.reference}
               </p>
             </div>
 
             <div className="mt-4 flex flex-col gap-3">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-brand-muted">
                 Din beställning
               </h3>
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-brand-border">
                 {transaction.items.map((item, index) => (
                   <div key={index} className="flex justify-between py-3">
                     <div className="flex gap-3">
-                      <span className="font-bold text-stone-700">
+                      <span className="font-bold text-brand-muted">
                         {item.quantity}x
                       </span>
-                      <span className="font-medium text-slate-700">
+                      <span className="font-medium text-brand-muted">
                         {item.name}
                       </span>
                     </div>
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-brand-foreground">
                       {item.price * item.quantity} kr
                     </span>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between border-t border-slate-200 pt-4">
-                <span className="text-lg font-bold text-slate-900">Totalt</span>
-                <span className="text-xl font-black text-stone-700">
+              <div className="flex justify-between border-t border-brand-border pt-4">
+                <span className="text-lg font-bold text-brand-foreground">Totalt</span>
+                <span className="text-xl font-black text-brand-muted">
                   {transaction.amount} kr
                 </span>
               </div>
@@ -121,14 +121,14 @@ function ThankYouView() {
         </section>
 
         {isDemoShopName(transaction.shopName) ? (
-          <section className="relaxed-surface border-stone-200 bg-stone-50/70 p-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
+          <section className="relaxed-surface border-brand-border bg-surface-muted/70 p-6 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-muted">
               QRButik-demo
             </p>
-            <h2 className="mt-2 text-lg font-semibold text-slate-900">
+            <h2 className="mt-2 text-lg font-semibold text-brand-foreground">
               Digital kiosk för hela föreningen
             </h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-brand-muted">
               Det här flödet bygger på QRButik — kiosksystem för idrottsföreningar
               med Swish, export och flera kiosker under samma licens.
             </p>
@@ -143,12 +143,12 @@ function ThankYouView() {
         ) : null}
 
         <div className="flex flex-col gap-4 text-center">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-brand-muted">
             När personalen har verifierat betalningen får du dina varor.
           </p>
           <Link
             to="/"
-            className="text-sm font-semibold text-stone-700 hover:text-stone-800"
+            className="text-sm font-semibold text-brand-muted hover:text-brand-foreground"
             trackaton-on-click="thankyou-back-home"
           >
             ← Till startsidan

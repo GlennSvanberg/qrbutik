@@ -15,16 +15,16 @@ function ExportHelpPage() {
     <main className="relaxed-page-shell min-h-screen px-6 py-12">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
         <header>
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-subtle">
             Hjälp
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             Export till bokföring
           </h1>
         </header>
 
-        <section className="relaxed-surface p-6 text-sm text-slate-700">
-          <h2 className="text-base font-semibold text-slate-900">Excel</h2>
+        <section className="relaxed-surface p-6 text-sm text-brand-muted">
+          <h2 className="text-base font-semibold text-brand-foreground">Excel</h2>
           <p className="mt-2">
             Filen öppnas direkt i Excel med formaterad tabell, anpassade
             kolumnbredder och filter. Kolumner: datum, kiosk, belopp, referens,
@@ -34,8 +34,8 @@ function ExportHelpPage() {
           </p>
         </section>
 
-        <section className="relaxed-surface p-6 text-sm text-slate-700">
-          <h2 className="text-base font-semibold text-slate-900">SIE4</h2>
+        <section className="relaxed-surface p-6 text-sm text-brand-muted">
+          <h2 className="text-base font-semibold text-brand-foreground">SIE4</h2>
           <p className="mt-2">
             SIE-filen följer version 4 och kan importeras i Fortnox, Visma och
             liknande program. Varje verifierat köp blir en #TRANS-rad på
@@ -47,8 +47,8 @@ function ExportHelpPage() {
           </p>
         </section>
 
-        <section className="relaxed-surface p-6 text-sm text-slate-700">
-          <h2 className="text-base font-semibold text-slate-900">
+        <section className="relaxed-surface p-6 text-sm text-brand-muted">
+          <h2 className="text-base font-semibold text-brand-foreground">
             Exempel: helgens cup
           </h2>
           <p className="mt-2">

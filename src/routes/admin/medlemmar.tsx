@@ -47,7 +47,7 @@ function InviteAcceptPanel({
   if (invitation === undefined) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           Laddar inbjudan…
         </div>
       </main>
@@ -57,7 +57,7 @@ function InviteAcceptPanel({
   if (invitation === null) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           Inbjudan hittades inte eller har redan accepterats.
         </div>
       </main>
@@ -67,7 +67,7 @@ function InviteAcceptPanel({
   if (invitation.expired) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           Inbjudan har gått ut. Be föreningens administratör skicka en ny.
         </div>
       </main>
@@ -77,8 +77,8 @@ function InviteAcceptPanel({
   return (
     <main className="relaxed-page-shell min-h-screen px-6 py-10">
       <div className="relaxed-surface mx-auto flex max-w-2xl flex-col gap-4 p-8">
-        <h1 className="text-2xl font-semibold text-slate-900">Medlemsinbjudan</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-brand-foreground">Medlemsinbjudan</h1>
+        <p className="text-sm text-brand-muted">
           Du är inbjuden till {invitation.organizationName} som{' '}
           {roleLabel[invitation.role]}.
         </p>
@@ -132,7 +132,7 @@ function MedlemmarPage() {
   if (orgList.length === 0) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           Skapa en förening först.
         </div>
       </main>
@@ -235,7 +235,7 @@ function MedlemmarContent({
   if (!canManage) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-sm text-brand-muted">
           Endast kassör eller ägare kan hantera medlemmar.
         </div>
       </main>
@@ -246,14 +246,14 @@ function MedlemmarContent({
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 py-10">
         <header>
-          <h1 className="text-3xl font-semibold text-slate-900">Medlemmar</h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <h1 className="text-3xl font-semibold text-brand-foreground">Medlemmar</h1>
+          <p className="mt-2 text-sm text-brand-muted">
             Bjud in lagledare och kassörer till {activeOrg.name}.
           </p>
         </header>
 
         {organizations.length > 1 ? (
-          <label className="flex max-w-md flex-col gap-2 text-sm text-slate-700">
+          <label className="flex max-w-md flex-col gap-2 text-sm text-brand-muted">
             Förening
             <select
               value={organizationId}
@@ -273,7 +273,7 @@ function MedlemmarContent({
 
         {inviteFromUrl ? (
           <div className="relaxed-surface p-4">
-            <p className="text-sm text-slate-700">
+            <p className="text-sm text-brand-muted">
               Du har en väntande inbjudan. Acceptera den för att gå med i
               föreningen.
             </p>
@@ -300,7 +300,7 @@ function MedlemmarContent({
         ) : null}
 
         <section className="relaxed-surface flex flex-col gap-4 p-6">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-brand-foreground">
             Bjud in medlem
           </h2>
           <form
@@ -329,7 +329,7 @@ function MedlemmarContent({
               }
             }}
           >
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
+            <label className="flex flex-col gap-2 text-sm text-brand-muted">
               E-post
               <input
                 id="invite-email"
@@ -340,7 +340,7 @@ function MedlemmarContent({
                 className="relaxed-input h-11 px-3"
               />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-slate-700">
+            <label className="flex flex-col gap-2 text-sm text-brand-muted">
               Roll
               <select
                 id="invite-role"
@@ -355,7 +355,7 @@ function MedlemmarContent({
               </select>
             </label>
             {inviteRole === 'editor' && shops ? (
-              <fieldset className="flex flex-col gap-2 text-sm text-slate-700">
+              <fieldset className="flex flex-col gap-2 text-sm text-brand-muted">
                 <legend>Tilldelade kiosker</legend>
                 {shops.map((shop) => (
                   <label key={shop._id} className="flex items-center gap-2">
@@ -386,8 +386,8 @@ function MedlemmarContent({
         </section>
 
         <section className="relaxed-surface p-6">
-          <h2 className="text-base font-semibold text-slate-900">Medlemmar</h2>
-          <ul className="mt-4 divide-y divide-slate-200/70">
+          <h2 className="text-base font-semibold text-brand-foreground">Medlemmar</h2>
+          <ul className="mt-4 divide-y divide-brand-border/70">
             {(members ?? []).map((member) => {
               const assignedLabel = formatShopNames(
                 member.assignedShopIds,
@@ -399,10 +399,10 @@ function MedlemmarContent({
                 <li key={member._id} className="flex flex-col gap-3 py-4 text-sm">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-slate-900">{member.email}</p>
-                      <p className="text-slate-500">{roleLabel[member.role]}</p>
+                      <p className="font-medium text-brand-foreground">{member.email}</p>
+                      <p className="text-brand-muted">{roleLabel[member.role]}</p>
                       {member.role === 'editor' && assignedLabel ? (
-                        <p className="mt-1 text-slate-500">
+                        <p className="mt-1 text-brand-muted">
                           Kiosker: {assignedLabel}
                         </p>
                       ) : null}
@@ -418,7 +418,7 @@ function MedlemmarContent({
                             )
                             setEditAssignedShopIds(member.assignedShopIds ?? [])
                           }}
-                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
+                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-brand-muted"
                         >
                           {isEditing ? 'Avbryt' : 'Redigera'}
                         </button>
@@ -443,7 +443,7 @@ function MedlemmarContent({
                               )
                             }
                           }}
-                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
+                          className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-brand-muted"
                         >
                           Ta bort
                         </button>
@@ -453,7 +453,7 @@ function MedlemmarContent({
 
                   {isEditing && member.role !== 'owner' ? (
                     <form
-                      className="relaxed-surface-soft flex flex-col gap-3 rounded-2xl bg-stone-50/70 p-4"
+                      className="relaxed-surface-soft flex flex-col gap-3 rounded-2xl bg-surface-muted/70 p-4"
                       onSubmit={async (event) => {
                         event.preventDefault()
                         setError(null)
@@ -483,7 +483,7 @@ function MedlemmarContent({
                         }
                       }}
                     >
-                      <label className="flex flex-col gap-2 text-sm text-slate-700">
+                      <label className="flex flex-col gap-2 text-sm text-brand-muted">
                         Roll
                         <select
                           value={editRole}
@@ -499,7 +499,7 @@ function MedlemmarContent({
                         </select>
                       </label>
                       {editRole === 'editor' && shops ? (
-                        <fieldset className="flex flex-col gap-2 text-sm text-slate-700">
+                        <fieldset className="flex flex-col gap-2 text-sm text-brand-muted">
                           <legend>Tilldelade kiosker</legend>
                           {shops.map((shop) => (
                             <label
@@ -539,10 +539,10 @@ function MedlemmarContent({
 
         {(invitations ?? []).length > 0 ? (
           <section className="relaxed-surface p-6">
-            <h2 className="text-base font-semibold text-slate-900">
+            <h2 className="text-base font-semibold text-brand-foreground">
               Väntande inbjudningar
             </h2>
-            <ul className="mt-4 divide-y divide-slate-200/70">
+            <ul className="mt-4 divide-y divide-brand-border/70">
               {invitations?.map((invitation) => {
                 const assignedLabel = formatShopNames(
                   invitation.assignedShopIds,
@@ -554,15 +554,15 @@ function MedlemmarContent({
                   className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
                 >
                   <div>
-                    <p className="font-medium text-slate-900">
+                    <p className="font-medium text-brand-foreground">
                       {invitation.email}
                     </p>
-                    <p className="text-slate-500">
+                    <p className="text-brand-muted">
                       {roleLabel[invitation.role]} · gäller till{' '}
                       {new Date(invitation.expiresAt).toLocaleDateString('sv-SE')}
                     </p>
                     {invitation.role === 'editor' && assignedLabel ? (
-                      <p className="mt-1 text-slate-500">
+                      <p className="mt-1 text-brand-muted">
                         Kiosker: {assignedLabel}
                       </p>
                     ) : null}
@@ -575,7 +575,7 @@ function MedlemmarContent({
                         invitationId: invitation._id,
                       })
                     }}
-                    className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-slate-700"
+                    className="relaxed-secondary-button h-10 cursor-pointer px-4 text-sm font-semibold text-brand-muted"
                   >
                     Återkalla
                   </button>

@@ -114,3 +114,49 @@ Other prerequisites in [`TESTING.md`](./TESTING.md):
 - `convex/test/fixtures.ts`, `matrices.ts`, `modules.ts`
 - `e2e/global-setup.ts`
 - `e2e/helpers/org.ts`, `invite.ts`, `convex.ts`, `kiosk.ts`, `export.ts`, `purchase.ts`, `members.ts`, `findings.ts`, `env.ts`
+
+- **2026-06-14T09:32:11.493Z** — `e2e/export.spec.ts` — trial org can sell, verify, and export Excel/SIE
+| e2e/export.spec.ts | trial org can sell, verify, and export Excel/SIE | Test passes | Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByText('Betalning verifierad.')
+Expected: visible
+Timeout: 15000ms
+Error: element(s) not found
+
+C | medium | e2e |
+
+- **2026-06-14T09:32:44.152Z** — `e2e/export.spec.ts` — trial org can sell, verify, and export Excel/SIE
+| e2e/export.spec.ts | trial org can sell, verify, and export Excel/SIE | Test passes | Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByText('Betalning verifierad.')
+Expected: visible
+Timeout: 15000ms
+Error: element(s) not found
+
+C | medium | e2e |
+
+- **2026-06-14T09:37:17.767Z** — `e2e/members.spec.ts` — owner invites editor and editor accepts via dev invite token
+| e2e/members.spec.ts | owner invites editor and editor accepts via dev invite token | Test passes | Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByRole('heading', { name: /Centralt dashboard\|Dina kiosker\|Föreningens kiosker/ })
+Expected: visi | medium | e2e |
+
+- **2026-06-14T09:39:07.262Z** — `e2e/roadmap-5-4.spec.ts` — trial org → skapa-kiosk → customer purchase → verify → export download
+| e2e/roadmap-5-4.spec.ts | trial org → skapa-kiosk → customer purchase → verify → export download | Test passes | Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByText('Betalning verifierad.')
+Expected: visible
+Timeout: 15000ms
+Error: element(s) not found
+
+C | medium | e2e |
+
+- **2026-06-14T09:39:38.609Z** — `e2e/roadmap-5-4.spec.ts` — trial org → skapa-kiosk → customer purchase → verify → export download
+| e2e/roadmap-5-4.spec.ts | trial org → skapa-kiosk → customer purchase → verify → export download | Test passes | Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByText('Betalning verifierad.')
+Expected: visible
+Timeout: 15000ms
+Error: element(s) not found
+
+C | medium | e2e |

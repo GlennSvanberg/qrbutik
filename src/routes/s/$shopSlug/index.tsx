@@ -41,10 +41,10 @@ function ShopView() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Kiosken hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Kontrollera länken eller kontakta föreningen.
           </p>
           <Link
@@ -62,13 +62,13 @@ function ShopView() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-xs uppercase tracking-[0.2em] text-subtle">
             QRButik.se
           </p>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Kiosken är tillfälligt stängd
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             {shopData.organization.name} har ingen aktiv klubblicens just nu.
           </p>
         </div>
@@ -260,24 +260,24 @@ function ActiveShopView({
     <main className="relaxed-page-shell min-h-screen bg-transparent pb-32">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8">
         <header className="flex flex-col gap-2 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-subtle">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-bold text-slate-900">{shopName}</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-3xl font-bold text-brand-foreground">{shopName}</h1>
+          <p className="text-sm text-brand-muted">
             Valj varor nedan och betala smidigt med Swish.
           </p>
         </header>
 
         {isDemoShopSlug(shopSlug) ? (
-          <section className="relaxed-surface border-stone-200 bg-stone-50/70 px-6 py-5 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-600">
+          <section className="relaxed-surface border-brand-border bg-surface-muted/70 px-6 py-5 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-muted">
               Demo av QRButik
             </p>
-            <h2 className="mt-2 text-lg font-semibold text-slate-900">
+            <h2 className="mt-2 text-lg font-semibold text-brand-foreground">
               Digital kiosk för hela föreningen
             </h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-brand-muted">
               Det här är en riktig QRButik-checkout. Starta provperiod för er
               förening eller boka demo.
             </p>
@@ -292,7 +292,7 @@ function ActiveShopView({
         ) : null}
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-lg font-semibold text-slate-800 px-2">
+          <h2 className="text-lg font-semibold text-brand-foreground px-2">
             Produkter
           </h2>
           <div className="flex flex-col gap-3">
@@ -301,13 +301,13 @@ function ActiveShopView({
               return (
                 <div
                   key={product._id}
-                  className="relaxed-surface-soft flex items-center justify-between p-5 transition-all hover:border-stone-200"
+                  className="relaxed-surface-soft flex items-center justify-between p-5 transition-all hover:border-brand-border"
                 >
                   <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-brand-foreground">
                       {product.name}
                     </h3>
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-brand-muted">
                       {product.price} kr
                     </p>
                   </div>
@@ -316,7 +316,7 @@ function ActiveShopView({
                       <>
                         <button
                           onClick={() => removeFromCart(product._id)}
-                          className="relaxed-secondary-button flex h-12 w-12 items-center justify-center rounded-full text-slate-600 active:scale-95"
+                          className="relaxed-secondary-button flex h-12 w-12 items-center justify-center rounded-full text-brand-muted active:scale-95"
                           trackaton-on-click="shop-remove-from-cart"
                         >
                           <svg
@@ -332,7 +332,7 @@ function ActiveShopView({
                             <line x1="5" y1="12" x2="19" y2="12" />
                           </svg>
                         </button>
-                        <span className="w-4 text-center font-bold text-slate-900">
+                        <span className="w-4 text-center font-bold text-brand-foreground">
                           {quantity}
                         </span>
                       </>
@@ -362,7 +362,7 @@ function ActiveShopView({
             })}
 
             {products.length === 0 && (
-              <div className="relaxed-surface rounded-3xl border-dashed p-12 text-center text-slate-400">
+              <div className="relaxed-surface rounded-3xl border-dashed p-12 text-center text-subtle">
                 Inga produkter tillgangliga just nu.
               </div>
             )}
@@ -371,20 +371,20 @@ function ActiveShopView({
       </div>
 
       {totalPrice > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-stone-200/80 bg-stone-50/80 p-4 backdrop-blur-xl">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand-border/80 bg-surface-muted/80 p-4 backdrop-blur-xl">
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             <div className="flex items-center justify-between px-2">
-              <span className="text-slate-500 font-medium">
+              <span className="text-brand-muted font-medium">
                 Totalt att betala:
               </span>
-              <span className="text-2xl font-bold text-slate-900">
+              <span className="text-2xl font-bold text-brand-foreground">
                 {totalPrice} kr
               </span>
             </div>
             <button
               onClick={handlePay}
               disabled={isSubmitting}
-              className="relaxed-primary-button flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-lg font-bold text-white shadow-lg shadow-stone-300/40 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+              className="relaxed-primary-button flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-lg font-bold text-white shadow-lg shadow-[var(--color-shadow)] active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
               trackaton-on-click="shop-pay-swish"
             >
               {isSubmitting ? (

@@ -22,16 +22,16 @@ type SuperAdminKioskTableProps = {
 export function SuperAdminKioskTable({ shops }: SuperAdminKioskTableProps) {
   return (
     <section className="relaxed-surface overflow-hidden">
-      <div className="border-b border-slate-100 px-5 py-4">
-        <h2 className="text-lg font-semibold text-slate-900">Kiosker</h2>
-        <p className="text-sm text-slate-600">
+      <div className="border-b border-brand-border px-5 py-4">
+        <h2 className="text-lg font-semibold text-brand-foreground">Kiosker</h2>
+        <p className="text-sm text-brand-muted">
           Alla kiosker på plattformen med licensstatus och aktivitet senaste 7 dagar.
         </p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+          <thead className="bg-surface-muted text-xs uppercase tracking-wide text-brand-muted">
             <tr>
               <th className="px-5 py-3 font-semibold">Förening</th>
               <th className="px-5 py-3 font-semibold">Kiosk</th>
@@ -43,19 +43,19 @@ export function SuperAdminKioskTable({ shops }: SuperAdminKioskTableProps) {
               <th className="px-5 py-3 font-semibold">Senaste försäljning</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-brand-border">
             {shops.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-5 py-8 text-center text-slate-600">
+                <td colSpan={8} className="px-5 py-8 text-center text-brand-muted">
                   Inga kiosker skapade ännu.
                 </td>
               </tr>
             ) : (
               shops.map((shop) => (
                 <tr key={shop.shopId}>
-                  <td className="px-5 py-4 text-slate-700">{shop.organizationName}</td>
-                  <td className="px-5 py-4 font-medium text-slate-900">{shop.shopName}</td>
-                  <td className="px-5 py-4 text-slate-700">{shop.teamLabel ?? '—'}</td>
+                  <td className="px-5 py-4 text-brand-muted">{shop.organizationName}</td>
+                  <td className="px-5 py-4 font-medium text-brand-foreground">{shop.shopName}</td>
+                  <td className="px-5 py-4 text-brand-muted">{shop.teamLabel ?? '—'}</td>
                   <td className="px-5 py-4">
                     <Link
                       to="/s/$shopSlug"
@@ -65,22 +65,22 @@ export function SuperAdminKioskTable({ shops }: SuperAdminKioskTableProps) {
                       {shop.slug}
                     </Link>
                   </td>
-                  <td className="px-5 py-4 text-slate-700">{shop.swishNumber}</td>
+                  <td className="px-5 py-4 text-brand-muted">{shop.swishNumber}</td>
                   <td className="px-5 py-4">
                     <span
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset ${
                         shop.licenseActive
                           ? 'bg-green-50 text-green-700 ring-green-200'
-                          : 'bg-slate-100 text-slate-600 ring-slate-200'
+                          : 'bg-surface-muted text-brand-muted ring-brand-border'
                       }`}
                     >
                       {shop.licenseActive ? 'Aktiv' : 'Inaktiv'}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-slate-700">
+                  <td className="px-5 py-4 text-brand-muted">
                     {shop.verifiedTransactionCount7d}
                   </td>
-                  <td className="px-5 py-4 text-slate-700">
+                  <td className="px-5 py-4 text-brand-muted">
                     {shop.lastVerifiedSaleAt !== null
                       ? formatDateTime(shop.lastVerifiedSaleAt)
                       : '—'}

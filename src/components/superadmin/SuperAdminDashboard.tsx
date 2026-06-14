@@ -57,7 +57,7 @@ export function SuperAdminDashboard() {
     return (
       <main className="relaxed-page-shell flex-1 px-6 py-10">
         <div className="relaxed-surface mx-auto max-w-7xl p-8 text-center">
-          <p className="text-sm text-slate-600">Laddar plattformsdata...</p>
+          <p className="text-sm text-brand-muted">Laddar plattformsdata...</p>
         </div>
       </main>
     )

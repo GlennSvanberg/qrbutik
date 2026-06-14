@@ -91,7 +91,7 @@ export function SuperAdminActions({
             type="button"
             disabled={isExtending}
             onClick={() => void handleExtendTrial(7)}
-            className="cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-1.5 text-xs font-semibold text-brand-muted hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
           >
             +7d trial
           </button>
@@ -99,7 +99,7 @@ export function SuperAdminActions({
             type="button"
             disabled={isExtending}
             onClick={() => void handleExtendTrial(14)}
-            className="cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-1.5 text-xs font-semibold text-brand-muted hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
           >
             +14d trial
           </button>
@@ -109,14 +109,14 @@ export function SuperAdminActions({
       <button
         type="button"
         onClick={() => setShowStatusDialog((open) => !open)}
-        className="cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+        className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-1.5 text-xs font-semibold text-brand-muted hover:bg-surface-muted"
       >
         Ändra status
       </button>
 
       {showStatusDialog ? (
-        <div className="mt-1 flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
-          <label className="text-xs font-semibold text-slate-600" htmlFor={`status-${organizationId}`}>
+        <div className="mt-1 flex flex-col gap-2 rounded-xl border border-brand-border bg-surface-muted p-3">
+          <label className="text-xs font-semibold text-brand-muted" htmlFor={`status-${organizationId}`}>
             Ny status
           </label>
           <select
@@ -125,7 +125,7 @@ export function SuperAdminActions({
             onChange={(event) =>
               setNextStatus(event.target.value as SubscriptionStatusOption)
             }
-            className="cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900"
+            className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-2 text-sm text-brand-foreground"
           >
             {SUBSCRIPTION_STATUS_OPTIONS.map((status) => (
               <option key={status} value={status}>

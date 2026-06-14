@@ -52,10 +52,10 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
       `}</style>
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 print:hidden">
         <header className="flex flex-col gap-2 text-center">
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-brand-foreground">
             Skylt för {shop.name}
           </h2>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Skriv ut skylten och låt kunderna skanna QR-koden.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -70,7 +70,7 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
             <Link
               to="/s/$shopSlug/qr"
               params={{ shopSlug: shop.slug }}
-              className="relaxed-secondary-button cursor-pointer px-4 py-2 text-sm font-semibold text-slate-700"
+              className="relaxed-secondary-button cursor-pointer px-4 py-2 text-sm font-semibold text-brand-muted"
               trackaton-on-click="admin-public-qr-page"
             >
               Publik QR-sida
@@ -83,19 +83,19 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
             <img
               src={logoUrl}
               alt="Föreningslogotyp"
-              className="h-20 w-20 rounded-2xl border border-stone-200 object-contain p-2"
+              className="h-20 w-20 rounded-2xl border border-brand-border object-contain p-2"
             />
           ) : null}
           <div className="relaxed-surface p-6">
             <QRCodeSVG value={qrValue} size={220} level="M" />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-lg font-semibold text-brand-foreground">
               Skanna för att handla i {shop.name}
             </p>
-            <p className="text-sm text-slate-500">{displayUrl}</p>
+            <p className="text-sm text-brand-muted">{displayUrl}</p>
           </div>
-          <div className="relaxed-surface-soft flex flex-col gap-2 px-6 py-4 text-sm text-slate-600">
+          <div className="relaxed-surface-soft flex flex-col gap-2 px-6 py-4 text-sm text-brand-muted">
             <p>1. Skanna QR-koden med mobilkamera.</p>
             <p>2. Lägg varor i varukorgen.</p>
             <p>3. Betala direkt med Swish.</p>
@@ -105,7 +105,7 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
 
       <section className="hidden min-h-[297mm] w-[210mm] flex-col items-center justify-between gap-12 px-[22mm] py-[24mm] text-center print:flex">
         <div className="flex flex-col items-center gap-4">
-          <span className="text-[13px] font-semibold uppercase tracking-[0.5em] text-slate-400">
+          <span className="text-[13px] font-semibold uppercase tracking-[0.5em] text-subtle">
             qrbutik.se
           </span>
           {logoUrl ? (
@@ -115,15 +115,15 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
               className="h-28 w-28 object-contain"
             />
           ) : null}
-          <h1 className="text-5xl font-semibold text-slate-900">{shop.name}</h1>
-          <p className="text-lg font-semibold text-slate-600">{displayUrl}</p>
+          <h1 className="text-5xl font-semibold text-brand-foreground">{shop.name}</h1>
+          <p className="text-lg font-semibold text-brand-muted">{displayUrl}</p>
         </div>
 
         <div className="flex flex-col items-center gap-8">
-          <div className="rounded-[44px] border border-stone-200 bg-stone-50 p-10">
+          <div className="rounded-[44px] border border-brand-border bg-surface-muted p-10">
             <QRCodeSVG value={qrValue} size={420} level="M" />
           </div>
-          <div className="h-px w-40 bg-slate-200" />
+          <div className="h-px w-40 bg-brand-border" />
         </div>
       </section>
     </>

@@ -24,7 +24,7 @@ export function AdminShopNav({ shopId, organizationId }: AdminShopNavProps) {
   return (
     <nav
       aria-label="Kioskmeny"
-      className="-mx-6 border-b border-stone-200/80 px-6"
+      className="-mx-6 border-b border-brand-border/80 px-6"
     >
       <div className="flex overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {tabs.map((tab) => {
@@ -37,7 +37,7 @@ export function AdminShopNav({ shopId, organizationId }: AdminShopNavProps) {
               className={`inline-flex h-12 shrink-0 cursor-pointer items-center border-b-2 px-4 text-sm font-semibold whitespace-nowrap transition ${
                 isActive
                   ? 'border-brand text-brand'
-                  : 'border-transparent text-slate-600 hover:border-stone-300 hover:text-slate-900'
+                  : 'border-transparent text-brand-muted hover:border-brand-border hover:text-brand-foreground'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >

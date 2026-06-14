@@ -123,7 +123,7 @@ function Home() {
     <main className="relaxed-page-shell min-h-screen bg-transparent">
       <MarketingHeader loginTracking="home-header-login" />
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(26,115,232,0.04),_transparent_60%)]" />
+        <div className="pointer-events-none absolute inset-0 hero-glow" />
         <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-6 sm:pb-20 sm:pt-8">
           <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="flex flex-col gap-7">
@@ -158,7 +158,7 @@ function Home() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="overflow-hidden rounded-lg border border-brand-border-accent bg-white ring-1 ring-brand/20">
+                  <div className="overflow-hidden rounded-lg border border-brand-border-accent bg-surface ring-1 ring-brand/20">
                     <img
                       src="/after.jpg"
                       alt="Digital kiosk med meny"
@@ -181,7 +181,7 @@ function Home() {
                       </Link>
                     </div>
                   </div>
-                  <div className="overflow-hidden rounded-lg border border-brand-border bg-[#F8FAFC]">
+                  <div className="overflow-hidden rounded-lg border border-brand-border bg-surface-muted">
                     <img
                       src="/admin-demo-dashboard.svg"
                       alt="Exempel på adminpanel med försäljningsöversikt"
@@ -229,7 +229,7 @@ function Home() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
-            <div className="rounded-xl border border-brand-border bg-[#F8FAFC] p-6 sm:p-8">
+            <div className="rounded-xl border border-brand-border bg-surface-muted p-6 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
                 Utan digital kiosk
               </p>
@@ -238,7 +238,7 @@ function Home() {
                   <li key={row.problem} className="flex items-start gap-3 text-brand-muted">
                     <span
                       aria-hidden
-                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-border bg-white"
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-border bg-surface"
                     >
                       <span className="h-0.5 w-3 rounded-full bg-brand-muted/70" />
                     </span>
@@ -248,7 +248,7 @@ function Home() {
               </ul>
             </div>
 
-            <div className="rounded-xl border border-brand-border-accent bg-white p-6 shadow-sm ring-1 ring-brand/15 sm:p-8">
+            <div className="rounded-xl border border-brand-border-accent bg-surface p-6 shadow-sm ring-1 ring-brand/15 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand">
                 Med QRButik
               </p>
@@ -317,7 +317,7 @@ function Home() {
                 {pricingPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className="rounded-lg border border-brand-border bg-white p-5 shadow-sm"
+                    className="rounded-lg border border-brand-border bg-surface p-5 shadow-sm"
                   >
                     <div className="flex items-end justify-between gap-4">
                       <div>

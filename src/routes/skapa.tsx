@@ -61,32 +61,32 @@ function CreateOrganizationContent() {
     <main className="relaxed-page-shell min-h-screen px-6 py-12">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-xs uppercase tracking-[0.2em] text-subtle">
             QRButik.se
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900">
+          <h1 className="text-3xl font-semibold text-brand-foreground">
             Skapa förening
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-brand-muted">
             För idrottsföreningar och cuper — inte privat loppis.
           </p>
         </header>
 
         <section className="relaxed-surface flex flex-col gap-4 p-8">
-          <div className="rounded-xl border border-brand-border bg-brand-surface/50 p-4 text-sm text-slate-700">
-            <p className="font-semibold text-slate-900">Klubblicens — från 995 kr/mån</p>
-            <p className="mt-1 text-slate-600">
+          <div className="rounded-xl border border-brand-border bg-brand-surface/50 p-4 text-sm text-brand-muted">
+            <p className="font-semibold text-brand-foreground">Klubblicens — från 995 kr/mån</p>
+            <p className="mt-1 text-brand-muted">
               14 dagars gratis provperiod. Ingen betalning nu — du lägger till
               kiosker i admin när föreningen är skapad.
             </p>
           </div>
 
-          <h2 className="text-lg font-semibold text-slate-900">Föreningsuppgifter</h2>
-          <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+          <h2 className="text-lg font-semibold text-brand-foreground">Föreningsuppgifter</h2>
+          <label className="flex flex-col gap-2 text-sm font-medium text-brand-muted">
             Föreningsnamn
             <input
               required
-              className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
+              className="relaxed-input h-12 px-4 text-base text-brand-foreground outline-none"
               value={orgForm.organizationName}
               onChange={(event) =>
                 setOrgForm((prev) => ({
@@ -96,10 +96,10 @@ function CreateOrganizationContent() {
               }
             />
           </label>
-          <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+          <label className="flex flex-col gap-2 text-sm font-medium text-brand-muted">
             Organisationsnummer (valfritt)
             <input
-              className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
+              className="relaxed-input h-12 px-4 text-base text-brand-foreground outline-none"
               value={orgForm.orgNumber}
               onChange={(event) =>
                 setOrgForm((prev) => ({
@@ -109,12 +109,12 @@ function CreateOrganizationContent() {
               }
             />
           </label>
-          <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
+          <label className="flex flex-col gap-2 text-sm font-medium text-brand-muted">
             Faktura-e-post
             <input
               required
               type="email"
-              className="relaxed-input h-12 px-4 text-base text-slate-900 outline-none"
+              className="relaxed-input h-12 px-4 text-base text-brand-foreground outline-none"
               value={orgForm.billingEmail}
               onChange={(event) =>
                 setOrgForm((prev) => ({
@@ -124,7 +124,7 @@ function CreateOrganizationContent() {
               }
             />
           </label>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-brand-muted">
             QRButik riktar sig till föreningar och cuparrangörer. Privatpersoner
             som säljer på loppis passar bättre med andra lösningar.
           </p>

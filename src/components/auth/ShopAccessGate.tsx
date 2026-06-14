@@ -20,7 +20,7 @@ export function ShopAccessGate({ shopId, children }: ShopAccessGateProps) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Laddar adminpanelen...
           </h1>
         </div>
@@ -32,10 +32,10 @@ export function ShopAccessGate({ shopId, children }: ShopAccessGateProps) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Du har inte behörighet
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Den här kiosken tillhör en förening du inte har åtkomst till.
           </p>
           <Link
@@ -62,7 +62,7 @@ export function SignOutButton() {
         await authClient.signOut()
         void navigate({ to: '/logga-in' })
       }}
-      className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-slate-700"
+      className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-brand-muted"
     >
       Logga ut
     </button>

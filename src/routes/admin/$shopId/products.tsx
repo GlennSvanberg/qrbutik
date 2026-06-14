@@ -142,7 +142,7 @@ function ProductsPage() {
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       {statusMessage ? (
-        <p className="text-sm text-slate-600">{statusMessage}</p>
+        <p className="text-sm text-brand-muted">{statusMessage}</p>
       ) : null}
     </div>
   )

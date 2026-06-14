@@ -33,7 +33,7 @@ function PurchaseHistoryPage() {
   if (organizations !== undefined && orgRole && !isTreasurerRole(orgRole)) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           <p>Endast kassör eller ägare kan se köphistorik.</p>
           <Link
             to="/admin/$shopId"
@@ -117,26 +117,26 @@ function PurchaseHistoryContent({
       <section className="flex flex-col gap-4">
           <div className="relaxed-divider flex flex-wrap items-center justify-between gap-2 border-b pb-3">
             <div>
-              <h2 className="text-base font-semibold text-slate-900">
+              <h2 className="text-base font-semibold text-brand-foreground">
                 Alla köp
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-brand-muted">
                 Full historik med möjlighet att verifiera betalningar.
               </p>
             </div>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-brand-muted">
               {pendingTransactions.length} väntar på verifiering
             </span>
           </div>
 
-          <div className="relaxed-surface divide-y divide-slate-200/70">
-            <div className="grid grid-cols-[auto_1fr_auto] gap-4 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          <div className="relaxed-surface divide-y divide-brand-border/70">
+            <div className="grid grid-cols-[auto_1fr_auto] gap-4 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-subtle">
               <span>Verifiera</span>
               <span>Datum &amp; referens</span>
               <span className="text-right">Summa</span>
             </div>
             {formattedTransactions.length === 0 ? (
-              <div className="p-6 text-center text-sm text-slate-500">
+              <div className="p-6 text-center text-sm text-brand-muted">
                 Inga köp registrerade ännu.
               </div>
             ) : (
@@ -163,7 +163,7 @@ function PurchaseHistoryContent({
                       className="grid w-full cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-4 text-left"
                       trackaton-on-click="admin-toggle-transaction"
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-slate-300">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-brand-border">
                         <input
                           type="checkbox"
                           checked={transaction.status === 'verified'}
@@ -185,12 +185,12 @@ function PurchaseHistoryContent({
                               }
                             }
                           }}
-                          className="h-4 w-4 cursor-pointer accent-stone-700"
+                          className="h-4 w-4 cursor-pointer accent-brand-muted"
                           trackaton-on-click="admin-verify-transaction"
                         />
                       </span>
                       <span>
-                        <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                        <span className="flex items-center gap-2 text-sm font-semibold text-brand-foreground">
                           {transaction.formattedDate} ·{' '}
                           {transaction.formattedTime}
                           {transaction.status === 'pending' ? (
@@ -205,13 +205,13 @@ function PurchaseHistoryContent({
                         </span>
                       </span>
 
-                      <span className="text-right text-lg font-semibold text-slate-900">
+                      <span className="text-right text-lg font-semibold text-brand-foreground">
                         {transaction.amount} kr
                       </span>
                     </div>
                     {isExpanded ? (
-                      <div className="relaxed-surface-soft mt-3 bg-stone-50/70 px-4 py-3 text-xs text-slate-600">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                      <div className="relaxed-surface-soft mt-3 bg-surface-muted/70 px-4 py-3 text-xs text-brand-muted">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-subtle">
                           Varor
                         </p>
                         <div className="mt-2 flex flex-col gap-1">
@@ -243,7 +243,7 @@ function PurchaseHistoryContent({
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
         {statusMessage ? (
-          <p className="text-sm text-slate-600">{statusMessage}</p>
+          <p className="text-sm text-brand-muted">{statusMessage}</p>
         ) : null}
     </>
   )

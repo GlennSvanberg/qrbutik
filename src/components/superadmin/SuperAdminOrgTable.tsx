@@ -33,16 +33,16 @@ export function SuperAdminOrgTable({
 }: SuperAdminOrgTableProps) {
   return (
     <section className="relaxed-surface overflow-hidden">
-      <div className="border-b border-slate-100 px-5 py-4">
-        <h2 className="text-lg font-semibold text-slate-900">Föreningar</h2>
-        <p className="text-sm text-slate-600">
+      <div className="border-b border-brand-border px-5 py-4">
+        <h2 className="text-lg font-semibold text-brand-foreground">Föreningar</h2>
+        <p className="text-sm text-brand-muted">
           Alla kunder, licensstatus och plattformsåtgärder.
         </p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+          <thead className="bg-surface-muted text-xs uppercase tracking-wide text-brand-muted">
             <tr>
               <th className="px-5 py-3 font-semibold">Förening</th>
               <th className="px-5 py-3 font-semibold">Status</th>
@@ -54,10 +54,10 @@ export function SuperAdminOrgTable({
               <th className="px-5 py-3 font-semibold">Åtgärder</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-brand-border">
             {organizations.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-5 py-8 text-center text-slate-600">
+                <td colSpan={8} className="px-5 py-8 text-center text-brand-muted">
                   Inga föreningar registrerade ännu.
                 </td>
               </tr>
@@ -73,23 +73,23 @@ export function SuperAdminOrgTable({
                   }
                 >
                   <td className="px-5 py-4 align-top">
-                    <p className="font-semibold text-slate-900">{org.name}</p>
-                    <p className="text-xs text-slate-500">{org.billingEmail}</p>
+                    <p className="font-semibold text-brand-foreground">{org.name}</p>
+                    <p className="text-xs text-brand-muted">{org.billingEmail}</p>
                     {org.ownerEmail ? (
-                      <p className="text-xs text-slate-500">Owner: {org.ownerEmail}</p>
+                      <p className="text-xs text-brand-muted">Owner: {org.ownerEmail}</p>
                     ) : null}
                   </td>
                   <td className="px-5 py-4 align-top">
                     <StatusBadge status={org.subscriptionStatus} />
                   </td>
-                  <td className="px-5 py-4 align-top text-slate-700">
+                  <td className="px-5 py-4 align-top text-brand-muted">
                     {org.trialEndsAt !== null
                       ? formatDateTime(org.trialEndsAt)
                       : '—'}
                   </td>
-                  <td className="px-5 py-4 align-top text-slate-700">{org.shopCount}</td>
-                  <td className="px-5 py-4 align-top text-slate-700">{org.memberCount}</td>
-                  <td className="px-5 py-4 align-top text-slate-700">
+                  <td className="px-5 py-4 align-top text-brand-muted">{org.shopCount}</td>
+                  <td className="px-5 py-4 align-top text-brand-muted">{org.memberCount}</td>
+                  <td className="px-5 py-4 align-top text-brand-muted">
                     {org.lastVerifiedSaleAt !== null
                       ? formatDateTime(org.lastVerifiedSaleAt)
                       : '—'}
@@ -105,7 +105,7 @@ export function SuperAdminOrgTable({
                         Kund
                       </a>
                     ) : (
-                      <span className="text-slate-400">—</span>
+                      <span className="text-subtle">—</span>
                     )}
                   </td>
                   <td className="px-5 py-4 align-top">

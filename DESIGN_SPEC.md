@@ -6,14 +6,26 @@ The design should evoke **Trust, Speed, and Professionalism**. It should be clea
 **Product direction:** Club license SaaS — see [`ROADMAP.md`](./ROADMAP.md). Dashboard and export surfaces should feel credible for finance roles (tables, clear totals, export actions), not only mobile kiosk UI.
 
 ## Theming & Colors
-All theming should be maintained in `src/styles/app.css`.
+All theming should be maintained in `src/styles/app.css`. The app follows **browser system preference** (`prefers-color-scheme`) — no manual theme toggle.
 
+### Light mode (default)
 - **Background:** `#FFFFFF` — crisp white, no warm gradients.
 - **Primary (Buttons):** Electric Blue (`#1A73E8`, hover `#1656CB`) — primary CTAs, active states, key icons.
 - **Text:** Charcoal (`#1C2B39`) for headings and body; muted (`#5F6B7A`) for secondary copy.
 - **Success:** Green (`#34A853`) — checkmarks, verified payments, positive feedback.
 - **Borders:** Light gray (`#E2E8F0`); accent borders (`#BFDBFE`) for highlighted cards.
+
+### Dark mode (system preference)
+- **Background:** `#0F1419` page, `#1C2B39` elevated surfaces.
+- **Primary:** `#4A9EFF` (hover `#6BB0FF`) — brighter blue for dark backgrounds.
+- **Text:** `#F1F5F9` headings/body; muted `#94A3B8`.
+- **Borders:** `#2D3E50`; accent `#1E40AF`.
+
+### Print
+QR skylt A4 output always uses light tokens (`@media print`).
+
 - **Typography:** Inter (Sans-serif) — modern geometric sans with strong heading weights (700+).
+- Use semantic tokens (`brand-foreground`, `surface`, `surface-muted`, `subtle`) — never raw `slate-*` / `stone-*` in TSX.
 
 ## UX Principles
 - **Touch Targets:** Minimum 48px for all interactive elements (Mobile First).

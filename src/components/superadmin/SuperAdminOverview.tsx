@@ -63,10 +63,10 @@ function StatusBadge({ status }: { status: string }) {
 function KpiCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="relaxed-surface p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
         {label}
       </p>
-      <p className="mt-2 text-3xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-3xl font-semibold text-brand-foreground">{value}</p>
     </div>
   )
 }
@@ -84,11 +84,11 @@ function AlertList({
 }) {
   return (
     <div className="relaxed-surface p-5">
-      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      <h3 className="text-sm font-semibold text-brand-foreground">{title}</h3>
       {items.length === 0 ? (
-        <p className="mt-3 text-sm text-slate-600">{emptyText}</p>
+        <p className="mt-3 text-sm text-brand-muted">{emptyText}</p>
       ) : (
-        <ul className="mt-3 divide-y divide-slate-100">
+        <ul className="mt-3 divide-y divide-brand-border">
           {items.map((item) => (
             <li key={item.organizationId} className="flex items-center justify-between gap-3 py-3">
               <div>
@@ -101,10 +101,10 @@ function AlertList({
                     {item.name}
                   </button>
                 ) : (
-                  <p className="text-sm font-semibold text-slate-900">{item.name}</p>
+                  <p className="text-sm font-semibold text-brand-foreground">{item.name}</p>
                 )}
                 {item.trialEndsAt !== null ? (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-muted">
                     Trial till {formatDateTime(item.trialEndsAt)}
                   </p>
                 ) : null}
@@ -135,22 +135,22 @@ export function SuperAdminOverview({
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="relaxed-surface p-5">
-          <h3 className="text-sm font-semibold text-slate-900">Plattformsförsäljning (7 dagar)</h3>
-          <p className="mt-3 text-2xl font-semibold text-slate-900">
+          <h3 className="text-sm font-semibold text-brand-foreground">Plattformsförsäljning (7 dagar)</h3>
+          <p className="mt-3 text-2xl font-semibold text-brand-foreground">
             {formatCurrency(overview.platformTransactionStats.verifiedRevenue7d)}
           </p>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-brand-muted">
             {overview.platformTransactionStats.verifiedCount7d} verifierade köp ·{' '}
             {overview.totalMembers} medlemmar totalt
           </p>
         </div>
 
         <div className="relaxed-surface p-5">
-          <h3 className="text-sm font-semibold text-slate-900">Senaste registreringar</h3>
+          <h3 className="text-sm font-semibold text-brand-foreground">Senaste registreringar</h3>
           {overview.recentOrganizations.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-600">Inga föreningar ännu.</p>
+            <p className="mt-3 text-sm text-brand-muted">Inga föreningar ännu.</p>
           ) : (
-            <ul className="mt-3 divide-y divide-slate-100">
+            <ul className="mt-3 divide-y divide-brand-border">
               {overview.recentOrganizations.map((org) => (
                 <li
                   key={org.organizationId}
@@ -166,9 +166,9 @@ export function SuperAdminOverview({
                         {org.name}
                       </button>
                     ) : (
-                      <p className="text-sm font-semibold text-slate-900">{org.name}</p>
+                      <p className="text-sm font-semibold text-brand-foreground">{org.name}</p>
                     )}
-                    <p className="text-xs text-slate-500">{formatDate(org.createdAt)}</p>
+                    <p className="text-xs text-brand-muted">{formatDate(org.createdAt)}</p>
                   </div>
                   <StatusBadge status={org.subscriptionStatus} />
                 </li>

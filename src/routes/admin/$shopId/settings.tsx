@@ -34,7 +34,7 @@ function SettingsPage() {
   if (organizations !== undefined && orgRole && !isTreasurerRole(orgRole)) {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-10">
-        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-slate-600">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
           <p>Endast kassör eller ägare kan ändra kioskinställningar.</p>
           <Link
             to="/admin/$shopId"
@@ -95,7 +95,7 @@ function SettingsContent({
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
       <header className="flex flex-col gap-2 text-left">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             {organization.name} · {shop.name} ·{' '}
             <span className="font-medium">/s/{shop.slug}</span>
           </p>
@@ -103,7 +103,7 @@ function SettingsContent({
             <Link
               to="/s/$shopSlug"
               params={{ shopSlug: shop.slug }}
-              className="w-fit cursor-pointer text-sm font-semibold text-stone-700 hover:text-stone-600"
+              className="w-fit cursor-pointer text-sm font-semibold text-brand-muted hover:text-brand-muted"
             >
               Öppna kiosken
             </Link>
@@ -111,7 +111,7 @@ function SettingsContent({
         </header>
 
         <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
-          <h2 className="text-base font-semibold text-slate-900">Kioskinfo</h2>
+          <h2 className="text-base font-semibold text-brand-foreground">Kioskinfo</h2>
           <ButiksinfoForm
             values={shopState}
             onChange={(values) => setShopState(values)}
@@ -144,13 +144,13 @@ function SettingsContent({
         </section>
 
         <section className="relaxed-divider flex flex-col gap-4 border-t pt-6">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-brand-foreground">
             Föreningslicens
           </h2>
-          <div className="relaxed-surface-soft bg-stone-50/70 px-5 py-4 text-sm text-slate-600">
+          <div className="relaxed-surface-soft bg-surface-muted/70 px-5 py-4 text-sm text-brand-muted">
             <div className="flex items-center justify-between">
               <span>Status</span>
-              <span className="font-semibold text-slate-900">
+              <span className="font-semibold text-brand-foreground">
                 {organization.subscriptionStatus === 'trialing'
                   ? 'Provperiod'
                   : organization.subscriptionStatus === 'active'
@@ -161,12 +161,12 @@ function SettingsContent({
             {organization.trialEndsAt ? (
               <div className="mt-2 flex items-center justify-between">
                 <span>Provperiod till</span>
-                <span className="font-semibold text-slate-900">
+                <span className="font-semibold text-brand-foreground">
                   {new Date(organization.trialEndsAt).toLocaleDateString('sv-SE')}
                 </span>
               </div>
             ) : null}
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-brand-muted">
               Betalning och fakturering hanteras på föreningsnivå. Stripe
               checkout kommer i nästa steg.
             </p>
@@ -176,10 +176,10 @@ function SettingsContent({
         <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <h2 className="text-base font-semibold text-slate-900">
+              <h2 className="text-base font-semibold text-brand-foreground">
                 Ta bort kiosk
               </h2>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-brand-muted">
                 Detta tar bort kiosken och all tillhörande data permanent.
               </p>
             </div>
@@ -202,13 +202,13 @@ function SettingsContent({
                 <p className="text-sm text-rose-700">
                   Skriv kioskens namn exakt för att bekräfta borttagning.
                 </p>
-                <label className="flex flex-col gap-2 text-sm text-slate-700">
+                <label className="flex flex-col gap-2 text-sm text-brand-muted">
                   Bekräfta kiosknamn
                   <input
                     type="text"
                     value={deleteShopName}
                     onChange={(event) => setDeleteShopName(event.target.value)}
-                    className="relaxed-input h-12 border-rose-200 bg-stone-50 px-4 text-base text-slate-900 outline-none focus:border-rose-400"
+                    className="relaxed-input h-12 border-rose-200 bg-surface-muted px-4 text-base text-brand-foreground outline-none focus:border-rose-400"
                     placeholder={shop.name}
                   />
                 </label>
@@ -252,7 +252,7 @@ function SettingsContent({
 
         {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       {statusMessage ? (
-        <p className="text-sm text-slate-600">{statusMessage}</p>
+        <p className="text-sm text-brand-muted">{statusMessage}</p>
       ) : null}
     </div>
   )

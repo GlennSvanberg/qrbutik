@@ -40,10 +40,10 @@ function ShopQrPublicPage() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-4 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-brand-foreground">
             Butiken hittades inte
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Kontrollera länken eller skapa en ny butik.
           </p>
           <Link
@@ -68,16 +68,16 @@ function ShopQrPublicPage() {
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <header className="flex items-start justify-between">
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+            <p className="text-xs uppercase tracking-[0.2em] text-subtle">
               QRButik.se
             </p>
-            <h1 className="text-3xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold text-brand-foreground">
               QR-kod till {shop.name}
             </h1>
           </div>
           <Link
             to="/admin"
-            className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600"
+            className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle hover:text-brand-muted"
             trackaton-on-click="public-qr-admin"
           >
             Admin
@@ -90,17 +90,17 @@ function ShopQrPublicPage() {
               <img
                 src={logoUrl}
                 alt="Föreningslogotyp"
-                className="h-20 w-20 rounded-2xl border border-stone-200 object-contain p-2"
+                className="h-20 w-20 rounded-2xl border border-brand-border object-contain p-2"
               />
             ) : null}
-            <div className="relaxed-surface-soft rounded-3xl bg-stone-50/70 p-6">
+            <div className="relaxed-surface-soft rounded-3xl bg-surface-muted/70 p-6">
               <QRCodeSVG value={qrValue} size={240} level="M" />
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-lg font-semibold text-slate-900">
+              <p className="text-lg font-semibold text-brand-foreground">
                 Skanna för att handla
               </p>
-              <p className="text-sm text-slate-500">{displayUrl}</p>
+              <p className="text-sm text-brand-muted">{displayUrl}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
@@ -114,7 +114,7 @@ function ShopQrPublicPage() {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-slate-700"
+                className="relaxed-secondary-button cursor-pointer px-5 py-3 text-sm font-semibold text-brand-muted"
                 trackaton-on-click="public-qr-print"
               >
                 Skriv ut QR-kod

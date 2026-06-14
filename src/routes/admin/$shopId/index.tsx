@@ -37,7 +37,7 @@ function AdminShopDashboard() {
   if (!summary) {
     return (
       <div className="relaxed-surface p-8 text-center">
-        <p className="text-sm text-slate-600">Laddar försäljning...</p>
+        <p className="text-sm text-brand-muted">Laddar försäljning...</p>
       </div>
     )
   }
@@ -68,7 +68,7 @@ function AdminShopDashboard() {
                     className={`min-h-[2.5rem] w-full cursor-pointer whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
                       isActive
                         ? 'relaxed-primary-button text-white'
-                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                        : 'text-brand-muted hover:bg-surface-muted/80 hover:text-brand-foreground'
                     }`}
                   >
                     {option.label}
@@ -79,34 +79,34 @@ function AdminShopDashboard() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="relaxed-surface-soft p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+              <p className="text-xs uppercase tracking-[0.2em] text-subtle">
                 Totalt
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-brand-foreground">
                 {formattedTotal} kr
               </p>
             </div>
             <div className="relaxed-surface-soft p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+              <p className="text-xs uppercase tracking-[0.2em] text-subtle">
                 Betalningar
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-brand-foreground">
                 {summary.transactionCount}
               </p>
             </div>
             <div className="relaxed-surface-soft p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+              <p className="text-xs uppercase tracking-[0.2em] text-subtle">
                 Snittköp
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-brand-foreground">
                 {formattedAverage} kr
               </p>
             </div>
             <div className="relaxed-surface-soft p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+              <p className="text-xs uppercase tracking-[0.2em] text-subtle">
                 Senaste köp
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">
+              <p className="mt-2 text-xl font-semibold text-brand-foreground">
                 {formattedLastSale}
               </p>
             </div>
@@ -115,29 +115,29 @@ function AdminShopDashboard() {
 
         <section className="relaxed-divider flex flex-col gap-4 border-b pb-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900">Topplista</h2>
-            <span className="text-xs text-slate-500">Topp 5</span>
+            <h2 className="text-base font-semibold text-brand-foreground">Topplista</h2>
+            <span className="text-xs text-brand-muted">Topp 5</span>
           </div>
-          <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
+          <div className="relaxed-surface divide-y divide-brand-border/70 px-4">
             {summary.topItems.length === 0 ? (
-              <div className="p-6 text-center text-sm text-slate-500">
+              <div className="p-6 text-center text-sm text-brand-muted">
                 Ingen försäljning ännu.
               </div>
             ) : (
               summary.topItems.map((item) => (
                 <div
                   key={item.name}
-                  className="flex items-center justify-between py-3 text-sm text-slate-700"
+                  className="flex items-center justify-between py-3 text-sm text-brand-muted"
                 >
                   <div className="flex flex-col">
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-brand-foreground">
                       {item.name}
                     </span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-brand-muted">
                       {item.quantity} st
                     </span>
                   </div>
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-brand-foreground">
                     {Math.round(item.revenue).toLocaleString('sv-SE')} kr
                   </span>
                 </div>
@@ -148,14 +148,14 @@ function AdminShopDashboard() {
 
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900">
+            <h2 className="text-base font-semibold text-brand-foreground">
               Senaste köp
             </h2>
-            <span className="text-xs text-slate-500">Realtid</span>
+            <span className="text-xs text-brand-muted">Realtid</span>
           </div>
-          <div className="relaxed-surface divide-y divide-slate-200/70 px-4">
+          <div className="relaxed-surface divide-y divide-brand-border/70 px-4">
             {summary.recentSales.length === 0 ? (
-              <div className="p-6 text-center text-sm text-slate-500">
+              <div className="p-6 text-center text-sm text-brand-muted">
                 Inga köp ännu.
               </div>
             ) : (
@@ -165,17 +165,17 @@ function AdminShopDashboard() {
                   className="flex items-center justify-between py-3 text-sm"
                 >
                   <div className="flex flex-col">
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-brand-foreground">
                       {new Date(sale.createdAt).toLocaleTimeString('sv-SE', {
                         hour: '2-digit',
                         minute: '2-digit',
                       })}
                     </span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-brand-muted">
                       {sale.itemsCount} varor
                     </span>
                   </div>
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-brand-foreground">
                     {Math.round(sale.amount).toLocaleString('sv-SE')} kr
                   </span>
                 </div>

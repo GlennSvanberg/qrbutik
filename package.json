@@ -28,7 +28,9 @@
     "stripe:login": "node node_modules/@stripe/cli/bin/shim.js login",
     "stripe:setup": "node scripts/stripe-bootstrap.mjs",
     "stripe:listen": "node scripts/stripe-listen.mjs",
-    "demo:seed": "npx convex run demoSeed:ensureDemoShop"
+    "demo:seed": "npx convex run demoSeed:ensureDemoShop",
+    "video:dev": "npm run dev --prefix remotion",
+    "video:render": "npm run render --prefix remotion"
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.10.10",

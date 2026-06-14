@@ -24,8 +24,8 @@ export function AuthGate({
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-3 p-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">Laddar...</h1>
-          <p className="text-sm text-slate-600">Kontrollerar din session.</p>
+          <h1 className="text-2xl font-semibold text-brand-foreground">Laddar...</h1>
+          <p className="text-sm text-brand-muted">Kontrollerar din session.</p>
         </div>
       </main>
     )

@@ -60,11 +60,11 @@ export function LoginForm({
   return (
     <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
       <header className="text-center">
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+        <p className="text-xs uppercase tracking-[0.2em] text-subtle">
           QRButik.se
         </p>
-        <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
-        <p className="text-sm text-slate-600">{description}</p>
+        <h1 className="text-2xl font-semibold text-brand-foreground">{title}</h1>
+        <p className="text-sm text-brand-muted">{description}</p>
         {inviteHint ? (
           <p className="mt-2 text-sm font-medium text-brand">{inviteHint}</p>
         ) : null}
@@ -104,7 +104,7 @@ export function LoginForm({
           }
         }}
       >
-        <label className="flex flex-col gap-2 text-sm text-slate-700">
+        <label className="flex flex-col gap-2 text-sm text-brand-muted">
           E-post
           <input
             type="email"
@@ -113,7 +113,7 @@ export function LoginForm({
             disabled={isBusy}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="relaxed-input h-12 cursor-text px-4 text-base text-slate-900 outline-none disabled:cursor-not-allowed disabled:opacity-60"
+            className="relaxed-input h-12 cursor-text px-4 text-base text-brand-foreground outline-none disabled:cursor-not-allowed disabled:opacity-60"
           />
         </label>
         <button
@@ -126,11 +126,11 @@ export function LoginForm({
       </form>
 
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-slate-200" />
-        <span className="text-xs uppercase tracking-wide text-slate-400">
+        <div className="h-px flex-1 bg-brand-border" />
+        <span className="text-xs uppercase tracking-wide text-subtle">
           eller
         </span>
-        <div className="h-px flex-1 bg-slate-200" />
+        <div className="h-px flex-1 bg-brand-border" />
       </div>
 
       <button
@@ -152,21 +152,21 @@ export function LoginForm({
             setIsGoogleSubmitting(false)
           }
         }}
-        className="flex h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white px-6 text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-brand-border bg-surface px-6 text-base font-semibold text-brand-foreground shadow-sm transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
       >
         <GoogleIcon />
         {isGoogleSubmitting ? 'Omdirigerar...' : 'Fortsätt med Google'}
       </button>
 
       {statusMessage ? (
-        <p className="text-sm text-slate-600">{statusMessage}</p>
+        <p className="text-sm text-brand-muted">{statusMessage}</p>
       ) : null}
       {errorMessage ? (
         <p className="text-sm text-rose-600">{errorMessage}</p>
       ) : null}
 
       {showCreateLink ? (
-        <p className="text-center text-sm text-slate-600">
+        <p className="text-center text-sm text-brand-muted">
           Ny förening?{' '}
           <Link
             to="/logga-in"

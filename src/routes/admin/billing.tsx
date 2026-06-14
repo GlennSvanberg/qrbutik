@@ -76,7 +76,7 @@ function BillingPage() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <p className="text-sm text-slate-600">Laddar förening...</p>
+          <p className="text-sm text-brand-muted">Laddar förening...</p>
         </div>
       </main>
     )
@@ -86,7 +86,7 @@ function BillingPage() {
     return (
       <main className="relaxed-page-shell min-h-screen px-6 py-12">
         <div className="relaxed-surface mx-auto flex w-full max-w-2xl flex-col gap-4 p-8 text-center">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-muted">
             Du behöver en förening innan du kan hantera fakturering.
           </p>
           <Link
@@ -212,24 +212,24 @@ function BillingContent({
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-10">
         <header className="flex flex-col gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-subtle">
               QRButik.se
             </p>
-            <h1 className="text-3xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold text-brand-foreground">
               Klubblicens &amp; fakturering
             </h1>
           </div>
         </header>
 
         {organizations.length > 1 ? (
-          <label className="flex max-w-md flex-col gap-2 text-sm text-slate-700">
+          <label className="flex max-w-md flex-col gap-2 text-sm text-brand-muted">
             Förening
             <select
               value={organizationId}
               onChange={(event) =>
                 setOrganizationId(event.target.value as Id<'organizations'>)
               }
-              className="relaxed-input h-12 cursor-pointer px-4 text-base text-slate-900 outline-none"
+              className="relaxed-input h-12 cursor-pointer px-4 text-base text-brand-foreground outline-none"
             >
               {organizations.map((org) => (
                 <option key={org._id} value={org._id}>
@@ -287,37 +287,37 @@ function BillingContent({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="relaxed-surface-soft bg-stone-50/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                 Pris
               </p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900">
+              <p className="mt-1 text-2xl font-semibold text-brand-foreground">
                 från 995 kr/mån
               </p>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-brand-muted">
                 Obegränsat antal kiosker under samma förening.
               </p>
             </div>
-            <div className="relaxed-surface-soft bg-stone-50/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
                 Provperiod
               </p>
               {activeOrg.trialEndsAt ? (
-                <p className="mt-1 text-sm text-slate-700">
+                <p className="mt-1 text-sm text-brand-muted">
                   Gäller till{' '}
                   <span className="font-semibold">
                     {new Date(activeOrg.trialEndsAt).toLocaleDateString('sv-SE')}
                   </span>
                 </p>
               ) : (
-                <p className="mt-1 text-sm text-slate-600">Ingen aktiv provperiod</p>
+                <p className="mt-1 text-sm text-brand-muted">Ingen aktiv provperiod</p>
               )}
-              <p className="mt-2 text-sm text-slate-600">{trialCopy}</p>
+              <p className="mt-2 text-sm text-brand-muted">{trialCopy}</p>
             </div>
           </div>
 
           {!canManageBilling ? (
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-brand-muted">
               Endast kassör eller huvudansvarig kan hantera fakturering. Kontakta
               föreningens owner.
             </p>
@@ -375,7 +375,7 @@ function BillingContent({
                         setIsLoadingInvoice(false)
                       }
                     }}
-                    className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isLoadingInvoice ? 'Aktiverar...' : 'Betala med faktura'}
                   </button>
@@ -405,13 +405,13 @@ function BillingContent({
                     setIsLoadingPortal(false)
                   }
                 }}
-                className="relaxed-secondary-button h-12 w-fit cursor-pointer px-6 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="relaxed-secondary-button h-12 w-fit cursor-pointer px-6 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoadingPortal ? 'Öppnar...' : 'Hantera prenumeration'}
               </button>
 
               {showActivate ? (
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-brand-muted">
                   Kortbetalning via Stripe Checkout. Faktura skickas som PDF till
                   faktura-e-post — passar kassörer utan föreningskort.
                 </p>
@@ -420,11 +420,11 @@ function BillingContent({
           ) : null}
 
           {!stripeConfigured ? (
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-brand-muted">
               Stripe är inte konfigurerat ännu. Kör{' '}
-              <code className="rounded bg-stone-100 px-1">npm run stripe:setup</code>{' '}
+              <code className="rounded bg-surface-muted px-1">npm run stripe:setup</code>{' '}
               och starta{' '}
-              <code className="rounded bg-stone-100 px-1">npm run stripe:listen</code>{' '}
+              <code className="rounded bg-surface-muted px-1">npm run stripe:listen</code>{' '}
               under utveckling.
             </p>
           ) : null}
@@ -434,10 +434,10 @@ function BillingContent({
 
         {canManageBilling ? (
           <section className="relaxed-surface flex flex-col gap-4 p-8">
-            <h2 className="text-base font-semibold text-slate-900">
+            <h2 className="text-base font-semibold text-brand-foreground">
               Föreningslogotyp (QR-skylt)
             </h2>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-brand-muted">
               Valfri logotyp som visas på alla kioskers QR-skyltar. PNG eller JPG,
               max 500 KB. Kvadratisk bild rekommenderas.
             </p>
@@ -445,11 +445,11 @@ function BillingContent({
               <img
                 src={logoUrl}
                 alt={`${activeOrg.name} logotyp`}
-                className="mx-auto h-24 w-24 rounded-2xl border border-stone-200 object-contain p-2"
+                className="mx-auto h-24 w-24 rounded-2xl border border-brand-border object-contain p-2"
               />
             ) : null}
             <div className="flex flex-wrap gap-3">
-              <label className="relaxed-secondary-button inline-flex h-11 cursor-pointer items-center px-4 text-sm font-semibold text-slate-700">
+              <label className="relaxed-secondary-button inline-flex h-11 cursor-pointer items-center px-4 text-sm font-semibold text-brand-muted">
                 {isUploadingLogo ? 'Laddar upp…' : 'Ladda upp logotyp'}
                 <input
                   type="file"
@@ -531,7 +531,7 @@ function BillingContent({
                       setIsUploadingLogo(false)
                     }
                   }}
-                  className="relaxed-secondary-button h-11 cursor-pointer px-4 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="relaxed-secondary-button h-11 cursor-pointer px-4 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Ta bort logotyp
                 </button>
@@ -542,10 +542,10 @@ function BillingContent({
 
         {canManageBilling ? (
           <section className="relaxed-surface flex flex-col gap-4 p-8">
-            <h2 className="text-base font-semibold text-slate-900">
+            <h2 className="text-base font-semibold text-brand-foreground">
               Bokföring &amp; SIE-export
             </h2>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-brand-muted">
               Används när du exporterar SIE från dashboarden. Standardkonto 3010
               om inget annat anges.
             </p>
@@ -574,7 +574,7 @@ function BillingContent({
                 }
               }}
             >
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
+              <label className="flex flex-col gap-2 text-sm text-brand-muted">
                 Organisationsnummer
                 <input
                   value={orgNumber}
@@ -583,7 +583,7 @@ function BillingContent({
                   className="relaxed-input h-11 px-3"
                 />
               </label>
-              <label className="flex flex-col gap-2 text-sm text-slate-700">
+              <label className="flex flex-col gap-2 text-sm text-brand-muted">
                 Intäktskonto (SIE)
                 <input
                   value={sieRevenueAccount}
@@ -595,7 +595,7 @@ function BillingContent({
               <button
                 type="submit"
                 disabled={isSavingSettings}
-                className="relaxed-secondary-button h-11 w-fit cursor-pointer px-5 text-sm font-semibold text-slate-700 sm:col-span-2"
+                className="relaxed-secondary-button h-11 w-fit cursor-pointer px-5 text-sm font-semibold text-brand-muted sm:col-span-2"
               >
                 {isSavingSettings ? 'Sparar…' : 'Spara exportinställningar'}
               </button>

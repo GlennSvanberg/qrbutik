@@ -56,7 +56,7 @@ function NavLink({
       className={`inline-flex h-11 cursor-pointer items-center rounded-xl px-4 text-sm font-semibold transition ${
         isActive
           ? 'bg-brand/10 text-brand'
-          : 'text-slate-600 hover:bg-stone-100/80 hover:text-slate-900'
+          : 'text-brand-muted hover:bg-surface-muted/80 hover:text-brand-foreground'
       } ${className ?? ''}`}
       aria-current={isActive ? 'page' : undefined}
     >
@@ -189,22 +189,22 @@ export function AdminMainNav() {
   return (
     <header
       ref={containerRef}
-      className="sticky top-0 z-30 border-b border-stone-200/80 bg-white/90 backdrop-blur print:hidden"
+      className="nav-bar sticky top-0 z-30 print:hidden"
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">
         <Link
           {...homeLink}
           className="flex min-h-11 cursor-pointer flex-col justify-center"
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-400">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-subtle">
             QRButik.se
           </span>
           {activeOrg ? (
-            <span className="text-sm font-semibold text-slate-900">
+            <span className="text-sm font-semibold text-brand-foreground">
               {activeOrg.name}
             </span>
           ) : (
-            <span className="text-sm font-semibold text-slate-900">Admin</span>
+            <span className="text-sm font-semibold text-brand-foreground">Admin</span>
           )}
         </Link>
 
@@ -222,24 +222,24 @@ export function AdminMainNav() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            className="relaxed-secondary-button flex h-11 w-11 cursor-pointer items-center justify-center text-slate-700"
+            className="relaxed-secondary-button flex h-11 w-11 cursor-pointer items-center justify-center text-brand-muted"
             aria-expanded={isMobileMenuOpen}
             aria-controls="admin-main-nav-menu"
             aria-label={isMobileMenuOpen ? 'Stäng meny' : 'Öppna meny'}
           >
             <span className="flex h-4 w-5 flex-col justify-between">
               <span
-                className={`h-0.5 w-full rounded-full bg-slate-700 transition ${
+                className={`h-0.5 w-full rounded-full bg-brand-muted transition ${
                   isMobileMenuOpen ? 'translate-y-[7px] rotate-45' : ''
                 }`}
               />
               <span
-                className={`h-0.5 w-full rounded-full bg-slate-700 transition ${
+                className={`h-0.5 w-full rounded-full bg-brand-muted transition ${
                   isMobileMenuOpen ? 'opacity-0' : ''
                 }`}
               />
               <span
-                className={`h-0.5 w-full rounded-full bg-slate-700 transition ${
+                className={`h-0.5 w-full rounded-full bg-brand-muted transition ${
                   isMobileMenuOpen ? '-translate-y-[7px] -rotate-45' : ''
                 }`}
               />
@@ -252,7 +252,7 @@ export function AdminMainNav() {
         <nav
           id="admin-main-nav-menu"
           aria-label="Huvudmeny mobil"
-          className="border-t border-stone-200/80 bg-white px-6 py-4 md:hidden"
+          className="border-t border-brand-border/80 bg-surface px-6 py-4 md:hidden"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-1">
             {navLinks.map((item) => (
