@@ -19,12 +19,30 @@ const trustedOrigins = [
   "https://www.qrbutik.se",
 ];
 
-const convexSiteUrl =
-  process.env.CONVEX_SITE_URL ?? process.env.CONVEX_HTTP_URL;
+const getConvexSiteUrl = (): string => {
+  const url =
+    process.env.CONVEX_SITE_URL ??
+    process.env.CONVEX_HTTP_URL ??
+    process.env.VITE_CONVEX_SITE_URL;
+  if (url) {
+    return url;
+  }
+  const convexUrl = process.env.CONVEX_URL;
+  if (convexUrl) {
+    if (convexUrl.includes(".convex.cloud")) {
+      return convexUrl.replace(".convex.cloud", ".convex.site");
+    }
+    if (convexUrl.includes("localhost:3210")) {
+      return convexUrl.replace("localhost:3210", "localhost:3211");
+    }
+    if (convexUrl.includes("127.0.0.1:3210")) {
+      return convexUrl.replace("127.0.0.1:3210", "127.0.0.1:3211");
+    }
+  }
+  return "http://localhost:3211";
+};
 
-if (!convexSiteUrl) {
-  throw new Error("CONVEX_SITE_URL or CONVEX_HTTP_URL must be set.");
-}
+const convexSiteUrl = getConvexSiteUrl();
 
 export const authComponent = createClient<DataModel>(components.betterAuth);
 
@@ -43,10 +61,14 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     },
     database: authComponent.adapter(ctx),
     socialProviders: {
-      google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      },
+      ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+        ? {
+            google: {
+              clientId: process.env.GOOGLE_CLIENT_ID,
+              clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            },
+          }
+        : {}),
     },
     plugins: [
       crossDomain({ siteUrl }),
