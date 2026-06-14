@@ -13,6 +13,14 @@ test.describe('Public marketing pages', () => {
     await expect(
       page.getByRole('link', { name: 'Prova live kiosk' }).first(),
     ).toBeVisible()
+    const adminPreview = page.getByRole('img', {
+      name: 'Exempel på adminpanel med försäljningsöversikt',
+    })
+    await expect(adminPreview).toBeVisible()
+    const naturalWidth = await adminPreview.evaluate(
+      (el) => (el as HTMLImageElement).naturalWidth,
+    )
+    expect(naturalWidth).toBeGreaterThan(0)
   })
 
   test('demo kiosk shows products and demo banner', async ({ page }) => {

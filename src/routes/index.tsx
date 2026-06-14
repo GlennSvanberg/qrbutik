@@ -51,18 +51,23 @@ const heroKpis: Array<{ label: string; value: string }> = [
   { label: 'Betalning', value: 'Swish direkt' },
 ]
 
-const painPoints: Array<string> = [
-  'Räkna totalsumman i huvudet mitt i kön.',
-  'Stava Swish-numret högt om och om igen.',
-  'Svårt att veta vad som faktiskt sålts efteråt.',
-  'Långsam hantering när många vill handla samtidigt.',
-]
-
-const flowWins: Array<string> = [
-  'Inbyggd varukorg räknar automatiskt ut summan.',
-  'Swish öppnas med rätt belopp och nummer direkt.',
-  'Färdig säljrapport direkt till kassören.',
-  'Snabbare köer utan extra personal.',
+const comparisonRows: Array<{ problem: string; solution: string }> = [
+  {
+    problem: 'Totalsummor räknas i huvudet mitt i kön.',
+    solution: 'Varukorg och Swish öppnas med rätt belopp direkt.',
+  },
+  {
+    problem: 'Försäljning från flera lag blir Excel och papperslappar.',
+    solution: 'Alla kiosker syns i samma vy för kassör och styrelse.',
+  },
+  {
+    problem: 'Bokföring tar timmar efter cuphelgen.',
+    solution: 'Export till CSV eller SIE på några minuter.',
+  },
+  {
+    problem: 'Långsam kiosk när kön växer.',
+    solution: 'Snabbare flöde utan extra personal vid kassan.',
+  },
 ]
 
 const platformDetails: Array<{
@@ -209,40 +214,54 @@ function Home() {
       </section>
 
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-16 sm:gap-14">
-        <section className="premium-panel p-8 sm:p-10">
-          <div className="premium-shell grid gap-10 lg:grid-cols-2">
-            <div className="flex flex-col gap-4">
+        <section className="flex flex-col gap-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
+              För styrelse och kassör
+            </p>
+            <h2 className="mt-4 text-pretty text-3xl font-bold text-brand-foreground sm:text-4xl">
+              Från kioskkaos till kontroll efter cupen.
+            </h2>
+            <p className="mt-3 text-base text-brand-muted sm:text-lg">
+              Idrottsföreningar behöver både snabbare köer på plats och en tydlig
+              ekonomiöverblick — utan Excel efter helgen.
+            </p>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
+            <div className="rounded-xl border border-brand-border bg-[#F8FAFC] p-6 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
-                Vanliga problem
+                Utan digital kiosk
               </p>
-              <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
-                Låt kön rulla, inte huvudräkningen.
-              </h2>
-              <ul className="space-y-3 text-base text-brand-muted">
-                {painPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3">
-                    <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-bold text-red-600">
-                      ✕
+              <ul className="mt-6 space-y-4">
+                {comparisonRows.map((row) => (
+                  <li key={row.problem} className="flex items-start gap-3 text-brand-muted">
+                    <span
+                      aria-hidden
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-brand-border bg-white"
+                    >
+                      <span className="h-0.5 w-3 rounded-full bg-brand-muted/70" />
                     </span>
-                    <span>{point}</span>
+                    <span className="text-sm sm:text-base">{row.problem}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="flex flex-col gap-4">
+
+            <div className="rounded-xl border border-brand-border-accent bg-white p-6 shadow-sm ring-1 ring-brand/15 sm:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand">
                 Med QRButik
               </p>
-              <h3 className="text-pretty text-2xl font-bold text-brand-foreground">
-                Ett modernt kioskflöde i ett sammanhållet paket.
-              </h3>
-              <ul className="premium-divider-list text-base text-brand-muted">
-                {flowWins.map((point) => (
-                  <li key={point} className="flex items-start gap-3">
-                    <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-bg text-sm font-bold text-success">
+              <ul className="mt-6 space-y-4">
+                {comparisonRows.map((row) => (
+                  <li key={row.solution} className="flex items-start gap-3 text-brand-foreground">
+                    <span
+                      aria-hidden
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-success-bg text-sm font-bold text-success"
+                    >
                       ✓
                     </span>
-                    <span>{point}</span>
+                    <span className="text-sm font-medium sm:text-base">{row.solution}</span>
                   </li>
                 ))}
               </ul>
