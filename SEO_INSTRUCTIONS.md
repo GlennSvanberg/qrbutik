@@ -1,6 +1,6 @@
 # SEO-instruktioner (QRButik)
 
-> **Strategi (2025):** Intent-baserad B2B-SEO med sport-P-SEO — inte sport×stad-matris.  
+> **Strategi (2025):** Intent-baserad B2B-SEO — inte sport×stad-matris.  
 > Operativ plan: [`ROADMAP.md`](./ROADMAP.md) Fas 4.
 
 ---
@@ -27,9 +27,9 @@ Ranka på sökord där **köparen är en förening som letar kiosksystem** — i
 - Pris: **från 995 kr/mån**, 14 dagars provperiod
 - CTAs: **Starta 14 dagars provperiod** + **Boka demo** (`/kontakt`)
 
-### 2. Sport-P-SEO (`/utforska/{sport}`)
+### 2. Intent-sidor (`/losningar/...`, planerade)
 
-En landningssida per sport (fotboll, handboll, ishockey, innebandy, konståkning).
+Småskaliga landningssidor med köpintention, t.ex. `/losningar/digitalt-kiosksystem-idrottsförening`, `/losningar/kassa-fotbollscup`. Se ROADMAP 4.1.2.
 
 Varje sida ska innehålla:
 
@@ -39,9 +39,7 @@ Varje sida ska innehålla:
 - **FAQ** — schema.org FAQPage
 - **CTA** — provperiod + boka demo
 
-Hub: `/utforska` listar alla sporter.
-
-**Stad×sport-URL:er** (`/utforska/{sport}/{city}`) redirectar permanent till sport-sidan (301). Behålls endast för indexerade legacy-länkar.
+De gamla programmatiska sport/stad-sidorna (`/utforska/*`, `pseo-data.json`) togs bort 2026-09-27 — ingen trafik att bevara.
 
 ### 3. Kontakt / demo
 
@@ -51,9 +49,9 @@ Hub: `/utforska` listar alla sporter.
 
 ## Tekniskt
 
-1. `scripts/generate-pseo-files.mjs` — sitemap med `/`, `/skapa`, `/utforska`, `/kontakt` + sport-hubbar (inte stad-sidor)
+1. `public/sitemap*.xml` + `public/robots.txt` — statiska filer (ingen generator): `/`, `/skapa`, `/kontakt`
 2. Meta title/description per sida — primärt keyword + "för idrottsföreningar"
-3. Internlänkning: startsida → `/utforska/{sport}` → provperiod
+3. Internlänkning: startsida → intent-sidor → provperiod
 4. `public/llms.txt` — B2B-positionering
 5. Varumärke: **QRButik** (konsekvent casing)
 

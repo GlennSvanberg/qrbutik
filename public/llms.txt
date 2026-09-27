@@ -17,7 +17,6 @@
 ## Core pages
 
 - [Homepage](https://qrbutik.se/): B2B value prop, trial + demo CTAs
-- [Solutions by sport](https://qrbutik.se/utforska): Sport-specific landing pages (football, handball, etc.)
 - [Contact / demo](https://qrbutik.se/kontakt): Book a demo or start trial
 - [Create organization](https://qrbutik.se/skapa): Onboarding with 14-day trial
 - [Admin](https://qrbutik.se/admin): Magic-link login; org billing and kiosks
@@ -42,4 +41,4 @@
 
 ## SEO note
 
-Sport×city URLs redirect to sport hub pages. Primary SEO surface: homepage + `/utforska/{sport}`.
+Programmatic sport/city pages (`/utforska/*`) were removed 2026-09-27 (no traffic to preserve). Primary SEO surface: homepage + upcoming intent pages under `/losningar/`.

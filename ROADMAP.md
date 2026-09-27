@@ -172,7 +172,7 @@ Från passiv SEO till aktiv B2B-försäljning.
 
 ### 4.1 SEO — rikta om till köpintention
 
-- [ ] **4.1.1** Ta bort eller noindex hela `/utforska/*` P-SEO (ingen trafik att bevara — greenfield)
+- [x] **4.1.1** Ta bort eller noindex hela `/utforska/*` P-SEO (ingen trafik att bevara — greenfield)
 - [ ] **4.1.2** Skapa 3–5 intent-landningssidor, t.ex.:
   - `/losningar/digitalt-kiosksystem-idrottsförening`
   - `/losningar/kassa-fotbollscup`
@@ -180,8 +180,8 @@ Från passiv SEO till aktiv B2B-försäljning.
   - `/losningar/kiosksystem-sommar-cup`
 - [ ] **4.1.3** Varje sida: problem → lösning → pris/trial-CTA → social proof → FAQ
 - [ ] **4.1.4** Uppdatera startsida: B2B-fokus, klubblicens, inte 10/99 kr
-- [ ] **4.1.5** Uppdatera `sitemap` — endast intent-sidor + kärn-sidor (ta bort P-SEO-URL:er)
-- [ ] **4.1.6** Radera `PSEO_INSTRUCTIONS.md` och ev. `pseo-data.json` när intent-sidor finns (valfritt steg)
+- [x] **4.1.5** Uppdatera `sitemap` — endast intent-sidor + kärn-sidor (ta bort P-SEO-URL:er)
+- [x] **4.1.6** Radera `PSEO_INSTRUCTIONS.md` och ev. `pseo-data.json` när intent-sidor finns (valfritt steg)
 
 ### 4.2 Aktiv distribution (sommaren)
 
@@ -261,3 +261,4 @@ Gör under fas 1–3 där det blockerar.
 | 2025-06-13 | Initial roadmap baserad på konsultrekommendation (B2B, Stripe, 10k MRR) |
 | 2025-06-13 | Greenfield: ingen bakåtkompatibilitet (inga aktiva butiker/betalande) |
 | 2025-06-13 | Fas 3: `/admin/org/{orgId}`, dashboard-polish, medlemshantering UI, org-logotyp, STRIPE_GO_LIVE.md |
+| 2026-09-27 | Fas 4.1.1/4.1.5/4.1.6: `/utforska/*`, `pseo-data.json`, `PseoSportLanding`, sitemap-generator och `PSEO_INSTRUCTIONS.md` borttagna; sitemap + SEO-docs omskrivna till intent-strategi |

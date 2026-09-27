@@ -33,10 +33,7 @@ export const recordInternal = internalMutation({
 const visitTypeValidator = v.union(v.literal('shop_view'), v.literal('page_view'))
 
 function isAllowedPagePath(path: string): boolean {
-  if (path === '/' || path === '/glenn' || path === '/kontakt') {
-    return true
-  }
-  return path.startsWith('/utforska/')
+  return path === '/' || path === '/glenn' || path === '/kontakt'
 }
 
 export const recordVisit = mutation({
