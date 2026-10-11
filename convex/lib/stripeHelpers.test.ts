@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
   assertCanStartSubscription,
+  buildCheckoutSubscriptionData,
+  buildInvoiceSubscriptionParams,
   mapStripeSubscriptionStatus,
+  optionalStripeTaxRateId,
   subscriptionTrialEnd,
 } from './stripeHelpers'
 import type { Id } from '../_generated/dataModel'
@@ -104,5 +107,92 @@ describe('subscriptionTrialEnd', () => {
         now,
       ),
     ).toBeUndefined()
+  })
+})
+
+describe('optionalStripeTaxRateId', () => {
+  it('treats missing and blank values as unset', () => {
+    expect(optionalStripeTaxRateId(undefined)).toBeUndefined()
+    expect(optionalStripeTaxRateId('')).toBeUndefined()
+    expect(optionalStripeTaxRateId('   ')).toBeUndefined()
+  })
+
+  it('returns a trimmed tax rate id', () => {
+    expect(optionalStripeTaxRateId(' txr_se_moms ')).toBe('txr_se_moms')
+  })
+})
+
+describe('buildCheckoutSubscriptionData', () => {
+  it('omits default_tax_rates when STRIPE_TAX_RATE_ID is unset', () => {
+    const data = buildCheckoutSubscriptionData({
+      organizationId: orgId,
+      trialEnd: 1_700_000_000,
+      taxRateId: optionalStripeTaxRateId(undefined),
+    })
+
+    expect(data).toEqual({
+      metadata: { organizationId: orgId },
+      trial_end: 1_700_000_000,
+    })
+    expect(data).not.toHaveProperty('default_tax_rates')
+  })
+
+  it('sets subscription_data.default_tax_rates when STRIPE_TAX_RATE_ID is set', () => {
+    const data = buildCheckoutSubscriptionData({
+      organizationId: orgId,
+      trialEnd: undefined,
+      taxRateId: optionalStripeTaxRateId('txr_25'),
+    })
+
+    expect(data).toEqual({
+      metadata: { organizationId: orgId },
+      default_tax_rates: ['txr_25'],
+    })
+    expect(data).not.toHaveProperty('trial_end')
+  })
+})
+
+describe('buildInvoiceSubscriptionParams', () => {
+  const base = {
+    customerId: 'cus_123',
+    priceId: 'price_995',
+    organizationId: orgId,
+  }
+
+  it('omits default_tax_rates when STRIPE_TAX_RATE_ID is unset', () => {
+    const params = buildInvoiceSubscriptionParams({
+      ...base,
+      trialEnd: undefined,
+      taxRateId: optionalStripeTaxRateId(''),
+    })
+
+    expect(params).toEqual({
+      customer: 'cus_123',
+      items: [{ price: 'price_995' }],
+      collection_method: 'send_invoice',
+      days_until_due: 30,
+      metadata: { organizationId: orgId },
+    })
+    expect(params).not.toHaveProperty('default_tax_rates')
+    expect(params.items[0]).not.toHaveProperty('tax_rates')
+  })
+
+  it('sets default_tax_rates when STRIPE_TAX_RATE_ID is set', () => {
+    const params = buildInvoiceSubscriptionParams({
+      ...base,
+      trialEnd: 1_700_000_000,
+      taxRateId: optionalStripeTaxRateId(' txr_25 '),
+    })
+
+    expect(params).toEqual({
+      customer: 'cus_123',
+      items: [{ price: 'price_995' }],
+      collection_method: 'send_invoice',
+      days_until_due: 30,
+      metadata: { organizationId: orgId },
+      trial_end: 1_700_000_000,
+      default_tax_rates: ['txr_25'],
+    })
+    expect(params.items[0]).not.toHaveProperty('tax_rates')
   })
 })
