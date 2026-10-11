@@ -9,67 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VillkorRouteImport } from './routes/villkor'
-import { Route as SkapaRouteImport } from './routes/skapa'
-import { Route as LoggaInRouteImport } from './routes/logga-in'
-import { Route as KontaktRouteImport } from './routes/kontakt'
-import { Route as IntegritetRouteImport } from './routes/integritet'
-import { Route as GlennRouteImport } from './routes/glenn'
-import { Route as SuperadminRouteRouteImport } from './routes/superadmin/route'
-import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SuperadminIndexRouteImport } from './routes/superadmin/index'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as GlennRouteImport } from './routes/glenn'
+import { Route as IntegritetRouteImport } from './routes/integritet'
+import { Route as KontaktRouteImport } from './routes/kontakt'
+import { Route as LoggaInRouteImport } from './routes/logga-in'
+import { Route as SkapaRouteImport } from './routes/skapa'
+import { Route as SuperadminRouteRouteImport } from './routes/superadmin/route'
+import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
-import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
-import { Route as HjalpExportRouteImport } from './routes/hjalp/export'
-import { Route as AdminSkapaKioskRouteImport } from './routes/admin/skapa-kiosk'
-import { Route as AdminMedlemmarRouteImport } from './routes/admin/medlemmar'
-import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
-import { Route as SShopSlugIndexRouteImport } from './routes/s/$shopSlug/index'
+import { Route as AdminBillingRouteImport } from './routes/admin/billing'
+import { Route as AdminMedlemmarRouteImport } from './routes/admin/medlemmar'
+import { Route as AdminSkapaKioskRouteImport } from './routes/admin/skapa-kiosk'
+import { Route as HjalpExportRouteImport } from './routes/hjalp/export'
+import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
+import { Route as SuperadminIndexRouteImport } from './routes/superadmin/index'
+import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
 import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
-import { Route as SShopSlugQrRouteImport } from './routes/s/$shopSlug/qr'
-import { Route as SShopSlugKlartRouteImport } from './routes/s/$shopSlug/klart'
-import { Route as AdminShopIdSkyltRouteImport } from './routes/admin/$shopId/skylt'
-import { Route as AdminShopIdSettingsRouteImport } from './routes/admin/$shopId/settings'
-import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
 import { Route as AdminShopIdHistorikRouteImport } from './routes/admin/$shopId/historik'
+import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
+import { Route as AdminShopIdSettingsRouteImport } from './routes/admin/$shopId/settings'
+import { Route as AdminShopIdSkyltRouteImport } from './routes/admin/$shopId/skylt'
+import { Route as SShopSlugIndexRouteImport } from './routes/s/$shopSlug/index'
+import { Route as SShopSlugKlartRouteImport } from './routes/s/$shopSlug/klart'
+import { Route as SShopSlugQrRouteImport } from './routes/s/$shopSlug/qr'
 import { Route as AdminOrgOrgIdIndexRouteImport } from './routes/admin/org/$orgId/index'
 
-const VillkorRoute = VillkorRouteImport.update({
-  id: '/villkor',
-  path: '/villkor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SkapaRoute = SkapaRouteImport.update({
-  id: '/skapa',
-  path: '/skapa',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoggaInRoute = LoggaInRouteImport.update({
-  id: '/logga-in',
-  path: '/logga-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KontaktRoute = KontaktRouteImport.update({
-  id: '/kontakt',
-  path: '/kontakt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IntegritetRoute = IntegritetRouteImport.update({
-  id: '/integritet',
-  path: '/integritet',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GlennRoute = GlennRouteImport.update({
-  id: '/glenn',
-  path: '/glenn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SuperadminRouteRoute = SuperadminRouteRouteImport.update({
-  id: '/superadmin',
-  path: '/superadmin',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -77,49 +47,44 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const GlennRoute = GlennRouteImport.update({
+  id: '/glenn',
+  path: '/glenn',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SuperadminIndexRoute = SuperadminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => SuperadminRouteRoute,
+const IntegritetRoute = IntegritetRouteImport.update({
+  id: '/integritet',
+  path: '/integritet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontaktRoute = KontaktRouteImport.update({
+  id: '/kontakt',
+  path: '/kontakt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoggaInRoute = LoggaInRouteImport.update({
+  id: '/logga-in',
+  path: '/logga-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkapaRoute = SkapaRouteImport.update({
+  id: '/skapa',
+  path: '/skapa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuperadminRouteRoute = SuperadminRouteRouteImport.update({
+  id: '/superadmin',
+  path: '/superadmin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VillkorRoute = VillkorRouteImport.update({
+  id: '/villkor',
+  path: '/villkor',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const TackTransactionIdRoute = TackTransactionIdRouteImport.update({
-  id: '/tack/$transactionId',
-  path: '/tack/$transactionId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SShopSlugRoute = SShopSlugRouteImport.update({
-  id: '/s/$shopSlug',
-  path: '/s/$shopSlug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HjalpExportRoute = HjalpExportRouteImport.update({
-  id: '/hjalp/export',
-  path: '/hjalp/export',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminSkapaKioskRoute = AdminSkapaKioskRouteImport.update({
-  id: '/skapa-kiosk',
-  path: '/skapa-kiosk',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminMedlemmarRoute = AdminMedlemmarRouteImport.update({
-  id: '/medlemmar',
-  path: '/medlemmar',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
-const AdminBillingRoute = AdminBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminShopIdRoute = AdminShopIdRouteImport.update({
@@ -127,34 +92,49 @@ const AdminShopIdRoute = AdminShopIdRouteImport.update({
   path: '/$shopId',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const SShopSlugIndexRoute = SShopSlugIndexRouteImport.update({
+const AdminBillingRoute = AdminBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminMedlemmarRoute = AdminMedlemmarRouteImport.update({
+  id: '/medlemmar',
+  path: '/medlemmar',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSkapaKioskRoute = AdminSkapaKioskRouteImport.update({
+  id: '/skapa-kiosk',
+  path: '/skapa-kiosk',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const HjalpExportRoute = HjalpExportRouteImport.update({
+  id: '/hjalp/export',
+  path: '/hjalp/export',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SShopSlugRoute = SShopSlugRouteImport.update({
+  id: '/s/$shopSlug',
+  path: '/s/$shopSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuperadminIndexRoute = SuperadminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SShopSlugRoute,
+  getParentRoute: () => SuperadminRouteRoute,
+} as any)
+const TackTransactionIdRoute = TackTransactionIdRouteImport.update({
+  id: '/tack/$transactionId',
+  path: '/tack/$transactionId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminShopIdIndexRoute = AdminShopIdIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
-const SShopSlugQrRoute = SShopSlugQrRouteImport.update({
-  id: '/qr',
-  path: '/qr',
-  getParentRoute: () => SShopSlugRoute,
-} as any)
-const SShopSlugKlartRoute = SShopSlugKlartRouteImport.update({
-  id: '/klart',
-  path: '/klart',
-  getParentRoute: () => SShopSlugRoute,
-} as any)
-const AdminShopIdSkyltRoute = AdminShopIdSkyltRouteImport.update({
-  id: '/skylt',
-  path: '/skylt',
-  getParentRoute: () => AdminShopIdRoute,
-} as any)
-const AdminShopIdSettingsRoute = AdminShopIdSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const AdminShopIdHistorikRoute = AdminShopIdHistorikRouteImport.update({
+  id: '/historik',
+  path: '/historik',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
 const AdminShopIdProductsRoute = AdminShopIdProductsRouteImport.update({
@@ -162,10 +142,30 @@ const AdminShopIdProductsRoute = AdminShopIdProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminShopIdRoute,
 } as any)
-const AdminShopIdHistorikRoute = AdminShopIdHistorikRouteImport.update({
-  id: '/historik',
-  path: '/historik',
+const AdminShopIdSettingsRoute = AdminShopIdSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AdminShopIdRoute,
+} as any)
+const AdminShopIdSkyltRoute = AdminShopIdSkyltRouteImport.update({
+  id: '/skylt',
+  path: '/skylt',
+  getParentRoute: () => AdminShopIdRoute,
+} as any)
+const SShopSlugIndexRoute = SShopSlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SShopSlugRoute,
+} as any)
+const SShopSlugKlartRoute = SShopSlugKlartRouteImport.update({
+  id: '/klart',
+  path: '/klart',
+  getParentRoute: () => SShopSlugRoute,
+} as any)
+const SShopSlugQrRoute = SShopSlugQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => SShopSlugRoute,
 } as any)
 const AdminOrgOrgIdIndexRoute = AdminOrgOrgIdIndexRouteImport.update({
   id: '/org/$orgId/',
@@ -200,7 +200,7 @@ export interface FileRoutesByFullPath {
   '/s/$shopSlug/qr': typeof SShopSlugQrRoute
   '/admin/$shopId/': typeof AdminShopIdIndexRoute
   '/s/$shopSlug/': typeof SShopSlugIndexRoute
-  '/admin/org/$orgId': typeof AdminOrgOrgIdIndexRoute
+  '/admin/org/$orgId/': typeof AdminOrgOrgIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -286,7 +286,7 @@ export interface FileRouteTypes {
     | '/s/$shopSlug/qr'
     | '/admin/$shopId/'
     | '/s/$shopSlug/'
-    | '/admin/org/$orgId'
+    | '/admin/org/$orgId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -360,53 +360,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/villkor': {
-      id: '/villkor'
-      path: '/villkor'
-      fullPath: '/villkor'
-      preLoaderRoute: typeof VillkorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/skapa': {
-      id: '/skapa'
-      path: '/skapa'
-      fullPath: '/skapa'
-      preLoaderRoute: typeof SkapaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/logga-in': {
-      id: '/logga-in'
-      path: '/logga-in'
-      fullPath: '/logga-in'
-      preLoaderRoute: typeof LoggaInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kontakt': {
-      id: '/kontakt'
-      path: '/kontakt'
-      fullPath: '/kontakt'
-      preLoaderRoute: typeof KontaktRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/integritet': {
-      id: '/integritet'
-      path: '/integritet'
-      fullPath: '/integritet'
-      preLoaderRoute: typeof IntegritetRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/glenn': {
-      id: '/glenn'
-      path: '/glenn'
-      fullPath: '/glenn'
-      preLoaderRoute: typeof GlennRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/superadmin': {
-      id: '/superadmin'
-      path: '/superadmin'
-      fullPath: '/superadmin'
-      preLoaderRoute: typeof SuperadminRouteRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -416,67 +374,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/glenn': {
+      id: '/glenn'
+      path: '/glenn'
+      fullPath: '/glenn'
+      preLoaderRoute: typeof GlennRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/superadmin/': {
-      id: '/superadmin/'
-      path: '/'
-      fullPath: '/superadmin/'
-      preLoaderRoute: typeof SuperadminIndexRouteImport
-      parentRoute: typeof SuperadminRouteRoute
+    '/integritet': {
+      id: '/integritet'
+      path: '/integritet'
+      fullPath: '/integritet'
+      preLoaderRoute: typeof IntegritetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontakt': {
+      id: '/kontakt'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logga-in': {
+      id: '/logga-in'
+      path: '/logga-in'
+      fullPath: '/logga-in'
+      preLoaderRoute: typeof LoggaInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skapa': {
+      id: '/skapa'
+      path: '/skapa'
+      fullPath: '/skapa'
+      preLoaderRoute: typeof SkapaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/superadmin': {
+      id: '/superadmin'
+      path: '/superadmin'
+      fullPath: '/superadmin'
+      preLoaderRoute: typeof SuperadminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/villkor': {
+      id: '/villkor'
+      path: '/villkor'
+      fullPath: '/villkor'
+      preLoaderRoute: typeof VillkorRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/tack/$transactionId': {
-      id: '/tack/$transactionId'
-      path: '/tack/$transactionId'
-      fullPath: '/tack/$transactionId'
-      preLoaderRoute: typeof TackTransactionIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/s/$shopSlug': {
-      id: '/s/$shopSlug'
-      path: '/s/$shopSlug'
-      fullPath: '/s/$shopSlug'
-      preLoaderRoute: typeof SShopSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hjalp/export': {
-      id: '/hjalp/export'
-      path: '/hjalp/export'
-      fullPath: '/hjalp/export'
-      preLoaderRoute: typeof HjalpExportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/skapa-kiosk': {
-      id: '/admin/skapa-kiosk'
-      path: '/skapa-kiosk'
-      fullPath: '/admin/skapa-kiosk'
-      preLoaderRoute: typeof AdminSkapaKioskRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/medlemmar': {
-      id: '/admin/medlemmar'
-      path: '/medlemmar'
-      fullPath: '/admin/medlemmar'
-      preLoaderRoute: typeof AdminMedlemmarRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
-    '/admin/billing': {
-      id: '/admin/billing'
-      path: '/billing'
-      fullPath: '/admin/billing'
-      preLoaderRoute: typeof AdminBillingRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/$shopId': {
@@ -486,53 +437,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShopIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/s/$shopSlug/': {
-      id: '/s/$shopSlug/'
+    '/admin/billing': {
+      id: '/admin/billing'
+      path: '/billing'
+      fullPath: '/admin/billing'
+      preLoaderRoute: typeof AdminBillingRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/medlemmar': {
+      id: '/admin/medlemmar'
+      path: '/medlemmar'
+      fullPath: '/admin/medlemmar'
+      preLoaderRoute: typeof AdminMedlemmarRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/skapa-kiosk': {
+      id: '/admin/skapa-kiosk'
+      path: '/skapa-kiosk'
+      fullPath: '/admin/skapa-kiosk'
+      preLoaderRoute: typeof AdminSkapaKioskRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/hjalp/export': {
+      id: '/hjalp/export'
+      path: '/hjalp/export'
+      fullPath: '/hjalp/export'
+      preLoaderRoute: typeof HjalpExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$shopSlug': {
+      id: '/s/$shopSlug'
+      path: '/s/$shopSlug'
+      fullPath: '/s/$shopSlug'
+      preLoaderRoute: typeof SShopSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/superadmin/': {
+      id: '/superadmin/'
       path: '/'
-      fullPath: '/s/$shopSlug/'
-      preLoaderRoute: typeof SShopSlugIndexRouteImport
-      parentRoute: typeof SShopSlugRoute
+      fullPath: '/superadmin/'
+      preLoaderRoute: typeof SuperadminIndexRouteImport
+      parentRoute: typeof SuperadminRouteRoute
+    }
+    '/tack/$transactionId': {
+      id: '/tack/$transactionId'
+      path: '/tack/$transactionId'
+      fullPath: '/tack/$transactionId'
+      preLoaderRoute: typeof TackTransactionIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/$shopId/': {
       id: '/admin/$shopId/'
       path: '/'
       fullPath: '/admin/$shopId/'
       preLoaderRoute: typeof AdminShopIdIndexRouteImport
-      parentRoute: typeof AdminShopIdRoute
-    }
-    '/s/$shopSlug/qr': {
-      id: '/s/$shopSlug/qr'
-      path: '/qr'
-      fullPath: '/s/$shopSlug/qr'
-      preLoaderRoute: typeof SShopSlugQrRouteImport
-      parentRoute: typeof SShopSlugRoute
-    }
-    '/s/$shopSlug/klart': {
-      id: '/s/$shopSlug/klart'
-      path: '/klart'
-      fullPath: '/s/$shopSlug/klart'
-      preLoaderRoute: typeof SShopSlugKlartRouteImport
-      parentRoute: typeof SShopSlugRoute
-    }
-    '/admin/$shopId/skylt': {
-      id: '/admin/$shopId/skylt'
-      path: '/skylt'
-      fullPath: '/admin/$shopId/skylt'
-      preLoaderRoute: typeof AdminShopIdSkyltRouteImport
-      parentRoute: typeof AdminShopIdRoute
-    }
-    '/admin/$shopId/settings': {
-      id: '/admin/$shopId/settings'
-      path: '/settings'
-      fullPath: '/admin/$shopId/settings'
-      preLoaderRoute: typeof AdminShopIdSettingsRouteImport
-      parentRoute: typeof AdminShopIdRoute
-    }
-    '/admin/$shopId/products': {
-      id: '/admin/$shopId/products'
-      path: '/products'
-      fullPath: '/admin/$shopId/products'
-      preLoaderRoute: typeof AdminShopIdProductsRouteImport
       parentRoute: typeof AdminShopIdRoute
     }
     '/admin/$shopId/historik': {
@@ -542,10 +500,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShopIdHistorikRouteImport
       parentRoute: typeof AdminShopIdRoute
     }
+    '/admin/$shopId/products': {
+      id: '/admin/$shopId/products'
+      path: '/products'
+      fullPath: '/admin/$shopId/products'
+      preLoaderRoute: typeof AdminShopIdProductsRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
+    '/admin/$shopId/settings': {
+      id: '/admin/$shopId/settings'
+      path: '/settings'
+      fullPath: '/admin/$shopId/settings'
+      preLoaderRoute: typeof AdminShopIdSettingsRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
+    '/admin/$shopId/skylt': {
+      id: '/admin/$shopId/skylt'
+      path: '/skylt'
+      fullPath: '/admin/$shopId/skylt'
+      preLoaderRoute: typeof AdminShopIdSkyltRouteImport
+      parentRoute: typeof AdminShopIdRoute
+    }
+    '/s/$shopSlug/': {
+      id: '/s/$shopSlug/'
+      path: '/'
+      fullPath: '/s/$shopSlug/'
+      preLoaderRoute: typeof SShopSlugIndexRouteImport
+      parentRoute: typeof SShopSlugRoute
+    }
+    '/s/$shopSlug/klart': {
+      id: '/s/$shopSlug/klart'
+      path: '/klart'
+      fullPath: '/s/$shopSlug/klart'
+      preLoaderRoute: typeof SShopSlugKlartRouteImport
+      parentRoute: typeof SShopSlugRoute
+    }
+    '/s/$shopSlug/qr': {
+      id: '/s/$shopSlug/qr'
+      path: '/qr'
+      fullPath: '/s/$shopSlug/qr'
+      preLoaderRoute: typeof SShopSlugQrRouteImport
+      parentRoute: typeof SShopSlugRoute
+    }
     '/admin/org/$orgId/': {
       id: '/admin/org/$orgId/'
       path: '/org/$orgId'
-      fullPath: '/admin/org/$orgId'
+      fullPath: '/admin/org/$orgId/'
       preLoaderRoute: typeof AdminOrgOrgIdIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
