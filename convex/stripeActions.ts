@@ -6,8 +6,10 @@ import { action, internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOrgMemberForAction } from "./lib/stripeAuth";
 import {
-  INVOICE_DAYS_UNTIL_DUE,
   assertCanStartSubscription,
+  buildCheckoutSubscriptionData,
+  buildInvoiceSubscriptionParams,
+  optionalStripeTaxRateId,
   subscriptionTrialEnd,
 } from "./lib/stripeHelpers";
 import type { SubscriptionStatus } from "./lib/validators";
@@ -30,6 +32,10 @@ function getPriceId(): string {
     throw new Error("Stripe price is not configured.");
   }
   return priceId;
+}
+
+function getTaxRateId(): string | undefined {
+  return optionalStripeTaxRateId(process.env.STRIPE_TAX_RATE_ID);
 }
 
 type StripeOrganization = {
@@ -224,12 +230,11 @@ export const createCheckoutSession = action({
 
     const trialEnd = subscriptionTrialEnd(organization);
     const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData =
-      {
-        metadata: {
-          organizationId: args.organizationId,
-        },
-        ...(trialEnd !== undefined ? { trial_end: trialEnd } : {}),
-      };
+      buildCheckoutSubscriptionData({
+        organizationId: args.organizationId,
+        trialEnd,
+        taxRateId: getTaxRateId(),
+      });
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -295,16 +300,15 @@ export const createInvoiceSubscription = action({
     );
 
     const trialEnd = subscriptionTrialEnd(organization);
-    const subscription = await stripe.subscriptions.create({
-      customer: customerId,
-      items: [{ price: priceId }],
-      collection_method: "send_invoice",
-      days_until_due: INVOICE_DAYS_UNTIL_DUE,
-      metadata: {
+    const subscriptionParams: Stripe.SubscriptionCreateParams =
+      buildInvoiceSubscriptionParams({
+        customerId,
+        priceId,
         organizationId: args.organizationId,
-      },
-      ...(trialEnd !== undefined ? { trial_end: trialEnd } : {}),
-    });
+        trialEnd,
+        taxRateId: getTaxRateId(),
+      });
+    const subscription = await stripe.subscriptions.create(subscriptionParams);
 
     await ctx.runMutation(internal.stripeMutations.handleCheckoutCompleted, {
       organizationId: args.organizationId,
