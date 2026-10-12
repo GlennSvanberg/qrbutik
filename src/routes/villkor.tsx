@@ -23,8 +23,8 @@ function VillkorPage() {
             Användarvillkor (B2B)
           </h1>
           <p className="text-sm text-brand-muted">
-            Senast uppdaterad: 13 juni 2025. Gäller idrottsföreningar och
-            organisationer som tecknar klubblicens hos QRButik.se.
+            Senast uppdaterad: 12 oktober 2026. Gäller idrottsföreningar och
+            organisationer som använder QRButik.se.
           </p>
         </header>
 
@@ -37,24 +37,27 @@ function VillkorPage() {
           </p>
 
           <h2 className="text-lg font-semibold text-brand-foreground">
-            2. Klubblicens och provperiod
+            2. Planer
           </h2>
           <p>
-            Klubblicensen kostar från 995 kr per månad och omfattar obegränsat antal
-            kiosker under samma organisation. Nya föreningar erbjuds 14 dagars
-            gratis provperiod utan betalkort. Efter provperiod krävs aktiv
-            prenumeration för att kiosker ska acceptera köp.
+            Gratis är standard och inkluderar 1 kiosk, obegränsat antal produkter,
+            Swish-QR och statistik för idag. En liten QRButik-märkning visas.
+            Event kostar 295 kr inklusive moms och ger flera kiosker, ingen
+            märkning samt försäljningsrapport och export i 7 dagar från köpet.
+            Säsong kostar 1 495 kr per år inklusive moms (cirka 125 kr per månad)
+            och ger obegränsat antal kiosker, flera administratörer och
+            bokföringsexport så länge prenumerationen är aktiv. Det finns ingen
+            separat provperiod.
           </p>
 
           <h2 className="text-lg font-semibold text-brand-foreground">
             3. Betalning till QRButik
           </h2>
           <p>
-            Fakturering sker via Stripe. Föreningen kan betala med betalkort
-            (Checkout) eller välja faktura som skickas som PDF till angiven
-            faktura-e-post. Föreningen ansvarar för att hålla betalningsuppgifter
-            aktuella. Vid utebliven betalning kan tjänsten pausas tills
-            betalning regleras.
+            Event betalas som engångsköp och Säsong som årsprenumeration via
+            Stripe Checkout. Föreningen ansvarar för att hålla
+            betalningsuppgifter aktuella. Om Säsong inte betalas gäller
+            Gratis igen. Event återgår till Gratis när de 7 dagarna har gått.
           </p>
 
           <h2 className="text-lg font-semibold text-brand-foreground">
@@ -70,9 +73,9 @@ function VillkorPage() {
             5. Uppsägning
           </h2>
           <p>
-            Prenumerationen kan sägas upp via kundportalen. Uppsägning stoppar
-            framtida debitering; data kan raderas enligt separat
-            integritetspolicy.
+            Säsong kan sägas upp via kundportalen. Uppsägning stoppar framtida
+            debitering. Event är ett engångsköp och förnyas inte automatiskt.
+            Data kan raderas enligt separat integritetspolicy.
           </p>
 
           <p className="text-xs text-brand-muted">

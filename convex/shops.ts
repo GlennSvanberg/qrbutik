@@ -3,10 +3,9 @@ import { query } from './_generated/server'
 import { api, internal } from './_generated/api'
 import { authedMutation } from './lib/customFunctions'
 import { requireOrgMember, requireShopAccess } from './lib/auth'
-import {
-  isSubscriptionActive,
-  subscriptionStatusValidator,
-} from './lib/validators'
+import { kioskIsOpen, storedEntitlements, syncOrganizationBilling } from './lib/planAccess'
+import { KIOSK_LIMIT_ERROR } from './lib/plans'
+import { subscriptionStatusValidator } from './lib/validators'
 import type { MutationCtx } from './_generated/server'
 
 const slugify = (value: string) => {
@@ -107,9 +106,12 @@ export const getShopWithLicenseBySlug = query({
         _id: v.id('organizations'),
         name: v.string(),
         subscriptionStatus: subscriptionStatusValidator,
-        trialEndsAt: v.optional(v.number()),
+        plan: v.optional(
+          v.union(v.literal('gratis'), v.literal('event'), v.literal('season')),
+        ),
       }),
       licenseActive: v.boolean(),
+      showBranding: v.boolean(),
     }),
     v.null(),
   ),
@@ -127,7 +129,8 @@ export const getShopWithLicenseBySlug = query({
       return null
     }
 
-    const licenseActive = isSubscriptionActive(organization.subscriptionStatus)
+    const entitlements = storedEntitlements(organization)
+    const licenseActive = await kioskIsOpen(ctx, organization, shop._id)
 
     return {
       shop,
@@ -135,9 +138,10 @@ export const getShopWithLicenseBySlug = query({
         _id: organization._id,
         name: organization.name,
         subscriptionStatus: organization.subscriptionStatus,
-        trialEndsAt: organization.trialEndsAt,
+        plan: organization.plan,
       },
       licenseActive,
+      showBranding: entitlements.showBranding,
     }
   },
 })
@@ -208,9 +212,22 @@ export const createShopInOrganization = authedMutation({
   handler: async (ctx, args) => {
     await requireOrgMember(ctx, args.organizationId, ['owner', 'treasurer'])
 
-    const organization = await ctx.db.get('organizations', args.organizationId)
-    if (!organization) {
+    const existingOrganization = await ctx.db.get('organizations', args.organizationId)
+    if (!existingOrganization) {
       throw new Error('Föreningen hittades inte.')
+    }
+    const organization = await syncOrganizationBilling(ctx, existingOrganization)
+    const entitlements = storedEntitlements(organization)
+    if (entitlements.maxKiosks !== null) {
+      const shops = await ctx.db
+        .query('shops')
+        .withIndex('by_organizationId', (q) =>
+          q.eq('organizationId', args.organizationId),
+        )
+        .collect()
+      if (shops.length >= entitlements.maxKiosks) {
+        throw new Error(KIOSK_LIMIT_ERROR)
+      }
     }
 
     const shopName = args.name.trim()

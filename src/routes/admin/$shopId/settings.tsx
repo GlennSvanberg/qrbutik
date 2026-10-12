@@ -88,10 +88,6 @@ function SettingsContent({
   const canSaveShop =
     shopState.name.trim() && shopState.swishNumber.trim()
 
-  const licenseActive =
-    organization.subscriptionStatus === 'trialing' ||
-    organization.subscriptionStatus === 'active'
-
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
       <header className="flex flex-col gap-2 text-left">
@@ -99,15 +95,13 @@ function SettingsContent({
             {organization.name} · {shop.name} ·{' '}
             <span className="font-medium">/s/{shop.slug}</span>
           </p>
-          {licenseActive ? (
-            <Link
-              to="/s/$shopSlug"
-              params={{ shopSlug: shop.slug }}
-              className="w-fit cursor-pointer text-sm font-semibold text-brand-muted hover:text-brand-muted"
-            >
-              Öppna kiosken
-            </Link>
-          ) : null}
+          <Link
+            to="/s/$shopSlug"
+            params={{ shopSlug: shop.slug }}
+            className="w-fit cursor-pointer text-sm font-semibold text-brand-muted hover:text-brand-muted"
+          >
+            Öppna kiosken
+          </Link>
         </header>
 
         <section className="relaxed-divider flex flex-col gap-6 border-t pt-6">
@@ -151,24 +145,24 @@ function SettingsContent({
             <div className="flex items-center justify-between">
               <span>Status</span>
               <span className="font-semibold text-brand-foreground">
-                {organization.subscriptionStatus === 'trialing'
-                  ? 'Provperiod'
-                  : organization.subscriptionStatus === 'active'
-                    ? 'Aktiv'
-                    : 'Inaktiv'}
+                {organization.plan === 'season'
+                  ? 'Säsong'
+                  : organization.plan === 'event'
+                    ? 'Event'
+                    : 'Gratis'}
               </span>
             </div>
-            {organization.trialEndsAt ? (
+            {organization.plan === 'event' && organization.eventExpiresAt ? (
               <div className="mt-2 flex items-center justify-between">
-                <span>Provperiod till</span>
+                <span>Event till</span>
                 <span className="font-semibold text-brand-foreground">
-                  {new Date(organization.trialEndsAt).toLocaleDateString('sv-SE')}
+                  {new Date(organization.eventExpiresAt).toLocaleDateString('sv-SE')}
                 </span>
               </div>
             ) : null}
             <p className="mt-3 text-xs text-brand-muted">
-              Betalning och fakturering hanteras på föreningsnivå. Stripe
-              checkout kommer i nästa steg.
+              Gratis inkluderar 1 kiosk. Event och Säsong hanteras under
+              Fakturering.
             </p>
           </div>
         </section>

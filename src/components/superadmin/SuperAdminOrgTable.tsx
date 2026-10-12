@@ -11,7 +11,8 @@ export type OrganizationRow = {
   name: string
   billingEmail: string
   subscriptionStatus: string
-  trialEndsAt: number | null
+  plan: 'gratis' | 'event' | 'season' | null
+  eventExpiresAt: number | null
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   createdAt: number
@@ -46,7 +47,7 @@ export function SuperAdminOrgTable({
             <tr>
               <th className="px-5 py-3 font-semibold">Förening</th>
               <th className="px-5 py-3 font-semibold">Status</th>
-              <th className="px-5 py-3 font-semibold">Trial slut</th>
+              <th className="px-5 py-3 font-semibold">Plan</th>
               <th className="px-5 py-3 font-semibold">Kiosker</th>
               <th className="px-5 py-3 font-semibold">Medlemmar</th>
               <th className="px-5 py-3 font-semibold">Senaste försäljning</th>
@@ -83,9 +84,13 @@ export function SuperAdminOrgTable({
                     <StatusBadge status={org.subscriptionStatus} />
                   </td>
                   <td className="px-5 py-4 align-top text-brand-muted">
-                    {org.trialEndsAt !== null
-                      ? formatDateTime(org.trialEndsAt)
-                      : '—'}
+                    {org.plan === 'event' && org.eventExpiresAt !== null
+                      ? `Event till ${formatDateTime(org.eventExpiresAt)}`
+                      : org.plan === 'season'
+                        ? 'Säsong'
+                        : org.plan === 'gratis'
+                          ? 'Gratis'
+                          : '—'}
                   </td>
                   <td className="px-5 py-4 align-top text-brand-muted">{org.shopCount}</td>
                   <td className="px-5 py-4 align-top text-brand-muted">{org.memberCount}</td>

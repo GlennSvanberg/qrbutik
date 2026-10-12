@@ -1,13 +1,18 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import {
   buildDashboardFilter,
   getDateRangeForPeriod,
   isTreasurerRole,
 } from '../lib/adminDashboard'
+import {
+  hasAccountingExport,
+  hasSalesExport,
+  hasSalesReport,
+} from '../lib/billingUi'
 import { AdminDashboardFilters } from './AdminDashboardFilters'
 import { AdminExportPanel } from './AdminExportPanel'
 import type { DashboardPeriod } from '../lib/adminDashboard'
@@ -58,6 +63,9 @@ type AdminOrgDashboardProps = {
     _id: Id<'organizations'>
     name: string
     subscriptionStatus: string
+    plan?: 'gratis' | 'event' | 'season'
+    eventExpiresAt?: number
+    stripeSubscriptionId?: string
     role: 'owner' | 'treasurer' | 'editor'
   }>
 }
@@ -68,7 +76,7 @@ export function AdminOrgDashboard({
   organizations,
 }: AdminOrgDashboardProps) {
   const navigate = useNavigate()
-  const [period, setPeriod] = useState<DashboardPeriod>('last7')
+  const [period, setPeriod] = useState<DashboardPeriod>('today')
   const [customStart, setCustomStart] = useState('')
   const [customEnd, setCustomEnd] = useState('')
   const [selectedShopId, setSelectedShopId] = useState<Id<'shops'> | 'all'>(
@@ -78,6 +86,15 @@ export function AdminOrgDashboard({
   const activeOrg =
     organizations.find((org) => org._id === organizationId) ?? organizations[0]
   const isTreasurer = isTreasurerRole(activeOrg.role)
+  const salesReport = hasSalesReport(activeOrg)
+  const salesExport = hasSalesExport(activeOrg)
+  const accountingExport = hasAccountingExport(activeOrg)
+
+  useEffect(() => {
+    if (!salesReport && period !== 'today') {
+      setPeriod('today')
+    }
+  }, [period, salesReport])
 
   const { data: shops } = useSuspenseQuery(
     convexQuery(api.organizations.listOrganizationShops, {
@@ -109,10 +126,6 @@ export function AdminOrgDashboard({
     enabled: !isTreasurer && shops.length > 0,
   })
 
-  const licenseActive =
-    activeOrg.subscriptionStatus === 'trialing' ||
-    activeOrg.subscriptionStatus === 'active'
-
   const shopCards: Array<ShopCardData> = isTreasurer
     ? (dashboard?.shops ?? []).map((shop) => ({
         shopId: shop.shopId,
@@ -130,7 +143,7 @@ export function AdminOrgDashboard({
         shopId: shop._id,
         shopName: shop.name,
         teamLabel: shop.teamLabel ?? null,
-        licenseActive,
+        licenseActive: true,
         periodRevenue: 0,
         todayRevenue: 0,
         weekendRevenue: 0,
@@ -218,6 +231,7 @@ export function AdminOrgDashboard({
               shopId={selectedShopId}
               shopOptions={shops}
               onShopChange={setSelectedShopId}
+              salesReport={salesReport}
             />
 
             {dashboard ? (
@@ -316,6 +330,8 @@ export function AdminOrgDashboard({
               shopId={selectedShopId === 'all' ? undefined : selectedShopId}
               start={start}
               end={end}
+              salesExport={salesExport}
+              accountingExport={accountingExport}
             />
 
             <details className="relaxed-surface p-5">

@@ -132,19 +132,18 @@ TEST_FINDINGS.md          # failure report from discovery runs
 | File | Subject |
 |------|---------|
 | `convex/lib/validators.test.ts` | Email normalization, subscription gating |
-| `convex/lib/stripeHelpers.test.ts` | Stripe status mapping, trial sync, duplicate subscription guard |
+| `convex/lib/stripeHelpers.test.ts` | Stripe status mapping, Event/Säsong Checkout params |
 | `convex/lib/auth.test.ts` | Shop access matrix per role |
 | `convex/lib/transactions.test.ts` | buildSummary, period ranges, pending filter |
 | `convex/lib/exportFormat.test.ts` | CSV/SIE formatting, verified-only SIE lines |
 | `convex/stripeMutations.integration.test.ts` | Webhook mutations, dedup |
-| `convex/transactions.gating.integration.test.ts` | Purchase gating + trial expiry |
+| `convex/transactions.gating.integration.test.ts` | Purchase gating + event-plan expiry |
 | `convex/exports.integration.test.ts` | Export authorization |
 | `convex/members.integration.test.ts` | acceptInvitation |
 | `convex/shops.integration.test.ts` | createShop, delete cascade |
 | `convex/orgDashboard.integration.test.ts` | Dashboard vs export row parity |
 | `src/lib/swish.test.ts` | Swish deep link generation |
-| `src/lib/billing.test.ts` | Trial countdown helper |
-| `src/lib/billingUi.test.ts` | canActivate, needsPaymentUrgently |
+| `src/lib/billingUi.test.ts` | Plan entitlements, needsPaymentUrgently |
 | `src/lib/adminDashboard.test.ts` | Date range filters |
 | `src/lib/adminShopNav.test.ts` | Tab visibility per role |
 
@@ -184,11 +183,11 @@ npm run test:e2e -- e2e/onboarding.spec.ts
 | `e2e/billing.spec.ts` | Billing UI + Stripe Checkout redirect (`STRIPE_E2E=true` in `.env.local`) |
 | `e2e/members.spec.ts` | Invite editor, accept via dev invite token |
 | `e2e/roles.spec.ts` | Owner vs editor nav, export gating, editor historik deep-link blocked |
-| `e2e/export.spec.ts` | Trial → kiosk → purchase → verify → CSV/SIE export |
-| `e2e/kiosk-closed.spec.ts` | Inactive org → public kiosk “tillfälligt stängd” |
+| `e2e/export.spec.ts` | Säsong org → kiosk → purchase → verify → CSV/SIE export |
+| `e2e/kiosk-closed.spec.ts` | Gratis plan closes a second kiosk; the first stays open |
 | `e2e/kiosk-checkout.spec.ts` | Demo kiosk checkout → thank-you page |
 | `e2e/kiosk-verify.spec.ts` | Admin historik verify after checkout |
-| `e2e/roadmap-5-4.spec.ts` | ROADMAP 5.4 full flow (trial → kiosk → purchase → verify → export) |
+| `e2e/roadmap-5-4.spec.ts` | Full flow (Säsong org → kiosk → purchase → verify → export) |
 | `e2e/products.spec.ts` | Product admin |
 
 ### Global setup
@@ -267,4 +266,4 @@ Stripe checkout E2E remains optional (`STRIPE_E2E=true` + secrets).
 ## Related docs
 
 - [`AGENTS.md`](./AGENTS.md) — agent workflow including test commands
-- [`ROADMAP.md`](./ROADMAP.md) — **5.4** E2E trial → kiosk → purchase → export (Phase 3+)
+- [`ROADMAP.md`](./ROADMAP.md) — **5.4** E2E kiosk → purchase → export (Phase 3+)

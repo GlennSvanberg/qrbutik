@@ -4,7 +4,8 @@ import { mutation, query } from './_generated/server'
 import { internal } from './_generated/api'
 import { authedMutation, authedQuery } from './lib/customFunctions'
 import { requireShopAccess, requireShopIdsAccess } from './lib/auth'
-import { isSubscriptionActive } from './lib/validators'
+import { kioskIsOpen, storedEntitlements, syncOrganizationBilling } from './lib/planAccess'
+import { KIOSK_CLOSED_ERROR, SALES_REPORT_ERROR } from './lib/plans'
 import {
   buildSummary,
   getCustomRange,
@@ -14,7 +15,19 @@ import {
   listShopTransactionsInRange,
   periodArgsValidator,
 } from './lib/transactions'
+import type { QueryCtx } from './_generated/server'
 import type { Id } from './_generated/dataModel'
+
+async function assertSalesReport(ctx: QueryCtx, shopId: Id<'shops'>) {
+  const shop = await ctx.db.get('shops', shopId)
+  if (!shop) {
+    throw new Error('Butiken hittades inte.')
+  }
+  const organization = await ctx.db.get('organizations', shop.organizationId)
+  if (!organization || !storedEntitlements(organization).salesReport) {
+    throw new Error(SALES_REPORT_ERROR)
+  }
+}
 
 export const create = mutation({
   args: {
@@ -36,9 +49,14 @@ export const create = mutation({
       throw new Error('Butiken hittades inte.')
     }
 
-    const organization = await ctx.db.get('organizations', shop.organizationId)
-    if (!organization || !isSubscriptionActive(organization.subscriptionStatus)) {
-      throw new Error('Kiosken är inte aktiv just nu.')
+    const existingOrganization = await ctx.db.get('organizations', shop.organizationId)
+    if (!existingOrganization) {
+      throw new Error(KIOSK_CLOSED_ERROR)
+    }
+    const organization = await syncOrganizationBilling(ctx, existingOrganization)
+    const open = await kioskIsOpen(ctx, organization, shop._id)
+    if (!open) {
+      throw new Error(KIOSK_CLOSED_ERROR)
     }
 
     const createdAt = Date.now()
@@ -200,6 +218,7 @@ export const listByShop = authedQuery({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId, ['owner', 'treasurer'])
+    await assertSalesReport(ctx, args.shopId)
     return await listShopTransactionsAll(ctx, args.shopId)
   },
 })
@@ -211,6 +230,7 @@ export const listByShopPaginated = authedQuery({
   },
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId)
+    await assertSalesReport(ctx, args.shopId)
     return await ctx.db
       .query('transactions')
       .withIndex('by_shopId', (q) => q.eq('shopId', args.shopId))
@@ -234,6 +254,9 @@ export const listByShopPeriod = authedQuery({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId)
+    if (args.period !== 'today') {
+      await assertSalesReport(ctx, args.shopId)
+    }
     const { start, end } = getPeriodRange(args.period)
     return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
@@ -248,6 +271,7 @@ export const listByShopDateRange = authedQuery({
   returns: v.array(transactionPayload),
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId)
+    await assertSalesReport(ctx, args.shopId)
     const { start, end } = getCustomRange(args.start, args.end)
     return await listShopTransactionsInRange(ctx, args.shopId, start, end)
   },
@@ -310,6 +334,9 @@ export const getPeriodSummary = authedQuery({
   returns: summaryReturns,
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId)
+    if (args.period !== 'today') {
+      await assertSalesReport(ctx, args.shopId)
+    }
     const { start, end } = getPeriodRange(args.period)
     const transactions = await listShopTransactionsInRange(
       ctx,
@@ -331,6 +358,7 @@ export const getDateRangeSummary = authedQuery({
   returns: summaryReturns,
   handler: async (ctx, args) => {
     await requireShopAccess(ctx, args.shopId)
+    await assertSalesReport(ctx, args.shopId)
     const { start, end } = getCustomRange(args.start, args.end)
     const transactions = await listShopTransactionsInRange(
       ctx,

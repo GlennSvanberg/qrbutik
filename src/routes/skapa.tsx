@@ -16,7 +16,7 @@ export const Route = createFileRoute('/skapa')({
       {
         name: 'description',
         content:
-          'Skapa din idrottsförening. 14 dagars provperiod utan betalning — kiosker lägger du till i admin efteråt.',
+          'Skapa din idrottsförening på Gratis. Kiosker lägger du till i admin efteråt. Event 295 kr eller Säsong 1 495 kr/år när ni behöver mer.',
       },
     ],
   }),
@@ -74,10 +74,10 @@ function CreateOrganizationContent() {
 
         <section className="relaxed-surface flex flex-col gap-4 p-8">
           <div className="rounded-xl border border-brand-border bg-brand-surface/50 p-4 text-sm text-brand-muted">
-            <p className="font-semibold text-brand-foreground">Klubblicens — från 995 kr/mån</p>
+            <p className="font-semibold text-brand-foreground">Gratis att börja</p>
             <p className="mt-1 text-brand-muted">
-              14 dagars gratis provperiod. Ingen betalning nu — du lägger till
-              kiosker i admin när föreningen är skapad.
+              Ingen betalning nu. 1 kiosk ingår. Event kostar 295 kr och Säsong
+              1 495 kr/år (cirka 125 kr/mån), inklusive moms.
             </p>
           </div>
 

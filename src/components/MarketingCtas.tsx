@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
-import { DEMO_LABEL, LIVE_KIOSK_LABEL, TRIAL_LABEL } from '~/lib/marketing'
+import { DEMO_LABEL, LIVE_KIOSK_LABEL, START_LABEL } from '~/lib/marketing'
 
 type MarketingCtasProps = {
   primaryTracking?: string
@@ -11,7 +11,7 @@ type MarketingCtasProps = {
 }
 
 export function MarketingCtas({
-  primaryTracking = 'trial-cta',
+  primaryTracking = 'start-cta',
   secondaryTracking = 'demo-cta',
   liveKioskTracking = 'live-kiosk-cta',
   layout = 'row',
@@ -30,7 +30,7 @@ export function MarketingCtas({
         className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
         trackaton-on-click={primaryTracking}
       >
-        {TRIAL_LABEL}
+        {START_LABEL}
       </Link>
       <Link
         to="/kontakt"

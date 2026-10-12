@@ -53,8 +53,8 @@ function IntegritetPage() {
           <p>
             Vi använder leverantörer för hosting (Convex), e-post (Resend) och
             betalning (Stripe). Dessa behandlar data enligt sina egna villkor
-            och biträdesavtal där det krävs. Vi skickar e-post om provperiod,
-            prenumeration och betalningspåminnelser till föreningens
+            och biträdesavtal där det krävs. Vi skickar e-post om plan,
+            Event, Säsong och betalningspåminnelser till föreningens
             faktura-e-post.
           </p>
 

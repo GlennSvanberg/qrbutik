@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingFooter } from '~/components/MarketingFooter'
-import { CLUB_LICENSE_PRICE, DEMO_EMAIL, LIVE_KIOSK_LABEL, SITE_TAGLINE } from '~/lib/marketing'
+import { DEMO_EMAIL, LIVE_KIOSK_LABEL, PRICE_SUMMARY, SITE_TAGLINE } from '~/lib/marketing'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
 import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
@@ -13,7 +13,7 @@ export const Route = createFileRoute('/kontakt')({
       {
         name: 'description',
         content:
-          'Boka demo av QRButik för er idrottsförening eller starta 14 dagars provperiod. Klubblicens från 995 kr/mån.',
+          'Boka demo av QRButik för er idrottsförening. Gratis, Event 295 kr eller Säsong 1 495 kr/år.',
       },
       {
         name: 'robots',
@@ -41,7 +41,7 @@ function KontaktPage() {
           </h1>
           <p className="text-base text-brand-muted">
             QRButik riktar sig till idrottsföreningar och cuparrangörer. Boka
-            en demo eller starta provperiod direkt.
+            en demo eller skapa förening på Gratis.
           </p>
         </header>
 
@@ -53,7 +53,7 @@ function KontaktPage() {
               </h2>
               <p className="mt-2 text-sm text-brand-muted">
                 Vi visar hur styrelse och kassör sätter upp kiosker, tar betalt
-                med Swish och exporterar till bokföring. {CLUB_LICENSE_PRICE}.
+                med Swish och exporterar till bokföring. {PRICE_SUMMARY}.
               </p>
               <a
                 href={demoMailto}
@@ -89,17 +89,17 @@ function KontaktPage() {
                 Eller prova själv
               </h2>
               <p className="mt-2 text-sm text-brand-muted">
-                Skapa förening och testa 14 dagar utan betalkort. Lägg till
-                kiosker i admin när ni är redo.
+                Skapa förening på Gratis. Lägg till en kiosk i admin när ni är
+                redo. Event och Säsong köps under Fakturering.
               </p>
               <div className="mt-4">
                 <Link
                   to="/logga-in"
                   search={{ redirect: '/skapa' }}
                   className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
-                  trackaton-on-click="kontakt-trial"
+                  trackaton-on-click="kontakt-start"
                 >
-                  Starta 14 dagars provperiod
+                  Skapa förening
                 </Link>
               </div>
             </div>

@@ -8,6 +8,8 @@ import {
   requireTreasurerMembership,
 } from './lib/customFunctions'
 import { getCurrentUser, getMembershipByEmail } from './lib/auth'
+import { syncOrganizationBilling } from './lib/planAccess'
+import { ADMIN_LIMIT_ERROR, canAddAdmin, resolveEntitlements } from './lib/plans'
 import { normalizeEmail } from './lib/validators'
 import type { Doc } from './_generated/dataModel'
 
@@ -138,6 +140,17 @@ export const inviteMember = orgTreasurerMutation({
       throw new Error('Föreningen hittades inte.')
     }
 
+    const synced = await syncOrganizationBilling(ctx, organization)
+    const members = await ctx.db
+      .query('organizationMembers')
+      .withIndex('by_organizationId', (q) =>
+        q.eq('organizationId', args.organizationId),
+      )
+      .collect()
+    if (!canAddAdmin(resolveEntitlements(synced, Date.now()), members.length)) {
+      throw new Error(ADMIN_LIMIT_ERROR)
+    }
+
     const now = Date.now()
     const token = generateInviteToken()
 
@@ -218,6 +231,17 @@ export const acceptInvitation = authedMutation({
     const organization = await ctx.db.get('organizations', invitation.organizationId)
     if (!organization) {
       throw new Error('Föreningen hittades inte.')
+    }
+
+    const synced = await syncOrganizationBilling(ctx, organization)
+    const members = await ctx.db
+      .query('organizationMembers')
+      .withIndex('by_organizationId', (q) =>
+        q.eq('organizationId', invitation.organizationId),
+      )
+      .collect()
+    if (!canAddAdmin(resolveEntitlements(synced, Date.now()), members.length)) {
+      throw new Error(ADMIN_LIMIT_ERROR)
     }
 
     const now = Date.now()

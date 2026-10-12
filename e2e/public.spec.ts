@@ -4,9 +4,11 @@ test.describe('Public marketing pages', () => {
   test('landing page shows B2B club license messaging', async ({ page }) => {
     await page.goto('/')
     await expect(
-      page.getByRole('heading', { name: /Klubblicens/i }).first(),
+      page.getByRole('heading', { name: 'Gratis, Event eller Säsong.' }),
     ).toBeVisible()
-    await expect(page.getByText('från 995 kr/mån').first()).toBeVisible()
+    await expect(page.getByText('1 495 kr/år').first()).toBeVisible()
+    await expect(page.getByText('295 kr').first()).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Skapa förening' }).first()).toBeVisible()
     await expect(
       page.getByRole('link', { name: 'Logga in' }).first(),
     ).toBeVisible()

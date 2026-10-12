@@ -5,12 +5,12 @@ import { MarketingHeader } from '~/components/MarketingHeader'
 import { TimeSavingsCalculator } from '~/components/TimeSavingsCalculator'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
 import {
-  CLUB_LICENSE_PRICE,
   DEFAULT_DESCRIPTION,
   LIVE_KIOSK_LABEL,
+  PRICE_SUMMARY,
   SITE_NAME,
   SITE_TAGLINE,
-  TRIAL_LABEL,
+  START_LABEL,
 } from '~/lib/marketing'
 import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
@@ -46,9 +46,9 @@ export const Route = createFileRoute('/')({
 })
 
 const heroKpis: Array<{ label: string; value: string }> = [
-  { label: 'Provperiod', value: '14 dagar' },
-  { label: 'Kiosker', value: 'Obegränsat' },
-  { label: 'Betalning', value: 'Swish direkt' },
+  { label: 'Gratis', value: '1 kiosk' },
+  { label: 'Event', value: '295 kr' },
+  { label: 'Säsong', value: '1 495 kr/år' },
 ]
 
 const comparisonRows: Array<{ problem: string; solution: string }> = [
@@ -105,14 +105,57 @@ const pricingPlans: Array<{
   variant: 'primary' | 'secondary'
 }> = [
   {
-    id: 'club',
-    name: 'Klubblicens',
-    price: CLUB_LICENSE_PRICE,
+    id: 'gratis',
+    name: 'Gratis',
+    price: '0 kr',
     description:
-      'Hela föreningen — alla lag och kiosker. 14 dagars provperiod utan betalkort.',
-    cta: TRIAL_LABEL,
-    tracking: 'start-club-license',
+      '1 kiosk, obegränsat antal produkter, Swish-QR och statistik för idag. En liten QRButik-märkning visas. Inget kort.',
+    cta: START_LABEL,
+    tracking: 'start-gratis',
+    variant: 'secondary',
+  },
+  {
+    id: 'event',
+    name: 'Event',
+    price: '295 kr',
+    description:
+      'Engångsköp för cuphelgen. Flera kiosker, ingen märkning, försäljningsrapport och export i 7 dagar.',
+    cta: 'Köp Event',
+    tracking: 'start-event',
+    variant: 'secondary',
+  },
+  {
+    id: 'season',
+    name: 'Säsong',
+    price: '1 495 kr/år',
+    description:
+      'Cirka 125 kr/mån. Obegränsat antal kiosker och event, flera administratörer och bokföringsexport så länge prenumerationen är aktiv.',
+    cta: 'Starta Säsong',
+    tracking: 'start-season',
     variant: 'primary',
+  },
+]
+
+const faqItems: Array<{ question: string; answer: string }> = [
+  {
+    question: 'Vad kostar QRButik?',
+    answer:
+      'Gratis är standard. Event kostar 295 kr och Säsong 1 495 kr per år (cirka 125 kr/mån). Alla priser är inklusive 25 % moms.',
+  },
+  {
+    question: 'Finns det en provperiod?',
+    answer:
+      'Nej. Varje förening börjar på Gratis utan kort. Event och Säsong köps när ni behöver fler kiosker, rapport eller export.',
+  },
+  {
+    question: 'Vad händer när Event tar slut?',
+    answer:
+      'Efter 7 dagar går föreningen tillbaka till Gratis. Den äldsta kiosken fortsätter att ta emot Swish-köp.',
+  },
+  {
+    question: 'Kan vi säga upp Säsong?',
+    answer:
+      'Ja, i kundportalen. Tillgången till obegränsade kiosker, flera administratörer och bokföringsexport gäller så länge prenumerationen är aktiv.',
   },
 ]
 
@@ -143,7 +186,7 @@ function Home() {
               />
 
               <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.2em] text-brand-muted">
-                <span className="premium-pill">{CLUB_LICENSE_PRICE}</span>
+                <span className="premium-pill">{PRICE_SUMMARY}</span>
                 <span className="premium-pill">Ingen app</span>
                 <span className="premium-pill">Export CSV/SIE</span>
               </div>
@@ -305,7 +348,7 @@ function Home() {
                   Priser
                 </p>
                 <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
-                  Klubblicens för föreningar.
+                  Gratis, Event eller Säsong.
                 </h2>
                 <p className="mt-4 text-sm text-brand-muted">
                   QRButik riktar sig till idrottsföreningar och cuparrangörer — inte
@@ -349,9 +392,27 @@ function Home() {
               </div>
               <p className="mt-4 text-sm text-brand-muted">
                 Logga in med e-post, skapa förening och lägg till kiosker i admin.
-                Kunder behöver aldrig konto.
+                Kunder behöver aldrig konto. Priser inklusive 25 % moms.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="premium-panel p-8 sm:p-10" id="faq">
+          <div className="premium-shell flex flex-col gap-6">
+            <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
+              Vanliga frågor
+            </h2>
+            <dl className="flex flex-col gap-5">
+              {faqItems.map((item) => (
+                <div key={item.question}>
+                  <dt className="font-semibold text-brand-foreground">
+                    {item.question}
+                  </dt>
+                  <dd className="mt-1 text-sm text-brand-muted">{item.answer}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
 
@@ -364,8 +425,8 @@ function Home() {
                 Redo att samla kiosken under samma tak?
               </h2>
               <p className="mt-3 text-base text-brand-muted">
-                Starta provperiod eller boka demo — vi hjälper styrelse och kassör
-                att komma igång.
+                Skapa förening på Gratis eller boka demo — vi hjälper styrelse och
+                kassör att komma igång.
               </p>
             </div>
             <MarketingCtas

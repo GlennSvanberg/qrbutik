@@ -16,7 +16,10 @@ import {
 describe('acceptInvitation', () => {
   it('accepts valid invitation and assigns role', async () => {
     const t = convexTest(schema, convexModules)
-    const { organizationId } = await seedOrganization(t)
+    const { organizationId } = await seedOrganization(t, {
+      plan: 'season',
+      status: 'active',
+    })
     const { shopId } = await seedShop(t, organizationId)
     const { token } = await seedInvitation(t, organizationId, {
       email: 'editor@qrbutik.test',

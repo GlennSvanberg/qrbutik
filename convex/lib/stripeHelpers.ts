@@ -1,11 +1,9 @@
-import type { Id } from '../_generated/dataModel'
 import type { SubscriptionStatus } from './validators'
 
 export type StripeOrganizationBilling = {
-  _id: Id<'organizations'>
   stripeSubscriptionId?: string
   subscriptionStatus: SubscriptionStatus
-  trialEndsAt?: number
+  plan?: 'gratis' | 'event' | 'season'
 }
 
 export function mapStripeSubscriptionStatus(
@@ -24,37 +22,6 @@ export function mapStripeSubscriptionStatus(
   }
 }
 
-export function assertCanStartSubscription(
-  organization: StripeOrganizationBilling,
-): void {
-  if (
-    organization.stripeSubscriptionId &&
-    (organization.subscriptionStatus === 'active' ||
-      organization.subscriptionStatus === 'trialing')
-  ) {
-    throw new Error('Föreningen har redan en aktiv prenumeration.')
-  }
-}
-
-export function subscriptionTrialEnd(
-  organization: StripeOrganizationBilling,
-  nowMs: number = Date.now(),
-): number | undefined {
-  if (
-    organization.subscriptionStatus !== 'trialing' ||
-    organization.trialEndsAt === undefined
-  ) {
-    return undefined
-  }
-
-  const trialEndSeconds = Math.floor(organization.trialEndsAt / 1000)
-  if (trialEndSeconds <= Math.floor(nowMs / 1000)) {
-    return undefined
-  }
-
-  return trialEndSeconds
-}
-
 export const INVOICE_DAYS_UNTIL_DUE = 30
 
 /** Blank `STRIPE_TAX_RATE_ID` is unset, so callers omit tax rate fields. */
@@ -67,9 +34,8 @@ export function optionalStripeTaxRateId(
 
 /**
  * Stripe applies a fixed rate to recurring Checkout via
- * `subscription_data.default_tax_rates`, and to `subscriptions.create`
- * (including `send_invoice`) via top-level `default_tax_rates`. The Tax Rate
- * object itself is inclusive; this only attaches its ID.
+ * `subscription_data.default_tax_rates`. The Tax Rate object itself is
+ * inclusive; this only attaches its ID.
  */
 export function subscriptionDefaultTaxRates(taxRateId: string | undefined): {
   default_tax_rates?: Array<string>
@@ -81,56 +47,107 @@ export function subscriptionDefaultTaxRates(taxRateId: string | undefined): {
   return { default_tax_rates: [taxRateId] }
 }
 
-export type CheckoutSubscriptionData = {
-  metadata: {
-    organizationId: string
+/** One-time Checkout (`mode=payment`) attaches the tax rate on the line item. */
+export function paymentLineItemTaxRates(taxRateId: string | undefined): {
+  tax_rates?: Array<string>
+} {
+  if (!taxRateId) {
+    return {}
   }
-  trial_end?: number
-  default_tax_rates?: Array<string>
+
+  return { tax_rates: [taxRateId] }
 }
 
-export function buildCheckoutSubscriptionData(input: {
-  organizationId: string
-  trialEnd: number | undefined
-  taxRateId: string | undefined
-}): CheckoutSubscriptionData {
-  return {
-    metadata: {
-      organizationId: input.organizationId,
-    },
-    ...(input.trialEnd !== undefined ? { trial_end: input.trialEnd } : {}),
-    ...subscriptionDefaultTaxRates(input.taxRateId),
-  }
+export type CheckoutLineItem = {
+  price: string
+  quantity: number
+  tax_rates?: Array<string>
 }
 
-export type InvoiceSubscriptionCreateParams = {
-  customer: string
-  items: Array<{ price: string }>
-  collection_method: 'send_invoice'
-  days_until_due: number
-  metadata: {
-    organizationId: string
-  }
-  trial_end?: number
-  default_tax_rates?: Array<string>
-}
-
-export function buildInvoiceSubscriptionParams(input: {
-  customerId: string
+export function buildEventCheckoutLineItem(input: {
   priceId: string
-  organizationId: string
-  trialEnd: number | undefined
   taxRateId: string | undefined
-}): InvoiceSubscriptionCreateParams {
+}): CheckoutLineItem {
   return {
-    customer: input.customerId,
-    items: [{ price: input.priceId }],
-    collection_method: 'send_invoice',
-    days_until_due: INVOICE_DAYS_UNTIL_DUE,
+    price: input.priceId,
+    quantity: 1,
+    ...paymentLineItemTaxRates(input.taxRateId),
+  }
+}
+
+export type SeasonSubscriptionData = {
+  metadata: {
+    organizationId: string
+    plan: 'season'
+  }
+  default_tax_rates?: Array<string>
+}
+
+export function buildSeasonSubscriptionData(input: {
+  organizationId: string
+  taxRateId: string | undefined
+}): SeasonSubscriptionData {
+  return {
     metadata: {
       organizationId: input.organizationId,
+      plan: 'season',
     },
-    ...(input.trialEnd !== undefined ? { trial_end: input.trialEnd } : {}),
     ...subscriptionDefaultTaxRates(input.taxRateId),
+  }
+}
+
+export type CheckoutSessionBase = {
+  allow_promotion_codes: true
+  metadata: {
+    organizationId: string
+    plan: 'event' | 'season'
+  }
+}
+
+export function buildEventCheckoutParams(input: {
+  organizationId: string
+  priceId: string
+  taxRateId: string | undefined
+}): CheckoutSessionBase & {
+  mode: 'payment'
+  line_items: Array<CheckoutLineItem>
+} {
+  return {
+    mode: 'payment',
+    allow_promotion_codes: true,
+    line_items: [
+      buildEventCheckoutLineItem({
+        priceId: input.priceId,
+        taxRateId: input.taxRateId,
+      }),
+    ],
+    metadata: {
+      organizationId: input.organizationId,
+      plan: 'event',
+    },
+  }
+}
+
+export function buildSeasonCheckoutParams(input: {
+  organizationId: string
+  priceId: string
+  taxRateId: string | undefined
+}): CheckoutSessionBase & {
+  mode: 'subscription'
+  line_items: Array<{ price: string; quantity: number }>
+  subscription_data: SeasonSubscriptionData
+} {
+  return {
+    mode: 'subscription',
+    allow_promotion_codes: true,
+    line_items: [{ price: input.priceId, quantity: 1 }],
+    metadata: {
+      organizationId: input.organizationId,
+      plan: 'season',
+    },
+    subscription_data: buildSeasonSubscriptionData({
+      organizationId: input.organizationId,
+      taxRateId: input.taxRateId,
+    }),
   }
 }

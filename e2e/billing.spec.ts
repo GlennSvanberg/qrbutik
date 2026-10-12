@@ -3,7 +3,7 @@ import { loginAndOpen } from './helpers/auth'
 import { isStripeE2EEnabled, uniqueTestEmail } from './helpers/env'
 
 test.describe('Billing', () => {
-  test('billing page shows trial and payment actions for new org', async ({
+  test('billing page shows Gratis, Event and Säsong', async ({
     page,
     baseURL,
   }) => {
@@ -23,18 +23,19 @@ test.describe('Billing', () => {
       timeout: 30_000,
     })
 
-    const stripeConfigured = await page
-      .getByRole('button', { name: 'Betala med kort' })
-      .isVisible()
-      .catch(() => false)
+    await expect(page.getByText('295 kr').first()).toBeVisible()
+    await expect(page.getByText('1 495 kr/år').first()).toBeVisible()
+    await expect(page.getByText(/Nuvarande plan: Gratis/)).toBeVisible()
+
+    const eventCheckout = page.getByRole('button', { name: 'Köp Event — 295 kr' })
+    const seasonCheckout = page.getByRole('button', {
+      name: 'Starta Säsong — 1 495 kr/år',
+    })
+    const stripeConfigured = await eventCheckout.isVisible().catch(() => false)
 
     if (stripeConfigured) {
-      await expect(
-        page.getByRole('button', { name: 'Betala med kort' }),
-      ).toBeEnabled()
-      await expect(
-        page.getByRole('button', { name: 'Betala med faktura' }),
-      ).toBeEnabled()
+      await expect(eventCheckout).toBeEnabled()
+      await expect(seasonCheckout).toBeEnabled()
     } else {
       await expect(
         page.getByText(/Stripe är inte konfigurerat|npm run stripe:setup/i),
@@ -54,7 +55,7 @@ test.describe('Billing', () => {
     await page.getByLabel('Faktura-e-post').fill(email)
     await page.getByRole('button', { name: 'Skapa förening' }).click()
 
-    await page.getByRole('button', { name: 'Betala med kort' }).click()
+    await page.getByRole('button', { name: 'Starta Säsong — 1 495 kr/år' }).click()
 
     await expect(page).toHaveURL(/checkout\.stripe\.com/, { timeout: 30_000 })
   })

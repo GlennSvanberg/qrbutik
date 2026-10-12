@@ -15,7 +15,10 @@ export const getOrganizationForStripe = internalQuery({
       stripeCustomerId: v.optional(v.string()),
       stripeSubscriptionId: v.optional(v.string()),
       subscriptionStatus: subscriptionStatusValidator,
-      trialEndsAt: v.optional(v.number()),
+      plan: v.optional(
+        v.union(v.literal('gratis'), v.literal('event'), v.literal('season')),
+      ),
+      eventExpiresAt: v.optional(v.number()),
     }),
     v.null(),
   ),
@@ -33,7 +36,8 @@ export const getOrganizationForStripe = internalQuery({
       stripeCustomerId: organization.stripeCustomerId,
       stripeSubscriptionId: organization.stripeSubscriptionId,
       subscriptionStatus: organization.subscriptionStatus,
-      trialEndsAt: organization.trialEndsAt,
+      plan: organization.plan,
+      eventExpiresAt: organization.eventExpiresAt,
     }
   },
 })

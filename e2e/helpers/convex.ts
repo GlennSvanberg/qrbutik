@@ -50,6 +50,26 @@ export function setOrgSubscriptionStatus(
   })
 }
 
+export function grantSeasonAccess(organizationId: string): void {
+  runConvex('internal.organizations.setCommercialPlan', {
+    organizationId,
+    plan: 'season',
+    subscriptionStatus: 'active',
+  })
+}
+
+export function setCommercialPlan(
+  organizationId: string,
+  plan: 'gratis' | 'event' | 'season',
+  subscriptionStatus?: SubscriptionStatus,
+): void {
+  runConvex('internal.organizations.setCommercialPlan', {
+    organizationId,
+    plan,
+    ...(subscriptionStatus ? { subscriptionStatus } : {}),
+  })
+}
+
 export function deactivateOrgForShopSlug(slug: string): void {
   const shop = getShopBySlug(slug)
   if (!shop) {

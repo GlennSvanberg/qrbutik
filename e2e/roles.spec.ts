@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { loginAndOpen } from './helpers/auth'
+import { grantSeasonAccess } from './helpers/convex'
 import { attachFindingsReporter } from './helpers/findings'
 import { getTestBaseUrl, uniqueTestEmail } from './helpers/env'
 import { acceptInviteAsUser, inviteMember } from './helpers/members'
@@ -18,7 +19,8 @@ test.describe('Role-based navigation', () => {
     const kioskSlug = `e2e-roles-owner-${Date.now()}`
 
     await loginAndOpen(page, email, '/skapa', appUrl)
-    await createTestOrg(page, { email, orgName })
+    const organizationId = await createTestOrg(page, { email, orgName })
+    grantSeasonAccess(organizationId)
     const { shopId } = await createTestKiosk(page, appUrl, { slug: kioskSlug })
 
     await page.goto(`${appUrl}/admin`, { waitUntil: 'domcontentloaded' })
@@ -63,7 +65,11 @@ test.describe('Role-based navigation', () => {
 
     try {
       await loginAndOpen(ownerPage, ownerEmail, '/skapa', appUrl)
-      await createTestOrg(ownerPage, { email: ownerEmail, orgName })
+      const organizationId = await createTestOrg(ownerPage, {
+        email: ownerEmail,
+        orgName,
+      })
+      grantSeasonAccess(organizationId)
       const { shopId } = await createTestKiosk(ownerPage, appUrl, {
         slug: kioskSlug,
         kioskName,

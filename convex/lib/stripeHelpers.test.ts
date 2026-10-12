@@ -1,15 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
-  assertCanStartSubscription,
-  buildCheckoutSubscriptionData,
-  buildInvoiceSubscriptionParams,
+  buildEventCheckoutLineItem,
+  buildEventCheckoutParams,
+  buildSeasonCheckoutParams,
+  buildSeasonSubscriptionData,
   mapStripeSubscriptionStatus,
   optionalStripeTaxRateId,
-  subscriptionTrialEnd,
 } from './stripeHelpers'
-import type { Id } from '../_generated/dataModel'
 
-const orgId = 'jd7abc123' as Id<'organizations'>
+const orgId = 'jd7abc123'
 
 describe('mapStripeSubscriptionStatus', () => {
   it('maps known Stripe statuses', () => {
@@ -25,91 +24,6 @@ describe('mapStripeSubscriptionStatus', () => {
   })
 })
 
-describe('assertCanStartSubscription', () => {
-  it('allows checkout when no Stripe subscription exists', () => {
-    expect(() =>
-      assertCanStartSubscription({
-        _id: orgId,
-        subscriptionStatus: 'trialing',
-      }),
-    ).not.toThrow()
-  })
-
-  it('blocks duplicate active subscriptions', () => {
-    expect(() =>
-      assertCanStartSubscription({
-        _id: orgId,
-        stripeSubscriptionId: 'sub_123',
-        subscriptionStatus: 'active',
-      }),
-    ).toThrow('Föreningen har redan en aktiv prenumeration.')
-  })
-
-  it('blocks duplicate trialing Stripe subscriptions', () => {
-    expect(() =>
-      assertCanStartSubscription({
-        _id: orgId,
-        stripeSubscriptionId: 'sub_123',
-        subscriptionStatus: 'trialing',
-      }),
-    ).toThrow('Föreningen har redan en aktiv prenumeration.')
-  })
-
-  it('allows new checkout after cancellation', () => {
-    expect(() =>
-      assertCanStartSubscription({
-        _id: orgId,
-        stripeSubscriptionId: 'sub_old',
-        subscriptionStatus: 'canceled',
-      }),
-    ).not.toThrow()
-  })
-})
-
-describe('subscriptionTrialEnd', () => {
-  const now = Date.UTC(2025, 5, 13, 12, 0, 0)
-
-  it('returns unix seconds for future trial end', () => {
-    const trialEndsAt = now + 7 * 24 * 60 * 60 * 1000
-    expect(
-      subscriptionTrialEnd(
-        {
-          _id: orgId,
-          subscriptionStatus: 'trialing',
-          trialEndsAt,
-        },
-        now,
-      ),
-    ).toBe(Math.floor(trialEndsAt / 1000))
-  })
-
-  it('returns undefined when trial already ended', () => {
-    expect(
-      subscriptionTrialEnd(
-        {
-          _id: orgId,
-          subscriptionStatus: 'trialing',
-          trialEndsAt: now - 1000,
-        },
-        now,
-      ),
-    ).toBeUndefined()
-  })
-
-  it('returns undefined when not trialing', () => {
-    expect(
-      subscriptionTrialEnd(
-        {
-          _id: orgId,
-          subscriptionStatus: 'inactive',
-          trialEndsAt: now + 86_400_000,
-        },
-        now,
-      ),
-    ).toBeUndefined()
-  })
-})
-
 describe('optionalStripeTaxRateId', () => {
   it('treats missing and blank values as unset', () => {
     expect(optionalStripeTaxRateId(undefined)).toBeUndefined()
@@ -122,77 +36,91 @@ describe('optionalStripeTaxRateId', () => {
   })
 })
 
-describe('buildCheckoutSubscriptionData', () => {
-  it('omits default_tax_rates when STRIPE_TAX_RATE_ID is unset', () => {
-    const data = buildCheckoutSubscriptionData({
-      organizationId: orgId,
-      trialEnd: 1_700_000_000,
+describe('buildEventCheckoutLineItem', () => {
+  it('omits tax_rates when STRIPE_TAX_RATE_ID is unset', () => {
+    const item = buildEventCheckoutLineItem({
+      priceId: 'price_event',
       taxRateId: optionalStripeTaxRateId(undefined),
     })
 
-    expect(data).toEqual({
-      metadata: { organizationId: orgId },
-      trial_end: 1_700_000_000,
-    })
-    expect(data).not.toHaveProperty('default_tax_rates')
+    expect(item).toEqual({ price: 'price_event', quantity: 1 })
+    expect(item).not.toHaveProperty('tax_rates')
   })
 
-  it('sets subscription_data.default_tax_rates when STRIPE_TAX_RATE_ID is set', () => {
-    const data = buildCheckoutSubscriptionData({
+  it('sets tax_rates on the line item when STRIPE_TAX_RATE_ID is set', () => {
+    const item = buildEventCheckoutLineItem({
+      priceId: 'price_event',
+      taxRateId: optionalStripeTaxRateId(' txr_25 '),
+    })
+
+    expect(item).toEqual({
+      price: 'price_event',
+      quantity: 1,
+      tax_rates: ['txr_25'],
+    })
+  })
+})
+
+describe('buildSeasonSubscriptionData', () => {
+  it('omits default_tax_rates when the tax rate is unset', () => {
+    const data = buildSeasonSubscriptionData({
       organizationId: orgId,
-      trialEnd: undefined,
+      taxRateId: optionalStripeTaxRateId(''),
+    })
+
+    expect(data).toEqual({
+      metadata: { organizationId: orgId, plan: 'season' },
+    })
+    expect(data).not.toHaveProperty('default_tax_rates')
+    expect(data).not.toHaveProperty('trial_end')
+  })
+
+  it('sets default_tax_rates for the subscription', () => {
+    const data = buildSeasonSubscriptionData({
+      organizationId: orgId,
       taxRateId: optionalStripeTaxRateId('txr_25'),
     })
 
     expect(data).toEqual({
-      metadata: { organizationId: orgId },
+      metadata: { organizationId: orgId, plan: 'season' },
       default_tax_rates: ['txr_25'],
     })
-    expect(data).not.toHaveProperty('trial_end')
   })
 })
 
-describe('buildInvoiceSubscriptionParams', () => {
-  const base = {
-    customerId: 'cus_123',
-    priceId: 'price_995',
-    organizationId: orgId,
-  }
-
-  it('omits default_tax_rates when STRIPE_TAX_RATE_ID is unset', () => {
-    const params = buildInvoiceSubscriptionParams({
-      ...base,
-      trialEnd: undefined,
-      taxRateId: optionalStripeTaxRateId(''),
+describe('checkout params', () => {
+  it('builds a one-time payment checkout with promotion codes', () => {
+    const params = buildEventCheckoutParams({
+      organizationId: orgId,
+      priceId: 'price_event',
+      taxRateId: 'txr_25',
     })
 
-    expect(params).toEqual({
-      customer: 'cus_123',
-      items: [{ price: 'price_995' }],
-      collection_method: 'send_invoice',
-      days_until_due: 30,
-      metadata: { organizationId: orgId },
+    expect(params.mode).toBe('payment')
+    expect(params.allow_promotion_codes).toBe(true)
+    expect(params.metadata.plan).toBe('event')
+    expect(params.line_items[0]).toEqual({
+      price: 'price_event',
+      quantity: 1,
+      tax_rates: ['txr_25'],
     })
-    expect(params).not.toHaveProperty('default_tax_rates')
-    expect(params.items[0]).not.toHaveProperty('tax_rates')
   })
 
-  it('sets default_tax_rates when STRIPE_TAX_RATE_ID is set', () => {
-    const params = buildInvoiceSubscriptionParams({
-      ...base,
-      trialEnd: 1_700_000_000,
-      taxRateId: optionalStripeTaxRateId(' txr_25 '),
+  it('builds a season subscription checkout without a trial', () => {
+    const params = buildSeasonCheckoutParams({
+      organizationId: orgId,
+      priceId: 'price_season',
+      taxRateId: undefined,
     })
 
-    expect(params).toEqual({
-      customer: 'cus_123',
-      items: [{ price: 'price_995' }],
-      collection_method: 'send_invoice',
-      days_until_due: 30,
-      metadata: { organizationId: orgId },
-      trial_end: 1_700_000_000,
-      default_tax_rates: ['txr_25'],
+    expect(params.mode).toBe('subscription')
+    expect(params.allow_promotion_codes).toBe(true)
+    expect(params.metadata.plan).toBe('season')
+    expect(params.line_items).toEqual([{ price: 'price_season', quantity: 1 }])
+    expect(params.subscription_data).toEqual({
+      metadata: { organizationId: orgId, plan: 'season' },
     })
-    expect(params.items[0]).not.toHaveProperty('tax_rates')
+    expect(params.subscription_data).not.toHaveProperty('trial_end')
+    expect(params.line_items[0]).not.toHaveProperty('tax_rates')
   })
 })

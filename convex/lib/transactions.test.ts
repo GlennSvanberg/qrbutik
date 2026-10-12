@@ -94,7 +94,7 @@ function createMockReadCtx(
 
             return {
               order: (_direction: string) => ({
-                collect: async () => filtered,
+                collect: () => Promise.resolve(filtered),
               }),
             }
           },

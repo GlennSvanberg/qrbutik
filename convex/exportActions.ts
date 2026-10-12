@@ -25,6 +25,10 @@ export const exportTransactionsSie = action({
       throw new Error('Not authenticated')
     }
 
+    await ctx.runMutation(internal.organizations.syncOrganizationPlan, {
+      organizationId: args.organizationId,
+    })
+
     const data = await ctx.runQuery(internal.exports.listTransactionsForExportInternal, {
       organizationId: args.organizationId,
       callerEmail: identity.email.trim().toLowerCase(),
@@ -32,6 +36,7 @@ export const exportTransactionsSie = action({
       start: args.start,
       end: args.end,
       includePending: args.includePending,
+      format: 'sie',
     })
 
     const revenueAccount = data.sieRevenueAccount?.trim() || '3010'

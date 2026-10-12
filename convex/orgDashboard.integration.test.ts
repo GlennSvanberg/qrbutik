@@ -15,7 +15,10 @@ import {
 describe('getOrganizationDashboardSummary vs export', () => {
   it('transactionCount matches export rows for the same range filter', async () => {
     const t = convexTest(schema, convexModules)
-    const { organizationId, ownerEmail } = await seedOrganization(t)
+    const { organizationId, ownerEmail } = await seedOrganization(t, {
+      plan: 'season',
+      status: 'active',
+    })
     const { shopId } = await seedShop(t, organizationId)
 
     await seedTransaction(t, shopId, {

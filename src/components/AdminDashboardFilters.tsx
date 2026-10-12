@@ -15,6 +15,7 @@ type AdminDashboardFiltersProps = {
   shopId: Id<'shops'> | 'all'
   shopOptions: Array<{ _id: Id<'shops'>; name: string }>
   onShopChange: (shopId: Id<'shops'> | 'all') => void
+  salesReport?: boolean
 }
 
 export function AdminDashboardFilters({
@@ -27,11 +28,22 @@ export function AdminDashboardFilters({
   shopId,
   shopOptions,
   onShopChange,
+  salesReport = true,
 }: AdminDashboardFiltersProps) {
+  const options = salesReport
+    ? dashboardPeriodOptions
+    : dashboardPeriodOptions.filter((option) => option.id === 'today')
+
   return (
     <div className="flex flex-col gap-4">
+      {!salesReport ? (
+        <p className="text-sm text-brand-muted">
+          Gratis visar statistik för idag. Försäljningsrapport ingår i Event och
+          Säsong.
+        </p>
+      ) : null}
       <div className="flex flex-wrap gap-2">
-        {dashboardPeriodOptions.map((option) => (
+        {options.map((option) => (
           <button
             key={option.id}
             type="button"
