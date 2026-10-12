@@ -6,7 +6,6 @@ import { api } from './_generated/api'
 import schema from './schema'
 import {
   FIXTURE_NOW,
-  FIXTURE_TRIAL_ENDS_AT,
   asUser,
   seedOrganization,
   seedShop,
@@ -158,48 +157,6 @@ describe('superadmin data', () => {
 describe('superadmin mutations', () => {
   afterEach(() => {
     vi.unstubAllEnvs()
-  })
-
-  it('extendTrial updates trialEndsAt for trialing org', async () => {
-    vi.stubEnv('PLATFORM_ADMIN_EMAILS', PLATFORM_ADMIN)
-    const t = convexTest(schema, convexModules)
-    const { organizationId } = await seedOrganization(t, {
-      status: 'trialing',
-      trialEndsAt: FIXTURE_TRIAL_ENDS_AT,
-    })
-
-    const result = await asUser(t, PLATFORM_ADMIN).mutation(
-      api.superadmin.extendTrial,
-      {
-        organizationId,
-        additionalDays: 7,
-      },
-    )
-
-    expect(result.subscriptionStatus).toBe('trialing')
-    expect(result.trialEndsAt).toBeGreaterThan(FIXTURE_TRIAL_ENDS_AT)
-
-    const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
-    expect(org?.trialEndsAt).toBe(result.trialEndsAt)
-  })
-
-  it('extendTrial reactivates inactive org to trialing', async () => {
-    vi.stubEnv('PLATFORM_ADMIN_EMAILS', PLATFORM_ADMIN)
-    const t = convexTest(schema, convexModules)
-    const { organizationId } = await seedOrganization(t, {
-      status: 'inactive',
-      trialEndsAt: FIXTURE_NOW - 24 * 60 * 60 * 1000,
-    })
-
-    const result = await asUser(t, PLATFORM_ADMIN).mutation(
-      api.superadmin.extendTrial,
-      {
-        organizationId,
-        additionalDays: 14,
-      },
-    )
-
-    expect(result.subscriptionStatus).toBe('trialing')
   })
 
   it('updateSubscriptionStatus rejects non-admin', async () => {

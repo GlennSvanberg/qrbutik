@@ -45,22 +45,23 @@ describe('transactions.create subscription gating', () => {
   )
 })
 
-describe('expireTrials', () => {
-  it('inactivates expired trial without Stripe subscription', async () => {
+describe('expireEventPlans', () => {
+  it('reverts an expired Event purchase to Gratis', async () => {
     const t = convexTest(schema, convexModules)
     const { organizationId } = await seedOrganization(t, {
-      status: 'trialing',
-      trialEndsAt: FIXTURE_NOW - 24 * 60 * 60 * 1000,
+      status: 'inactive',
+      plan: 'event',
+      eventExpiresAt: FIXTURE_NOW - 1000,
     })
 
-    await t.mutation(internal.organizations.expireTrials, {})
+    await t.mutation(internal.organizations.expireEventPlans, {})
 
     const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
-    expect(org?.subscriptionStatus).toBe('inactive')
-    expect(org?.trialExpiredEmailSentAt).toBeDefined()
+    expect(org?.plan).toBe('gratis')
+    expect(org?.eventExpiredEmailSentAt).toBeDefined()
   })
 
-  it('skips org with stripeSubscriptionId even if trial expired', async () => {
+  it('keeps a grandfathered Stripe subscription', async () => {
     const t = convexTest(schema, convexModules)
     const { organizationId } = await seedOrganization(t, {
       status: 'trialing',
@@ -68,9 +69,23 @@ describe('expireTrials', () => {
       stripeSubscriptionId: 'sub_keep_trialing',
     })
 
-    await t.mutation(internal.organizations.expireTrials, {})
+    await t.mutation(internal.organizations.expireEventPlans, {})
 
     const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
     expect(org?.subscriptionStatus).toBe('trialing')
+    expect(org?.stripeSubscriptionId).toBe('sub_keep_trialing')
+  })
+
+  it('clears a local no-card trial to inactive Gratis', async () => {
+    const t = convexTest(schema, convexModules)
+    const { organizationId } = await seedOrganization(t, {
+      status: 'trialing',
+    })
+
+    await t.mutation(internal.organizations.expireEventPlans, {})
+
+    const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
+    expect(org?.subscriptionStatus).toBe('inactive')
+    expect(org?.plan).toBe('gratis')
   })
 })

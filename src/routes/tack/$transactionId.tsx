@@ -137,7 +137,7 @@ function ThankYouView() {
               className="relaxed-primary-button mt-4 inline-flex h-12 cursor-pointer items-center justify-center px-6 text-sm font-semibold text-white"
               trackaton-on-click="demo-thankyou-cta"
             >
-              Starta provperiod
+              Skapa förening
             </Link>
           </section>
         ) : null}

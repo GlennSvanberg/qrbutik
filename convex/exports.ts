@@ -3,11 +3,34 @@ import { internalQuery } from './_generated/server'
 import { orgQuery, requireTreasurerMembership } from './lib/customFunctions'
 import { getAccessibleShopIds } from './lib/auth'
 import { buildItemsSummary } from './lib/exportFormat'
+import { storedEntitlements } from './lib/planAccess'
+import { ACCOUNTING_EXPORT_ERROR, SALES_EXPORT_ERROR } from './lib/plans'
 import {
   getCustomRange,
   listTransactionsForShopsInRange,
 } from './lib/transactions'
+import type { Doc } from './_generated/dataModel'
 import type { ExportRow } from './lib/exportFormat'
+
+const exportFormatValidator = v.optional(
+  v.union(v.literal('excel'), v.literal('sie')),
+)
+
+function assertExportEntitlement(
+  organization: Doc<'organizations'>,
+  format: 'excel' | 'sie' | undefined,
+) {
+  const entitlements = storedEntitlements(organization)
+  if (format === 'sie') {
+    if (!entitlements.accountingExport) {
+      throw new Error(ACCOUNTING_EXPORT_ERROR)
+    }
+    return
+  }
+  if (!entitlements.salesExport) {
+    throw new Error(SALES_EXPORT_ERROR)
+  }
+}
 
 const exportRowValidator = v.object({
   createdAt: v.number(),
@@ -27,10 +50,17 @@ export const listTransactionsForExport = orgQuery({
     start: v.number(),
     end: v.number(),
     includePending: v.optional(v.boolean()),
+    format: exportFormatValidator,
   },
   returns: v.array(exportRowValidator),
   handler: async (ctx, args) => {
     requireTreasurerMembership(ctx.membership)
+
+    const organization = await ctx.db.get('organizations', args.organizationId)
+    if (!organization) {
+      throw new Error('Föreningen hittades inte.')
+    }
+    assertExportEntitlement(organization, args.format)
 
     const { start, end } = getCustomRange(args.start, args.end)
     const accessibleShopIds = await getAccessibleShopIds(
@@ -91,6 +121,7 @@ export const listTransactionsForExportInternal = internalQuery({
     start: v.number(),
     end: v.number(),
     includePending: v.optional(v.boolean()),
+    format: exportFormatValidator,
   },
   returns: v.object({
     rows: v.array(exportRowValidator),
@@ -114,6 +145,8 @@ export const listTransactionsForExportInternal = internalQuery({
     if (!membership || !['owner', 'treasurer'].includes(membership.role)) {
       throw new Error('Unauthorized: treasurer access required')
     }
+
+    assertExportEntitlement(organization, args.format)
 
     const accessibleShopIds = membership.role === 'owner' || membership.role === 'treasurer'
       ? (

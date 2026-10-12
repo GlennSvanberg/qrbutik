@@ -5,14 +5,14 @@ import { v } from "convex/values";
 import { action, internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOrgMemberForAction } from "./lib/stripeAuth";
+import { assertCanBuyEvent, assertCanStartSeason } from "./lib/plans";
 import {
-  assertCanStartSubscription,
-  buildCheckoutSubscriptionData,
-  buildInvoiceSubscriptionParams,
+  buildEventCheckoutParams,
+  buildSeasonCheckoutParams,
   optionalStripeTaxRateId,
-  subscriptionTrialEnd,
 } from "./lib/stripeHelpers";
 import type { SubscriptionStatus } from "./lib/validators";
+import type { CommercialPlan } from "./lib/plans";
 
 import type { Id } from "./_generated/dataModel";
 
@@ -26,10 +26,18 @@ function getStripe(): Stripe {
   return new Stripe(secretKey);
 }
 
-function getPriceId(): string {
-  const priceId = process.env.STRIPE_PRICE_ID;
+function getEventPriceId(): string {
+  const priceId = process.env.STRIPE_EVENT_PRICE_ID;
   if (!priceId) {
-    throw new Error("Stripe price is not configured.");
+    throw new Error("Stripe event price is not configured.");
+  }
+  return priceId;
+}
+
+function getSeasonPriceId(): string {
+  const priceId = process.env.STRIPE_SEASON_PRICE_ID;
+  if (!priceId) {
+    throw new Error("Stripe season price is not configured.");
   }
   return priceId;
 }
@@ -46,7 +54,8 @@ type StripeOrganization = {
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
   subscriptionStatus: SubscriptionStatus;
-  trialEndsAt?: number;
+  plan?: CommercialPlan;
+  eventExpiresAt?: number;
 };
 
 async function ensureStripeCustomer(
@@ -89,6 +98,15 @@ async function ensureStripeCustomer(
   return customer.id;
 }
 
+function customerIdFrom(
+  customer: string | Stripe.Customer | Stripe.DeletedCustomer | null,
+): string | undefined {
+  if (!customer) {
+    return undefined;
+  }
+  return typeof customer === "string" ? customer : customer.id;
+}
+
 export const processWebhook = internalAction({
   args: {
     rawBody: v.string(),
@@ -124,16 +142,43 @@ export const processWebhook = internalAction({
       case "checkout.session.completed": {
         const session = event.data.object;
         const organizationId = session.metadata?.organizationId;
-        const customerId =
-          typeof session.customer === "string"
-            ? session.customer
-            : session.customer?.id;
+        const customerId = customerIdFrom(session.customer);
+        if (!organizationId || !customerId) {
+          break;
+        }
+
+        if (session.mode === "payment") {
+          if (
+            session.payment_status !== "paid" &&
+            session.payment_status !== "no_payment_required"
+          ) {
+            break;
+          }
+          if (session.metadata?.plan !== "event") {
+            break;
+          }
+
+          await ctx.runMutation(
+            internal.stripeMutations.handleEventCheckoutCompleted,
+            {
+              organizationId,
+              stripeCustomerId: customerId,
+              checkoutSessionId: session.id,
+              purchasedAt: session.created * 1000,
+            },
+          );
+          break;
+        }
+
+        if (session.mode !== "subscription") {
+          break;
+        }
+
         const subscriptionId =
           typeof session.subscription === "string"
             ? session.subscription
             : session.subscription?.id;
-
-        if (!organizationId || !customerId || !subscriptionId) {
+        if (!subscriptionId) {
           break;
         }
 
@@ -150,10 +195,10 @@ export const processWebhook = internalAction({
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
         const subscription = event.data.object;
-        const customerId =
-          typeof subscription.customer === "string"
-            ? subscription.customer
-            : subscription.customer.id;
+        const customerId = customerIdFrom(subscription.customer);
+        if (!customerId) {
+          break;
+        }
 
         await ctx.runMutation(
           internal.stripeMutations.handleSubscriptionUpdated,
@@ -161,17 +206,16 @@ export const processWebhook = internalAction({
             stripeCustomerId: customerId,
             stripeSubscriptionId: subscription.id,
             subscriptionStatus: subscription.status,
+            ...(subscription.metadata.plan === "season"
+              ? { plan: "season" as const }
+              : {}),
           },
         );
         break;
       }
       case "invoice.payment_failed": {
         const invoice = event.data.object;
-        const customerId =
-          typeof invoice.customer === "string"
-            ? invoice.customer
-            : invoice.customer?.id;
-
+        const customerId = customerIdFrom(invoice.customer);
         if (customerId) {
           await ctx.runMutation(internal.stripeMutations.handlePaymentFailed, {
             stripeCustomerId: customerId,
@@ -187,9 +231,12 @@ export const processWebhook = internalAction({
   },
 });
 
+const checkoutPlanValidator = v.union(v.literal("event"), v.literal("season"));
+
 export const createCheckoutSession = action({
   args: {
     organizationId: v.id("organizations"),
+    plan: checkoutPlanValidator,
   },
   returns: v.object({
     url: v.string(),
@@ -211,10 +258,14 @@ export const createCheckoutSession = action({
       throw new Error("Föreningen hittades inte.");
     }
 
-    assertCanStartSubscription(organization);
+    if (args.plan === "event") {
+      assertCanBuyEvent(organization, Date.now());
+    } else {
+      assertCanStartSeason(organization);
+    }
 
     const stripe = getStripe();
-    const priceId = getPriceId();
+    const taxRateId = getTaxRateId();
     const customerId = await ensureStripeCustomer(
       stripe,
       organization,
@@ -228,24 +279,24 @@ export const createCheckoutSession = action({
       },
     );
 
-    const trialEnd = subscriptionTrialEnd(organization);
-    const subscriptionData: Stripe.Checkout.SessionCreateParams.SubscriptionData =
-      buildCheckoutSubscriptionData({
-        organizationId: args.organizationId,
-        trialEnd,
-        taxRateId: getTaxRateId(),
-      });
+    const checkoutParams =
+      args.plan === "event"
+        ? buildEventCheckoutParams({
+            organizationId: args.organizationId,
+            priceId: getEventPriceId(),
+            taxRateId,
+          })
+        : buildSeasonCheckoutParams({
+          organizationId: args.organizationId,
+          priceId: getSeasonPriceId(),
+          taxRateId,
+        });
 
     const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
+      ...checkoutParams,
       customer: customerId,
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}&success=1`,
+      success_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}&success=1&plan=${args.plan}`,
       cancel_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}&canceled=1`,
-      metadata: {
-        organizationId: args.organizationId,
-      },
-      subscription_data: subscriptionData,
     });
 
     if (!session.url) {
@@ -253,76 +304,6 @@ export const createCheckoutSession = action({
     }
 
     return { url: session.url };
-  },
-});
-
-export const createInvoiceSubscription = action({
-  args: {
-    organizationId: v.id("organizations"),
-  },
-  returns: v.object({
-    message: v.string(),
-  }),
-  handler: async (ctx, args): Promise<{ message: string }> => {
-    await requireOrgMemberForAction(ctx, args.organizationId, [
-      "owner",
-      "treasurer",
-    ]);
-
-    const organizationRecord = await ctx.runQuery(
-      internal.stripeQueries.getOrganizationForStripe,
-      {
-        organizationId: args.organizationId,
-      },
-    );
-
-    if (!organizationRecord) {
-      throw new Error("Föreningen hittades inte.");
-    }
-
-    const organization: StripeOrganization = organizationRecord;
-
-    assertCanStartSubscription(organization);
-
-    const stripe = getStripe();
-    const priceId = getPriceId();
-    const customerId = await ensureStripeCustomer(
-      stripe,
-      organization,
-      args.organizationId,
-      async (newCustomerId) => {
-        await ctx.runMutation(internal.organizations.setSubscriptionStatus, {
-          organizationId: args.organizationId,
-          subscriptionStatus: organization.subscriptionStatus,
-          stripeCustomerId: newCustomerId,
-        });
-      },
-    );
-
-    const trialEnd = subscriptionTrialEnd(organization);
-    const subscriptionParams: Stripe.SubscriptionCreateParams =
-      buildInvoiceSubscriptionParams({
-        customerId,
-        priceId,
-        organizationId: args.organizationId,
-        trialEnd,
-        taxRateId: getTaxRateId(),
-      });
-    const subscription = await stripe.subscriptions.create(subscriptionParams);
-
-    await ctx.runMutation(internal.stripeMutations.handleCheckoutCompleted, {
-      organizationId: args.organizationId,
-      stripeCustomerId: customerId,
-      stripeSubscriptionId: subscription.id,
-      subscriptionStatus: subscription.status,
-    });
-
-    const duringTrial = subscription.status === "trialing";
-    return {
-      message: duringTrial
-        ? `Fakturering är kopplad. Första fakturan skickas till ${organization.billingEmail} när provperioden slutar.`
-        : `Faktura skickad till ${organization.billingEmail}. Kiosker aktiveras när betalningen registreras.`,
-    };
   },
 });
 

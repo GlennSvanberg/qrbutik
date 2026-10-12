@@ -28,6 +28,10 @@ export const exportTransactionsExcel = action({
       throw new Error('Not authenticated')
     }
 
+    await ctx.runMutation(internal.organizations.syncOrganizationPlan, {
+      organizationId: args.organizationId,
+    })
+
     const data = await ctx.runQuery(
       internal.exports.listTransactionsForExportInternal,
       {
@@ -37,6 +41,7 @@ export const exportTransactionsExcel = action({
         start: args.start,
         end: args.end,
         includePending: args.includePending,
+        format: 'excel',
       },
     )
 

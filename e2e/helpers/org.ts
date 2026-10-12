@@ -1,10 +1,11 @@
 import { expect } from '@playwright/test'
+import { grantSeasonAccess } from './convex'
 import type { Page } from '@playwright/test'
 
 export async function createTestOrg(
   page: Page,
   options: { email: string; orgName: string; billingEmail?: string },
-): Promise<void> {
+): Promise<string> {
   await page.getByLabel('Föreningsnamn').fill(options.orgName)
   await page
     .getByLabel('Faktura-e-post')
@@ -14,6 +15,11 @@ export async function createTestOrg(
   await expect(
     page.getByRole('heading', { name: 'Klubblicens & fakturering' }),
   ).toBeVisible({ timeout: 30_000 })
+  const organizationId = new URL(page.url()).searchParams.get('organizationId')
+  if (!organizationId) {
+    throw new Error('organizationId missing from billing URL')
+  }
+  return organizationId
 }
 
 export type CreateTestKioskOptions = {
@@ -102,10 +108,11 @@ export async function createTrialOrgWithKiosk(
     products?: Array<{ name: string; price: string }>
   },
 ): Promise<CreateTestKioskResult & { orgName: string; email: string }> {
-  await createTestOrg(page, {
+  const organizationId = await createTestOrg(page, {
     email: options.email,
     orgName: options.orgName,
   })
+  grantSeasonAccess(organizationId)
 
   const kiosk = await createTestKiosk(page, baseURL, {
     slug: options.slug,

@@ -6,6 +6,7 @@ import { useMutation } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
 import { AdminExportPanel } from '../../../components/AdminExportPanel'
 import { getDateRangeForPeriod, isTreasurerRole } from '../../../lib/adminDashboard'
+import { hasAccountingExport, hasSalesExport, hasSalesReport } from '../../../lib/billingUi'
 import type { Doc, Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/historik')({
@@ -22,9 +23,11 @@ function PurchaseHistoryPage() {
     convexQuery(api.organizations.getMyOrganizations, {}),
   )
 
-  const orgRole = organizations?.find(
+  const organization = organizations?.find(
     (org) => org._id === shop?.organizationId,
-  )?.role
+  )
+  const orgRole = organization?.role
+  const salesReport = organization ? hasSalesReport(organization) : false
 
   if (!shop) {
     return null
@@ -47,17 +50,49 @@ function PurchaseHistoryPage() {
     )
   }
 
-  return <PurchaseHistoryContent shopId={shopIdParam} shop={shop} orgRole={orgRole} />
+  if (organizations !== undefined && !salesReport) {
+    return (
+      <main className="relaxed-page-shell min-h-screen px-6 py-10">
+        <div className="relaxed-surface mx-auto max-w-2xl p-8 text-center text-sm text-brand-muted">
+          <p>
+            Försäljningsrapport ingår i Event och Säsong. Gratis visar statistik
+            för idag.
+          </p>
+          <Link
+            to="/admin/billing"
+            search={{ organizationId: shop.organizationId }}
+            className="relaxed-primary-button mt-4 inline-flex cursor-pointer px-4 py-2 text-sm font-semibold text-white"
+          >
+            Se planer
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <PurchaseHistoryContent
+      shopId={shopIdParam}
+      shop={shop}
+      orgRole={orgRole}
+      salesExport={organization ? hasSalesExport(organization) : false}
+      accountingExport={organization ? hasAccountingExport(organization) : false}
+    />
+  )
 }
 
 function PurchaseHistoryContent({
   shopId,
   shop,
   orgRole,
+  salesExport,
+  accountingExport,
 }: {
   shopId: Id<'shops'>
   shop: Doc<'shops'>
   orgRole?: 'owner' | 'treasurer' | 'editor'
+  salesExport: boolean
+  accountingExport: boolean
 }) {
   const { data: transactions } = useSuspenseQuery(
     convexQuery(api.transactions.listByShop, { shopId }),
@@ -111,6 +146,8 @@ function PurchaseHistoryContent({
           start={exportRange.start}
           end={exportRange.end}
           compact
+          salesExport={salesExport}
+          accountingExport={accountingExport}
         />
       ) : null}
 

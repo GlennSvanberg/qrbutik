@@ -27,7 +27,7 @@ Det innebär:
 |-----|-------|
 | **MRR-mål** | 10 000 kr/månad |
 | **Kundtyp** | Idrottsföreningar & sommarcuper (B2B) — **inte** privatpersoner/loppis |
-| **Prismodell** | Klubblicens: **995 kr/månad** (en plan) |
+| **Prismodell** | **Gratis**, **Event 295 kr** (7 dagar), **Säsong 1 495 kr/år** |
 | **Antal kunder** | 7–10 betalande föreninger |
 | **Plattformsintäkter** | Stripe Billing (kort) — **inte** manuell Swish till privatnummer |
 | **Kundbetalningar (kiosk)** | Fortfarande Swish deep links till föreningens/lagets eget nummer |

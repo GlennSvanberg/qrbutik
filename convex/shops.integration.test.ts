@@ -40,7 +40,10 @@ describe('createShopInOrganization', () => {
 
   it('throws when explicit slug collides', async () => {
     const t = convexTest(schema, convexModules)
-    const { organizationId, ownerEmail } = await seedOrganization(t)
+    const { organizationId, ownerEmail } = await seedOrganization(t, {
+      plan: 'season',
+      status: 'active',
+    })
     await seedShop(t, organizationId, { slug: 'taken-slug' })
 
     await expect(
@@ -56,7 +59,10 @@ describe('createShopInOrganization', () => {
 
   it('auto-suffixes slug when name collides without explicit slug', async () => {
     const t = convexTest(schema, convexModules)
-    const { organizationId, ownerEmail } = await seedOrganization(t)
+    const { organizationId, ownerEmail } = await seedOrganization(t, {
+      plan: 'season',
+      status: 'active',
+    })
     await seedShop(t, organizationId, { slug: 'collision-kiosk', name: 'Collision kiosk' })
 
     const result = await asUser(t, ownerEmail).mutation(

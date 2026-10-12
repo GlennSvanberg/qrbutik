@@ -19,17 +19,17 @@ type OverviewData = {
     inactive: number
   }
   estimatedMrrKr: number
-  trialsExpiringSoon: Array<{
+  eventsExpiringSoon: Array<{
     organizationId: string
     name: string
     subscriptionStatus: string
-    trialEndsAt: number | null
+    eventExpiresAt: number | null
   }>
   needsAttention: Array<{
     organizationId: string
     name: string
     subscriptionStatus: string
-    trialEndsAt: number | null
+    eventExpiresAt: number | null
   }>
   recentOrganizations: Array<{
     organizationId: string
@@ -103,9 +103,9 @@ function AlertList({
                 ) : (
                   <p className="text-sm font-semibold text-brand-foreground">{item.name}</p>
                 )}
-                {item.trialEndsAt !== null ? (
+                {item.eventExpiresAt !== null ? (
                   <p className="text-xs text-brand-muted">
-                    Trial till {formatDateTime(item.trialEndsAt)}
+                    Event till {formatDateTime(item.eventExpiresAt)}
                   </p>
                 ) : null}
               </div>
@@ -127,7 +127,7 @@ export function SuperAdminOverview({
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
         <KpiCard label="Föreningar" value={String(overview.totalOrganizations)} />
         <KpiCard label="Betalande" value={String(overview.statusCounts.active)} />
-        <KpiCard label="Provperiod" value={String(overview.statusCounts.trialing)} />
+        <KpiCard label="Trialing" value={String(overview.statusCounts.trialing)} />
         <KpiCard label="Förfallna" value={String(overview.statusCounts.past_due)} />
         <KpiCard label="Kiosker" value={String(overview.totalShops)} />
         <KpiCard label="Uppskattad MRR" value={formatMrr(overview.estimatedMrrKr)} />
@@ -180,9 +180,9 @@ export function SuperAdminOverview({
 
       <div className="grid gap-4 lg:grid-cols-2">
         <AlertList
-          title="Trial löper ut inom 7 dagar"
-          items={overview.trialsExpiringSoon}
-          emptyText="Inga provperioder löper ut snart."
+          title="Event löper ut inom 7 dagar"
+          items={overview.eventsExpiringSoon}
+          emptyText="Inga Event-köp löper ut snart."
           onSelectOrganization={onSelectOrganization}
         />
         <AlertList

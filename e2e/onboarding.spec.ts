@@ -19,6 +19,7 @@ test.describe('Organization onboarding', () => {
     await expect(page.getByRole('main').getByText(orgName)).toBeVisible({
       timeout: 30_000,
     })
-    await expect(page.getByText('från 995 kr/mån').first()).toBeVisible()
+    await expect(page.getByText('1 495 kr/år').first()).toBeVisible()
+    await expect(page.getByText('295 kr').first()).toBeVisible()
   })
 })

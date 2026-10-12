@@ -2,14 +2,14 @@
 
 ## Product direction (read first)
 
-QRButik pivots from **pay-per-activation (10/99 kr Swish)** to **B2B club licenses (995 kr/month)** for Swedish sports clubs. Target buyer: association board/treasurer — not private flea-market users.
+QRButik is a **B2B kiosk** for Swedish sports clubs. Plans, all prices including 25% VAT: **Gratis** (1 kiosk), **Event** (295 kr, 7 days), **Säsong** (1 495 kr/year, about 125 kr/month). Target buyer: association board/treasurer.
 
 - **Roadmap (checkbox plan):** [`ROADMAP.md`](./ROADMAP.md)
 - **Vision:** [`plan.md`](./plan.md)
 - **SEO strategy:** [`SEO_INSTRUCTIONS.md`](./SEO_INSTRUCTIONS.md)
 - **Design:** [`DESIGN_SPEC.md`](./DESIGN_SPEC.md)
 
-**MRR goal:** 10 000 kr/month via 7–10 paying clubs. Platform billing: **Stripe** (trial, card, invoice) — not manual Swish to a private number. Customer kiosk payments stay **Swish deep links** to the club's own number.
+**MRR goal:** 10 000 kr/month via paying clubs. Platform billing: **Stripe** (Event Checkout `mode=payment`, Säsong Checkout `mode=subscription`, Customer Portal). Customer kiosk payments stay **Swish deep links** to the club's own number.
 
 When implementing features, prefer: organizations, roles, central treasurer dashboard, CSV/SIE export, server-side auth in Convex.
 
@@ -32,7 +32,8 @@ When implementing features, prefer: organizations, roles, central treasurer dash
 |----------|-------|---------|
 | `STRIPE_SECRET_KEY` | Convex | API calls, webhook verification |
 | `STRIPE_WEBHOOK_SECRET` | Convex | Webhook signature |
-| `STRIPE_PRICE_ID` | Convex | 995 kr/mån subscription price (`tax_behavior=inclusive`, moms included) |
+| `STRIPE_EVENT_PRICE_ID` | Convex | Event 295 kr one-time price (`tax_behavior=inclusive`, moms included) |
+| `STRIPE_SEASON_PRICE_ID` | Convex | Säsong 1 495 kr/year price (`tax_behavior=inclusive`, moms included) |
 | `STRIPE_TAX_RATE_ID` | Convex (optional) | Inclusive 25% Tax Rate (`txr_…`). When set, sent as `default_tax_rates` on Checkout and `send_invoice` subscriptions. When unset, tax rates are omitted. |
 | `VITE_STRIPE_PUBLISHABLE_KEY` | Vite (optional) | Future client-side Stripe.js |
 | `PLATFORM_ADMIN_EMAILS` | Convex | Comma-separated emails allowed on `/superadmin` (platform control tower) |
@@ -60,7 +61,7 @@ When `DEV_MAGIC_LINK=true`, any authenticated user can access `/superadmin` with
 
 Webhook URL: `{CONVEX_SITE_URL}/stripe/webhook`
 
-Until keys exist, org onboarding uses **14-day trial without card**; billing UI at `/admin/billing` stays disabled.
+Until keys exist, every org stays on **Gratis** (no card). Billing buttons at `/admin/billing` stay hidden until `STRIPE_EVENT_PRICE_ID` or `STRIPE_SEASON_PRICE_ID` is set.
 
 **Stripe CLI bootstrap:** `npm run stripe:sandbox` → `npm run stripe:setup` → `npm run stripe:listen` (keep listen running during webhook tests). Claim sandbox for Customer Portal / dashboard webhooks: `npm run stripe:claim`.
 - **Styling:** Tailwind CSS (v4)

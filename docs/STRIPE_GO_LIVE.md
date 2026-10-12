@@ -5,7 +5,7 @@ Use this checklist before accepting real club payments in production.
 ## 1. Stripe account (ROADMAP 0.4)
 
 - [ ] Create or verify Stripe account with Swedish business details
-- [ ] Confirm the live Price is `tax_behavior=inclusive` (995 kr includes 25% moms)
+- [ ] Confirm both live Prices are `tax_behavior=inclusive` (295 kr and 1 495 kr include 25% moms)
 - [ ] Create an inclusive 25% Tax Rate and set `STRIPE_TAX_RATE_ID` (see [Swedish VAT](#swedish-vat-25-inclusive))
 - [ ] Enable Customer Portal (Billing → Customer portal)
 - [ ] Add production webhook endpoint: `{CONVEX_SITE_URL}/stripe/webhook`
@@ -19,8 +19,9 @@ Use this checklist before accepting real club payments in production.
 |----------|-------|
 | `STRIPE_SECRET_KEY` | Live secret key (`sk_live_…`) |
 | `STRIPE_WEBHOOK_SECRET` | Live webhook signing secret |
-| `STRIPE_PRICE_ID` | Live price ID for 995 kr/mån (`tax_behavior=inclusive`) |
-| `STRIPE_TAX_RATE_ID` | Optional. Live Tax Rate ID (`txr_…`) for 25% inclusive moms. When set, applied to Checkout and invoice subscriptions. When unset, those calls omit tax rates. |
+| `STRIPE_EVENT_PRICE_ID` | Live price ID for Event 295 kr one-time (`tax_behavior=inclusive`) |
+| `STRIPE_SEASON_PRICE_ID` | Live price ID for Säsong 1 495 kr/year (`tax_behavior=inclusive`) |
+| `STRIPE_TAX_RATE_ID` | Optional. Live Tax Rate ID (`txr_…`) for 25% inclusive moms. When set, Event Checkout sends `tax_rates` on the line item and Säsong Checkout sends `subscription_data.default_tax_rates`. When unset, those fields are omitted. |
 
 ### Vite (optional)
 
@@ -30,7 +31,7 @@ Use this checklist before accepting real club payments in production.
 
 ### Swedish VAT (25% inclusive)
 
-The club license is **995 kr/month including 25% moms**. The live Price uses `tax_behavior=inclusive`, so attaching an inclusive tax rate does not add 25% on top of 995 kr. Stripe breaks moms out on the invoice (796 kr exkl. moms + 199 kr moms).
+Event is **295 kr** once and Säsong is **1 495 kr/year** (about 125 kr/month). Both include 25% moms. Prices use `tax_behavior=inclusive`, so attaching an inclusive tax rate does not add 25% on top.
 
 Create the Tax Rate in the Stripe Dashboard (Product catalog → Tax rates), in the same mode as the secret key:
 
@@ -44,14 +45,12 @@ Then set it on the Convex deployment (do not commit the ID):
 npx convex env set STRIPE_TAX_RATE_ID "txr_..."
 ```
 
-When `STRIPE_TAX_RATE_ID` is set, QRButik passes that single ID as Stripe `default_tax_rates`:
+When `STRIPE_TAX_RATE_ID` is set:
 
-- Subscription Checkout: `checkout.sessions.create` → `subscription_data.default_tax_rates`
-- Invoice subscription: `subscriptions.create` with `collection_method=send_invoice` → `default_tax_rates`
+- Event Checkout (`mode=payment`): `line_items[].tax_rates`
+- Säsong Checkout (`mode=subscription`): `subscription_data.default_tax_rates`
 
-Line items stay `{ price, quantity }` / `{ price }` with no per-item `tax_rates`. Stripe copies the subscription default onto invoices for items that do not set their own rates.
-
-When the variable is unset or blank, both calls omit `default_tax_rates` (same request shape as before this setting existed). An exclusive tax rate would charge 995 kr plus 25% and must not be used with this price. This flow uses a manual Tax Rate, not Stripe Tax automatic tax.
+Both sessions set `allow_promotion_codes: true`. When the variable is unset or blank, tax rate fields are omitted. An exclusive tax rate would add 25% on top of the price and must not be used. This flow uses a manual Tax Rate, not Stripe Tax automatic tax.
 
 ## 3. Test Mode sign-off (ROADMAP 2.3.3)
 
@@ -69,26 +68,20 @@ npm run stripe:listen
 
 Manual flow:
 
-1. Create org at `/skapa` or use existing trial org
-2. Open `/admin/org/{orgId}` → Fakturering (`/admin/billing?organizationId=…`)
-3. Click **Betala med kort** and complete checkout with test card `4242 4242 4242 4242`
-4. If `STRIPE_TAX_RATE_ID` is set, confirm Checkout still totals **995 kr** and the summary shows inclusive moms. If it is unset, Checkout has no tax line.
-5. Confirm webhook updates org status to `active` in Convex dashboard
-6. Test **Hantera prenumeration** (Customer Portal)
+1. Create an org at `/skapa` (it starts on Gratis)
+2. Open `/admin/billing?organizationId=…`
+3. Click **Köp Event — 295 kr** or **Starta Säsong — 1 495 kr/år** and pay with test card `4242 4242 4242 4242`
+4. If `STRIPE_TAX_RATE_ID` is set, confirm the total stays **295 kr** or **1 495 kr** with inclusive moms
+5. Confirm the webhook sets `plan` to `event` (with `eventExpiresAt`) or `season` with status `active`
+6. For Säsong, open **Hantera prenumeration** (Customer Portal)
 7. Optional: `STRIPE_E2E=true npm run test:e2e -- e2e/billing.spec.ts`
-
-Invoice flow (Test Mode):
-
-1. Click **Betala med faktura** on billing page
-2. Confirm org receives invoice collection email in Stripe test dashboard
-3. If `STRIPE_TAX_RATE_ID` is set, confirm the invoice total is still **995 kr** with inclusive 25% moms. If it is unset, the invoice has no tax rate.
 
 ## 4. Production promotion
 
 - [ ] Deploy Convex + frontend with Live env vars
-- [ ] Run one real 995 kr checkout with a test club (refund in Stripe if needed)
+- [ ] Run one real Event or Säsong checkout with a test club (refund in Stripe if needed)
 - [ ] Verify webhook idempotency (`stripeEvents` table)
-- [ ] Confirm trial expiry cron still inactivates orgs without payment
+- [ ] Confirm `expireEventPlans` returns an expired Event to Gratis
 
 ## 5. Owner sign-off
 

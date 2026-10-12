@@ -1,9 +1,7 @@
 import { v } from 'convex/values'
-import {
-  estimatedMrrKr,
-  isTrialExpiringSoon,
-  needsPaymentUrgently,
-} from './lib/billing'
+import { estimatedMrrKr, needsPaymentUrgently } from './lib/billing'
+import { kioskIsOpen, storedEntitlements } from './lib/planAccess'
+import { isEventExpiringSoon } from './lib/plans'
 import { authedQuery, platformAdminMutation, platformAdminQuery } from './lib/customFunctions'
 import { requirePlatformAdmin } from './lib/platformAdmin'
 import { isE2eTestOrganization, isE2eTestShop } from './lib/testData'
@@ -12,10 +10,7 @@ import {
   platformEventTypeValidator,
   shouldIncludeStoredPlatformEvent,
 } from './lib/platformEvents'
-import {
-  isSubscriptionActive,
-  subscriptionStatusValidator,
-} from './lib/validators'
+import { subscriptionStatusValidator } from './lib/validators'
 import type { PlatformEventRow } from './lib/platformEvents'
 import type { SubscriptionStatus } from './lib/validators'
 import type { Doc, Id } from './_generated/dataModel'
@@ -35,7 +30,7 @@ const alertOrgValidator = v.object({
   organizationId: v.id('organizations'),
   name: v.string(),
   subscriptionStatus: subscriptionStatusValidator,
-  trialEndsAt: v.union(v.number(), v.null()),
+  eventExpiresAt: v.union(v.number(), v.null()),
 })
 
 const recentOrgValidator = v.object({
@@ -51,7 +46,7 @@ const platformOverviewValidator = v.object({
   totalMembers: v.number(),
   statusCounts: statusCountsValidator,
   estimatedMrrKr: v.number(),
-  trialsExpiringSoon: v.array(alertOrgValidator),
+  eventsExpiringSoon: v.array(alertOrgValidator),
   needsAttention: v.array(alertOrgValidator),
   recentOrganizations: v.array(recentOrgValidator),
   platformTransactionStats: v.object({
@@ -65,7 +60,13 @@ const organizationRowValidator = v.object({
   name: v.string(),
   billingEmail: v.string(),
   subscriptionStatus: subscriptionStatusValidator,
-  trialEndsAt: v.union(v.number(), v.null()),
+  plan: v.union(
+    v.literal('gratis'),
+    v.literal('event'),
+    v.literal('season'),
+    v.null(),
+  ),
+  eventExpiresAt: v.union(v.number(), v.null()),
   stripeCustomerId: v.union(v.string(), v.null()),
   stripeSubscriptionId: v.union(v.string(), v.null()),
   createdAt: v.number(),
@@ -175,17 +176,17 @@ export const getPlatformOverview = platformAdminQuery({
     )
 
     const statusCounts = emptyStatusCounts()
-    const trialsExpiringSoon: Array<{
+    const eventsExpiringSoon: Array<{
       organizationId: Id<'organizations'>
       name: string
       subscriptionStatus: SubscriptionStatus
-      trialEndsAt: number | null
+      eventExpiresAt: number | null
     }> = []
     const needsAttention: Array<{
       organizationId: Id<'organizations'>
       name: string
       subscriptionStatus: SubscriptionStatus
-      trialEndsAt: number | null
+      eventExpiresAt: number | null
     }> = []
 
     for (const org of organizations) {
@@ -195,16 +196,14 @@ export const getPlatformOverview = platformAdminQuery({
         organizationId: org._id,
         name: org.name,
         subscriptionStatus: org.subscriptionStatus,
-        trialEndsAt: org.trialEndsAt ?? null,
+        eventExpiresAt: org.eventExpiresAt ?? null,
       }
 
-      if (isTrialExpiringSoon(org.subscriptionStatus, org.trialEndsAt, args.now)) {
-        trialsExpiringSoon.push(alertRow)
+      if (isEventExpiringSoon(org, args.now)) {
+        eventsExpiringSoon.push(alertRow)
       }
 
-      if (
-        needsPaymentUrgently(org.subscriptionStatus, org.trialEndsAt, args.now)
-      ) {
+      if (needsPaymentUrgently(org.subscriptionStatus)) {
         needsAttention.push(alertRow)
       }
     }
@@ -242,8 +241,8 @@ export const getPlatformOverview = platformAdminQuery({
       totalShops: shops.length,
       totalMembers: members.length,
       statusCounts,
-      estimatedMrrKr: estimatedMrrKr(statusCounts.active),
-      trialsExpiringSoon,
+      estimatedMrrKr: estimatedMrrKr(organizations),
+      eventsExpiringSoon,
       needsAttention,
       recentOrganizations,
       platformTransactionStats: {
@@ -296,7 +295,8 @@ export const listOrganizations = platformAdminQuery({
         name: org.name,
         billingEmail: org.billingEmail,
         subscriptionStatus: org.subscriptionStatus,
-        trialEndsAt: org.trialEndsAt ?? null,
+        plan: org.plan ?? null,
+        eventExpiresAt: org.eventExpiresAt ?? null,
         stripeCustomerId: org.stripeCustomerId ?? null,
         stripeSubscriptionId: org.stripeSubscriptionId ?? null,
         createdAt: org.createdAt,
@@ -304,7 +304,7 @@ export const listOrganizations = platformAdminQuery({
         memberCount: members.length,
         ownerEmail: await getOwnerEmail(ctx, org._id),
         lastVerifiedSaleAt,
-        licenseActive: isSubscriptionActive(org.subscriptionStatus),
+        licenseActive: storedEntitlements(org).effectivePlan !== 'gratis',
       })
     }
 
@@ -345,7 +345,7 @@ export const listAllShops = platformAdminQuery({
         teamLabel: shop.teamLabel ?? null,
         slug: shop.slug,
         swishNumber: shop.swishNumber,
-        licenseActive: isSubscriptionActive(organization.subscriptionStatus),
+        licenseActive: await kioskIsOpen(ctx, organization, shop._id),
         verifiedTransactionCount7d: stats.verifiedTransactionCount7d,
         lastVerifiedSaleAt: stats.lastVerifiedSaleAt,
       })
@@ -354,69 +354,6 @@ export const listAllShops = platformAdminQuery({
     return rows.sort((a, b) =>
       a.organizationName.localeCompare(b.organizationName, 'sv-SE'),
     )
-  },
-})
-
-export const extendTrial = platformAdminMutation({
-  args: {
-    organizationId: v.id('organizations'),
-    additionalDays: v.optional(v.number()),
-    trialEndsAt: v.optional(v.number()),
-  },
-  returns: v.object({
-    trialEndsAt: v.number(),
-    subscriptionStatus: subscriptionStatusValidator,
-  }),
-  handler: async (ctx, args) => {
-    const organization = await ctx.db.get('organizations', args.organizationId)
-    if (!organization) {
-      throw new Error('Föreningen hittades inte.')
-    }
-
-    if (
-      organization.subscriptionStatus !== 'trialing' &&
-      organization.subscriptionStatus !== 'inactive'
-    ) {
-      throw new Error(
-        'Provperiod kan bara förlängas för föreningar i provperiod eller inaktiv efter utgången trial.',
-      )
-    }
-
-    let nextTrialEndsAt: number
-    if (args.trialEndsAt !== undefined) {
-      nextTrialEndsAt = args.trialEndsAt
-    } else if (args.additionalDays !== undefined) {
-      if (args.additionalDays < 1 || args.additionalDays > 90) {
-        throw new Error('additionalDays måste vara mellan 1 och 90.')
-      }
-      const base =
-        organization.trialEndsAt !== undefined && organization.trialEndsAt > Date.now()
-          ? organization.trialEndsAt
-          : Date.now()
-      nextTrialEndsAt = base + args.additionalDays * dayMs
-    } else {
-      throw new Error('Ange additionalDays eller trialEndsAt.')
-    }
-
-    const nextStatus: SubscriptionStatus =
-      organization.subscriptionStatus === 'inactive' ? 'trialing' : 'trialing'
-
-    await ctx.db.patch('organizations', args.organizationId, {
-      trialEndsAt: nextTrialEndsAt,
-      subscriptionStatus: nextStatus,
-    })
-
-    console.warn('Platform admin extended trial', {
-      adminEmail: ctx.user.email,
-      organizationId: args.organizationId,
-      trialEndsAt: nextTrialEndsAt,
-      subscriptionStatus: nextStatus,
-    })
-
-    return {
-      trialEndsAt: nextTrialEndsAt,
-      subscriptionStatus: nextStatus,
-    }
   },
 })
 

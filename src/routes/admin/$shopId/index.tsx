@@ -6,6 +6,7 @@ import {
 import { convexQuery } from '@convex-dev/react-query'
 import { useState } from 'react'
 import { api } from '../../../../convex/_generated/api'
+import { hasSalesReport } from '../../../lib/billingUi'
 import type { Id } from '../../../../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/admin/$shopId/')({
@@ -26,6 +27,19 @@ function AdminShopDashboard() {
   const { shopId } = Route.useParams()
   const shopIdParam = shopId as Id<'shops'>
   const [period, setPeriod] = useState<Period>('today')
+  const { data: shop } = useQuery(
+    convexQuery(api.shops.getShopById, { shopId: shopIdParam }),
+  )
+  const { data: organizations } = useQuery(
+    convexQuery(api.organizations.getMyOrganizations, {}),
+  )
+  const organization = organizations?.find(
+    (org) => org._id === shop?.organizationId,
+  )
+  const salesReport = organization ? hasSalesReport(organization) : true
+  const visiblePeriods = salesReport
+    ? periodOptions
+    : periodOptions.filter((option) => option.value === 'today')
   const { data: summary } = useQuery({
     ...convexQuery(api.transactions.getPeriodSummary, {
       shopId: shopIdParam,
@@ -58,7 +72,7 @@ function AdminShopDashboard() {
       <section className="relaxed-divider flex flex-col gap-5 border-b pb-6">
           <div className="flex items-center justify-center">
             <div className="relaxed-surface-soft grid w-full max-w-2xl grid-cols-5 gap-2 rounded-full p-1">
-              {periodOptions.map((option) => {
+              {visiblePeriods.map((option) => {
                 const isActive = period === option.value
                 return (
                   <button

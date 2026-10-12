@@ -39,6 +39,7 @@ describe('stripeMutations', () => {
 
     const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
     expect(org?.subscriptionStatus).toBe('active')
+    expect(org?.plan).toBe('season')
     expect(org?.stripeCustomerId).toBe('cus_test_1')
     expect(org?.stripeSubscriptionId).toBe('sub_test_1')
     expect(org?.subscriptionActivatedEmailSentAt).toBeDefined()
@@ -81,6 +82,85 @@ describe('stripeMutations', () => {
 
     const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
     expect(org?.subscriptionStatus).toBe('canceled')
+  })
+
+  it('handleEventCheckoutCompleted stores a 7 day window and is idempotent', async () => {
+    const t = convexTest(schema, convexModules)
+    const { organizationId } = await seedOrganization(t, {
+      status: 'inactive',
+      plan: 'gratis',
+    })
+    const purchasedAt = FIXTURE_NOW
+
+    await t.mutation(internal.stripeMutations.handleEventCheckoutCompleted, {
+      organizationId,
+      stripeCustomerId: 'cus_event',
+      checkoutSessionId: 'cs_event_1',
+      purchasedAt,
+    })
+    await t.mutation(internal.stripeMutations.handleEventCheckoutCompleted, {
+      organizationId,
+      stripeCustomerId: 'cus_event',
+      checkoutSessionId: 'cs_event_1',
+      purchasedAt: purchasedAt + 1000,
+    })
+
+    const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
+    expect(org?.plan).toBe('event')
+    expect(org?.eventExpiresAt).toBe(purchasedAt + 7 * 24 * 60 * 60 * 1000)
+    expect(org?.eventCheckoutSessionId).toBe('cs_event_1')
+  })
+
+  it('handleEventCheckoutCompleted does not downgrade an active Säsong', async () => {
+    const t = convexTest(schema, convexModules)
+    const { organizationId } = await seedOrganization(t, {
+      status: 'active',
+      plan: 'season',
+      stripeSubscriptionId: 'sub_season',
+    })
+
+    await t.mutation(internal.stripeMutations.handleEventCheckoutCompleted, {
+      organizationId,
+      stripeCustomerId: 'cus_season',
+      checkoutSessionId: 'cs_event_skip',
+      purchasedAt: FIXTURE_NOW,
+    })
+
+    const org = await t.run(async (ctx) => ctx.db.get('organizations', organizationId))
+    expect(org?.plan).toBe('season')
+    expect(org?.eventCheckoutSessionId).toBe('cs_event_skip')
+  })
+
+  it('handleSubscriptionUpdated sets plan season only when metadata says so', async () => {
+    const t = convexTest(schema, convexModules)
+    const { organizationId } = await seedOrganization(t, {
+      status: 'active',
+      stripeCustomerId: 'cus_legacy_plan',
+      stripeSubscriptionId: 'sub_legacy_plan',
+    })
+
+    await t.mutation(internal.stripeMutations.handleSubscriptionUpdated, {
+      stripeCustomerId: 'cus_legacy_plan',
+      stripeSubscriptionId: 'sub_legacy_plan',
+      subscriptionStatus: 'active',
+    })
+
+    const legacy = await t.run(async (ctx) =>
+      ctx.db.get('organizations', organizationId),
+    )
+    expect(legacy?.plan).toBeUndefined()
+
+    await t.mutation(internal.stripeMutations.handleSubscriptionUpdated, {
+      stripeCustomerId: 'cus_legacy_plan',
+      stripeSubscriptionId: 'sub_legacy_plan',
+      subscriptionStatus: 'active',
+      plan: 'season',
+    })
+
+    const season = await t.run(async (ctx) =>
+      ctx.db.get('organizations', organizationId),
+    )
+    expect(season?.plan).toBe('season')
   })
 
   it('handlePaymentFailed sets past_due and records email timestamp', async () => {

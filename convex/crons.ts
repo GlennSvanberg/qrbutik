@@ -4,15 +4,9 @@ import { internal } from './_generated/api'
 const crons = cronJobs()
 
 crons.interval(
-  'expire organization trials',
-  { hours: 1 },
-  internal.organizations.expireTrials,
-)
-
-crons.interval(
-  'send trial ending reminders',
-  { hours: 12 },
-  internal.organizations.sendTrialReminders,
+  'revert expired event plans to gratis',
+  { minutes: 5 },
+  internal.organizations.expireEventPlans,
 )
 
 crons.interval(

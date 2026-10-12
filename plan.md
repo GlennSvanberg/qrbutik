@@ -20,7 +20,7 @@ QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsförening
 
 | | Gammalt (raderas ur kodbasen) | Nytt |
 |--|-------------------------------|------|
-| Pris | 10 kr (48 h) / 99 kr (säsong) | **995 kr/månad** (klubblicens) |
+| Pris | 10 kr (48 h) / 99 kr (säsong) | **Gratis**, **Event 295 kr**, **Säsong 1 495 kr/år** |
 | Köpare | Enskild förälder/lagledare | **Föreningen** (kansli/styrelse) |
 | Betalning plattform | Manuell Swish till privatnummer | **Stripe Billing** (kort, faktura, 14 dagars trial) |
 | Kundbetalning (kiosk) | Swish deep link → lagets nummer | Oförändrat |

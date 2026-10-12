@@ -16,7 +16,10 @@ import {
 describe('exports authorization', () => {
   it('treasurer can export org transactions in range', async () => {
     const t = convexTest(schema, convexModules)
-    const { organizationId } = await seedOrganization(t)
+    const { organizationId } = await seedOrganization(t, {
+      plan: 'season',
+      status: 'active',
+    })
     const { shopId } = await seedShop(t, organizationId)
     await seedTransaction(t, shopId, {
       createdAt: FIXTURE_NOW,

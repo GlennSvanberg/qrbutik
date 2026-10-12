@@ -13,7 +13,7 @@ export const Route = createFileRoute('/glenn')({
       {
         name: 'description',
         content:
-          'Demo av QRButik-checkout för idrottsföreningar. Starta 14 dagars provperiod eller boka demo.',
+          'Demo av QRButik-checkout för idrottsföreningar. Skapa förening på Gratis eller boka demo.',
       },
     ],
   }),
@@ -47,7 +47,7 @@ function GlennDemoLanding() {
           </p>
           <div className="mt-6 flex flex-col items-center gap-3">
             <MarketingCtas
-              primaryTracking="glenn-landing-trial"
+              primaryTracking="glenn-landing-start"
               secondaryTracking="glenn-landing-demo"
               layout="stack"
             />

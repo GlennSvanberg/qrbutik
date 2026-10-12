@@ -19,12 +19,10 @@ export function SuperAdminActions({
   organizationName,
   subscriptionStatus,
 }: SuperAdminActionsProps) {
-  const extendTrial = useMutation(api.superadmin.extendTrial)
   const updateSubscriptionStatus = useMutation(
     api.superadmin.updateSubscriptionStatus,
   )
 
-  const [isExtending, setIsExtending] = useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
   const [showStatusDialog, setShowStatusDialog] = useState(false)
   const [nextStatus, setNextStatus] =
@@ -32,35 +30,9 @@ export function SuperAdminActions({
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  const canExtendTrial =
-    subscriptionStatus === 'trialing' || subscriptionStatus === 'inactive'
-
-  const handleExtendTrial = async (additionalDays: number) => {
-    const confirmed = window.confirm(
-      `Förläng provperiod med ${additionalDays} dagar för ${organizationName}? Detta uppdaterar bara Convex — inte Stripe.`,
-    )
-    if (!confirmed) {
-      return
-    }
-
-    setIsExtending(true)
-    setError(null)
-    setMessage(null)
-    try {
-      const result = await extendTrial({ organizationId, additionalDays })
-      setMessage(
-        `Provperiod förlängd till ${new Date(result.trialEndsAt).toLocaleString('sv-SE')}.`,
-      )
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Kunde inte förlänga provperiod.')
-    } finally {
-      setIsExtending(false)
-    }
-  }
-
   const handleUpdateStatus = async () => {
     const confirmed = window.confirm(
-      `Ändra status för ${organizationName} till "${subscriptionLabel[nextStatus] ?? nextStatus}"? Manuell override synkas inte till Stripe.`,
+      `Ändra status för ${organizationName} från "${subscriptionLabel[subscriptionStatus] ?? subscriptionStatus}" till "${subscriptionLabel[nextStatus] ?? nextStatus}"? Manuell override synkas inte till Stripe.`,
     )
     if (!confirmed) {
       return
@@ -85,27 +57,6 @@ export function SuperAdminActions({
 
   return (
     <div className="flex flex-col gap-2">
-      {canExtendTrial ? (
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            disabled={isExtending}
-            onClick={() => void handleExtendTrial(7)}
-            className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-1.5 text-xs font-semibold text-brand-muted hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            +7d trial
-          </button>
-          <button
-            type="button"
-            disabled={isExtending}
-            onClick={() => void handleExtendTrial(14)}
-            className="cursor-pointer rounded-lg border border-brand-border bg-surface px-3 py-1.5 text-xs font-semibold text-brand-muted hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            +14d trial
-          </button>
-        </div>
-      ) : null}
-
       <button
         type="button"
         onClick={() => setShowStatusDialog((open) => !open)}

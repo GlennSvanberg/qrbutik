@@ -7,15 +7,16 @@ export type SubscriptionStatus =
   | 'inactive'
   | 'canceled'
 
+/** First kiosk stays open on Gratis for every leftover subscription status. */
 export const SUBSCRIPTION_GATING: ReadonlyArray<{
   status: SubscriptionStatus
   canPurchase: boolean
 }> = [
   { status: 'trialing', canPurchase: true },
   { status: 'active', canPurchase: true },
-  { status: 'past_due', canPurchase: false },
-  { status: 'inactive', canPurchase: false },
-  { status: 'canceled', canPurchase: false },
+  { status: 'past_due', canPurchase: true },
+  { status: 'inactive', canPurchase: true },
+  { status: 'canceled', canPurchase: true },
 ]
 
 export const ROLE_SHOP_ACCESS: ReadonlyArray<{

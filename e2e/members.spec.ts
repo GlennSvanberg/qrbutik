@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { loginAndOpen } from './helpers/auth'
+import { grantSeasonAccess } from './helpers/convex'
 import { attachFindingsReporter } from './helpers/findings'
 import { getTestBaseUrl, uniqueTestEmail } from './helpers/env'
 import { acceptInviteAsUser, inviteMember } from './helpers/members'
@@ -26,7 +27,8 @@ test.describe('Member invitations', () => {
 
     try {
       await loginAndOpen(page, ownerEmail, '/skapa', appUrl)
-      await createTestOrg(page, { email: ownerEmail, orgName })
+      const organizationId = await createTestOrg(page, { email: ownerEmail, orgName })
+      grantSeasonAccess(organizationId)
       const { shopId } = await createTestKiosk(page, appUrl, {
         slug: kioskSlug,
         kioskName,
@@ -82,7 +84,8 @@ test.describe('Member invitations', () => {
 
     try {
       await loginAndOpen(page, ownerEmail, '/skapa', appUrl)
-      await createTestOrg(page, { email: ownerEmail, orgName })
+      const organizationId = await createTestOrg(page, { email: ownerEmail, orgName })
+      grantSeasonAccess(organizationId)
       await createTestKiosk(page, appUrl, {
         slug: `e2e-a-${Date.now()}`,
         kioskName: kioskA,

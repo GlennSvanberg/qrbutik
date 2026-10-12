@@ -9,8 +9,9 @@ import path from "node:path";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const stripeShim = path.join(root, "node_modules/@stripe/cli/bin/shim.js");
 
-const PRODUCT_NAME = "QRButik Klubblicens";
-const PRICE_AMOUNT = 99500;
+const PRODUCT_NAME = "QRButik";
+const EVENT_AMOUNT = 29500;
+const SEASON_AMOUNT = 149500;
 const PRICE_CURRENCY = "sek";
 
 function stripe(args, { json = true } = {}) {
@@ -45,9 +46,44 @@ function convexEnvGet(name) {
   }).trim();
 }
 
-function ensureProductAndPrice() {
+function ensurePrice(productId, prices, { amount, interval, label }) {
+  const existing = prices.data?.find(
+    (price) =>
+      price.currency === PRICE_CURRENCY &&
+      price.unit_amount === amount &&
+      price.tax_behavior === "inclusive" &&
+      (interval
+        ? price.recurring?.interval === interval
+        : !price.recurring),
+  );
+  if (existing) {
+    console.log(`Using existing price ${existing.id} (${label})`);
+    return existing.id;
+  }
+
+  const args = [
+    "prices",
+    "create",
+    "--product",
+    productId,
+    "--currency",
+    PRICE_CURRENCY,
+    "--unit-amount",
+    String(amount),
+    "-d",
+    "tax_behavior=inclusive",
+  ];
+  if (interval) {
+    args.push("-d", `recurring[interval]=${interval}`);
+  }
+  const created = stripe(args);
+  console.log(`Created price ${created.id} (${label})`);
+  return created.id;
+}
+
+function ensureProductAndPrices() {
   const products = stripe(["products", "list", "--limit", "100"]);
-  let product = products.data?.find((p) => p.name === PRODUCT_NAME);
+  let product = products.data?.find((item) => item.name === PRODUCT_NAME);
 
   if (!product) {
     product = stripe([
@@ -56,7 +92,7 @@ function ensureProductAndPrice() {
       "--name",
       PRODUCT_NAME,
       "--description",
-      "Månadslicens för idrottsföreningar — obegränsat antal kiosker",
+      "Event 295 kr och Säsong 1 495 kr/år för idrottsföreningar. Priser inklusive moms.",
     ]);
     console.log(`Created product ${product.id}`);
   } else {
@@ -64,32 +100,17 @@ function ensureProductAndPrice() {
   }
 
   const prices = stripe(["prices", "list", "--product", product.id, "--limit", "100"]);
-  let price = prices.data?.find(
-    (p) =>
-      p.currency === PRICE_CURRENCY &&
-      p.unit_amount === PRICE_AMOUNT &&
-      p.recurring?.interval === "month",
-  );
+  const eventPriceId = ensurePrice(product.id, prices, {
+    amount: EVENT_AMOUNT,
+    label: "Event 295 kr",
+  });
+  const seasonPriceId = ensurePrice(product.id, prices, {
+    amount: SEASON_AMOUNT,
+    interval: "year",
+    label: "Säsong 1 495 kr/år",
+  });
 
-  if (!price) {
-    price = stripe([
-      "prices",
-      "create",
-      "--product",
-      product.id,
-      "--currency",
-      PRICE_CURRENCY,
-      "--unit-amount",
-      String(PRICE_AMOUNT),
-      "-d",
-      "recurring[interval]=month",
-    ]);
-    console.log(`Created price ${price.id} (995 kr/mån)`);
-  } else {
-    console.log(`Using existing price ${price.id}`);
-  }
-
-  return { productId: product.id, priceId: price.id };
+  return { eventPriceId, seasonPriceId };
 }
 
 function readCliKeys() {
@@ -134,19 +155,21 @@ async function main() {
   console.log("QRButik Stripe bootstrap (Test Mode)\n");
 
   const keys = readCliKeys();
-  const { priceId } = ensureProductAndPrice();
+  const { eventPriceId, seasonPriceId } = ensureProductAndPrices();
   const convexSiteUrl = convexEnvGet("CONVEX_SITE_URL");
 
   console.log("\nSetting Convex dev environment variables...");
   convexEnvSet("STRIPE_SECRET_KEY", keys.secretKey);
-  convexEnvSet("STRIPE_PRICE_ID", priceId);
+  convexEnvSet("STRIPE_EVENT_PRICE_ID", eventPriceId);
+  convexEnvSet("STRIPE_SEASON_PRICE_ID", seasonPriceId);
   convexEnvSet("VITE_STRIPE_PUBLISHABLE_KEY", keys.publishableKey);
 
   const webhookSecret = readListenSecret(convexSiteUrl);
   convexEnvSet("STRIPE_WEBHOOK_SECRET", webhookSecret);
 
   console.log("\nDone. Stripe is configured on Convex dev.");
-  console.log(`  Price ID:     ${priceId}`);
+  console.log(`  Event price:  ${eventPriceId}`);
+  console.log(`  Season price: ${seasonPriceId}`);
   console.log(`  Webhook URL:  ${convexSiteUrl}/stripe/webhook`);
   console.log("\nNext steps:");
   console.log("  1. Keep webhooks flowing: npm run stripe:listen");

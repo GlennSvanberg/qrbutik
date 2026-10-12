@@ -1,7 +1,8 @@
 import { v } from 'convex/values'
 import { orgQuery, orgRoleMutation, requireTreasurerMembership } from './lib/customFunctions'
 import { getAccessibleShopIds } from './lib/auth'
-import { isSubscriptionActive } from './lib/validators'
+import { kioskIsOpen, storedEntitlements } from './lib/planAccess'
+import { SALES_REPORT_ERROR, isBasicStatsFilter } from './lib/plans'
 import {
   buildSummary,
   getCustomRange,
@@ -104,6 +105,11 @@ export const getOrganizationDashboardSummary = orgQuery({
       throw new Error('Föreningen hittades inte.')
     }
 
+    const entitlements = storedEntitlements(organization)
+    if (!entitlements.salesReport && !isBasicStatsFilter(args.filter)) {
+      throw new Error(SALES_REPORT_ERROR)
+    }
+
     const accessibleShopIds = await getAccessibleShopIds(
       ctx,
       args.organizationId,
@@ -120,7 +126,6 @@ export const getOrganizationDashboardSummary = orgQuery({
     }
 
     const { start, end } = resolveDateRange(args.filter)
-    const licenseActive = isSubscriptionActive(organization.subscriptionStatus)
 
     const shops = []
     for (const shopId of accessibleShopIds) {
@@ -193,7 +198,7 @@ export const getOrganizationDashboardSummary = orgQuery({
         shopId: shop._id,
         shopName: shop.name,
         teamLabel: shop.teamLabel ?? null,
-        licenseActive,
+        licenseActive: await kioskIsOpen(ctx, organization, shop._id),
         periodRevenue: shopSummary.totalRevenue,
         todayRevenue: buildSummary(shopTodayTransactions).totalRevenue,
         weekendRevenue: buildSummary(shopWeekendTransactions).totalRevenue,
@@ -233,7 +238,7 @@ export const getEditorShopSummaries = orgQuery({
       args.organizationId,
       ctx.membership,
     )
-    const licenseActive = isSubscriptionActive(organization.subscriptionStatus)
+    const entitlements = storedEntitlements(organization)
 
     const todayRange = getTodayRange()
     const weekendRange = getWeekendRange()
@@ -274,23 +279,27 @@ export const getEditorShopSummaries = orgQuery({
       const shopWeekendTransactions = weekendTransactions.filter(
         (transaction) => transaction.shopId === shopId,
       )
+      const latestSource = entitlements.salesReport
+        ? shopPeriodTransactions
+        : shopTodayTransactions
       const latestSaleAt =
-        shopPeriodTransactions.length > 0
-          ? shopPeriodTransactions[0].createdAt
-          : null
+        latestSource.length > 0 ? latestSource[0].createdAt : null
       const latestSaleAmount =
-        shopPeriodTransactions.length > 0
-          ? shopPeriodTransactions[0].amount
-          : null
+        latestSource.length > 0 ? latestSource[0].amount : null
 
+      const open = await kioskIsOpen(ctx, organization, shop._id)
       summaries.push({
         shopId: shop._id,
         shopName: shop.name,
         teamLabel: shop.teamLabel ?? null,
-        licenseActive,
+        licenseActive: open,
         todayRevenue: buildSummary(shopTodayTransactions).totalRevenue,
-        weekendRevenue: buildSummary(shopWeekendTransactions).totalRevenue,
-        periodRevenue: buildSummary(shopPeriodTransactions).totalRevenue,
+        weekendRevenue: entitlements.salesReport
+          ? buildSummary(shopWeekendTransactions).totalRevenue
+          : 0,
+        periodRevenue: entitlements.salesReport
+          ? buildSummary(shopPeriodTransactions).totalRevenue
+          : 0,
         latestSaleAt,
         latestSaleAmount,
       })

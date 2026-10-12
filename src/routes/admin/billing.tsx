@@ -4,12 +4,13 @@ import { convexQuery } from '@convex-dev/react-query'
 import { useAction, useMutation, useQuery } from 'convex/react'
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../../convex/_generated/api'
-import { daysUntil } from '../../lib/billing'
 import {
-  canActivate,
-  hasBillingSetup,
-  hasPaidSubscription,
+  canOpenCustomerPortal,
+  canPurchaseEvent,
+  canPurchaseSeason,
+  effectivePlan,
   needsPaymentUrgently,
+  planLabel,
 } from '../../lib/billingUi'
 import type { Id } from '../../../convex/_generated/dataModel'
 
@@ -46,7 +47,6 @@ function BillingPage() {
     organizationId: organizationIdFromSearch,
     success,
     canceled,
-    invoice,
   } = Route.useSearch()
   const { data: organizations, isPending: isOrganizationsPending } =
     useTanstackQuery(convexQuery(api.organizations.getMyOrganizations, {}))
@@ -56,7 +56,7 @@ function BillingPage() {
       ? { organizationId: organizationIdFromSearch as Id<'organizations'> }
       : 'skip',
   )
-  const stripeConfigured = useQuery(api.organizations.isStripeConfigured, {})
+  const stripeConfig = useQuery(api.organizations.isStripeConfigured, {})
 
   const orgList = organizations ?? []
 
@@ -112,10 +112,10 @@ function BillingPage() {
     <BillingContent
       organizations={resolvedOrganizations}
       initialOrganizationId={initialOrgId}
-      stripeConfigured={stripeConfigured?.configured ?? false}
+      stripeEvent={stripeConfig?.event ?? false}
+      stripeSeason={stripeConfig?.season ?? false}
       success={success === '1'}
       canceled={canceled === '1'}
-      invoiceSuccess={invoice === '1'}
     />
   )
 }
@@ -123,32 +123,30 @@ function BillingPage() {
 function BillingContent({
   organizations,
   initialOrganizationId,
-  stripeConfigured,
+  stripeEvent,
+  stripeSeason,
   success,
   canceled,
-  invoiceSuccess,
 }: {
   organizations: Array<{
     _id: Id<'organizations'>
     name: string
     subscriptionStatus: string
-    trialEndsAt?: number
+    plan?: 'gratis' | 'event' | 'season'
+    eventExpiresAt?: number
     stripeCustomerId?: string
     stripeSubscriptionId?: string
     role: 'owner' | 'treasurer' | 'editor'
   }>
   initialOrganizationId: Id<'organizations'>
-  stripeConfigured: boolean
+  stripeEvent: boolean
+  stripeSeason: boolean
   success: boolean
   canceled: boolean
-  invoiceSuccess: boolean
 }) {
   const [organizationId, setOrganizationId] =
     useState<Id<'organizations'>>(initialOrganizationId)
   const createCheckoutSession = useAction(api.stripeActions.createCheckoutSession)
-  const createInvoiceSubscription = useAction(
-    api.stripeActions.createInvoiceSubscription,
-  )
   const createPortalSession = useAction(
     api.stripeActions.createCustomerPortalSession,
   )
@@ -169,11 +167,11 @@ function BillingContent({
   const [settingsMessage, setSettingsMessage] = useState<string | null>(null)
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
-  const [isLoadingCheckout, setIsLoadingCheckout] = useState(false)
-  const [isLoadingInvoice, setIsLoadingInvoice] = useState(false)
+  const [checkoutPlan, setCheckoutPlan] = useState<'event' | 'season' | null>(
+    null,
+  )
   const [isLoadingPortal, setIsLoadingPortal] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [invoiceMessage, setInvoiceMessage] = useState<string | null>(null)
 
   const activeOrg = useMemo(
     () =>
@@ -184,11 +182,12 @@ function BillingContent({
   const canManageBilling =
     activeOrg.role === 'owner' || activeOrg.role === 'treasurer'
 
-  const trialDaysLeft = daysUntil(activeOrg.trialEndsAt)
-  const paid = hasPaidSubscription(activeOrg)
-  const billingSetup = hasBillingSetup(activeOrg)
-  const showActivate = canActivate(activeOrg, stripeConfigured)
+  const currentPlan = effectivePlan(activeOrg)
+  const showEvent = canPurchaseEvent(activeOrg, stripeEvent)
+  const showSeason = canPurchaseSeason(activeOrg, stripeSeason)
+  const showPortal = canOpenCustomerPortal(activeOrg)
   const urgent = needsPaymentUrgently(activeOrg)
+  const stripeConfigured = stripeEvent || stripeSeason
 
   useEffect(() => {
     if (!organizationDetails) {
@@ -198,14 +197,25 @@ function BillingContent({
     setSieRevenueAccount(organizationDetails.sieRevenueAccount ?? '3010')
   }, [organizationDetails])
 
-  const trialCopy =
-    activeOrg.subscriptionStatus === 'trialing' && trialDaysLeft !== null
-      ? trialDaysLeft > 0
-        ? `${trialDaysLeft} dag${trialDaysLeft === 1 ? '' : 'ar'} kvar av provperioden.`
-        : 'Provperioden slutar idag.'
-      : activeOrg.trialEndsAt
-        ? `Provperiod gällde till ${new Date(activeOrg.trialEndsAt).toLocaleDateString('sv-SE')}.`
-        : 'Ingen aktiv provperiod.'
+  const startCheckout = async (plan: 'event' | 'season') => {
+    setError(null)
+    setCheckoutPlan(plan)
+    try {
+      const result = await createCheckoutSession({
+        organizationId,
+        plan,
+      })
+      window.location.href = result.url
+    } catch (checkoutError) {
+      setError(
+        checkoutError instanceof Error
+          ? checkoutError.message
+          : 'Kunde inte starta checkout.',
+      )
+    } finally {
+      setCheckoutPlan(null)
+    }
+  }
 
   return (
     <main className="relaxed-page-shell min-h-screen bg-transparent">
@@ -246,12 +256,6 @@ function BillingContent({
             uppdateras.
           </p>
         ) : null}
-        {invoiceSuccess || invoiceMessage ? (
-          <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            {invoiceMessage ??
-              'Fakturering är aktiverad. Faktura skickas till föreningens faktura-e-post.'}
-          </p>
-        ) : null}
         {canceled ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             Checkout avbröts. Du kan försöka igen när du vill.
@@ -259,21 +263,20 @@ function BillingContent({
         ) : null}
         {urgent ? (
           <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
-            {activeOrg.subscriptionStatus === 'past_due'
-              ? 'Betalningen misslyckades. Kiosker kan pausas tills betalningen är reglerad.'
-              : 'Provperioden är slut. Aktivera klubblicensen för att fortsätta ta emot köp.'}
+            Betalningen misslyckades. Föreningen använder Gratis tills Säsong
+            är betald igen.
           </p>
         ) : null}
-        {paid ? (
+        {currentPlan === 'season' ? (
           <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            Klubblicensen är aktiv. Hantera kort, fakturor och uppsägning via
-            kundportalen.
+            Säsong är aktiv. Hantera kort och uppsägning i kundportalen.
           </p>
         ) : null}
-        {!paid && billingSetup ? (
+        {currentPlan === 'event' && activeOrg.eventExpiresAt ? (
           <p className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
-            Betalning är konfigurerad. Kiosker fortsätter under provperioden;
-            debitering sker enligt vald metod (kort eller faktura).
+            Event gäller till{' '}
+            {new Date(activeOrg.eventExpiresAt).toLocaleDateString('sv-SE')}.
+            Därefter går föreningen tillbaka till Gratis.
           </p>
         ) : null}
 
@@ -286,35 +289,42 @@ function BillingContent({
             </span>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
-                Pris
+                Gratis
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-brand-foreground">0 kr</p>
+              <p className="mt-1 text-sm text-brand-muted">
+                1 kiosk, Swish-QR och statistik för idag.
+              </p>
+            </div>
+            <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
+                Event
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-brand-foreground">295 kr</p>
+              <p className="mt-1 text-sm text-brand-muted">
+                Engångsköp. Flera kiosker och export i 7 dagar.
+              </p>
+            </div>
+            <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
+                Säsong
               </p>
               <p className="mt-1 text-2xl font-semibold text-brand-foreground">
-                från 995 kr/mån
+                1 495 kr/år
               </p>
               <p className="mt-1 text-sm text-brand-muted">
-                Obegränsat antal kiosker under samma förening.
+                Cirka 125 kr/mån. Obegränsat, flera administratörer och
+                bokföringsexport.
               </p>
-            </div>
-            <div className="relaxed-surface-soft bg-surface-muted/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-subtle">
-                Provperiod
-              </p>
-              {activeOrg.trialEndsAt ? (
-                <p className="mt-1 text-sm text-brand-muted">
-                  Gäller till{' '}
-                  <span className="font-semibold">
-                    {new Date(activeOrg.trialEndsAt).toLocaleDateString('sv-SE')}
-                  </span>
-                </p>
-              ) : (
-                <p className="mt-1 text-sm text-brand-muted">Ingen aktiv provperiod</p>
-              )}
-              <p className="mt-2 text-sm text-brand-muted">{trialCopy}</p>
             </div>
           </div>
+          <p className="text-sm text-brand-muted">
+            Nuvarande plan: {planLabel(currentPlan)}. Alla priser inklusive 25 %
+            moms.
+          </p>
 
           {!canManageBilling ? (
             <p className="text-sm text-brand-muted">
@@ -325,96 +335,55 @@ function BillingContent({
 
           {canManageBilling ? (
             <div className="flex flex-col gap-3">
-              {showActivate ? (
-                <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3">
+                {showEvent ? (
                   <button
                     type="button"
-                    disabled={isLoadingCheckout}
-                    onClick={async () => {
-                      setError(null)
-                      setInvoiceMessage(null)
-                      setIsLoadingCheckout(true)
-                      try {
-                        const result = await createCheckoutSession({
-                          organizationId,
-                        })
-                        window.location.href = result.url
-                      } catch (checkoutError) {
-                        setError(
-                          checkoutError instanceof Error
-                            ? checkoutError.message
-                            : 'Kunde inte starta checkout.',
-                        )
-                      } finally {
-                        setIsLoadingCheckout(false)
-                      }
-                    }}
+                    disabled={checkoutPlan !== null}
+                    onClick={() => void startCheckout('event')}
+                    className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-brand-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {checkoutPlan === 'event' ? 'Öppnar...' : 'Köp Event — 295 kr'}
+                  </button>
+                ) : null}
+                {showSeason ? (
+                  <button
+                    type="button"
+                    disabled={checkoutPlan !== null}
+                    onClick={() => void startCheckout('season')}
                     className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {isLoadingCheckout ? 'Öppnar...' : 'Betala med kort'}
+                    {checkoutPlan === 'season'
+                      ? 'Öppnar...'
+                      : 'Starta Säsong — 1 495 kr/år'}
                   </button>
-                  <button
-                    type="button"
-                    disabled={isLoadingInvoice}
-                    onClick={async () => {
-                      setError(null)
-                      setInvoiceMessage(null)
-                      setIsLoadingInvoice(true)
-                      try {
-                        const result = await createInvoiceSubscription({
-                          organizationId,
-                        })
-                        setInvoiceMessage(result.message)
-                      } catch (invoiceError) {
-                        setError(
-                          invoiceError instanceof Error
-                            ? invoiceError.message
-                            : 'Kunde inte aktivera fakturering.',
-                        )
-                      } finally {
-                        setIsLoadingInvoice(false)
-                      }
-                    }}
-                    className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {isLoadingInvoice ? 'Aktiverar...' : 'Betala med faktura'}
-                  </button>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
 
-              <button
-                type="button"
-                disabled={
-                  !stripeConfigured ||
-                  !activeOrg.stripeCustomerId ||
-                  isLoadingPortal
-                }
-                onClick={async () => {
-                  setError(null)
-                  setIsLoadingPortal(true)
-                  try {
-                    const result = await createPortalSession({ organizationId })
-                    window.location.href = result.url
-                  } catch (portalError) {
-                    setError(
-                      portalError instanceof Error
-                        ? portalError.message
-                        : 'Kunde inte öppna kundportalen.',
-                    )
-                  } finally {
-                    setIsLoadingPortal(false)
-                  }
-                }}
-                className="relaxed-secondary-button h-12 w-fit cursor-pointer px-6 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isLoadingPortal ? 'Öppnar...' : 'Hantera prenumeration'}
-              </button>
-
-              {showActivate ? (
-                <p className="text-sm text-brand-muted">
-                  Kortbetalning via Stripe Checkout. Faktura skickas som PDF till
-                  faktura-e-post — passar kassörer utan föreningskort.
-                </p>
+              {showPortal ? (
+                <button
+                  type="button"
+                  disabled={!stripeConfigured || isLoadingPortal}
+                  onClick={async () => {
+                    setError(null)
+                    setIsLoadingPortal(true)
+                    try {
+                      const result = await createPortalSession({ organizationId })
+                      window.location.href = result.url
+                    } catch (portalError) {
+                      setError(
+                        portalError instanceof Error
+                          ? portalError.message
+                          : 'Kunde inte öppna kundportalen.',
+                      )
+                    } finally {
+                      setIsLoadingPortal(false)
+                    }
+                  }}
+                  className="relaxed-secondary-button h-12 w-fit cursor-pointer px-6 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isLoadingPortal ? 'Öppnar...' : 'Hantera prenumeration'}
+                </button>
               ) : null}
             </div>
           ) : null}

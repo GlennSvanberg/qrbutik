@@ -24,8 +24,8 @@ Ranka på sökord där **köparen är en förening som letar kiosksystem** — i
 
 - B2B-copy: styrelse, kassör, förening
 - Tagline: **Digital kiosk för hela föreningen**
-- Pris: **från 995 kr/mån**, 14 dagars provperiod
-- CTAs: **Starta 14 dagars provperiod** + **Boka demo** (`/kontakt`)
+- Pris: **Gratis**, **Event 295 kr**, **Säsong 1 495 kr/år** (cirka 125 kr/mån), inklusive moms
+- CTAs: **Skapa förening** + **Boka demo** (`/kontakt`)
 
 ### 2. Intent-sidor (`/losningar/...`, planerade)
 
@@ -35,15 +35,15 @@ Varje sida ska innehålla:
 
 - **Problem** — köer, manuell bokföring, spridda Swish-nummer
 - **Lösning** — klubblicens, flera kiosker, central överblick, export
-- **Pris / trial** — från 995 kr/mån, 14 dagars provperiod
+- **Pris** — Gratis, Event 295 kr, Säsong 1 495 kr/år (cirka 125 kr/mån)
 - **FAQ** — schema.org FAQPage
-- **CTA** — provperiod + boka demo
+- **CTA** — skapa förening + boka demo
 
 De gamla programmatiska sport/stad-sidorna (`/utforska/*`, `pseo-data.json`) togs bort 2026-09-27 — ingen trafik att bevara.
 
 ### 3. Kontakt / demo
 
-`/kontakt` — mejl till `kontakt@qrbutik.se` + länk till provperiod.
+`/kontakt` — mejl till `kontakt@qrbutik.se` + länk till att skapa förening.
 
 ---
 

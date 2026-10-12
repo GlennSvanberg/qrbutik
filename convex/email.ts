@@ -36,45 +36,43 @@ async function sendEmail(args: {
   });
 }
 
-export const sendTrialWelcomeEmail = internalAction({
+export const sendOrganizationWelcomeEmail = internalAction({
   args: {
     to: v.string(),
     organizationName: v.string(),
     organizationId: v.id("organizations"),
-    trialEndsAt: v.number(),
   },
   returns: v.null(),
   handler: async (_ctx, args) => {
-    const trialEnd = new Date(args.trialEndsAt).toLocaleDateString("sv-SE");
     await sendEmail({
       to: args.to,
       subject: `Välkommen till QRButik — ${args.organizationName}`,
-      html: `<p>Hej!</p><p>Föreningen <strong>${args.organizationName}</strong> är skapad på QRButik.</p><p>Provperioden gäller till <strong>${trialEnd}</strong>. Under tiden kan ni skapa kiosker och testa försäljning.</p><p>När provperioden närmar sig slut kan ni aktivera klubblicensen (995 kr/mån) med betalkort eller faktura:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
+      html: `<p>Hej!</p><p>Föreningen <strong>${args.organizationName}</strong> är skapad på QRButik med <strong>Gratis</strong>.</p><p>Gratis inkluderar 1 kiosk, obegränsat antal produkter, Swish-QR och enkel statistik. En liten QRButik-märkning visas i kiosken. Inget kort behövs.</p><p><strong>Event/cup</strong> kostar 295 kr och låser upp flera kiosker, tar bort märkningen och ger försäljningsrapport och export i 7 dagar.</p><p><strong>Säsong</strong> kostar 1 495 kr per år (cirka 125 kr/mån) och ger obegränsat antal kiosker, flera administratörer och bokföringsexport så länge prenumerationen är aktiv.</p><p>Alla priser är inklusive 25 % moms.</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
     });
     return null;
   },
 });
 
-export const sendTrialReminderEmail = internalAction({
+export const sendEventActivatedEmail = internalAction({
   args: {
     to: v.string(),
     organizationName: v.string(),
     organizationId: v.id("organizations"),
-    trialEndsAt: v.number(),
+    eventExpiresAt: v.number(),
   },
   returns: v.null(),
   handler: async (_ctx, args) => {
-    const trialEnd = new Date(args.trialEndsAt).toLocaleDateString("sv-SE");
+    const eventEnd = new Date(args.eventExpiresAt).toLocaleDateString("sv-SE");
     await sendEmail({
       to: args.to,
-      subject: `Provperioden för ${args.organizationName} slutar snart`,
-      html: `<p>Hej!</p><p>Provperioden för <strong>${args.organizationName}</strong> gäller till <strong>${trialEnd}</strong>.</p><p>Aktivera klubblicensen innan dess så att kiosker fortsätter ta emot köp efter provperioden:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p><p>995 kr/mån — betalkort eller faktura via Stripe.</p>`,
+      subject: `Event/cup aktiverat — ${args.organizationName}`,
+      html: `<p>Hej!</p><p>Event/cup för <strong>${args.organizationName}</strong> är betald (295 kr inklusive moms).</p><p>Flera kiosker, försäljningsrapport och export gäller till <strong>${eventEnd}</strong>. Därefter går föreningen tillbaka till Gratis.</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
     });
     return null;
   },
 });
 
-export const sendTrialExpiredEmail = internalAction({
+export const sendEventExpiredEmail = internalAction({
   args: {
     to: v.string(),
     organizationName: v.string(),
@@ -84,8 +82,8 @@ export const sendTrialExpiredEmail = internalAction({
   handler: async (_ctx, args) => {
     await sendEmail({
       to: args.to,
-      subject: `Provperioden för ${args.organizationName} har löpt ut`,
-      html: `<p>Hej!</p><p>Provperioden för <strong>${args.organizationName}</strong> är avslutad och kiosker tar inte längre emot nya köp.</p><p>Aktivera klubblicensen för att fortsätta:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
+      subject: `Event/cup har löpt ut — ${args.organizationName}`,
+      html: `<p>Hej!</p><p>Event/cup för <strong>${args.organizationName}</strong> har löpt ut. Föreningen är tillbaka på Gratis: 1 kiosk, enkel statistik och QRButik-märkning i kiosken.</p><p>Ni kan köpa Event igen (295 kr) eller starta Säsong (1 495 kr/år):</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
     });
     return null;
   },
@@ -101,8 +99,8 @@ export const sendSubscriptionActivatedEmail = internalAction({
   handler: async (_ctx, args) => {
     await sendEmail({
       to: args.to,
-      subject: `Klubblicens aktiverad — ${args.organizationName}`,
-      html: `<p>Hej!</p><p>Betalningen för <strong>${args.organizationName}</strong> är registrerad. Klubblicensen är aktiv och kiosker kan ta emot köp.</p><p>Hantera prenumeration, fakturor och betalningsuppgifter här:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
+      subject: `Säsong aktiverad — ${args.organizationName}`,
+      html: `<p>Hej!</p><p>Säsong för <strong>${args.organizationName}</strong> är aktiv (1 495 kr per år, cirka 125 kr/mån, inklusive moms).</p><p>Obegränsat antal kiosker, flera administratörer och bokföringsexport gäller så länge prenumerationen är aktiv.</p><p>Hantera kort, fakturor och uppsägning i kundportalen:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
     });
     return null;
   },
@@ -119,7 +117,7 @@ export const sendPaymentFailedEmail = internalAction({
     await sendEmail({
       to: args.to,
       subject: `Betalning misslyckades — ${args.organizationName}`,
-      html: `<p>Hej!</p><p>Vi kunde inte debitera klubblicensen för <strong>${args.organizationName}</strong>. Kiosker kan pausas tills betalningen är reglerad.</p><p>Uppdatera betalningsuppgifter eller betala faktura via kundportalen:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
+      html: `<p>Hej!</p><p>Vi kunde inte debitera Säsong för <strong>${args.organizationName}</strong>. Föreningen faller tillbaka till Gratis (1 kiosk) tills betalningen är reglerad.</p><p>Uppdatera betalningsuppgifter i kundportalen:</p><p><a href="${billingUrl(args.organizationId)}">${billingUrl(args.organizationId)}</a></p>`,
     });
     return null;
   },

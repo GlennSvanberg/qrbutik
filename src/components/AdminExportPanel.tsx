@@ -10,6 +10,8 @@ type AdminExportPanelProps = {
   start: number
   end: number
   compact?: boolean
+  salesExport?: boolean
+  accountingExport?: boolean
 }
 
 export function AdminExportPanel({
@@ -18,6 +20,8 @@ export function AdminExportPanel({
   start,
   end,
   compact = false,
+  salesExport = false,
+  accountingExport = false,
 }: AdminExportPanelProps) {
   const exportExcel = useAction(api.exportExcelActions.exportTransactionsExcel)
   const exportSie = useAction(api.exportActions.exportTransactionsSie)
@@ -62,6 +66,13 @@ export function AdminExportPanel({
           endast verifierade köp.
         </p>
       </div>
+      {!salesExport ? (
+        <p className="text-sm text-brand-muted">
+          Försäljningsrapport och export ingår i Event och Säsong.
+        </p>
+      ) : null}
+      {salesExport ? (
+      <>
       <label className="flex cursor-pointer items-center gap-2 text-sm text-brand-muted">
         <input
           type="checkbox"
@@ -81,15 +92,23 @@ export function AdminExportPanel({
         >
           {isExporting === 'excel' ? 'Exporterar…' : 'Exportera Excel'}
         </button>
-        <button
-          type="button"
-          onClick={() => void handleExport('sie')}
-          disabled={isExporting !== null}
-          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isExporting === 'sie' ? 'Exporterar…' : 'Exportera SIE'}
-        </button>
+        {accountingExport ? (
+          <button
+            type="button"
+            onClick={() => void handleExport('sie')}
+            disabled={isExporting !== null}
+            className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isExporting === 'sie' ? 'Exporterar…' : 'Exportera SIE'}
+          </button>
+        ) : (
+          <p className="self-center text-sm text-brand-muted">
+            Bokföringsexport ingår i Säsong.
+          </p>
+        )}
       </div>
+      </>
+      ) : null}
       {error ? (
         <p className="text-sm text-rose-600" role="alert">
           {error}

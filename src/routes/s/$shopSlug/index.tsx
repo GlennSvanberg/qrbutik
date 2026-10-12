@@ -69,7 +69,8 @@ function ShopView() {
             Kiosken är tillfälligt stängd
           </h1>
           <p className="text-sm text-brand-muted">
-            {shopData.organization.name} har ingen aktiv klubblicens just nu.
+            Den här kiosken ingår inte i föreningens nuvarande plan. Gratis
+            inkluderar en kiosk.
           </p>
         </div>
       </main>
@@ -82,6 +83,7 @@ function ShopView() {
       shopName={shopData.shop.name}
       shopSlug={shopSlug}
       shopSwishNumber={shopData.shop.swishNumber}
+      showBranding={shopData.showBranding}
     />
   )
 }
@@ -91,6 +93,7 @@ type ActiveShopViewProps = {
   shopName: string
   shopSlug: string
   shopSwishNumber: string
+  showBranding: boolean
 }
 
 function ActiveShopView({
@@ -98,6 +101,7 @@ function ActiveShopView({
   shopName,
   shopSlug,
   shopSwishNumber,
+  showBranding,
 }: ActiveShopViewProps) {
   useRecordPlatformVisit({ type: 'shop_view', shopSlug })
 
@@ -278,8 +282,8 @@ function ActiveShopView({
               Digital kiosk för hela föreningen
             </h2>
             <p className="mt-1 text-sm text-brand-muted">
-              Det här är en riktig QRButik-checkout. Starta provperiod för er
-              förening eller boka demo.
+              Det här är en riktig QRButik-checkout. Skapa förening på Gratis
+              eller boka demo.
             </p>
             <Link
               to="/glenn"
@@ -368,6 +372,10 @@ function ActiveShopView({
             )}
           </div>
         </section>
+
+        {showBranding ? (
+          <p className="pb-4 text-center text-xs text-subtle">Kiosk via QRButik</p>
+        ) : null}
       </div>
 
       {totalPrice > 0 && (

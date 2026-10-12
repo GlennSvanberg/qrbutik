@@ -27,6 +27,8 @@ export async function seedOrganization(
   options: {
     status?: SubscriptionStatus
     trialEndsAt?: number
+    plan?: 'gratis' | 'event' | 'season'
+    eventExpiresAt?: number
     stripeSubscriptionId?: string
     stripeCustomerId?: string
     ownerEmail?: string
@@ -43,6 +45,8 @@ export async function seedOrganization(
       billingEmail: ownerEmail,
       subscriptionStatus: options.status ?? 'trialing',
       trialEndsAt: options.trialEndsAt ?? FIXTURE_TRIAL_ENDS_AT,
+      plan: options.plan,
+      eventExpiresAt: options.eventExpiresAt,
       stripeSubscriptionId: options.stripeSubscriptionId,
       stripeCustomerId: options.stripeCustomerId,
       createdAt: FIXTURE_NOW,
