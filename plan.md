@@ -22,7 +22,7 @@ QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsförening
 |--|-------------------------------|------|
 | Pris | 10 kr (48 h) / 99 kr (säsong) | **Gratis**, **Event 295 kr**, **Säsong 1 495 kr/år** |
 | Köpare | Enskild förälder/lagledare | **Föreningen** (kansli/styrelse) |
-| Betalning plattform | Manuell Swish till privatnummer | **Stripe Billing** (kort, faktura, 14 dagars trial) |
+| Betalning plattform | Manuell Swish till privatnummer | **Stripe** (Event engångsbetalning, Säsong årsprenumeration, Customer Portal) |
 | Kundbetalning (kiosk) | Swish deep link → lagets nummer | Oförändrat |
 | Dataägande | `ownerEmail` per butik | `organizations` + `organizationMembers` |
 | MRR-mål | — | 7–10 föreningar ≈ 10 000 kr/månad |
@@ -61,7 +61,7 @@ QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsförening
 | Frontend | TanStack Start (SSR), Tailwind v4 |
 | Backend / DB | Convex (realtid) |
 | Auth | Better Auth (magic link) |
-| **Plattformsbetalning** | **Stripe Billing** (prenumeration, trial, webhooks) |
+| **Plattformsbetalning** | **Stripe** (Event `mode=payment`, Säsong `mode=subscription`, webhooks) |
 | Kundbetalning (kiosk) | Swish `swish://` deep links (inget Business API) |
 | E-post | Resend (magic links, onboarding, billing) |
 
@@ -76,7 +76,7 @@ QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsförening
 
 ```
 /logga-in → magic link → session
-/skapa (inloggad) → createOrganization → org (trialing) + owner
+/skapa (inloggad) → createOrganization → org på Gratis + owner
 /admin → skapa kiosk via /admin/skapa-kiosk; ShopAccessGate per kiosk
 /admin/billing → Stripe Checkout / Portal (when env configured)
 /s/{slug} → publikt; gated på org.subscriptionStatus
@@ -89,9 +89,9 @@ QRButik (*"Kiosken på burk"*) är en svensk B2B-tjänst för **idrottsförening
 ### A) Förening → QRButik (licens)
 
 ```
-Styrelse → skapa förening (14 dagars trial utan kort) → lägg till kiosker i admin
-  → vid behov: /admin/billing → Stripe Checkout (kort)
-  → Webhook aktiverar organization → alla kiosker tillåtna
+Styrelse → skapa förening (Gratis, inget kort) → en kiosk i admin
+  → vid behov: /admin/billing → Stripe Checkout (Event 295 kr eller Säsong 1 495 kr/år)
+  → Webhook sätter plan tills Event löper ut eller Säsong avslutas
 ```
 
 ### B) Kund → förening (kiosk, oförändrat)
@@ -136,7 +136,7 @@ Se [`SEO_INSTRUCTIONS.md`](./SEO_INSTRUCTIONS.md).
 Se full lista i [`ROADMAP.md`](./ROADMAP.md):
 
 - [ ] Klubblicens + organisation i schema
-- [ ] Stripe Billing + trial
+- [ ] Stripe: Event (295 kr) och Säsong (1 495 kr/år)
 - [ ] Centralt föreningsdashboard
 - [ ] CSV/SIE-export
 - [ ] Roller & inbjudningar

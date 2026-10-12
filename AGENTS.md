@@ -34,7 +34,7 @@ When implementing features, prefer: organizations, roles, central treasurer dash
 | `STRIPE_WEBHOOK_SECRET` | Convex | Webhook signature |
 | `STRIPE_EVENT_PRICE_ID` | Convex | Event 295 kr one-time price (`tax_behavior=inclusive`, moms included) |
 | `STRIPE_SEASON_PRICE_ID` | Convex | Säsong 1 495 kr/year price (`tax_behavior=inclusive`, moms included) |
-| `STRIPE_TAX_RATE_ID` | Convex (optional) | Inclusive 25% Tax Rate (`txr_…`). When set, sent as `default_tax_rates` on Checkout and `send_invoice` subscriptions. When unset, tax rates are omitted. |
+| `STRIPE_TAX_RATE_ID` | Convex (optional) | Inclusive 25% Tax Rate (`txr_…`). When set, sent as `tax_rates` on the Event payment line item and `default_tax_rates` on the Säsong subscription. When unset, tax rates are omitted. |
 | `VITE_STRIPE_PUBLISHABLE_KEY` | Vite (optional) | Future client-side Stripe.js |
 | `PLATFORM_ADMIN_EMAILS` | Convex | Comma-separated emails allowed on `/superadmin` (platform control tower) |
 | `PLATFORM_REPORTS_ENABLED` | Convex **prod only** | Set `true` to send hourly activity digest emails to `PLATFORM_ADMIN_EMAILS` |

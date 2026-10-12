@@ -1,6 +1,6 @@
 # QRButik
 
-> QRButik is a Swedish B2B SaaS for sports clubs and tournaments: a QR-based kiosk system with Swish checkout for visitors. Clubs pay a monthly license (from 995 SEK/month). Platform billing uses Stripe; customer payments use Swish deep links to the club's own number.
+> QRButik is a Swedish B2B SaaS for sports clubs and tournaments: a QR-based kiosk system with Swish checkout for visitors. Plans, all prices including 25% Swedish VAT: Gratis, Event 295 SEK (7 days), and Säsong 1 495 SEK/year (about 125 SEK/month). Platform billing uses Stripe; customer payments use Swish deep links to the club's own number.
 
 ## Target audience
 
@@ -10,15 +10,16 @@
 
 ## Business model
 
-- Club license: from 995 SEK/month, unlimited kiosks within the organization
-- 14-day free trial without card at signup; Stripe Checkout for billing
+- Gratis: 1 kiosk, unlimited products, Swish QR, today's stats, small QRButik branding. No card.
+- Event: 295 SEK one-time. Multiple kiosks, no branding, sales report and Excel export for 7 days.
+- Säsong: 1 495 SEK/year (about 125 SEK/month). Unlimited kiosks and events, multiple admins, accounting export while active.
 - Tagline: Digital kiosk för hela föreningen
 
 ## Core pages
 
-- [Homepage](https://qrbutik.se/): B2B value prop, trial + demo CTAs
-- [Contact / demo](https://qrbutik.se/kontakt): Book a demo or start trial
-- [Create organization](https://qrbutik.se/skapa): Onboarding with 14-day trial
+- [Homepage](https://qrbutik.se/): B2B value prop, Gratis / Event / Säsong pricing, demo CTA
+- [Contact / demo](https://qrbutik.se/kontakt): Book a demo or create a club
+- [Create organization](https://qrbutik.se/skapa): Onboarding on Gratis, no card
 - [Admin](https://qrbutik.se/admin): Magic-link login; org billing and kiosks
 
 ## Customer-facing (no login)

@@ -14,7 +14,7 @@ Ranka på sökord där **köparen är en förening som letar kiosksystem** — i
 | "Digitalt kiosksystem idrottsförening" | "Fotboll i Kinna" |
 | "Kiosksystem för fotbollsföreningar" | Sport×stad-matris i stor skala |
 | "Swish kiosk förening" | Tunn lokalsida utan köpintention |
-| Landningssidor med trial/demo-CTA | Passiv trafik utan konvertering |
+| Landningssidor med Skapa förening + demo-CTA | Passiv trafik utan konvertering |
 
 ---
 
@@ -51,7 +51,7 @@ De gamla programmatiska sport/stad-sidorna (`/utforska/*`, `pseo-data.json`) tog
 
 1. `public/sitemap*.xml` + `public/robots.txt` — statiska filer (ingen generator): `/`, `/skapa`, `/kontakt`
 2. Meta title/description per sida — primärt keyword + "för idrottsföreningar"
-3. Internlänkning: startsida → intent-sidor → provperiod
+3. Internlänkning: startsida → intent-sidor → /skapa
 4. `public/llms.txt` — B2B-positionering
 5. Varumärke: **QRButik** (konsekvent casing)
 
@@ -59,7 +59,7 @@ De gamla programmatiska sport/stad-sidorna (`/utforska/*`, `pseo-data.json`) tog
 
 ## Mätning
 
-- Mål: konvertering intent-trafik → trial → betalande — inte rå sidvisningar
+- Mål: konvertering intent-trafik → Gratis-förening → Event eller Säsong — inte rå sidvisningar
 - `source`-spårning kan läggas till senare vid registrering
 
 ---
