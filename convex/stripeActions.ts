@@ -9,6 +9,7 @@ import { assertCanBuyEvent, assertCanStartSeason } from "./lib/plans";
 import {
   buildEventCheckoutParams,
   buildSeasonCheckoutParams,
+  normalizeStripeWebhookSubscriptionStatus,
   optionalStripeTaxRateId,
 } from "./lib/stripeHelpers";
 import type { SubscriptionStatus } from "./lib/validators";
@@ -188,7 +189,9 @@ export const processWebhook = internalAction({
           organizationId,
           stripeCustomerId: customerId,
           stripeSubscriptionId: subscriptionId,
-          subscriptionStatus: subscription.status,
+          subscriptionStatus: normalizeStripeWebhookSubscriptionStatus(
+            subscription.status,
+          ),
         });
         break;
       }
@@ -205,7 +208,9 @@ export const processWebhook = internalAction({
           {
             stripeCustomerId: customerId,
             stripeSubscriptionId: subscription.id,
-            subscriptionStatus: subscription.status,
+            subscriptionStatus: normalizeStripeWebhookSubscriptionStatus(
+              subscription.status,
+            ),
             ...(subscription.metadata.plan === "season"
               ? { plan: "season" as const }
               : {}),
