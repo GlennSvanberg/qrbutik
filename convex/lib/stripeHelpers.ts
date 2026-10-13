@@ -6,6 +6,34 @@ export type StripeOrganizationBilling = {
   plan?: 'gratis' | 'event' | 'season'
 }
 
+/** Raw Stripe subscription.status values we pass into webhook mutations. */
+export const STRIPE_WEBHOOK_SUBSCRIPTION_STATUSES = [
+  'active',
+  'trialing',
+  'past_due',
+  'canceled',
+  'unpaid',
+  'incomplete',
+  'incomplete_expired',
+  'paused',
+] as const
+
+export type StripeWebhookSubscriptionStatus =
+  (typeof STRIPE_WEBHOOK_SUBSCRIPTION_STATUSES)[number]
+
+export function normalizeStripeWebhookSubscriptionStatus(
+  status: string,
+): StripeWebhookSubscriptionStatus {
+  if (
+    (STRIPE_WEBHOOK_SUBSCRIPTION_STATUSES as ReadonlyArray<string>).includes(
+      status,
+    )
+  ) {
+    return status as StripeWebhookSubscriptionStatus
+  }
+  return 'incomplete'
+}
+
 export function mapStripeSubscriptionStatus(
   status: string,
 ): SubscriptionStatus {

@@ -47,7 +47,7 @@ export function AdminHeader({
             onChange={(event) => {
               void navigate({
                 to: activeRoute,
-                params: { shopId: event.target.value as Id<'shops'> },
+                params: { shopId: event.target.value },
               })
             }}
             className="relaxed-input h-12 w-full cursor-pointer px-4 text-base text-brand-foreground outline-none"

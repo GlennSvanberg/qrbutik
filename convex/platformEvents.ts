@@ -5,7 +5,6 @@ import {
   recordPlatformEvent,
 } from './lib/platformEvents'
 import { isE2eTestShopSlug } from './lib/testData'
-import type { PlatformEventInput } from './lib/platformEvents'
 
 const recordEventArgsValidator = {
   type: platformEventTypeValidator,
@@ -26,7 +25,7 @@ export const recordInternal = internalMutation({
   args: recordEventArgsValidator,
   returns: v.union(v.id('platformEvents'), v.null()),
   handler: async (ctx, args) => {
-    return await recordPlatformEvent(ctx, args as PlatformEventInput)
+    return await recordPlatformEvent(ctx, args)
   },
 })
 
