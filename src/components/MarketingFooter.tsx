@@ -13,7 +13,7 @@ export function MarketingFooter() {
           Kontakt
         </a>
         <a
-          href="/support"
+          href="/kontakt"
           className="rounded-full px-3 py-1 transition hover:bg-brand-accent hover:text-brand-foreground"
           trackaton-on-click="footer-support"
         >

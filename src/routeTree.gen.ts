@@ -17,6 +17,7 @@ import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as LoggaInRouteImport } from './routes/logga-in'
 import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as SuperadminRouteRouteImport } from './routes/superadmin/route'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
@@ -75,6 +76,11 @@ const SkapaRoute = SkapaRouteImport.update({
 const SuperadminRouteRoute = SuperadminRouteRouteImport.update({
   id: '/superadmin',
   path: '/superadmin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VillkorRoute = VillkorRouteImport.update({
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/admin/billing': typeof AdminBillingRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
   '/admin/billing': typeof AdminBillingRoute
   '/admin/medlemmar': typeof AdminMedlemmarRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/skapa': typeof SkapaRoute
+  '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
   '/admin/$shopId': typeof AdminShopIdRouteWithChildren
   '/admin/billing': typeof AdminBillingRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/skapa'
+    | '/support'
     | '/villkor'
     | '/admin/$shopId'
     | '/admin/billing'
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/skapa'
+    | '/support'
     | '/villkor'
     | '/admin/billing'
     | '/admin/medlemmar'
@@ -322,6 +333,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/skapa'
+    | '/support'
     | '/villkor'
     | '/admin/$shopId'
     | '/admin/billing'
@@ -352,6 +364,7 @@ export interface RootRouteChildren {
   KontaktRoute: typeof KontaktRoute
   LoggaInRoute: typeof LoggaInRoute
   SkapaRoute: typeof SkapaRoute
+  SupportRoute: typeof SupportRoute
   VillkorRoute: typeof VillkorRoute
   HjalpExportRoute: typeof HjalpExportRoute
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
@@ -414,6 +427,13 @@ declare module '@tanstack/react-router' {
       path: '/superadmin'
       fullPath: '/superadmin'
       preLoaderRoute: typeof SuperadminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/villkor': {
@@ -631,6 +651,7 @@ const rootRouteChildren: RootRouteChildren = {
   KontaktRoute: KontaktRoute,
   LoggaInRoute: LoggaInRoute,
   SkapaRoute: SkapaRoute,
+  SupportRoute: SupportRoute,
   VillkorRoute: VillkorRoute,
   HjalpExportRoute: HjalpExportRoute,
   SShopSlugRoute: SShopSlugRouteWithChildren,
