@@ -1,8 +1,8 @@
 import { createRouter } from '@tanstack/react-router'
 import { QueryClient } from '@tanstack/react-query'
-import { routerWithQueryClient } from '@tanstack/react-router-with-query'
 import { ConvexQueryClient } from '@convex-dev/react-query'
 import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react'
+import { routerWithQueryClient } from './lib/routerWithQueryClient'
 import { routeTree } from './routeTree.gen'
 import { authClient } from './lib/authClient'
 

@@ -33,7 +33,8 @@ async function ensureDemoOrganization(ctx: MutationCtx): Promise<Id<'organizatio
       await ctx.db.patch('organizations', organization._id, {
         name: DEMO_ORG_NAME,
         billingEmail: DEMO_BILLING_EMAIL,
-        subscriptionStatus: 'active',
+        plan: 'gratis',
+        subscriptionStatus: 'inactive',
       })
       return organization._id
     }
@@ -42,7 +43,8 @@ async function ensureDemoOrganization(ctx: MutationCtx): Promise<Id<'organizatio
   return await ctx.db.insert('organizations', {
     name: DEMO_ORG_NAME,
     billingEmail: DEMO_BILLING_EMAIL,
-    subscriptionStatus: 'active',
+    plan: 'gratis',
+    subscriptionStatus: 'inactive',
     createdAt: Date.now(),
   })
 }

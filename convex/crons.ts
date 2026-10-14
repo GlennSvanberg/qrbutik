@@ -15,4 +15,10 @@ crons.interval(
   internal.platformReports.sendHourlyReport,
 )
 
+crons.interval(
+  'ensure public demo kiosk',
+  { minutes: 15 },
+  internal.demoSeed.ensureDemoShop,
+)
+
 export default crons
