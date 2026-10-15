@@ -1,6 +1,7 @@
 import {
   HeadContent,
   Outlet,
+  ScriptOnce,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
@@ -12,6 +13,7 @@ import {
   SITE_TAGLINE,
 } from '~/lib/marketing'
 import appCss from '~/styles/app.css?url'
+import { trackatonBootstrapSource } from '~/lib/trackaton'
 
 const SITE_URL =
   (import.meta as any).env.VITE_SITE_URL ?? 'https://qrbutik.se'
@@ -200,12 +202,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           content="R-KP7EKVZRONLvh8T9mSu_yuAMh9zTpqBVJf8AZR1Ho"
         />
         <HeadContent />
-        <script
-          src="https://www.trackaton.com/track.js"
-          data-website-id="jd79w2wpqpayas6bw1j9nhb20h7yqj82"
-          data-endpoint="https://resolute-orca-949.convex.site/api/e"
-          async
-        ></script>
+        <ScriptOnce>{trackatonBootstrapSource()}</ScriptOnce>
       </head>
       <body>
         {children}
