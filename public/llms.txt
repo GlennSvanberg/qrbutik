@@ -18,6 +18,8 @@
 ## Core pages
 
 - [Homepage](https://qrbutik.se/): B2B value prop, Gratis / Event / Säsong pricing, demo CTA
+- [Pricing](https://qrbutik.se/priser): Gratis, Event 295 SEK one-time, Säsong 1 495 SEK/year
+- [Explore sports](https://qrbutik.se/utforska): Hub and sport pages for club kiosks
 - [Contact / demo](https://qrbutik.se/kontakt): Book a demo or create a club
 - [Create organization](https://qrbutik.se/skapa): Onboarding on Gratis, no card
 - [Admin](https://qrbutik.se/admin): Magic-link login; org billing and kiosks
@@ -31,7 +33,7 @@
 
 - Multiple kiosks under one club license
 - Central dashboard for treasurer and board
-- CSV and SIE export for Fortnox/Visma
+- CSV and SIE export files
 - Organization roles: owner, treasurer, editor
 
 ## Documentation for agents
@@ -42,4 +44,4 @@
 
 ## SEO note
 
-Programmatic sport/city pages (`/utforska/*`) were removed 2026-09-27 (no traffic to preserve). Primary SEO surface: homepage + upcoming intent pages under `/losningar/`.
+Public sport pages live under `/utforska` and `/utforska/{sport}` for a fixed set of sports. Primary SEO surface: homepage, `/priser`, `/utforska` and `/kontakt`.
