@@ -77,7 +77,7 @@ function KontaktPage() {
                   to="/s/$shopSlug"
                   params={{ shopSlug: DEMO_SHOP_SLUG }}
                   className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-brand-foreground"
-                  trackaton-on-click="kontakt-live-kiosk"
+                  trackaton-on-click="live_kiosk_click"
                 >
                   {LIVE_KIOSK_LABEL}
                 </Link>
@@ -97,7 +97,7 @@ function KontaktPage() {
                   to="/logga-in"
                   search={{ redirect: '/skapa' }}
                   className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-6 text-base font-semibold text-white"
-                  trackaton-on-click="kontakt-start"
+                  trackaton-on-click="signup_started"
                 >
                   Skapa förening
                 </Link>

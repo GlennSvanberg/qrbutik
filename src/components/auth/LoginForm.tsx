@@ -5,6 +5,7 @@ import {
   isDevMagicLinkEnabled,
   maybeOpenDevMagicLink,
 } from '../../lib/devMagicLink'
+import { trackFunnelEvent } from '../../lib/trackaton'
 
 type LoginFormProps = {
   redirectTo?: string
@@ -56,6 +57,11 @@ export function LoginForm({
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false)
 
   const isBusy = isMagicLinkSubmitting || isGoogleSubmitting
+  const isTrialSignup = redirectTo.startsWith('/skapa')
+
+  const noteSignupStarted = () => {
+    if (isTrialSignup) trackFunnelEvent('signup_started')
+  }
 
   return (
     <div className="relaxed-surface mx-auto flex w-full max-w-xl flex-col gap-6 p-8">
@@ -82,6 +88,7 @@ export function LoginForm({
             return
           }
           setIsMagicLinkSubmitting(true)
+          noteSignupStarted()
           setStatusMessage('Skickar inloggningsmejl...')
           try {
             await authClient.signIn.magicLink(
@@ -140,6 +147,7 @@ export function LoginForm({
           setStatusMessage(null)
           setErrorMessage(null)
           setIsGoogleSubmitting(true)
+          noteSignupStarted()
           try {
             await authClient.signIn.social(
               { provider: 'google', callbackURL: redirectTo },
@@ -172,6 +180,7 @@ export function LoginForm({
             to="/logga-in"
             search={{ redirect: '/skapa' }}
             className="cursor-pointer font-semibold text-brand hover:underline"
+            trackaton-on-click="signup_started"
           >
             Logga in och skapa förening
           </Link>

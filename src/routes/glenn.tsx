@@ -47,7 +47,7 @@ function GlennDemoLanding() {
           </p>
           <div className="mt-6 flex flex-col items-center gap-3">
             <MarketingCtas
-              primaryTracking="glenn-landing-start"
+              primaryTracking="signup_started"
               secondaryTracking="glenn-landing-demo"
               layout="stack"
             />

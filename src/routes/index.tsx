@@ -101,7 +101,6 @@ const pricingPlans: Array<{
   price: string
   description: string
   cta: string
-  tracking: string
   variant: 'primary' | 'secondary'
 }> = [
   {
@@ -111,7 +110,6 @@ const pricingPlans: Array<{
     description:
       '1 kiosk, obegränsat antal produkter, Swish-QR och statistik för idag. En liten QRButik-märkning visas. Inget kort.',
     cta: START_LABEL,
-    tracking: 'start-gratis',
     variant: 'secondary',
   },
   {
@@ -121,7 +119,6 @@ const pricingPlans: Array<{
     description:
       'Engångsköp för cuphelgen. Flera kiosker, ingen märkning, försäljningsrapport och export i 7 dagar.',
     cta: 'Köp Event',
-    tracking: 'start-event',
     variant: 'secondary',
   },
   {
@@ -131,7 +128,6 @@ const pricingPlans: Array<{
     description:
       'Cirka 125 kr/mån. Obegränsat antal kiosker och event, flera administratörer och bokföringsexport så länge prenumerationen är aktiv.',
     cta: 'Starta Säsong',
-    tracking: 'start-season',
     variant: 'primary',
   },
 ]
@@ -181,7 +177,7 @@ function Home() {
               </div>
 
               <MarketingCtas
-                primaryTracking="primary-cta"
+                primaryTracking="signup_started"
                 secondaryTracking="home-demo-cta"
               />
 
@@ -218,7 +214,7 @@ function Home() {
                         to="/s/$shopSlug"
                         params={{ shopSlug: DEMO_SHOP_SLUG }}
                         className="mt-3 inline-flex cursor-pointer text-sm font-semibold text-brand underline decoration-brand-border underline-offset-4"
-                        trackaton-on-click="home-hero-live-kiosk"
+                        trackaton-on-click="live_kiosk_click"
                       >
                         {LIVE_KIOSK_LABEL} →
                       </Link>
@@ -379,7 +375,11 @@ function Home() {
                             ? 'relaxed-primary-button inline-flex h-11 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-white'
                             : 'relaxed-secondary-button inline-flex h-11 cursor-pointer items-center justify-center px-4 text-sm font-semibold text-brand-foreground'
                         }
-                        trackaton-on-click={plan.tracking}
+                        trackaton-on-click="plan_selected"
+                        data-trackaton-plan={plan.id}
+                        {...(plan.id === 'gratis'
+                          ? { 'data-trackaton-also': 'signup_started' }
+                          : {})}
                       >
                         {plan.cta}
                       </Link>
@@ -430,7 +430,7 @@ function Home() {
               </p>
             </div>
             <MarketingCtas
-              primaryTracking="landing-bottom-cta"
+              primaryTracking="signup_started"
               secondaryTracking="landing-bottom-demo"
               layout="stack"
             />
