@@ -12,6 +12,7 @@ import {
   needsPaymentUrgently,
   planLabel,
 } from '../../lib/billingUi'
+import { trackFunnelEvent } from '../../lib/trackaton'
 import type { Id } from '../../../convex/_generated/dataModel'
 
 type BillingSearch = {
@@ -198,6 +199,7 @@ function BillingContent({
   }, [organizationDetails])
 
   const startCheckout = async (plan: 'event' | 'season') => {
+    trackFunnelEvent('checkout_started', { plan })
     setError(null)
     setCheckoutPlan(plan)
     try {
@@ -341,6 +343,8 @@ function BillingContent({
                     type="button"
                     disabled={checkoutPlan !== null}
                     onClick={() => void startCheckout('event')}
+                    trackaton-on-click="plan_selected"
+                    data-trackaton-plan="event"
                     className="relaxed-secondary-button h-12 cursor-pointer px-6 text-sm font-semibold text-brand-foreground disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {checkoutPlan === 'event' ? 'Öppnar...' : 'Köp Event — 295 kr'}
@@ -351,6 +355,8 @@ function BillingContent({
                     type="button"
                     disabled={checkoutPlan !== null}
                     onClick={() => void startCheckout('season')}
+                    trackaton-on-click="plan_selected"
+                    data-trackaton-plan="season"
                     className="relaxed-primary-button h-12 cursor-pointer px-6 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {checkoutPlan === 'season'

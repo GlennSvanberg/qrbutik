@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { api } from '../../convex/_generated/api'
 import { AuthGate } from '../components/auth/AuthGate'
 import { authClient } from '../lib/authClient'
+import { trackFunnelEvent } from '../lib/trackaton'
 
 export const Route = createFileRoute('/skapa')({
   head: () => ({
@@ -132,6 +133,7 @@ function CreateOrganizationContent() {
             type="button"
             disabled={!canSubmit || isSubmitting}
             onClick={async () => {
+              trackFunnelEvent('signup_started')
               setError(null)
               setIsSubmitting(true)
               try {
@@ -140,6 +142,7 @@ function CreateOrganizationContent() {
                   orgNumber: orgForm.orgNumber.trim() || undefined,
                   billingEmail: orgForm.billingEmail.trim(),
                 })
+                trackFunnelEvent('signup_completed')
                 await queryClient.invalidateQueries({
                   queryKey: convexQuery(api.organizations.getMyOrganizations, {})
                     .queryKey,

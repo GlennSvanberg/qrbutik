@@ -11,9 +11,9 @@ type MarketingCtasProps = {
 }
 
 export function MarketingCtas({
-  primaryTracking = 'start-cta',
+  primaryTracking = 'signup_started',
   secondaryTracking = 'demo-cta',
-  liveKioskTracking = 'live-kiosk-cta',
+  liveKioskTracking = 'live_kiosk_click',
   layout = 'row',
   showLiveKiosk = true,
 }: MarketingCtasProps) {
