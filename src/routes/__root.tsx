@@ -37,9 +37,10 @@ const normalizePathname = (pathname: string) => {
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
-  head: ({ match }) => {
+  head: ({ matches }) => {
+    const leaf = matches[matches.length - 1]
     const canonicalUrl = buildAbsoluteUrl(
-      normalizePathname(match.pathname || '/'),
+      normalizePathname(leaf.pathname || '/'),
     )
     const ogImageUrl = buildAbsoluteUrl(OG_IMAGE_PATH)
 

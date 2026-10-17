@@ -10,8 +10,8 @@ import {
   PRICE_SUMMARY,
   SITE_NAME,
   SITE_TAGLINE,
-  START_LABEL,
 } from '~/lib/marketing'
+import { pricingFaq, pricingPlans } from '~/lib/pricingPlans'
 import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
 export const Route = createFileRoute('/')({
@@ -91,69 +91,10 @@ const platformDetails: Array<{
     id: 'pricing',
     title: 'Export till bokföring',
     description:
-      'CSV och SIE för Fortnox och Visma — per kiosk eller hela föreningen.',
+      'CSV- och SIE-filer — per kiosk eller hela föreningen.',
   },
 ]
 
-const pricingPlans: Array<{
-  id: string
-  name: string
-  price: string
-  description: string
-  cta: string
-  variant: 'primary' | 'secondary'
-}> = [
-  {
-    id: 'gratis',
-    name: 'Gratis',
-    price: '0 kr',
-    description:
-      '1 kiosk, obegränsat antal produkter, Swish-QR och statistik för idag. En liten QRButik-märkning visas. Inget kort.',
-    cta: START_LABEL,
-    variant: 'secondary',
-  },
-  {
-    id: 'event',
-    name: 'Event',
-    price: '295 kr',
-    description:
-      'Engångsköp för cuphelgen. Flera kiosker, ingen märkning, försäljningsrapport och export i 7 dagar.',
-    cta: 'Köp Event',
-    variant: 'secondary',
-  },
-  {
-    id: 'season',
-    name: 'Säsong',
-    price: '1 495 kr/år',
-    description:
-      'Cirka 125 kr/mån. Obegränsat antal kiosker och event, flera administratörer och bokföringsexport så länge prenumerationen är aktiv.',
-    cta: 'Starta Säsong',
-    variant: 'primary',
-  },
-]
-
-const faqItems: Array<{ question: string; answer: string }> = [
-  {
-    question: 'Vad kostar QRButik?',
-    answer:
-      'Gratis är standard. Event kostar 295 kr och Säsong 1 495 kr per år (cirka 125 kr/mån). Alla priser är inklusive 25 % moms.',
-  },
-  {
-    question: 'Finns det en provperiod?',
-    answer:
-      'Nej. Varje förening börjar på Gratis utan kort. Event och Säsong köps när ni behöver fler kiosker, rapport eller export.',
-  },
-  {
-    question: 'Vad händer när Event tar slut?',
-    answer:
-      'Efter 7 dagar går föreningen tillbaka till Gratis. Den äldsta kiosken fortsätter att ta emot Swish-köp.',
-  },
-  {
-    question: 'Kan vi säga upp Säsong?',
-    answer:
-      'Ja, i kundportalen. Tillgången till obegränsade kiosker, flera administratörer och bokföringsexport gäller så länge prenumerationen är aktiv.',
-  },
-]
 
 function Home() {
   useRecordPlatformVisit({ type: 'page_view', path: '/' })
@@ -337,7 +278,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="premium-panel p-8 sm:p-10">
+          <div className="premium-panel p-8 sm:p-10" id="priser">
             <div className="premium-shell flex h-full flex-col">
               <div className="flex flex-col gap-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-muted">
@@ -404,7 +345,7 @@ function Home() {
               Vanliga frågor
             </h2>
             <dl className="flex flex-col gap-5">
-              {faqItems.map((item) => (
+              {pricingFaq.map((item) => (
                 <div key={item.question}>
                   <dt className="font-semibold text-brand-foreground">
                     {item.question}
@@ -437,6 +378,20 @@ function Home() {
           </div>
         </section>
 
+        <nav
+          aria-label="Andra sajter"
+          className="flex flex-wrap justify-center gap-4 text-sm text-brand-muted"
+        >
+          <a href="https://selio.se" className="cursor-pointer underline decoration-brand-border underline-offset-4">
+            selio.se
+          </a>
+          <a href="https://allaheterglenn.se" className="cursor-pointer underline decoration-brand-border underline-offset-4">
+            allaheterglenn.se
+          </a>
+          <a href="https://glennsvanberg.se" className="cursor-pointer underline decoration-brand-border underline-offset-4">
+            glennsvanberg.se
+          </a>
+        </nav>
         <MarketingFooter />
       </div>
     </main>

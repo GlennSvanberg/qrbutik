@@ -15,6 +15,9 @@ import { Route as GlennRouteImport } from './routes/glenn'
 import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as LoggaInRouteImport } from './routes/logga-in'
+import { Route as PriserRouteImport } from './routes/priser'
+import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SkapaRouteImport } from './routes/skapa'
 import { Route as SuperadminRouteRouteImport } from './routes/superadmin/route'
 import { Route as SupportRouteImport } from './routes/support'
@@ -28,6 +31,8 @@ import { Route as HjalpExportRouteImport } from './routes/hjalp/export'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as SuperadminIndexRouteImport } from './routes/superadmin/index'
 import { Route as TackTransactionIdRouteImport } from './routes/tack/$transactionId'
+import { Route as UtforskaIndexRouteImport } from './routes/utforska/index'
+import { Route as UtforskaSportRouteImport } from './routes/utforska/$sport'
 import { Route as AdminShopIdIndexRouteImport } from './routes/admin/$shopId/index'
 import { Route as AdminShopIdHistorikRouteImport } from './routes/admin/$shopId/historik'
 import { Route as AdminShopIdProductsRouteImport } from './routes/admin/$shopId/products'
@@ -66,6 +71,21 @@ const KontaktRoute = KontaktRouteImport.update({
 const LoggaInRoute = LoggaInRouteImport.update({
   id: '/logga-in',
   path: '/logga-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PriserRoute = PriserRouteImport.update({
+  id: '/priser',
+  path: '/priser',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
+  id: '/sitemap-static.xml',
+  path: '/sitemap-static.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SkapaRoute = SkapaRouteImport.update({
@@ -133,6 +153,16 @@ const TackTransactionIdRoute = TackTransactionIdRouteImport.update({
   path: '/tack/$transactionId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UtforskaIndexRoute = UtforskaIndexRouteImport.update({
+  id: '/utforska/',
+  path: '/utforska/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UtforskaSportRoute = UtforskaSportRouteImport.update({
+  id: '/utforska/$sport',
+  path: '/utforska/$sport',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminShopIdIndexRoute = AdminShopIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -187,6 +217,9 @@ export interface FileRoutesByFullPath {
   '/integritet': typeof IntegritetRoute
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
+  '/priser': typeof PriserRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
   '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
@@ -197,8 +230,10 @@ export interface FileRoutesByFullPath {
   '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRoute
   '/admin/': typeof AdminIndexRoute
   '/superadmin/': typeof SuperadminIndexRoute
+  '/utforska/': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -215,6 +250,9 @@ export interface FileRoutesByTo {
   '/integritet': typeof IntegritetRoute
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
+  '/priser': typeof PriserRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
   '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
@@ -223,8 +261,10 @@ export interface FileRoutesByTo {
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
   '/hjalp/export': typeof HjalpExportRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRoute
   '/admin': typeof AdminIndexRoute
   '/superadmin': typeof SuperadminIndexRoute
+  '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -244,6 +284,9 @@ export interface FileRoutesById {
   '/integritet': typeof IntegritetRoute
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
+  '/priser': typeof PriserRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
   '/support': typeof SupportRoute
   '/villkor': typeof VillkorRoute
@@ -254,8 +297,10 @@ export interface FileRoutesById {
   '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
+  '/utforska/$sport': typeof UtforskaSportRoute
   '/admin/': typeof AdminIndexRoute
   '/superadmin/': typeof SuperadminIndexRoute
+  '/utforska/': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
   '/admin/$shopId/products': typeof AdminShopIdProductsRoute
   '/admin/$shopId/settings': typeof AdminShopIdSettingsRoute
@@ -276,6 +321,9 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/kontakt'
     | '/logga-in'
+    | '/priser'
+    | '/sitemap-static.xml'
+    | '/sitemap.xml'
     | '/skapa'
     | '/support'
     | '/villkor'
@@ -286,8 +334,10 @@ export interface FileRouteTypes {
     | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin/'
     | '/superadmin/'
+    | '/utforska/'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -304,6 +354,9 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/kontakt'
     | '/logga-in'
+    | '/priser'
+    | '/sitemap-static.xml'
+    | '/sitemap.xml'
     | '/skapa'
     | '/support'
     | '/villkor'
@@ -312,8 +365,10 @@ export interface FileRouteTypes {
     | '/admin/skapa-kiosk'
     | '/hjalp/export'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin'
     | '/superadmin'
+    | '/utforska'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -332,6 +387,9 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/kontakt'
     | '/logga-in'
+    | '/priser'
+    | '/sitemap-static.xml'
+    | '/sitemap.xml'
     | '/skapa'
     | '/support'
     | '/villkor'
@@ -342,8 +400,10 @@ export interface FileRouteTypes {
     | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
+    | '/utforska/$sport'
     | '/admin/'
     | '/superadmin/'
+    | '/utforska/'
     | '/admin/$shopId/historik'
     | '/admin/$shopId/products'
     | '/admin/$shopId/settings'
@@ -363,12 +423,17 @@ export interface RootRouteChildren {
   IntegritetRoute: typeof IntegritetRoute
   KontaktRoute: typeof KontaktRoute
   LoggaInRoute: typeof LoggaInRoute
+  PriserRoute: typeof PriserRoute
+  SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SkapaRoute: typeof SkapaRoute
   SupportRoute: typeof SupportRoute
   VillkorRoute: typeof VillkorRoute
   HjalpExportRoute: typeof HjalpExportRoute
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
+  UtforskaSportRoute: typeof UtforskaSportRoute
+  UtforskaIndexRoute: typeof UtforskaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -413,6 +478,27 @@ declare module '@tanstack/react-router' {
       path: '/logga-in'
       fullPath: '/logga-in'
       preLoaderRoute: typeof LoggaInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/priser': {
+      id: '/priser'
+      path: '/priser'
+      fullPath: '/priser'
+      preLoaderRoute: typeof PriserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-static.xml': {
+      id: '/sitemap-static.xml'
+      path: '/sitemap-static.xml'
+      fullPath: '/sitemap-static.xml'
+      preLoaderRoute: typeof SitemapStaticDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/skapa': {
@@ -504,6 +590,20 @@ declare module '@tanstack/react-router' {
       path: '/tack/$transactionId'
       fullPath: '/tack/$transactionId'
       preLoaderRoute: typeof TackTransactionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/utforska/': {
+      id: '/utforska/'
+      path: '/utforska'
+      fullPath: '/utforska/'
+      preLoaderRoute: typeof UtforskaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/utforska/$sport': {
+      id: '/utforska/$sport'
+      path: '/utforska/$sport'
+      fullPath: '/utforska/$sport'
+      preLoaderRoute: typeof UtforskaSportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/$shopId/': {
@@ -650,12 +750,17 @@ const rootRouteChildren: RootRouteChildren = {
   IntegritetRoute: IntegritetRoute,
   KontaktRoute: KontaktRoute,
   LoggaInRoute: LoggaInRoute,
+  PriserRoute: PriserRoute,
+  SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SkapaRoute: SkapaRoute,
   SupportRoute: SupportRoute,
   VillkorRoute: VillkorRoute,
   HjalpExportRoute: HjalpExportRoute,
   SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
+  UtforskaSportRoute: UtforskaSportRoute,
+  UtforskaIndexRoute: UtforskaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
