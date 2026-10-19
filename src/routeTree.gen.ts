@@ -16,6 +16,7 @@ import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as LoggaInRouteImport } from './routes/logga-in'
 import { Route as PriserRouteImport } from './routes/priser'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SkapaRouteImport } from './routes/skapa'
@@ -76,6 +77,11 @@ const LoggaInRoute = LoggaInRouteImport.update({
 const PriserRoute = PriserRouteImport.update({
   id: '/priser',
   path: '/priser',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/priser': typeof PriserRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/priser': typeof PriserRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
@@ -285,6 +293,7 @@ export interface FileRoutesById {
   '/kontakt': typeof KontaktRoute
   '/logga-in': typeof LoggaInRoute
   '/priser': typeof PriserRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skapa': typeof SkapaRoute
@@ -322,6 +331,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/priser'
+    | '/robots.txt'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/skapa'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/priser'
+    | '/robots.txt'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/skapa'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/logga-in'
     | '/priser'
+    | '/robots.txt'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/skapa'
@@ -424,6 +436,7 @@ export interface RootRouteChildren {
   KontaktRoute: typeof KontaktRoute
   LoggaInRoute: typeof LoggaInRoute
   PriserRoute: typeof PriserRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SkapaRoute: typeof SkapaRoute
@@ -485,6 +498,13 @@ declare module '@tanstack/react-router' {
       path: '/priser'
       fullPath: '/priser'
       preLoaderRoute: typeof PriserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap-static.xml': {
@@ -751,6 +771,7 @@ const rootRouteChildren: RootRouteChildren = {
   KontaktRoute: KontaktRoute,
   LoggaInRoute: LoggaInRoute,
   PriserRoute: PriserRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SkapaRoute: SkapaRoute,

@@ -7,7 +7,10 @@ describe('public sitemap', () => {
   it('lists the public pages and every sport with the given lastmod', () => {
     const xml = buildSitemapXml('2026-10-17')
     for (const path of publicSitemapPaths()) {
-      const loc = path === '/' ? 'https://qrbutik.se/' : `https://qrbutik.se${path}`
+      const loc =
+        path === '/'
+          ? 'https://www.qrbutik.se/'
+          : `https://www.qrbutik.se${path}`
       expect(xml).toContain(`<loc>${loc}</loc>`)
     }
     expect(xml.match(/<lastmod>2026-10-17<\/lastmod>/g)).toHaveLength(

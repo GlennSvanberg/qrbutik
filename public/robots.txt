@@ -1,9 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Disallow: /s/
-Disallow: /tack/
-Allow: /
-
-Sitemap: https://qrbutik.se/sitemap.xml
-Sitemap: https://qrbutik.se/sitemap-static.xml
-LLMS: https://qrbutik.se/llms.txt

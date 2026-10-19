@@ -4,6 +4,7 @@ import { convexQuery } from '@convex-dev/react-query'
 import { QRCodeSVG } from 'qrcode.react'
 import { useMemo } from 'react'
 import { api } from '../../../../convex/_generated/api'
+import { resolveSiteUrl } from '~/lib/siteUrl'
 
 export const Route = createFileRoute('/s/$shopSlug/qr')({
   head: () => ({
@@ -58,9 +59,10 @@ function ShopQrPublicPage() {
     )
   }
 
+  const publicOrigin = resolveSiteUrl()
   const qrValue = origin
     ? `${origin}/s/${shop.slug}`
-    : `https://qrbutik.se/s/${shop.slug}`
+    : `${publicOrigin}/s/${shop.slug}`
   const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (

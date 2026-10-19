@@ -1,6 +1,5 @@
+import { resolveSiteUrl } from '~/lib/siteUrl'
 import { sportPages } from '~/lib/sports'
-
-export const SITEMAP_HOST = 'https://qrbutik.se'
 
 const staticPaths = ['/', '/skapa', '/kontakt', '/priser', '/utforska'] as const
 
@@ -20,9 +19,10 @@ function escapeXml(value: string): string {
 }
 
 export function buildSitemapXml(lastmod: string): string {
+  const host = resolveSiteUrl()
   const urls = publicSitemapPaths()
     .map((path) => {
-      const loc = path === '/' ? `${SITEMAP_HOST}/` : `${SITEMAP_HOST}${path}`
+      const loc = path === '/' ? `${host}/` : `${host}${path}`
       return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${escapeXml(lastmod)}</lastmod>\n  </url>`
     })
     .join('\n')

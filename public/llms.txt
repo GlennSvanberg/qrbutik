@@ -17,17 +17,17 @@
 
 ## Core pages
 
-- [Homepage](https://qrbutik.se/): B2B value prop, Gratis / Event / Säsong pricing, demo CTA
-- [Pricing](https://qrbutik.se/priser): Gratis, Event 295 SEK one-time, Säsong 1 495 SEK/year
-- [Explore sports](https://qrbutik.se/utforska): Hub and sport pages for club kiosks
-- [Contact / demo](https://qrbutik.se/kontakt): Book a demo or create a club
-- [Create organization](https://qrbutik.se/skapa): Onboarding on Gratis, no card
-- [Admin](https://qrbutik.se/admin): Magic-link login; org billing and kiosks
+- [Homepage](https://www.qrbutik.se/): B2B value prop, Gratis / Event / Säsong pricing, demo CTA
+- [Pricing](https://www.qrbutik.se/priser): Gratis, Event 295 SEK one-time, Säsong 1 495 SEK/year
+- [Explore sports](https://www.qrbutik.se/utforska): Hub and sport pages for club kiosks
+- [Contact / demo](https://www.qrbutik.se/kontakt): Book a demo or create a club
+- [Create organization](https://www.qrbutik.se/skapa): Onboarding on Gratis, no card
+- [Admin](https://www.qrbutik.se/admin): Magic-link login; org billing and kiosks
 
 ## Customer-facing (no login)
 
-- [Shop menu](https://qrbutik.se/s/{shopSlug}): Public menu and Swish payment
-- [Receipt](https://qrbutik.se/tack/{transactionId}): Digital receipt after payment
+- [Shop menu](https://www.qrbutik.se/s/{shopSlug}): Public menu and Swish payment
+- [Receipt](https://www.qrbutik.se/tack/{transactionId}): Digital receipt after payment
 
 ## Product capabilities (positioning)
 
