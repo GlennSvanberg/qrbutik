@@ -5,10 +5,11 @@ import { magicLink } from "better-auth/plugins";
 import authConfig from "./auth.config";
 import { components } from "./_generated/api";
 import { isDevMagicLinkEnabled } from "./devMagicLink";
+import { getSiteUrl } from "./lib/siteUrl";
 import type { DataModel } from "./_generated/dataModel";
 import type { GenericCtx } from "@convex-dev/better-auth";
 
-const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
+const siteUrl = getSiteUrl();
 const trustedOrigins = [
   siteUrl,
   "http://localhost:3000",

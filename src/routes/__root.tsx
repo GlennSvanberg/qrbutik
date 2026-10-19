@@ -14,18 +14,12 @@ import {
 } from '~/lib/marketing'
 import appCss from '~/styles/app.css?url'
 import { trackatonBootstrapSource } from '~/lib/trackaton'
+import { absoluteSiteUrl, resolveSiteUrl } from '~/lib/siteUrl'
 
-const SITE_URL =
-  (import.meta as any).env.VITE_SITE_URL ?? 'https://qrbutik.se'
+const SITE_URL = resolveSiteUrl()
 const OG_IMAGE_PATH = '/og.jpg'
 
-const buildAbsoluteUrl = (pathname: string) => {
-  try {
-    return new URL(pathname, SITE_URL).toString()
-  } catch {
-    return SITE_URL
-  }
-}
+const buildAbsoluteUrl = (pathname: string) => absoluteSiteUrl(pathname, SITE_URL)
 
 const normalizePathname = (pathname: string) => {
   if (!pathname || pathname === '/') {

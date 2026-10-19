@@ -9,13 +9,13 @@ import {
 } from "./lib/platformEvents";
 import { getPlatformAdminEmails } from "./lib/platformAdmin";
 import { canSendPlatformReportEmail } from "./lib/platformReports";
+import { getSiteUrl } from "./lib/siteUrl";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const defaultFrom = process.env.RESEND_FROM ?? "QRButik <no-reply@qrbutik.se>";
-const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
 
 function billingUrl(organizationId: string): string {
-  return `${siteUrl}/admin/billing?organizationId=${organizationId}`;
+  return `${getSiteUrl()}/admin/billing?organizationId=${organizationId}`;
 }
 
 async function sendEmail(args: {
@@ -134,7 +134,7 @@ export const sendMemberInvitationEmail = internalAction({
   returns: v.null(),
   handler: async (_ctx, args) => {
     const roleLabel = args.role === "treasurer" ? "kassör" : "lagledare";
-    const loginUrl = `${siteUrl}/logga-in?invite=${encodeURIComponent(args.token)}&redirect=${encodeURIComponent("/admin/medlemmar")}`;
+    const loginUrl = `${getSiteUrl()}/logga-in?invite=${encodeURIComponent(args.token)}&redirect=${encodeURIComponent("/admin/medlemmar")}`;
     await sendEmail({
       to: args.to,
       subject: `Inbjudan till ${args.organizationName} på QRButik`,
@@ -153,6 +153,7 @@ export const sendStoreCreatedEmail = action({
   },
   returns: v.null(),
   handler: async (_ctx, args) => {
+    const siteUrl = getSiteUrl();
     const shopUrl = `${siteUrl}/s/${args.shopSlug}`;
     const adminUrl = `${siteUrl}/admin`;
     const shopAdminUrl = `${adminUrl}/${args.shopId}`;

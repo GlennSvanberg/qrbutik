@@ -12,12 +12,11 @@ import {
   normalizeStripeWebhookSubscriptionStatus,
   optionalStripeTaxRateId,
 } from "./lib/stripeHelpers";
+import { getSiteUrl } from "./lib/siteUrl";
 import type { SubscriptionStatus } from "./lib/validators";
 import type { CommercialPlan } from "./lib/plans";
 
 import type { Id } from "./_generated/dataModel";
-
-const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
 
 function getStripe(): Stripe {
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -300,8 +299,8 @@ export const createCheckoutSession = action({
     const session = await stripe.checkout.sessions.create({
       ...checkoutParams,
       customer: customerId,
-      success_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}&success=1&plan=${args.plan}`,
-      cancel_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}&canceled=1`,
+      success_url: `${getSiteUrl()}/admin/billing?organizationId=${args.organizationId}&success=1&plan=${args.plan}`,
+      cancel_url: `${getSiteUrl()}/admin/billing?organizationId=${args.organizationId}&canceled=1`,
     });
 
     if (!session.url) {
@@ -339,7 +338,7 @@ export const createCustomerPortalSession = action({
     const stripe = getStripe();
     const session = await stripe.billingPortal.sessions.create({
       customer: organization.stripeCustomerId,
-      return_url: `${siteUrl}/admin/billing?organizationId=${args.organizationId}`,
+      return_url: `${getSiteUrl()}/admin/billing?organizationId=${args.organizationId}`,
     });
 
     return { url: session.url };

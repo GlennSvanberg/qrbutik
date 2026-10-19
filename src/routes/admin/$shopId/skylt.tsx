@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { api } from '../../../../convex/_generated/api'
 import type { Doc, Id } from '../../../../convex/_generated/dataModel'
+import { resolveSiteUrl } from '~/lib/siteUrl'
 
 export const Route = createFileRoute('/admin/$shopId/skylt')({
   component: ShopQrPage,
@@ -38,9 +39,10 @@ function ShopQrSign({ shop }: { shop: Doc<'shops'> }) {
     return window.location.origin
   }, [])
 
+  const publicOrigin = resolveSiteUrl()
   const qrValue = origin
     ? `${origin}/s/${shop.slug}`
-    : `https://qrbutik.se/s/${shop.slug}`
+    : `${publicOrigin}/s/${shop.slug}`
   const displayUrl = `qrbutik.se/s/${shop.slug}`
 
   return (

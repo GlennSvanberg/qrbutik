@@ -3,8 +3,8 @@ import { httpAction } from "./_generated/server";
 import { authComponent, createAuth } from "./auth";
 import { isDevMagicLinkEnabled } from "./devMagicLink";
 import { api, internal } from "./_generated/api";
+import { getSiteUrl, normalizePublicOrigin } from "./lib/siteUrl";
 
-const siteUrl = process.env.SITE_URL;
 const allowedOrigins = new Set([
   "http://localhost:3000",
   "http://localhost:3001",
@@ -12,10 +12,11 @@ const allowedOrigins = new Set([
   "https://qrbutik.vercel.app",
   "https://qrbutik.se",
   "https://www.qrbutik.se",
+  getSiteUrl(),
 ]);
 
-if (siteUrl) {
-  allowedOrigins.add(siteUrl);
+if (process.env.SITE_URL?.trim()) {
+  allowedOrigins.add(normalizePublicOrigin(process.env.SITE_URL.trim()));
 }
 
 const http = httpRouter();
