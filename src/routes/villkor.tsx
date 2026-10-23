@@ -23,7 +23,7 @@ function VillkorPage() {
             Användarvillkor (B2B)
           </h1>
           <p className="text-sm text-brand-muted">
-            Senast uppdaterad: 12 oktober 2026. Gäller idrottsföreningar och
+            Senast uppdaterad: 23 oktober 2026. Gäller idrottsföreningar och
             organisationer som använder QRButik.se.
           </p>
         </header>
@@ -33,7 +33,10 @@ function VillkorPage() {
           <p>
             QRButik tillhandahåller en digital kioskplattform för
             idrottsföreningar och cuparrangörer. Kundbetalningar sker via Swish
-            direkt till föreningens eget nummer — inte till QRButik.
+            direkt till föreningens eget nummer — inte till QRButik. QRButik är
+            inte ett certifierat kassaregister enligt skatteförfarandelagen 39
+            kap., och föreningen ansvarar själv för att bedöma om den omfattas
+            av kassaregisterkravet.
           </p>
 
           <h2 className="text-lg font-semibold text-brand-foreground">
