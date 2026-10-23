@@ -37,8 +37,9 @@ function ExportHelpPage() {
         <section className="relaxed-surface p-6 text-sm text-brand-muted">
           <h2 className="text-base font-semibold text-brand-foreground">SIE4</h2>
           <p className="mt-2">
-            SIE-filen följer version 4 och kan importeras i Fortnox, Visma och
-            liknande program. Varje verifierat köp blir en #TRANS-rad på
+            SIE-filen följer version 4 och kan läsas in i bokföringsprogram,
+            till exempel Fortnox eller Visma. Varje verifierat köp blir en
+            #TRANS-rad på
             intäktskontot (standard 3010 om inget annat anges).
           </p>
           <p className="mt-2">

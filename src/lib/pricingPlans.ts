@@ -36,26 +36,3 @@ export const pricingPlans: Array<{
     variant: 'primary',
   },
 ]
-
-export const pricingFaq: Array<{ question: string; answer: string }> = [
-  {
-    question: 'Vad kostar QRButik?',
-    answer:
-      'Gratis är standard. Event kostar 295 kr och Säsong 1 495 kr per år (cirka 125 kr/mån). Alla priser är inklusive 25 % moms.',
-  },
-  {
-    question: 'Finns det en provperiod?',
-    answer:
-      'Nej. Varje förening börjar på Gratis utan kort. Event och Säsong köps när ni behöver fler kiosker, rapport eller export.',
-  },
-  {
-    question: 'Vad händer när Event tar slut?',
-    answer:
-      'Efter 7 dagar går föreningen tillbaka till Gratis. Den äldsta kiosken fortsätter att ta emot Swish-köp.',
-  },
-  {
-    question: 'Kan vi säga upp Säsong?',
-    answer:
-      'Ja, i kundportalen. Tillgången till obegränsade kiosker, flera administratörer och bokföringsexport gäller så länge prenumerationen är aktiv.',
-  },
-]

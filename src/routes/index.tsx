@@ -11,7 +11,9 @@ import {
   SITE_NAME,
   SITE_TAGLINE,
 } from '~/lib/marketing'
-import { pricingFaq, pricingPlans } from '~/lib/pricingPlans'
+import { PricingFaqList } from '~/components/PricingFaqList'
+import { faqPageJsonLd } from '~/lib/pricingFaq'
+import { pricingPlans } from '~/lib/pricingPlans'
 import { useRecordPlatformVisit } from '~/lib/platformTracking'
 
 export const Route = createFileRoute('/')({
@@ -39,6 +41,9 @@ export const Route = createFileRoute('/')({
       {
         name: 'twitter:description',
         content: DEFAULT_DESCRIPTION,
+      },
+      {
+        'script:ld+json': faqPageJsonLd(),
       },
     ],
   }),
@@ -344,16 +349,7 @@ function Home() {
             <h2 className="text-pretty text-3xl font-bold text-brand-foreground">
               Vanliga frågor
             </h2>
-            <dl className="flex flex-col gap-5">
-              {pricingFaq.map((item) => (
-                <div key={item.question}>
-                  <dt className="font-semibold text-brand-foreground">
-                    {item.question}
-                  </dt>
-                  <dd className="mt-1 text-sm text-brand-muted">{item.answer}</dd>
-                </div>
-              ))}
-            </dl>
+            <PricingFaqList />
           </div>
         </section>
 

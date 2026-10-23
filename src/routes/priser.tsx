@@ -2,7 +2,8 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { MarketingFooter } from '~/components/MarketingFooter'
 import { DEMO_SHOP_SLUG } from '~/lib/demo'
 import { LIVE_KIOSK_LABEL, START_LABEL } from '~/lib/marketing'
-import { pricingFaq, pricingPlans } from '~/lib/pricingPlans'
+import { PricingFaqList } from '~/components/PricingFaqList'
+import { pricingPlans } from '~/lib/pricingPlans'
 
 export const Route = createFileRoute('/priser')({
   head: () => ({
@@ -70,14 +71,7 @@ function PricingPage() {
 
         <section className="flex flex-col gap-5">
           <h2 className="text-2xl font-bold text-brand-foreground">Vanliga frågor</h2>
-          <dl className="flex flex-col gap-5">
-            {pricingFaq.map((item) => (
-              <div key={item.question}>
-                <dt className="font-semibold text-brand-foreground">{item.question}</dt>
-                <dd className="mt-1 text-sm text-brand-muted">{item.answer}</dd>
-              </div>
-            ))}
-          </dl>
+          <PricingFaqList />
         </section>
 
         <p className="text-sm text-brand-muted">
