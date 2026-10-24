@@ -24,16 +24,18 @@ export function AdminExportPanel({
   accountingExport = false,
 }: AdminExportPanelProps) {
   const exportExcel = useAction(api.exportExcelActions.exportTransactionsExcel)
+  const exportCsv = useAction(api.exportExcelActions.exportTransactionsCsv)
   const exportSie = useAction(api.exportActions.exportTransactionsSie)
-  const [isExporting, setIsExporting] = useState<'excel' | 'sie' | null>(null)
+  const [isExporting, setIsExporting] = useState<'excel' | 'csv' | 'sie' | null>(null)
   const [includePending, setIncludePending] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleExport = async (format: 'excel' | 'sie') => {
+  const handleExport = async (format: 'excel' | 'csv' | 'sie') => {
     setError(null)
     setIsExporting(format)
     try {
-      const action = format === 'excel' ? exportExcel : exportSie
+      const action =
+        format === 'excel' ? exportExcel : format === 'csv' ? exportCsv : exportSie
       const result = await action({
         organizationId,
         shopId,
@@ -62,8 +64,10 @@ export function AdminExportPanel({
           Exportera till bokföring
         </h2>
         <p className="text-sm text-brand-muted">
-          Excel för översikt och SIE4 för Fortnox/Visma. SIE inkluderar alltid
-          endast verifierade köp.
+          Excel och CSV för översikt. SIE4-filen kan läsas in i bokföringsprogram,
+          till exempel Fortnox eller Visma. SIE tar bara med verifierade köp och
+          bokför beloppet mot 1930 och intäktskontot. Artiklar har ingen momssats,
+          så utgående moms delas inte upp.
         </p>
       </div>
       {!salesExport ? (
@@ -91,6 +95,14 @@ export function AdminExportPanel({
           className="relaxed-primary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isExporting === 'excel' ? 'Exporterar…' : 'Exportera Excel'}
+        </button>
+        <button
+          type="button"
+          onClick={() => void handleExport('csv')}
+          disabled={isExporting !== null}
+          className="relaxed-secondary-button inline-flex h-12 cursor-pointer items-center justify-center px-5 text-sm font-semibold text-brand-muted disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isExporting === 'csv' ? 'Exporterar…' : 'Exportera CSV'}
         </button>
         {accountingExport ? (
           <button

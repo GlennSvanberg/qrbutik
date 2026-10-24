@@ -1,7 +1,7 @@
 import { v } from 'convex/values'
 import { action } from './_generated/server'
 import { internal } from './_generated/api'
-import { buildExportFilename, buildSieExport } from './lib/exportFormat'
+import { buildExportFilename, buildSieExport, encodePc8 } from './lib/exportFormat'
 
 const exportResultValidator = v.object({
   filename: v.string(),
@@ -45,7 +45,10 @@ export const exportTransactionsSie = action({
       orgNumber: data.orgNumber,
       revenueAccount,
       rows: data.rows,
+      periodStart: args.start,
+      periodEnd: args.end,
     })
+    const pc8 = encodePc8(content)
 
     const filename = buildExportFilename({
       organizationName: data.organizationName,
@@ -56,8 +59,9 @@ export const exportTransactionsSie = action({
 
     return {
       filename,
-      content,
-      mimeType: 'text/plain;charset=utf-8',
+      content: Buffer.from(pc8).toString('base64'),
+      mimeType: 'application/octet-stream',
+      encoding: 'base64' as const,
     }
   },
 })

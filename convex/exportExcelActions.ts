@@ -4,7 +4,7 @@ import { v } from 'convex/values'
 import { action } from './_generated/server'
 import { internal } from './_generated/api'
 import { buildExcelExport } from './lib/buildExcelExport'
-import { buildExportFilename } from './lib/exportFormat'
+import { buildCsvExport, buildExportFilename } from './lib/exportFormat'
 
 const exportResultValidator = v.object({
   filename: v.string(),
@@ -59,6 +59,57 @@ export const exportTransactionsExcel = action({
       mimeType:
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       encoding: 'base64' as const,
+    }
+  },
+})
+
+export const exportTransactionsCsv = action({
+  args: {
+    organizationId: v.id('organizations'),
+    shopId: v.optional(v.id('shops')),
+    start: v.number(),
+    end: v.number(),
+    includePending: v.optional(v.boolean()),
+  },
+  returns: exportResultValidator,
+  handler: async (ctx, args): Promise<{
+    filename: string
+    content: string
+    mimeType: string
+  }> => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity?.email) {
+      throw new Error('Not authenticated')
+    }
+
+    await ctx.runMutation(internal.organizations.syncOrganizationPlan, {
+      organizationId: args.organizationId,
+    })
+
+    const data: {
+      organizationName: string
+      rows: Parameters<typeof buildCsvExport>[0]
+    } = await ctx.runQuery(internal.exports.listTransactionsForExportInternal, {
+      organizationId: args.organizationId,
+      callerEmail: identity.email.trim().toLowerCase(),
+      shopId: args.shopId,
+      start: args.start,
+      end: args.end,
+      includePending: args.includePending,
+      format: 'excel',
+    })
+
+    const filename = buildExportFilename({
+      organizationName: data.organizationName,
+      extension: 'csv',
+      start: args.start,
+      end: args.end,
+    })
+
+    return {
+      filename,
+      content: buildCsvExport(data.rows),
+      mimeType: 'text/csv;charset=utf-8',
     }
   },
 })
