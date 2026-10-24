@@ -1,12 +1,14 @@
+import { blogPosts } from '~/lib/blog'
 import { resolveSiteUrl } from '~/lib/siteUrl'
 import { sportPages } from '~/lib/sports'
 
-const staticPaths = ['/', '/skapa', '/kontakt', '/priser', '/utforska'] as const
+const staticPaths = ['/', '/skapa', '/kontakt', '/priser', '/utforska', '/blogg'] as const
 
 export function publicSitemapPaths(): Array<string> {
   return [
     ...staticPaths,
     ...sportPages.map((sport) => `/utforska/${sport.slug}`),
+    ...blogPosts.map((post) => `/blogg/${post.slug}`),
   ]
 }
 

@@ -96,8 +96,12 @@ export function buildSieExport(args: {
   const orgNumber = args.orgNumber?.replace(/\D/g, '') || '0000000000'
   const revenueAccount = args.revenueAccount.replace(/\D/g, '') || '3010'
   const verified = args.rows.filter((row) => row.status === 'verified')
-  const periodStart = args.periodStart ?? verified[0]?.createdAt ?? generatedAt
-  const periodEnd = args.periodEnd ?? verified.at(-1)?.createdAt ?? periodStart
+  const periodStart =
+    args.periodStart ??
+    (verified.length > 0 ? verified[0].createdAt : generatedAt)
+  const periodEnd =
+    args.periodEnd ??
+    (verified.length > 0 ? verified[verified.length - 1].createdAt : periodStart)
 
   const accounts = new Map<string, string>([
     [SWISH_ACCOUNT, ACCOUNT_NAMES[SWISH_ACCOUNT]],

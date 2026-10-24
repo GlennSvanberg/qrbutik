@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { blogPosts } from './blog'
 import { pricingPlans } from './pricingPlans'
 import { buildSitemapXml, publicSitemapPaths, sitemapLastmod } from './sitemap'
 import { getSport, sportPages } from './sports'
@@ -24,7 +25,9 @@ describe('public sitemap', () => {
       '/kontakt',
       '/priser',
       '/utforska',
+      '/blogg',
       ...sportPages.map((sport) => `/utforska/${sport.slug}`),
+      ...blogPosts.map((post) => `/blogg/${post.slug}`),
     ])
   })
 
