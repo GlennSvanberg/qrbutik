@@ -26,21 +26,22 @@ function ExportHelpPage() {
         <section className="relaxed-surface p-6 text-sm text-brand-muted">
           <h2 className="text-base font-semibold text-brand-foreground">Excel</h2>
           <p className="mt-2">
-            Filen öppnas direkt i Excel med formaterad tabell, anpassade
-            kolumnbredder och filter. Kolumner: datum, kiosk, belopp, referens,
-            status, artiklar och antal rader. En summa-rad visar total
-            försäljning. Kryssa i &quot;Inkludera icke verifierade köp&quot;
-            om du vill se väntande betalningar också.
+            Excel öppnas med formaterad tabell, filter och en summarad. CSV är
+            semikolonseparerad, UTF-8 med BOM, decimaltecken komma och datum
+            ÅÅÅÅ-MM-DD tt:mm. Kolumner: datum, kiosk, belopp, referens, status,
+            artiklar och antal rader. Kryssa i &quot;Inkludera icke verifierade
+            köp&quot; om du vill ta med väntande betalningar i Excel och CSV.
           </p>
         </section>
 
         <section className="relaxed-surface p-6 text-sm text-brand-muted">
           <h2 className="text-base font-semibold text-brand-foreground">SIE4</h2>
           <p className="mt-2">
-            SIE-filen följer version 4 och kan läsas in i bokföringsprogram,
-            till exempel Fortnox eller Visma. Varje verifierat köp blir en
-            #TRANS-rad på
-            intäktskontot (standard 3010 om inget annat anges).
+            SIE-filen är typ 4, PC8/CP437, och kan läsas in i bokföringsprogram,
+            till exempel Fortnox eller Visma. Varje verifierat köp blir ett
+            balanserat verifikat: debet 1930 (Swish) och kredit på intäktskontot
+            (standard 3010). Artiklar har ingen momssats, så filen bokför hela
+            beloppet som försäljning och använder inte konton för utgående moms.
           </p>
           <p className="mt-2">
             Ange organisationsnummer och intäktskonto under Fakturering i
