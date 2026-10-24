@@ -27,6 +27,12 @@ export function MarketingFooter() {
           Integritet
         </a>
         <a
+          href="/blogg"
+          className="rounded-full px-3 py-1 transition hover:bg-brand-accent hover:text-brand-foreground"
+        >
+          Blogg
+        </a>
+        <a
           href="/villkor"
           className="rounded-full px-3 py-1 transition hover:bg-brand-accent hover:text-brand-foreground"
           trackaton-on-click="footer-villkor"

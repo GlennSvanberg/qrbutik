@@ -28,6 +28,8 @@ import { Route as AdminShopIdRouteImport } from './routes/admin/$shopId'
 import { Route as AdminBillingRouteImport } from './routes/admin/billing'
 import { Route as AdminMedlemmarRouteImport } from './routes/admin/medlemmar'
 import { Route as AdminSkapaKioskRouteImport } from './routes/admin/skapa-kiosk'
+import { Route as BloggIndexRouteImport } from './routes/blogg/index'
+import { Route as BloggSlugRouteImport } from './routes/blogg/$slug'
 import { Route as HjalpExportRouteImport } from './routes/hjalp/export'
 import { Route as SShopSlugRouteImport } from './routes/s/$shopSlug'
 import { Route as SuperadminIndexRouteImport } from './routes/superadmin/index'
@@ -139,6 +141,16 @@ const AdminSkapaKioskRoute = AdminSkapaKioskRouteImport.update({
   path: '/skapa-kiosk',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const BloggIndexRoute = BloggIndexRouteImport.update({
+  id: '/blogg/',
+  path: '/blogg/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BloggSlugRoute = BloggSlugRouteImport.update({
+  id: '/blogg/$slug',
+  path: '/blogg/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HjalpExportRoute = HjalpExportRouteImport.update({
   id: '/hjalp/export',
   path: '/hjalp/export',
@@ -234,11 +246,13 @@ export interface FileRoutesByFullPath {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/blogg/$slug': typeof BloggSlugRoute
   '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRoute
   '/admin/': typeof AdminIndexRoute
+  '/blogg/': typeof BloggIndexRoute
   '/superadmin/': typeof SuperadminIndexRoute
   '/utforska/': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
@@ -267,10 +281,12 @@ export interface FileRoutesByTo {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/blogg/$slug': typeof BloggSlugRoute
   '/hjalp/export': typeof HjalpExportRoute
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRoute
   '/admin': typeof AdminIndexRoute
+  '/blogg': typeof BloggIndexRoute
   '/superadmin': typeof SuperadminIndexRoute
   '/utforska': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
@@ -303,11 +319,13 @@ export interface FileRoutesById {
   '/admin/billing': typeof AdminBillingRoute
   '/admin/medlemmar': typeof AdminMedlemmarRoute
   '/admin/skapa-kiosk': typeof AdminSkapaKioskRoute
+  '/blogg/$slug': typeof BloggSlugRoute
   '/hjalp/export': typeof HjalpExportRoute
   '/s/$shopSlug': typeof SShopSlugRouteWithChildren
   '/tack/$transactionId': typeof TackTransactionIdRoute
   '/utforska/$sport': typeof UtforskaSportRoute
   '/admin/': typeof AdminIndexRoute
+  '/blogg/': typeof BloggIndexRoute
   '/superadmin/': typeof SuperadminIndexRoute
   '/utforska/': typeof UtforskaIndexRoute
   '/admin/$shopId/historik': typeof AdminShopIdHistorikRoute
@@ -341,11 +359,13 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/blogg/$slug'
     | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
     | '/admin/'
+    | '/blogg/'
     | '/superadmin/'
     | '/utforska/'
     | '/admin/$shopId/historik'
@@ -374,10 +394,12 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/blogg/$slug'
     | '/hjalp/export'
     | '/tack/$transactionId'
     | '/utforska/$sport'
     | '/admin'
+    | '/blogg'
     | '/superadmin'
     | '/utforska'
     | '/admin/$shopId/historik'
@@ -409,11 +431,13 @@ export interface FileRouteTypes {
     | '/admin/billing'
     | '/admin/medlemmar'
     | '/admin/skapa-kiosk'
+    | '/blogg/$slug'
     | '/hjalp/export'
     | '/s/$shopSlug'
     | '/tack/$transactionId'
     | '/utforska/$sport'
     | '/admin/'
+    | '/blogg/'
     | '/superadmin/'
     | '/utforska/'
     | '/admin/$shopId/historik'
@@ -442,10 +466,12 @@ export interface RootRouteChildren {
   SkapaRoute: typeof SkapaRoute
   SupportRoute: typeof SupportRoute
   VillkorRoute: typeof VillkorRoute
+  BloggSlugRoute: typeof BloggSlugRoute
   HjalpExportRoute: typeof HjalpExportRoute
   SShopSlugRoute: typeof SShopSlugRouteWithChildren
   TackTransactionIdRoute: typeof TackTransactionIdRoute
   UtforskaSportRoute: typeof UtforskaSportRoute
+  BloggIndexRoute: typeof BloggIndexRoute
   UtforskaIndexRoute: typeof UtforskaIndexRoute
 }
 
@@ -583,6 +609,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/skapa-kiosk'
       preLoaderRoute: typeof AdminSkapaKioskRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/blogg/': {
+      id: '/blogg/'
+      path: '/blogg'
+      fullPath: '/blogg/'
+      preLoaderRoute: typeof BloggIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blogg/$slug': {
+      id: '/blogg/$slug'
+      path: '/blogg/$slug'
+      fullPath: '/blogg/$slug'
+      preLoaderRoute: typeof BloggSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/hjalp/export': {
       id: '/hjalp/export'
@@ -777,10 +817,12 @@ const rootRouteChildren: RootRouteChildren = {
   SkapaRoute: SkapaRoute,
   SupportRoute: SupportRoute,
   VillkorRoute: VillkorRoute,
+  BloggSlugRoute: BloggSlugRoute,
   HjalpExportRoute: HjalpExportRoute,
   SShopSlugRoute: SShopSlugRouteWithChildren,
   TackTransactionIdRoute: TackTransactionIdRoute,
   UtforskaSportRoute: UtforskaSportRoute,
+  BloggIndexRoute: BloggIndexRoute,
   UtforskaIndexRoute: UtforskaIndexRoute,
 }
 export const routeTree = rootRouteImport

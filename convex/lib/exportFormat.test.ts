@@ -7,8 +7,8 @@ import {
   buildSieExport,
   decodePc8,
   encodePc8,
-  type ExportRow,
 } from './exportFormat'
+import type { ExportRow } from './exportFormat'
 
 const generatedAt = new Date('2026-10-24T10:00:00+02:00').getTime()
 
